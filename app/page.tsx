@@ -53,7 +53,7 @@ const UserProfilePage = () => {
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
-      <Flex direction={{ base: "column", md: "row" }} mb={6} maxH="36px">
+      <Flex direction={{ base: "column", md: "row" }} mb={6}>
         <Text mx={5}>网站访问人次： {countData.viewCount}</Text>
         <Text mx={5}>当前用户数量： {countData.userCount}</Text>
       </Flex>
@@ -62,15 +62,15 @@ const UserProfilePage = () => {
         <Image src="images/logo.png" alt="logo" maxH="160px" />
       </Center>
 
-      <Flex direction={{ base: "column", md: "row" }} height="240px">
-        <Flex direction="column" mx={3} mt={6} width="230px" height="200px">
+      <Flex direction={{ base: "column", md: "row" }}>
+        <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
             免费使用
           </Center>
           <Center>目前无收费内容，但不保证永久免费，也可能后续没钱倒闭</Center>
         </Flex>
 
-        <Flex direction="column" mx={3} mt={6} width="230px" height="200px">
+        <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
             多平台
           </Center>

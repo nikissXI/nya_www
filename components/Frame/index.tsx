@@ -35,7 +35,7 @@ const Frame = ({
           flex={{ base: "1", md: "4" }} // 移动端占据全部宽度，桌面端占据 2/3 宽度
           mt={{ base: 20, md: 100 }}
           overflowX="hidden"
-          // minH={{ base: "20rem", md: "auto" }}
+          minH={{ base: "530px", md: "auto" }}
           px={10}
         >
           {children}
