@@ -24,6 +24,7 @@ const Navbar = ({ path }: { path: string }) => {
     { name: "首页", path: "/" },
     { name: "编号绑定", path: "/wgnum" },
     { name: "联机教程", path: "/tutorial" },
+    { name: "赞助榜", path: "/sponsor" },
   ];
   const currentMenuItem = menuItems.find((item) => item.path === path);
   const title = currentMenuItem ? currentMenuItem.name : "未定义页面";
@@ -49,7 +50,7 @@ const Navbar = ({ path }: { path: string }) => {
         direction="column"
         pt={12}
       >
-        <Flex as="nav" direction="column" p={8}>
+        <Flex as="nav" direction="column" py={10} px={12}>
           {menuItems.map((item) => (
             <Link
               as={NextLink}

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { Flex, Center, Spinner, Divider } from "@chakra-ui/react";
+import { useEffect, useState, useCallback } from "react";
+import { Flex, Center, Divider } from "@chakra-ui/react";
 
 interface GroupItem {
   name: string;
@@ -11,7 +11,7 @@ interface GroupData {
   relate: GroupItem[];
 }
 
-const RelateGroupList: React.FC = () => {
+const RelateGroupList = () => {
   // 使用 useRef 缓存数据
   // const groupListRef = useRef<{ name: string; qq: number }[]>([]);
 
@@ -22,7 +22,7 @@ const RelateGroupList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchGroups = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch("https://nya.nikiss.top/relateGroup");
       if (!response.ok) {
@@ -40,14 +40,14 @@ const RelateGroupList: React.FC = () => {
 
   useEffect(() => {
     if (groupData.main.length === 0) {
-      fetchGroups(); // 只在数据为空时请求
+      fetchData(); // 只在数据为空时请求
     } else {
       setLoading(false); // 数据已缓存，直接设置加载状态
     }
-  }, [fetchGroups, groupData]);
+  }, [fetchData, groupData]);
 
   if (loading) {
-    return
+    return;
     // return <Spinner size="md" />;
   }
 
@@ -61,17 +61,17 @@ const RelateGroupList: React.FC = () => {
         喵服关联QQ群
       </Center>
       {groupData.main.map((group, index) => (
-          <Center key={index} mb={2}>
-            {group.name} - {group.qq}
-          </Center>
+        <Center key={index} mb={2}>
+          {group.name} - {group.qq}
+        </Center>
       ))}
 
-      <Divider my={2} opacity={0}/>
+      <Divider my={2} opacity={0} />
 
       {groupData.relate.map((group, index) => (
-          <Center key={index} mb={2}>
-            {group.name} - {group.qq}
-          </Center>
+        <Center key={index} mb={2}>
+          {group.name} - {group.qq}
+        </Center>
       ))}
     </Flex>
   );

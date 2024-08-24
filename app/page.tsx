@@ -19,7 +19,7 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCount = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch("https://nya.nikiss.top/countInfo");
       if (!response.ok) {
@@ -37,11 +37,11 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     if (countData.viewCount === -1) {
-      fetchCount(); // 只在数据为空时请求
+      fetchData(); // 只在数据为空时请求
     } else {
       setLoading(false); // 数据已缓存，直接设置加载状态
     }
-  }, [fetchCount, countData]);
+  }, [fetchData, countData]);
 
   if (loading) {
     return;
@@ -53,21 +53,21 @@ const UserProfilePage = () => {
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
-      <Flex direction={{ base: "column", md: "row" }} mb={6}>
+      <Flex wrap="wrap" direction={{ base: "column", md: "row" }} mb={6}>
         <Text mx={5}>网站访问人次： {countData.viewCount}</Text>
         <Text mx={5}>当前用户数量： {countData.userCount}</Text>
       </Flex>
 
       <Center>
-        <Image src="images/logo.png" alt="logo" maxH="160px" />
+        <Image src="images/logo.png" alt="logo" maxH="150px" />
       </Center>
 
-      <Flex direction={{ base: "column", md: "row" }}>
+      <Flex wrap="wrap" direction={{ base: "column", md: "row" }}>
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
             免费使用
           </Center>
-          <Center>目前无收费内容，但不保证永久免费，也可能后续没钱倒闭</Center>
+          <Center>目前无收费内容，但不保证永久免费，也可能后续没钱倒闭，我不是富豪做不起慈善</Center>
         </Flex>
 
         <Flex direction="column" mx={3} mt={6} width="230px">
@@ -75,12 +75,13 @@ const UserProfilePage = () => {
             多平台
           </Center>
           <Center>
-            支持主流操作系统Android、iOS、Windows、macOS，若游戏支持可实现电脑和手机联机
+            支持主流操作系统Android、iOS、Windows、macOS，若游戏支持可实现如电脑和手机联机
           </Center>
         </Flex>
       </Flex>
 
       <Button
+        color="#80ffaf"
         mt={6}
         bgColor="#2d85c980"
         fontSize="lg"

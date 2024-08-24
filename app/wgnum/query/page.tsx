@@ -11,35 +11,22 @@ const Page = () => {
     <Box p={4} textAlign="center">
       <Heading mb={6}>请点击选择</Heading>
       <Center>
-        <Stack spacing={10}>
+        <Stack spacing={4} maxW="300px">
           <Button
             colorScheme="teal"
             size="lg"
             variant="solid"
+            width="100%"
             onClick={() => {
               router.push("/wgnum");
             }}
           >
             我还没有编号，需要获取编号联机
           </Button>
-          <Button
-            colorScheme="blue"
-            size="lg"
-            variant="solid"
-            onClick={() => {
-              router.push("/wgnum");
-            }}
-          >
+          <Button colorScheme="blue" size="lg" variant="solid" width="100%">
             我有编号，要下载conf文件
           </Button>
-          <Button
-            colorScheme="orange"
-            size="lg"
-            variant="solid"
-            onClick={() => {
-              router.push("/wgnum");
-            }}
-          >
+          <Button colorScheme="orange" size="lg" variant="solid" width="100%">
             我只是来查询编号绑定信息
           </Button>
         </Stack>
