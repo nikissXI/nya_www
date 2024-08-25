@@ -1,36 +1,91 @@
 "use client";
 
-import { Center, Text, Box, Button, Stack, Heading } from "@chakra-ui/react";
+import {
+  Input,
+  Center,
+  InputGroup,
+  Text,
+  Box,
+  InputRightElement,
+  Button,
+  Stack,
+  Heading,
+} from "@chakra-ui/react";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
   const router = useRouter();
+  const [inputValue, setInputValue] = useState<string>("");
+  const [resultText, setresultText] = useState<string>("");
+
+  // 处理输入框变化
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
+      const response = await fetch(
+        `${apiUrl}/num_check?num=${encodeURIComponent(inputValue)}`
+      );
+      if (!response.ok) {
+        throw new Error("发送请求出错");
+      }
+      const data = await response.text();
+      setresultText(data);
+    } catch (err) {
+      setresultText(err instanceof Error ? err.message : "发送请求出错");
+    }
+  };
 
   return (
-    <Box p={4} textAlign="center">
-      <Heading mb={6}>请点击选择</Heading>
+    <Box pt={10} textAlign="center">
       <Center>
-        <Stack spacing={4} maxW="300px">
-          <Button
-            colorScheme="teal"
-            size="lg"
-            variant="solid"
-            width="100%"
-            onClick={() => {
-              router.push("/wgnum");
-            }}
-          >
-            我还没有编号，需要获取编号联机
-          </Button>
-          <Button colorScheme="blue" size="lg" variant="solid" width="100%">
-            我有编号，要下载conf文件
-          </Button>
-          <Button colorScheme="orange" size="lg" variant="solid" width="100%">
-            我只是来查询编号绑定信息
-          </Button>
-        </Stack>
+        <Heading maxW="80vw">这里可以通过QQ或编号查询绑定信息</Heading>
       </Center>
+
+      <Center>
+        <Text pt={3}>小提示：喵服关联群发“查绑”一样效果</Text>
+      </Center>
+
+      <Center pt={6}>
+        {/* 使用 Flex 组件来对齐输入框和按钮 */}
+        <Input
+          bgColor="#000c1975"
+          placeholder="请输入QQ或编号"
+          value={inputValue}
+          onChange={handleInputChange}
+          maxW="240px"
+          mr={1} // 设置右边距，以便输入框和按钮之间有间隔
+        />
+        <Button
+          bgColor="#0075ff"
+          onClick={handleSubmit}
+          isDisabled={!inputValue} // 当输入框为空时禁用按钮
+        >
+          提交
+        </Button>
+      </Center>
+
+      <Center>
+        <Text whiteSpace="pre-line" textAlign="left" minW="200px" mt={3}>
+          {resultText}
+        </Text>
+      </Center>
+
+      <Button
+        color="#ff4d4d"
+        mt={6}
+        bgColor="#2d85c980"
+        fontSize="lg"
+        onClick={() => {
+          router.back(); // 匿名函数路由到 /wgnum
+        }}
+      >
+        返回上一级
+      </Button>
     </Box>
   );
 };

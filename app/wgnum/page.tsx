@@ -8,7 +8,7 @@ const Page = () => {
   const router = useRouter();
 
   return (
-    <Box p={4} textAlign="center">
+    <Box pt={10} textAlign="center">
       <Heading mb={6}>请点击选择</Heading>
       <Center>
         <Stack spacing={10}>
@@ -17,30 +17,32 @@ const Page = () => {
             size="lg"
             variant="solid"
             onClick={() => {
-              router.push("/wgnum");
+              router.push("/wgnum/bind");
             }}
           >
-            我还没有编号，需要获取编号联机
+            还没有编号，需要获取编号联机
           </Button>
-          <Button
-            colorScheme="blue"
-            size="lg"
-            variant="solid"
-            onClick={() => {
-              router.push("/wgnum");
-            }}
-          >
-            我有编号，要下载conf文件
-          </Button>
+
           <Button
             colorScheme="orange"
             size="lg"
             variant="solid"
             onClick={() => {
-              router.push("/wgnum");
+              router.push("/wgnum/query");
             }}
           >
-            我只是来查询编号绑定信息
+            只是来查询编号绑定信息
+          </Button>
+
+          <Button
+            colorScheme="blue"
+            size="lg"
+            variant="solid"
+            onClick={() => {
+              router.push("/tutorial");
+            }}
+          >
+            来看喵服怎么用的，需要教程
           </Button>
         </Stack>
       </Center>

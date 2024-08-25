@@ -21,7 +21,8 @@ const UserProfilePage = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch("https://nya.nikiss.top/countInfo");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
+      const response = await fetch(`${apiUrl}/countInfo`);
       if (!response.ok) {
         throw new Error("获取计数信息出错");
       }
@@ -53,21 +54,35 @@ const UserProfilePage = () => {
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
-      <Flex wrap="wrap" direction={{ base: "column", md: "row" }} mb={6}>
-        <Text mx={5}>网站访问人次： {countData.viewCount}</Text>
-        <Text mx={5}>当前用户数量： {countData.userCount}</Text>
+      <Flex
+        wrap="wrap"
+        direction={{ base: "column", md: "row" }}
+        justifyContent="center"
+        mb={6}
+      >
+        <Text w="200px">网站访问人次： {countData.viewCount}</Text>
+        <Text w="200px">当前用户数量： {countData.userCount}</Text>
       </Flex>
-
       <Center>
-        <Image src="images/logo.png" alt="logo" maxH="150px" />
+        <Image
+          src="images/logo.png"
+          alt="logo"
+          maxH={{ base: "130px", md: "180px" }}
+        />
       </Center>
 
-      <Flex wrap="wrap" direction={{ base: "column", md: "row" }}>
+      <Flex
+        wrap="wrap"
+        justifyContent="center"
+        direction={{ base: "column", md: "row" }}
+      >
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
             免费使用
           </Center>
-          <Center>目前无收费内容，但不保证永久免费，也可能后续没钱倒闭，我不是富豪做不起慈善</Center>
+          <Center>
+            目前无收费内容，但不保证永久免费，也可能后续没钱倒闭，我不是富豪做不起慈善
+          </Center>
         </Flex>
 
         <Flex direction="column" mx={3} mt={6} width="230px">
@@ -89,8 +104,7 @@ const UserProfilePage = () => {
           router.push("/wgnum"); // 匿名函数路由到 /wgnum
         }}
       >
-        {" "}
-        &gt;&gt; 点我开始使用 &lt;&lt;{" "}
+        &gt;&gt; 点我开始使用 &lt;&lt;
       </Button>
     </Flex>
   );

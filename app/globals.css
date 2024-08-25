@@ -9,3 +9,22 @@ th {
 td {
   text-align: center !important;
 }
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 10px; /* 滚动条的宽度 */
+}
+
+::-webkit-scrollbar-track {
+  background: #9ce6ff; /* 滚动条轨道的背景色 */
+  border-radius: 10px; /* 轨道的圆角 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #007ab3; /* 滚动条的颜色 */
+  border-radius: 6px; /* 滚动条的圆角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #003e5b; /* 滚动条在悬停时的颜色 */
+}

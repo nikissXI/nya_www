@@ -24,7 +24,8 @@ const RelateGroupList = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch("https://nya.nikiss.top/relateGroup");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
+      const response = await fetch(`${apiUrl}/relateGroup`);
       if (!response.ok) {
         throw new Error("获取关联群信息出错");
       }

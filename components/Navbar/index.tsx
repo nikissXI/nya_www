@@ -16,19 +16,30 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
 
 const Navbar = ({ path }: { path: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [title, setTitle] = useState<string>("");
+  useEffect(() => {
+    // 根据路由设置标题
+    const titles: { [key: string]: string } = {
+      "/": "首页",
+      "/wgnum": "编号绑定",
+      "/wgnum/query": "绑定查询",
+      "/tutorial": "联机教程",
+      "/sponsor": "赞助榜",
+    };
+    setTitle(titles[path]);
+  }, [path]);
 
-  const menuItems = [
+  const rootGuide = [
     { name: "首页", path: "/" },
     { name: "编号绑定", path: "/wgnum" },
     { name: "联机教程", path: "/tutorial" },
     { name: "赞助榜", path: "/sponsor" },
   ];
-  const currentMenuItem = menuItems.find((item) => item.path === path);
-  const title = currentMenuItem ? currentMenuItem.name : "未定义页面";
-
+  const rootPath = "/" + path.split("/")[1];
   return (
     <Box>
       <Center
@@ -51,7 +62,7 @@ const Navbar = ({ path }: { path: string }) => {
         pt={12}
       >
         <Flex as="nav" direction="column" py={10} px={12}>
-          {menuItems.map((item) => (
+          {rootGuide.map((item) => (
             <Link
               as={NextLink}
               key={item.path}
@@ -59,13 +70,13 @@ const Navbar = ({ path }: { path: string }) => {
               my={3}
               py={2}
               _hover={{ textDecoration: "none" }}
-              bg={path === item.path ? "#4098f282" : "transparent"}
+              bg={rootPath === item.path ? "#4098f282" : "transparent"}
               rounded={12}
             >
               <Center>
                 <Text
-                  color={path === item.path ? "white" : "gray.200"}
-                  fontWeight={path === item.path ? "bold" : "normal"}
+                  color={rootPath === item.path ? "white" : "gray.200"}
+                  fontWeight={rootPath === item.path ? "bold" : "normal"}
                 >
                   {item.name}
                 </Text>
@@ -100,7 +111,7 @@ const Navbar = ({ path }: { path: string }) => {
 
           <DrawerBody>
             <Flex as="nav" direction="column" p={4}>
-              {menuItems.map((item) => (
+              {rootGuide.map((item) => (
                 <Link
                   as={NextLink}
                   key={item.path}

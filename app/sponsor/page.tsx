@@ -25,7 +25,8 @@ const Page = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch("https://nya.nikiss.top/sponsorList");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
+      const response = await fetch(`${apiUrl}/sponsorList`);
       if (!response.ok) {
         throw new Error("获取赞助列表出错");
       }

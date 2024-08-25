@@ -9,3 +9,10 @@ const Page = () => {
 };
 
 export default Page;
+const data = localStorage.getItem('userData');
+if (data) {
+  const parsedData = JSON.parse(data);
+  console.log('Loaded data:', parsedData);
+} else {
+  console.log('No data found');
+}
