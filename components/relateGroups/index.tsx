@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Flex, Center, Divider } from "@chakra-ui/react";
-
+import { ArrowDownIcon } from "@chakra-ui/icons";
 interface GroupItem {
   name: string;
   qq: number;
@@ -59,7 +59,9 @@ const RelateGroupList = () => {
   return (
     <Flex direction="column" alignItems="center">
       <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
+        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
         喵服关联QQ群
+        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
       </Center>
       {groupData.main.map((group, index) => (
         <Center key={index} mb={2}>

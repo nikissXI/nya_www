@@ -1,15 +1,14 @@
 "use client";
 
-import { Center, Text, Box, Button, Stack, Heading } from "@chakra-ui/react";
-import { useEffect, useState, useCallback } from "react";
+import { Center,Flex, Button, Stack, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
   const router = useRouter();
 
   return (
-    <Box pt={10} textAlign="center">
-      <Heading mb={6}>请点击选择</Heading>
+    <Flex pt={10} direction="column" justifyContent="space-between" alignItems="center">
+      <Heading mb={6}>你要干啥呢</Heading>
       <Center>
         <Stack spacing={10}>
           <Button
@@ -46,7 +45,7 @@ const Page = () => {
           </Button>
         </Stack>
       </Center>
-    </Box>
+    </Flex>
   );
 };
 

@@ -1,6 +1,13 @@
 "use client";
 
-import { Input, Center, Text, Flex, Button, Heading } from "@chakra-ui/react";
+import {
+  Input,
+  Center,
+  Text,
+  Box,
+  Button,
+  Heading,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -34,7 +41,6 @@ const Page = () => {
       if (data.code === 99) {
         setTextColor("#ff5353");
       } else if (data.code === 2) {
-        localStorage.setItem("key", data.key);
         setShowTutorial("Flex");
       }
       setResultText(data.msg);
@@ -49,17 +55,14 @@ const Page = () => {
   };
 
   return (
-    <Flex
-      pt={10}
-      direction="column"
-      justifyContent="space-between"
-      alignItems="center"
-    >
-      <Heading size="md" maxW="80vw">
-        1个编号不能同时用于多个设备哦
-      </Heading>
+    <Box pt={10} textAlign="center">
+      <Center>
+        <Heading maxW="80vw">每个QQ可以绑定一个编号</Heading>
+      </Center>
 
-      <Text pt={3}>1个QQ只能绑定1个编号，请跟随提示进行操作</Text>
+      <Center>
+        <Text pt={3}>请跟随提示进行操作</Text>
+      </Center>
 
       <Center pt={6}>
         {/* 使用 Flex 组件来对齐输入框和按钮 */}
@@ -80,41 +83,47 @@ const Page = () => {
         </Button>
       </Center>
 
-      <Text
-        color={textColor}
-        whiteSpace="pre-line"
-        textAlign="left"
-        minW="200px"
-        mt={3}
-      >
-        {resultText}
-      </Text>
+      <Center>
+        <Text
+          color={textColor}
+          whiteSpace="pre-line"
+          textAlign="left"
+          minW="200px"
+          mt={3}
+        >
+          {resultText}
+        </Text>
+      </Center>
 
-      <Button
-        display={showTutorial}
-        color="#80ffaf"
-        mt={5}
-        bgColor="#2d85c980"
-        fontSize="md"
-        onClick={() => {
-          router.push("/tutorial");
-        }}
-      >
-        &gt; 点击跳转教程页面 &lt;
-      </Button>
+      <Center>
+        <Button
+          display={showTutorial}
+          color="#80ffaf"
+          mt={5}
+          bgColor="#2d85c980"
+          fontSize="md"
+          onClick={() => {
+            router.push("/tutorial");
+          }}
+        >
+          &gt; 点击跳转教程页面 &lt;
+        </Button>
+      </Center>
 
-      <Button
-        color="#ff4d4d"
-        mt={6}
-        bgColor="#2d85c980"
-        fontSize="lg"
-        onClick={() => {
-          router.back(); // 匿名函数路由到 /wgnum
-        }}
-      >
-        返回上一级
-      </Button>
-    </Flex>
+      <Center>
+        <Button
+          color="#ff4d4d"
+          mt={6}
+          bgColor="#2d85c980"
+          fontSize="lg"
+          onClick={() => {
+            router.back(); // 匿名函数路由到 /wgnum
+          }}
+        >
+          返回上一级
+        </Button>
+      </Center>
+    </Box>
   );
 };
 

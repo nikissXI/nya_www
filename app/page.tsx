@@ -90,7 +90,7 @@ const UserProfilePage = () => {
             多平台
           </Center>
           <Center>
-            支持主流操作系统Android、iOS、Windows、macOS，若游戏支持可实现如电脑和手机联机
+            支持主流操作系统如安卓、苹果、Windows，若游戏支持可实现跨系统联机
           </Center>
         </Flex>
       </Flex>

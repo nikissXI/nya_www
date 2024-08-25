@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  Input,
-  Center,
-  InputGroup,
-  Text,
-  Box,
-  InputRightElement,
-  Button,
-  Stack,
-  Heading,
-} from "@chakra-ui/react";
+import { Input, Center, Text, Flex, Button, Heading } from "@chakra-ui/react";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
@@ -41,14 +31,17 @@ const Page = () => {
   };
 
   return (
-    <Box pt={10} textAlign="center">
-      <Center>
-        <Heading maxW="80vw">这里可以通过QQ或编号查询绑定信息</Heading>
-      </Center>
+    <Flex
+      pt={10}
+      direction="column"
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <Heading size="md" maxW="80vw">
+        通过QQ或编号查询绑定信息
+      </Heading>
 
-      <Center>
-        <Text pt={3}>小提示：喵服关联群发“查绑”一样效果</Text>
-      </Center>
+      <Text pt={3}>小提示：喵服关联群发“查绑”一样效果</Text>
 
       <Center pt={6}>
         {/* 使用 Flex 组件来对齐输入框和按钮 */}
@@ -69,11 +62,9 @@ const Page = () => {
         </Button>
       </Center>
 
-      <Center>
-        <Text whiteSpace="pre-line" textAlign="left" minW="200px" mt={3}>
-          {resultText}
-        </Text>
-      </Center>
+      <Text whiteSpace="pre-line" textAlign="left" minW="200px" mt={3}>
+        {resultText}
+      </Text>
 
       <Button
         color="#ff4d4d"
@@ -86,7 +77,7 @@ const Page = () => {
       >
         返回上一级
       </Button>
-    </Box>
+    </Flex>
   );
 };
 
