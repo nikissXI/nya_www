@@ -1,52 +1,58 @@
 "use client";
-import { Flex, Text, Box, Button, Heading } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 
+import { Flex, Text, Box, Button, Heading } from "@chakra-ui/react";
+import AndroidPage1 from "@/components/tutorial/android/page1";
+import { useRouter } from "next/navigation";
 export default function Page({ params }: { params: { pageId: string } }) {
   const { pageId } = params;
-  const [warnningDisplay, setWarnningDisplay] = useState<string>("none");
+  const router = useRouter();
 
-  const checkKey = async () => {
-    const key = localStorage.getItem("key");
-    if (!key) {
-      setWarnningDisplay("block");
-      return;
-    }
-
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
-    const response = await fetch(
-      `${apiUrl}/checkKey?key=${encodeURIComponent(key)}`,
-      { method: "GET" }
-    );
-    if (response.ok) {
-      const data = await response.json();
-      if (data.code === 1) {
-        setWarnningDisplay("block");
-        localStorage.removeItem("key");
-      }
-    }
+  const pageMap: { [key: string]: JSX.Element } = {
+    "0": <AndroidPage1 />,
   };
 
-  // 使用 useEffect 在组件加载时调用
-  useEffect(() => {
-    checkKey();
-  }, []); // 空依赖数组表示只在首次加载时调用
-
-  const currentStepIndex = 3;
+  const currentStepIndex = 1;
   return (
-    <Flex direction="column" justifyContent="space-between" alignItems="center">
+    <Flex
+      direction="column"
+      justifyContent="space-between"
+      alignItems="center"
+      mx="6vw"
+    >
       <Heading mb={4}>安卓教程</Heading>
 
-      <Heading color="yellow" size="md" display={warnningDisplay}>
-        你尚未进行身份验证，无法下载
-      </Heading>
+      {pageMap[pageId]}
 
-      <Text mb={4}>content</Text>
+      <Flex justifyContent="space-between" mt={6}>
+        <Box width="100%">
+          <Button
+            bgColor="#e87f2c"
+            visibility={currentStepIndex > 1 ? "visible" : "hidden"}
+          >
+            上一步
+          </Button>
+        </Box>
 
-      <Box display="flex" justifyContent="space-between">
-        {currentStepIndex > 0 && <Button colorScheme="teal">上一步</Button>}
-        {currentStepIndex < 10 && <Button colorScheme="teal">下一步</Button>}
-      </Box>
+        <Box width="100%" mx="5vw">
+          <Button
+            bgColor="#b23333"
+            onClick={() => {
+              router.push("/tutorial"); // 匿名函数路由到 /wgnum
+            }}
+          >
+            返回
+          </Button>
+        </Box>
+
+        <Box width="100%">
+          <Button
+            bgColor="#30ad2a"
+            visibility={currentStepIndex < 10 ? "visible" : "hidden"}
+          >
+            下一步
+          </Button>
+        </Box>
+      </Flex>
     </Flex>
   );
 }
