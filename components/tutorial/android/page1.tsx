@@ -1,67 +1,35 @@
 "use client";
-import { useRouter } from "next/navigation";
-import {
-  Flex,
-  Center,
-  Stack,
-  Text,
-  Box,
-  Button,
-  Heading,
-} from "@chakra-ui/react";
-import { useState } from "react";
+import { Flex, Center, Text, Image, Heading } from "@chakra-ui/react";
+import { Button } from "@/components/universal";
 
-export default function AndroidPage1() {
-  const router = useRouter();
-
-  const [showXM, setShowXM] = useState(false);
-
-  const toggleText = () => {
-    setShowXM(!showXM);
-  };
+export function Page() {
+  const wg_apk_url = process.env.NEXT_PUBLIC_WG_APK_URL; // 从环境变量获取 API 地址
 
   return (
-    <Flex direction="column" justifyContent="space-between" alignItems="center">
-      <Center>
-        <Stack spacing={10} w="160px">
-          <Box>
-            <Text>小米/红米手机的点击查看，不是请忽略</Text>
-            <Button onClick={toggleText} bgColor="#ff7a00">
-              {showXM ? "隐藏文本" : "小米手机"}
-            </Button>
-            {showXM && (
-              <Text>
-                找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭，如下图
-                这个东西默认是开启的，需要关掉，否则会导致无法联机，关掉后最好再重启一下手机
-              </Text>
-            )}
-          </Box>
-          
-          <Button
-            h="70px"
-            bgColor="#148f14"
-            fontSize="40px"
-            variant="solid"
-            onClick={() => {
-              router.push("/tutorial/android/0");
-            }}
-          >
-            视频
-          </Button>
+    <Center>
+      <Flex
+        direction="column"
+        justifyContent="space-between"
+        alignItems="center"
+        maxW="460px"
+      >
+        <Heading size="md" mb={3}>
+          下载WG安装包
+        </Heading>
 
-          <Button
-            h="70px"
-            bgColor="#2383c2"
-            fontSize="40px"
-            variant="solid"
-            onClick={() => {
-              router.push("/tutorial/ios");
-            }}
-          >
-            图文
-          </Button>
-        </Stack>
-      </Center>
-    </Flex>
+        <Button
+          size="sm"
+          onClick={() => {
+            window.open(wg_apk_url, "_blank");
+          }}
+        >
+          点击下载WG安装包
+        </Button>
+
+        <Image my={3} maxW="240px" src="/images/apk_logo.jpg" alt="apk_logo" />
+
+        <Text>下载后完成安装</Text>
+      </Flex>
+    </Center>
   );
 }

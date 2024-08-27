@@ -25,6 +25,7 @@ const Frame = ({
           as="header"
           minW="240px"
           flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
+          zIndex={100}
         >
           {/* 导航栏 */}
           <Navbar path={pathname}></Navbar>
@@ -35,8 +36,6 @@ const Frame = ({
           as="main"
           flex={{ base: "1", md: "4" }} // 移动端占据全部宽度，桌面端占据 2/3 宽度
           mt={{ base: 20, md: 100 }}
-          overflowX="hidden"
-          minH={{ base: "520px", md: "auto" }}
         >
           {children}
         </Box>

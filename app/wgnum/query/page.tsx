@@ -1,8 +1,9 @@
 "use client";
 
-import { Input, Center, Text, Flex, Button, Heading } from "@chakra-ui/react";
-import { useEffect, useState, useCallback } from "react";
+import { Input, Center, Text, Flex, Heading } from "@chakra-ui/react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/universal";
 
 const Page = () => {
   const router = useRouter();
@@ -67,9 +68,8 @@ const Page = () => {
       </Text>
 
       <Button
-        color="#ff4d4d"
         mt={6}
-        bgColor="#2d85c980"
+        bgColor="#b23333"
         fontSize="lg"
         onClick={() => {
           router.back(); // 匿名函数路由到 /wgnum

@@ -1,20 +1,25 @@
 "use client";
 
-import { Center,Flex, Button, Stack, Heading } from "@chakra-ui/react";
+import { Center, Flex, Stack, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/universal";
 
 const Page = () => {
   const router = useRouter();
 
   return (
-    <Flex pt={10} direction="column" justifyContent="space-between" alignItems="center">
+    <Flex
+      pt={10}
+      direction="column"
+      justifyContent="space-between"
+      alignItems="center"
+    >
       <Heading mb={6}>你要干啥呢</Heading>
       <Center>
         <Stack spacing={10}>
           <Button
-            colorScheme="teal"
+            bgColor="teal"
             size="lg"
-            variant="solid"
             onClick={() => {
               router.push("/wgnum/bind");
             }}
@@ -23,9 +28,8 @@ const Page = () => {
           </Button>
 
           <Button
-            colorScheme="orange"
+            bgColor="#b77600"
             size="lg"
-            variant="solid"
             onClick={() => {
               router.push("/wgnum/query");
             }}
@@ -34,9 +38,8 @@ const Page = () => {
           </Button>
 
           <Button
-            colorScheme="blue"
+            bgColor="#006daa"
             size="lg"
-            variant="solid"
             onClick={() => {
               router.push("/tutorial");
             }}

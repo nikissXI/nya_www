@@ -19,6 +19,7 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 
 const Navbar = ({ path }: { path: string }) => {
+  const rootPath = "/" + path.split("/")[1];
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState<string>("");
   useEffect(() => {
@@ -26,11 +27,23 @@ const Navbar = ({ path }: { path: string }) => {
     const titles: { [key: string]: string } = {
       "/": "首页",
       "/wgnum": "编号绑定",
+      "/wgnum/bind": "身份验证",
       "/wgnum/query": "绑定查询",
       "/tutorial": "联机教程",
+      "/tutorial/android": "安卓教程",
+      "/tutorial/ios": "苹果教程",
+      "/tutorial/pc": "电脑教程",
       "/sponsor": "赞助榜",
     };
-    setTitle(titles[path]);
+    if (path.includes("/tutorial/android")) {
+      setTitle(titles["/tutorial/android"]);
+    } else if (path.includes("/tutorial/ios")) {
+      setTitle(titles["/tutorial/ios"]);
+    } else if (path.includes("/tutorial/pcios")) {
+      setTitle(titles["/tutorial/pc"]);
+    } else {
+      setTitle(titles[path]);
+    }
   }, [path]);
 
   const rootGuide = [
@@ -39,7 +52,6 @@ const Navbar = ({ path }: { path: string }) => {
     { name: "联机教程", path: "/tutorial" },
     { name: "赞助榜", path: "/sponsor" },
   ];
-  const rootPath = "/" + path.split("/")[1];
   return (
     <Box>
       <Center
@@ -95,6 +107,7 @@ const Navbar = ({ path }: { path: string }) => {
         right={3}
         variant="outline"
         colorScheme="whiteAlpha"
+        rounded={10}
         onClick={onOpen}
         border={0}
       >

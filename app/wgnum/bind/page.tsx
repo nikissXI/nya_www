@@ -1,8 +1,9 @@
 "use client";
 
-import { Input, Center, Text, Flex, Button, Heading } from "@chakra-ui/react";
+import { Input, Center, Text, Flex, Heading } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/universal";
 
 const Page = () => {
   const router = useRouter();
@@ -56,12 +57,17 @@ const Page = () => {
       alignItems="center"
     >
       <Heading size="md" maxW="80vw">
-        1个编号不能同时用于多个设备哦
+        请通过QQ进行身份验证
       </Heading>
-
-      <Text pt={3}>1个QQ只能绑定1个编号，请跟随提示进行操作</Text>
-
-      <Center pt={6}>
+      <Text py={5}>
+        如果QQ未绑定编号将自动绑定新编号
+        <br />
+        1个编号不能同时用于多个设备
+        <br />
+        1个QQ只能绑定1个编号
+      </Text>
+      请跟随提示进行操作
+      <Center pt={2}>
         {/* 使用 Flex 组件来对齐输入框和按钮 */}
         <Input
           bgColor="#000c1975"
@@ -79,7 +85,6 @@ const Page = () => {
           {buttonText}
         </Button>
       </Center>
-
       <Text
         color={textColor}
         whiteSpace="pre-line"
@@ -89,12 +94,10 @@ const Page = () => {
       >
         {resultText}
       </Text>
-
       <Button
         display={showTutorial}
-        color="#80ffaf"
         mt={5}
-        bgColor="#2d85c980"
+        bgColor="#31c92d80"
         fontSize="md"
         onClick={() => {
           router.push("/tutorial");
@@ -102,14 +105,12 @@ const Page = () => {
       >
         &gt; 点击跳转教程页面 &lt;
       </Button>
-
       <Button
-        color="#ff4d4d"
         mt={6}
-        bgColor="#2d85c980"
+        bgColor="#b23333"
         fontSize="lg"
         onClick={() => {
-          router.back(); // 匿名函数路由到 /wgnum
+          router.back(); 
         }}
       >
         返回上一级

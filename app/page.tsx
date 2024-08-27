@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
-import { Button, Flex, Image, Center, Text } from "@chakra-ui/react";
+import { Flex, Image, Center, Text } from "@chakra-ui/react";
+import { Button } from "@/components/universal";
 
 interface CountData {
   viewCount: number;
@@ -60,12 +61,16 @@ const UserProfilePage = () => {
         justifyContent="center"
         mb={6}
       >
-        <Text w="200px">网站访问人次： {countData.viewCount}</Text>
-        <Text w="200px">当前用户数量： {countData.userCount}</Text>
+        <Text w="200px" textAlign={{ md: "center" }}>
+          网站访问人次： {countData.viewCount}
+        </Text>
+        <Text w="200px" textAlign={{ md: "center" }}>
+          当前用户数量： {countData.userCount}
+        </Text>
       </Flex>
       <Center>
         <Image
-          src="images/logo.png"
+          src="/images/logo.png"
           alt="logo"
           maxH={{ base: "130px", md: "180px" }}
         />
@@ -78,16 +83,16 @@ const UserProfilePage = () => {
       >
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
-            免费使用
+            喵服简介
           </Center>
           <Center>
-            目前无收费内容，但不保证永久免费，也可能后续没钱倒闭，我不是富豪做不起慈善
+            一个为玩家提供虚拟组网服务的联机平台，解决异地进行局域网联机难题
           </Center>
         </Flex>
 
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
-            多平台
+            适用系统
           </Center>
           <Center>
             支持主流操作系统如安卓、苹果、Windows，若游戏支持可实现跨系统联机
@@ -96,9 +101,8 @@ const UserProfilePage = () => {
       </Flex>
 
       <Button
-        color="#80ffaf"
         mt={6}
-        bgColor="#2d85c980"
+        bgColor="#1d984b"
         fontSize="lg"
         onClick={() => {
           router.push("/wgnum"); // 匿名函数路由到 /wgnum
