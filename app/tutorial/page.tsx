@@ -1,18 +1,24 @@
 "use client";
 
-import { Center, Box, Stack, Heading } from "@chakra-ui/react";
+import { Center, Box, Stack, Heading, useDisclosure } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
+import { GameListModal } from "@/components/tutorial/GameList";
 
-const Page = () => {
+export default function Page() {
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box pt={3} textAlign="center">
-
-      <Heading my={6}>请选择系统</Heading>
+    <Box textAlign="center">
+      <GameListModal isOpen={isOpen} onClose={onClose} />
+      <Heading my={3}>
+        请根据系统类型
+        <br />
+        查看连接喵服教程
+      </Heading>
       <Center>
-        <Stack spacing={10} w="160px">
+        <Stack spacing={6} w="160px">
           <Button
             h="70px"
             bgColor="#148f14"
@@ -47,8 +53,14 @@ const Page = () => {
           </Button>
         </Stack>
       </Center>
+
+      <Center mt={6}>
+        <Button h="60px" bgColor="#7242ad" fontSize="20px" onClick={onOpen}>
+          目前已收录的
+          <br />
+          游戏联机教程
+        </Button>
+      </Center>
     </Box>
   );
-};
-
-export default Page;
+}

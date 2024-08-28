@@ -10,7 +10,7 @@ interface CountData {
   userCount: number;
 }
 
-const UserProfilePage = () => {
+export default function UserProfilePage() {
   const router = useRouter();
 
   const [countData, setData] = useState<CountData>({
@@ -112,6 +112,4 @@ const UserProfilePage = () => {
       </Button>
     </Flex>
   );
-};
-
-export default UserProfilePage;
+}

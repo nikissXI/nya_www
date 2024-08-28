@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState, useCallback } from "react";
 import { Flex, Center, Divider } from "@chakra-ui/react";
 import { ArrowDownIcon } from "@chakra-ui/icons";
