@@ -26,7 +26,7 @@ export function Page() {
           点击下载WG安装包
         </Button>
 
-        <Text my={3}>这是安装成功的图</Text>
+        <Text my={3}>安装完成的程序图标</Text>
 
         <Image maxW="240px" src="/images/apk_img.jpg" alt="apk_img" />
       </Flex>
