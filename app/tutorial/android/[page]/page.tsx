@@ -1,14 +1,13 @@
 "use client";
 
-import { Flex, Box, Text, Center } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/universal";
-import { Page as Page1 } from "@/components/tutorial/android/page1";
-import { Page as Page2 } from "@/components/tutorial/android/page2";
-import { Page as Page3 } from "@/components/tutorial/android/page3";
-import { Page as Page4 } from "@/components/tutorial/android/page4";
-import { Page as Page5 } from "@/components/tutorial/android/page5";
-import { Page as Page6 } from "@/components/tutorial/android/page6";
+import { Flex, Box, Center } from "@chakra-ui/react";
+import { Button } from "@/components/universal/button";
+import { Page as Page1 } from "@/components/tutorial/android/Page1";
+import { Page as Page2 } from "@/components/tutorial/android/Page2";
+import { Page as Page3 } from "@/components/tutorial/android/Page3";
+import { Page as Page4 } from "@/components/tutorial/android/Page4";
+import { Page as Page5 } from "@/components/tutorial/android/Page5";
+import { Page as Page6 } from "@/components/tutorial/android/Page6";
 import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { page: number } }) {

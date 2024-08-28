@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Flex, Center, Heading } from "@chakra-ui/react";
-import { Button } from "@/components/universal";
+import { Button } from "@/components/universal/button";
+import HeadingText from "@/components/tutorial/TutorialHeading";
 
 export default function AndroidPage0() {
   const router = useRouter();
@@ -14,12 +15,12 @@ export default function AndroidPage0() {
         alignItems="center"
         mx={3}
       >
-        <Heading mt={4} size="md" textAlign="center">
-          视频教程更新没那么及时
+        <HeadingText />
+
+        <Heading size="md" mt={5}>
+          Windows只支持win10和win11
           <br />
-          但流程是大差不差的
-          <br />
-          具体以图文流程为准
+          苹果电脑也行但我没买做不了教程
         </Heading>
 
         <Button
@@ -30,7 +31,7 @@ export default function AndroidPage0() {
           fontSize="40px"
           onClick={() => {
             window.open(
-              "https://www.bilibili.com/video/BV1MK4y1s7mS?p=1",
+              "https://www.bilibili.com/video/BV1MK4y1s7mS?p=3",
               "_blank"
             );
           }}
@@ -45,7 +46,7 @@ export default function AndroidPage0() {
           bgColor="#00987a"
           fontSize="40px"
           onClick={() => {
-            router.push("/tutorial/android/1");
+            router.push("/tutorial/pc/1");
           }}
         >
           图文

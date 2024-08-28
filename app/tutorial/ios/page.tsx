@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Flex, Center, Heading } from "@chakra-ui/react";
-import { Button } from "@/components/universal";
+import { Flex, Center } from "@chakra-ui/react";
+import { Button } from "@/components/universal/button";
+import HeadingText from "@/components/tutorial/TutorialHeading";
 
 export default function AndroidPage0() {
   const router = useRouter();
@@ -14,13 +15,7 @@ export default function AndroidPage0() {
         alignItems="center"
         mx={3}
       >
-        <Heading mt={4} size="md" textAlign="center">
-          视频教程更新没那么及时
-          <br />
-          但流程是大差不差的
-          <br />
-          具体以图文流程为准
-        </Heading>
+        <HeadingText />
 
         <Button
           mt={10}

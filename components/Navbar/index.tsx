@@ -17,11 +17,13 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
+import { LoginStateText } from "./LoginState";
 
 const Navbar = ({ path }: { path: string }) => {
   const rootPath = "/" + path.split("/")[1];
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState<string>("");
+
   useEffect(() => {
     // 根据路由设置标题
     const titles: { [key: string]: string } = {
@@ -39,7 +41,7 @@ const Navbar = ({ path }: { path: string }) => {
       setTitle(titles["/tutorial/android"]);
     } else if (path.includes("/tutorial/ios")) {
       setTitle(titles["/tutorial/ios"]);
-    } else if (path.includes("/tutorial/pcios")) {
+    } else if (path.includes("/tutorial/pc")) {
       setTitle(titles["/tutorial/pc"]);
     } else {
       setTitle(titles[path]);
@@ -52,6 +54,7 @@ const Navbar = ({ path }: { path: string }) => {
     { name: "联机教程", path: "/tutorial" },
     { name: "赞助榜", path: "/sponsor" },
   ];
+
   return (
     <Box>
       <Center
@@ -95,6 +98,8 @@ const Navbar = ({ path }: { path: string }) => {
               </Center>
             </Link>
           ))}
+          {/* 登陆状态 */}
+          <LoginStateText />
         </Flex>
       </Flex>
 
@@ -147,6 +152,8 @@ const Navbar = ({ path }: { path: string }) => {
                   </Center>
                 </Link>
               ))}
+              {/* 登陆状态 */}
+              <LoginStateText />
             </Flex>
           </DrawerBody>
         </DrawerContent>

@@ -1,10 +1,16 @@
 "use client";
-import { Flex, Center, Text, Image, Heading } from "@chakra-ui/react";
-import { Button } from "@/components/universal";
+import {
+  Flex,
+  Center,
+  List,
+  ListItem,
+  Image,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
+import { Button } from "@/components/universal/button";
 
 export function Page() {
-  const wg_apk_url = process.env.NEXT_PUBLIC_WG_APK_URL; // 从环境变量获取 API 地址
-
   return (
     <Center>
       <Flex
@@ -14,21 +20,16 @@ export function Page() {
         maxW="460px"
       >
         <Heading size="md" mb={3}>
-          下载WG安装包
+          准备一个外区ID
         </Heading>
 
-        <Button
-          size="sm"
-          onClick={() => {
-            window.open(wg_apk_url, "_blank");
-          }}
-        >
-          点击下载WG安装包
-        </Button>
-
-        <Image my={3} maxW="240px" src="/images/apk_logo.jpg" alt="apk_logo" />
-
-        <Text>下载后完成安装</Text>
+        <List spacing={2}>
+          <ListItem>连接喵服用的软件叫WireGuard（简称WG）</ListItem>
+          <ListItem>该软件需要外区ID（就是海外苹果账号）才能下载</ListItem>
+          <ListItem>
+            如果没有外区ID或不知道这是什么，可以礼貌地私聊群主找他借
+          </ListItem>
+        </List>
       </Flex>
     </Center>
   );

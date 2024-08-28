@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import {
   Modal,
@@ -10,23 +12,21 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import { Button } from "@/components/universal";
+import { Button } from "@/components/universal/button";
 
-export default function OpenWarn() {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isQQBrowser, setIsQQBrowser] = useState<boolean>(false);
   const [copyButtonText, setButtonText] =
     useState<string>("点击复制链接到剪切板");
 
   const [displayLink, setDisplayLink] = useState<boolean>(true);
-  const currentUrl = window.location.href; // 获取当前网页链接
 
   useEffect(() => {
     const userAgent = navigator.userAgent;
-
     // 检查 User-Agent 是否包含 "QQ"
     if (userAgent.includes("QQ")) {
-      // if (1) {
+      //   if (1) {
       setIsQQBrowser(true);
       onOpen(); // 打开模态窗口
     }
@@ -35,16 +35,13 @@ export default function OpenWarn() {
   const handleCopyLink = () => {
     // if (window.isSecureContext) {  }
     try {
-      navigator.clipboard.writeText(currentUrl);
+      navigator.clipboard.writeText(window.location.href);
       setButtonText("链接已复制到剪切板");
     } catch (err) {
+      alert(err);
       setButtonText("复制链接失败，请长按下方链接复制");
       setDisplayLink(false);
     }
-  };
-
-  const handleCloseClick = () => {
-    onClose(); // 关闭模态窗口
   };
 
   return (
@@ -68,9 +65,9 @@ export default function OpenWarn() {
                   {copyButtonText}
                 </Button>
                 <Text hidden={displayLink} fontSize="lg" my={3}>
-                  {currentUrl}
+                  {window.location.href}
                 </Text>
-                <Button bgColor="#ff5353" onClick={handleCloseClick} mt={3}>
+                <Button bgColor="#ff5353" onClick={onClose} mt={3}>
                   无视风险继续访问
                 </Button>
               </Flex>
@@ -78,6 +75,7 @@ export default function OpenWarn() {
           </ModalContent>
         </Modal>
       )}
+      {children}
     </>
   );
 }

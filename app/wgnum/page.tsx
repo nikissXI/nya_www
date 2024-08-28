@@ -2,7 +2,7 @@
 
 import { Center, Flex, Stack, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/universal";
+import { Button } from "@/components/universal/button";
 
 const Page = () => {
   const router = useRouter();

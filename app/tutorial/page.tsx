@@ -1,16 +1,14 @@
 "use client";
 
 import { Center, Box, Stack, Heading } from "@chakra-ui/react";
-import { Button } from "@/components/universal";
+import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
-import OpenWarn from "@/components/tutorial/openWarn";
 
 const Page = () => {
   const router = useRouter();
 
   return (
     <Box pt={3} textAlign="center">
-      <OpenWarn />
 
       <Heading my={6}>请选择系统</Heading>
       <Center>

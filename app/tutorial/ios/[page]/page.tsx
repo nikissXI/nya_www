@@ -1,16 +1,15 @@
 "use client";
 
-import { Flex, Box, Text, Center } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/universal";
-import { Page as Page1 } from "@/components/tutorial/ios/page1";
-import { Page as Page2 } from "@/components/tutorial/ios/page2";
-import { Page as Page3 } from "@/components/tutorial/ios/page3";
-import { Page as Page4 } from "@/components/tutorial/ios/page4";
-import { Page as Page5 } from "@/components/tutorial/ios/page5";
-import { Page as Page6 } from "@/components/tutorial/ios/page6";
+import { Flex, Box, Center } from "@chakra-ui/react";
+import { Button } from "@/components/universal/button";
+import { Page as Page1 } from "@/components/tutorial/ios/Page1";
+import { Page as Page2 } from "@/components/tutorial/ios/Page2";
+import { Page as Page3 } from "@/components/tutorial/ios/Page3";
+import { Page as Page4 } from "@/components/tutorial/ios/Page4";
+import { Page as Page5 } from "@/components/tutorial/ios/Page5";
+import { Page as Page6 } from "@/components/tutorial/ios/Page6";
+import { Page as Page7 } from "@/components/tutorial/ios/Page7";
 import { useRouter } from "next/navigation";
-
 export default function Page({ params }: { params: { page: number } }) {
   const { page } = params;
   const pageId = Number(page);
@@ -24,6 +23,7 @@ export default function Page({ params }: { params: { page: number } }) {
     4: <Page4 />,
     5: <Page5 />,
     6: <Page6 />,
+    7: <Page7 />,
   };
 
   const pageCount = Object.keys(pageMap).length;
@@ -48,7 +48,7 @@ export default function Page({ params }: { params: { page: number } }) {
               bgColor="#e87f2c"
               visibility={pageId > 1 ? "visible" : "hidden"}
               onClick={() => {
-                router.push(`/tutorial/android/${pageId - 1}`);
+                router.push(`/tutorial/ios/${pageId - 1}`);
               }}
             >
               上一步
@@ -59,7 +59,7 @@ export default function Page({ params }: { params: { page: number } }) {
             <Button
               bgColor="#b23333"
               onClick={() => {
-                router.push(`/tutorial/android`);
+                router.push(`/tutorial/ios`);
               }}
             >
               返回
@@ -71,7 +71,7 @@ export default function Page({ params }: { params: { page: number } }) {
               bgColor="#30ad2a"
               visibility={pageId < pageCount ? "visible" : "hidden"}
               onClick={() => {
-                router.push(`/tutorial/android/${pageId + 1}`);
+                router.push(`/tutorial/ios/${pageId + 1}`);
               }}
             >
               下一步

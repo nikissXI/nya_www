@@ -3,7 +3,7 @@
 import { Input, Center, Text, Flex, Heading } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/universal";
+import { Button } from "@/components/universal/button";
 
 const Page = () => {
   const router = useRouter();
@@ -75,7 +75,7 @@ const Page = () => {
           router.back(); // 匿名函数路由到 /wgnum
         }}
       >
-        返回上一级
+        返回
       </Button>
     </Flex>
   );

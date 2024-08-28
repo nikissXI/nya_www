@@ -3,7 +3,7 @@ import { Flex, Center, Text, Image, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 
 export function Page() {
-  const wg_apk_url = process.env.NEXT_PUBLIC_WG_APK_URL; // 从环境变量获取 API 地址
+  const wg_msi_url = process.env.NEXT_PUBLIC_WG_PC_URL; // 从环境变量获取 API 地址
 
   return (
     <Center>
@@ -20,15 +20,15 @@ export function Page() {
         <Button
           size="sm"
           onClick={() => {
-            window.open(wg_apk_url, "_blank");
+            window.open(wg_msi_url, "_blank");
           }}
         >
           点击下载WG安装包
         </Button>
 
-        <Text my={3}>这是安装成功的图</Text>
+        <Text my={3}>WG全称WireGuard，这是安装成功的图</Text>
 
-        <Image maxW="240px" src="/images/apk_img.jpg" alt="apk_img" />
+        <Image src="/images/msi_img.png" alt="msi_img" />
       </Flex>
     </Center>
   );

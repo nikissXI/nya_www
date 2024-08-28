@@ -1,53 +1,85 @@
 "use client";
-import { Flex, Text, Box, Heading } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/universal";
 
-export default function Page({ params }: { params: { pageId: string } }) {
-  const { pageId } = params;
-  const [warnningDisplay, setWarnningDisplay] = useState<string>("none");
+import { Flex, Box, Center } from "@chakra-ui/react";
+import { Button } from "@/components/universal/button";
+import { Page as Page1 } from "@/components/tutorial/pc/Page1";
+import { Page as Page2 } from "@/components/tutorial/pc/Page2";
+import { Page as Page3 } from "@/components/tutorial/pc/Page3";
+import { Page as Page4 } from "@/components/tutorial/pc/Page4";
+import { Page as Page5 } from "@/components/tutorial/pc/Page5";
+import { Page as Page6 } from "@/components/tutorial/pc/Page6";
+import { Page as Page7 } from "@/components/tutorial/pc/Page7";
+import { useRouter } from "next/navigation";
 
-  const checkKey = async () => {
-    const key = localStorage.getItem("key");
-    if (!key) {
-      setWarnningDisplay("block");
-      return;
-    }
+export default function Page({ params }: { params: { page: number } }) {
+  const { page } = params;
+  const pageId = Number(page);
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
-    const response = await fetch(
-      `${apiUrl}/checkKey?key=${encodeURIComponent(key)}`,
-      { method: "GET" }
-    );
-    if (response.ok) {
-      const data = await response.json();
-      if (data.code === 1) {
-        setWarnningDisplay("block");
-        localStorage.removeItem("key");
-      }
-    }
+  const router = useRouter();
+
+  const pageMap: { [key: number]: JSX.Element } = {
+    1: <Page1 />,
+    2: <Page2 />,
+    3: <Page3 />,
+    4: <Page4 />,
+    5: <Page5 />,
+    6: <Page6 />,
+    7: <Page7 />,
   };
 
-  // 使用 useEffect 在组件加载时调用
-  useEffect(() => {
-    checkKey();
-  }, []); // 空依赖数组表示只在首次加载时调用
+  const pageCount = Object.keys(pageMap).length;
 
-  const currentStepIndex = 3;
   return (
-    <Flex direction="column" justifyContent="space-between" alignItems="center">
-      <Heading mb={4}>电脑教程</Heading>
+    <Flex
+      direction="column"
+      justifyContent="space-between"
+      alignItems="center"
+      mx="5vw"
+      minH="50vh"
+    >
+      {pageMap[pageId]}
 
-      <Heading color="yellow" size="md" display={warnningDisplay}>
-        你尚未进行身份验证，无法下载
-      </Heading>
+      <Flex justifyContent="space-between" direction="column" mb={6}>
+        <Center mt={6} mb={2}>
+          教程进度 {pageId}/{pageCount}
+        </Center>
+        <Flex>
+          <Box width="100%">
+            <Button
+              bgColor="#e87f2c"
+              visibility={pageId > 1 ? "visible" : "hidden"}
+              onClick={() => {
+                router.push(`/tutorial/pc/${pageId - 1}`);
+              }}
+            >
+              上一步
+            </Button>
+          </Box>
 
-      <Text mb={4}>content</Text>
+          <Box width="100%" mx={5}>
+            <Button
+              bgColor="#b23333"
+              onClick={() => {
+                router.push(`/tutorial/pc`);
+              }}
+            >
+              返回
+            </Button>
+          </Box>
 
-      <Box display="flex" justifyContent="space-between">
-        {currentStepIndex > 0 && <Button colorScheme="teal">上一步</Button>}
-        {currentStepIndex < 10 && <Button colorScheme="teal">下一步</Button>}
-      </Box>
+          <Box width="100%">
+            <Button
+              bgColor="#30ad2a"
+              visibility={pageId < pageCount ? "visible" : "hidden"}
+              onClick={() => {
+                router.push(`/tutorial/pc/${pageId + 1}`);
+              }}
+            >
+              下一步
+            </Button>
+          </Box>
+        </Flex>
+      </Flex>
     </Flex>
   );
 }

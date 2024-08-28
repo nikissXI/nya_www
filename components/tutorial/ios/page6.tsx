@@ -1,16 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
-import {
-  Flex,
-  Center,
-  List,
-  ListItem,
-  Text,
-  ListIcon,
-  Image,
-  Heading,
-} from "@chakra-ui/react";
-import { WarningIcon } from "@chakra-ui/icons";
+import { Flex, Center, List, ListItem, Image, Heading } from "@chakra-ui/react";
 
 export function Page() {
   return (
@@ -22,38 +11,22 @@ export function Page() {
         maxW="460px"
       >
         <Heading size="md" mb={3}>
-          喵服连接教学已完成
-          <br />
-          下面是联机注意事项
+          创建和加入房间
         </Heading>
 
         <List spacing={2}>
           <ListItem>
-            <WarningIcon mr={2} />
-            QQ绑定编号后，群昵称会被改成形如“编号（联机IP）”，方便玩家间联机
+            创建房间使用命令“创建”，该命令的详细用法可以通过发送“创建”了解
           </ListItem>
-          <ListItem>
-            <WarningIcon mr={2} />
-            联机请保持网络流畅，可以通过“检测”命令判断网络流畅度，若延迟大于100或丢包代表网络不稳定
-          </ListItem>
-          <ListItem>
-            <WarningIcon mr={2} />
-            如果游戏的创建者把游戏放后台，会导致其他玩家无法搜索和加入游戏
-          </ListItem>
-          <ListItem>
-            <Text fontSize="md">
-              <WarningIcon mr={2} />
-              喵服支持
-              <Text as="span" fontWeight="bold" color="#ff6969">
-                所有可以填IP直连
-              </Text>
-              及
-              <Text as="span" fontWeight="bold" color="#ff6969">
-                大部分搜索加入
-              </Text>
-              的游戏联机
-            </Text>
-          </ListItem>
+          <Image my={3} src="/images/chuanjian.png" alt="chuanjian" />
+          <ListItem>如要与1号和2号联机，就发命令“创建1 2”</ListItem>
+          <Image
+            my={3}
+            src="/images/chuangjianMember.png"
+            alt="chuangjianMember"
+          />
+          <ListItem>房间成员使用命令“加入”进入房间</ListItem>
+          <Image my={3} src="/images/jiaru.png" alt="chuangjianMember" />
         </List>
       </Flex>
     </Center>

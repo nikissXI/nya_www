@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { Flex, Image, Center, Text } from "@chakra-ui/react";
-import { Button } from "@/components/universal";
+import { Button } from "@/components/universal/button";
 
 interface CountData {
   viewCount: number;
