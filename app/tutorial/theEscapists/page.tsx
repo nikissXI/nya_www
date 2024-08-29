@@ -1,8 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Flex, Center, Heading } from "@chakra-ui/react";
+import { Flex, Center, Heading, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import HeadingText from "@/components/tutorial/TutorialHeading";
 
 export default function AndroidPage0() {
   const router = useRouter();
@@ -15,28 +14,31 @@ export default function AndroidPage0() {
         alignItems="center"
         mx={3}
       >
-        <HeadingText />
-
-        <Heading size="md" mt={5}>
-          苹果因系统原因安装较麻烦
+        <Heading size="md" my={5}>
+          由于该游戏的联机机制特殊
           <br />
-          不懂就看视频，有完成录屏
+          需要额外工具辅助才能建房
+          <br />
+          想联机就认真看教程
         </Heading>
 
+        <Text>
+          加Q群961793250
+          <br />
+          群里有机器人给开房提示
+        </Text>
+
         <Button
-          mt={10}
+          mt={5}
           w="160px"
           h="70px"
           bgColor="#c54572"
           fontSize="40px"
           onClick={() => {
-            window.open(
-              "https://www.bilibili.com/video/BV1MK4y1s7mS?p=2",
-              "_blank"
-            );
+            router.push("/tutorial/theEscapists/android/1");
           }}
         >
-          视频
+          安卓
         </Button>
 
         <Button
@@ -46,10 +48,10 @@ export default function AndroidPage0() {
           bgColor="#00987a"
           fontSize="40px"
           onClick={() => {
-            router.push("/tutorial/ios/1");
+            router.push("/tutorial/theEscapists/ios/1");
           }}
         >
-          图文
+          苹果
         </Button>
 
         <Button

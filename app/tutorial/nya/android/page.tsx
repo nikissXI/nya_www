@@ -47,7 +47,7 @@ export default function AndroidPage0() {
           bgColor="#00987a"
           fontSize="40px"
           onClick={() => {
-            router.push("/tutorial/android/1");
+            router.push("/tutorial/nya/android/1");
           }}
         >
           图文

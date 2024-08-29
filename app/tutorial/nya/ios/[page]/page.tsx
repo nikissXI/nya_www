@@ -2,15 +2,14 @@
 
 import { Flex, Box, Center } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { Page as Page1 } from "@/components/tutorial/pc/Page1";
-import { Page as Page2 } from "@/components/tutorial/pc/Page2";
-import { Page as Page3 } from "@/components/tutorial/pc/Page3";
-import { Page as Page4 } from "@/components/tutorial/pc/Page4";
-import { Page as Page5 } from "@/components/tutorial/pc/Page5";
-import { Page as Page6 } from "@/components/tutorial/pc/Page6";
-import { Page as Page7 } from "@/components/tutorial/pc/Page7";
+import { Page as Page1 } from "@/components/tutorial/nya/ios/Page1";
+import { Page as Page2 } from "@/components/tutorial/nya/ios/Page2";
+import { Page as Page3 } from "@/components/tutorial/nya/ios/Page3";
+import { Page as Page4 } from "@/components/tutorial/nya/ios/Page4";
+import { Page as Page5 } from "@/components/tutorial/nya/ios/Page5";
+import { Page as Page6 } from "@/components/tutorial/nya/ios/Page6";
+import { Page as Page7 } from "@/components/tutorial/nya/ios/Page7";
 import { useRouter } from "next/navigation";
-
 export default function Page({ params }: { params: { page: number } }) {
   const { page } = params;
   const pageId = Number(page);
@@ -49,7 +48,7 @@ export default function Page({ params }: { params: { page: number } }) {
               bgColor="#e87f2c"
               visibility={pageId > 1 ? "visible" : "hidden"}
               onClick={() => {
-                router.push(`/tutorial/pc/${pageId - 1}`);
+                router.push(`${pageId - 1}`);
               }}
             >
               上一步
@@ -60,7 +59,7 @@ export default function Page({ params }: { params: { page: number } }) {
             <Button
               bgColor="#b23333"
               onClick={() => {
-                router.push(`/tutorial/pc`);
+                router.push(`/tutorial/nya/ios`);
               }}
             >
               返回
@@ -72,7 +71,7 @@ export default function Page({ params }: { params: { page: number } }) {
               bgColor="#30ad2a"
               visibility={pageId < pageCount ? "visible" : "hidden"}
               onClick={() => {
-                router.push(`/tutorial/pc/${pageId + 1}`);
+                router.push(`${pageId + 1}`);
               }}
             >
               下一步

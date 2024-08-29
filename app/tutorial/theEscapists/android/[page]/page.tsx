@@ -2,12 +2,8 @@
 
 import { Flex, Box, Center } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { Page as Page1 } from "@/components/tutorial/android/Page1";
-import { Page as Page2 } from "@/components/tutorial/android/Page2";
-import { Page as Page3 } from "@/components/tutorial/android/Page3";
-import { Page as Page4 } from "@/components/tutorial/android/Page4";
-import { Page as Page5 } from "@/components/tutorial/android/Page5";
-import { Page as Page6 } from "@/components/tutorial/android/Page6";
+import { Page as Page1 } from "@/components/tutorial/theEscapists/android/Page1";
+import { Page as Page2 } from "@/components/tutorial/theEscapists/android/Page2";
 import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { page: number } }) {
@@ -19,10 +15,6 @@ export default function Page({ params }: { params: { page: number } }) {
   const pageMap: { [key: number]: JSX.Element } = {
     1: <Page1 />,
     2: <Page2 />,
-    3: <Page3 />,
-    4: <Page4 />,
-    5: <Page5 />,
-    6: <Page6 />,
   };
 
   const pageCount = Object.keys(pageMap).length;
@@ -47,7 +39,7 @@ export default function Page({ params }: { params: { page: number } }) {
               bgColor="#e87f2c"
               visibility={pageId > 1 ? "visible" : "hidden"}
               onClick={() => {
-                router.push(`/tutorial/android/${pageId - 1}`);
+                router.push(`${pageId - 1}`);
               }}
             >
               上一步
@@ -58,7 +50,7 @@ export default function Page({ params }: { params: { page: number } }) {
             <Button
               bgColor="#b23333"
               onClick={() => {
-                router.push(`/tutorial/android`);
+                router.push(`/tutorial/theEscapists`);
               }}
             >
               返回
@@ -70,7 +62,7 @@ export default function Page({ params }: { params: { page: number } }) {
               bgColor="#30ad2a"
               visibility={pageId < pageCount ? "visible" : "hidden"}
               onClick={() => {
-                router.push(`/tutorial/android/${pageId + 1}`);
+                router.push(`${pageId + 1}`);
               }}
             >
               下一步

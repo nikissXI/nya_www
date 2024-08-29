@@ -24,7 +24,7 @@ export default function Page() {
             bgColor="#148f14"
             fontSize="40px"
             onClick={() => {
-              router.push("/tutorial/android");
+              router.push("/tutorial/nya/android");
             }}
           >
             安卓
@@ -35,7 +35,7 @@ export default function Page() {
             bgColor="#2383c2"
             fontSize="40px"
             onClick={() => {
-              router.push("/tutorial/ios");
+              router.push("/tutorial/nya/ios");
             }}
           >
             苹果
@@ -46,7 +46,7 @@ export default function Page() {
             bgColor="#753030"
             fontSize="40px"
             onClick={() => {
-              router.push("/tutorial/pc");
+              router.push("/tutorial/nya/pc");
             }}
           >
             电脑

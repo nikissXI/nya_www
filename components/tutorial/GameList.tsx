@@ -22,15 +22,14 @@ interface Article {
   title: string;
 }
 
+const biliPrefix = "https://www.bilibili.com/video/";
+
 const articles: Article[] = [
-  { path: "BV13xijemE3L", title: "逃脱者2" },
-  { path: "BV1z14y1W7ee", title: "恶果之地" },
-  {
-    path: "BV1FLeJeNEq6",
-    title: "阿瑞斯病毒2",
-  },
-  { path: "BV1U1eGe8Eka", title: "星露谷物语" },
-  { path: "BV1svije6Eda", title: "传说法师" },
+  { path: "/tutorial/theEscapists", title: "逃脱者2" },
+  { path: biliPrefix + "BV1z14y1W7ee", title: "恶果之地" },
+  { path: biliPrefix + "BV1FLeJeNEq6", title: "阿瑞斯病毒2" },
+  { path: biliPrefix + "BV1U1eGe8Eka", title: "星露谷物语" },
+  { path: biliPrefix + "BV1svije6Eda", title: "传说法师" },
 ];
 
 export const GameListModal: React.FC<{
@@ -65,7 +64,7 @@ export const GameListModal: React.FC<{
                 <ListItem key={article.path}>
                   <Link
                     as={NextLink}
-                    href={`https://www.bilibili.com/video/${article.path}`}
+                    href={article.path}
                     color="#a6d4ff"
                     _hover={{ textDecoration: "none" }}
                     onClick={onClose}

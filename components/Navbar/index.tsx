@@ -25,24 +25,27 @@ const Navbar = ({ path }: { path: string }) => {
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
-    // 根据路由设置标题
+    // 根据路由设置标题 
     const titles: { [key: string]: string } = {
       "/": "首页",
       "/wgnum": "编号绑定",
       "/wgnum/bind": "身份验证",
       "/wgnum/query": "绑定查询",
-      "/tutorial": "联机教程",
-      "/tutorial/android": "安卓教程",
-      "/tutorial/ios": "苹果教程",
-      "/tutorial/pc": "电脑教程",
       "/sponsor": "赞助榜",
+      "/tutorial": "联机教程",
+      "/tutorial/nya/android": "喵服安卓教程",
+      "/tutorial/nya/ios": "喵服苹果教程",
+      "/tutorial/nya/pc": "喵服电脑教程",
+      "/tutorial/theEscapists": "联机教程 - 逃脱者",
     };
-    if (path.includes("/tutorial/android")) {
-      setTitle(titles["/tutorial/android"]);
-    } else if (path.includes("/tutorial/ios")) {
-      setTitle(titles["/tutorial/ios"]);
-    } else if (path.includes("/tutorial/pc")) {
-      setTitle(titles["/tutorial/pc"]);
+    if (path.includes("/tutorial/nya/android")) {
+      setTitle(titles["/tutorial/nya/android"]);
+    } else if (path.includes("/tutorial/nya/ios")) {
+      setTitle(titles["/tutorial/nya/ios"]);
+    } else if (path.includes("/tutorial/nya/pc")) {
+      setTitle(titles["/tutorial/nya/pc"]);
+    } else if (path.includes("/tutorial/theEscapists")) {
+      setTitle(titles["/tutorial/theEscapists"]);
     } else {
       setTitle(titles[path]);
     }
