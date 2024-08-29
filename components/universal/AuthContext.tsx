@@ -11,7 +11,7 @@ interface AuthContextType {
 
 // 默认值
 const defaultContextValue: AuthContextType = {
-  isLoggedIn: false,
+  isLoggedIn: true,
   toggleLogin: () => {}, // 默认的空函数
   wgnum: 0,
   setWgnum: () => {}, // 默认的空函数
@@ -22,7 +22,7 @@ const AuthContext = createContext<AuthContextType>(defaultContextValue);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
 
   const toggleLogin = (loggedIn: boolean) => {
     setIsLoggedIn(loggedIn);
