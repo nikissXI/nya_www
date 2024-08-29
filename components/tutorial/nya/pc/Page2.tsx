@@ -10,16 +10,25 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/universal/AuthContext";
 
 export function Page() {
   const router = useRouter();
 
-  const key = localStorage.getItem("key");
+  const [contDownloadUrl, setContDownloadUrl] = useState<string>("");
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const contDownloadUrl = `${apiUrl}/d?k=${key}&r=${Math.random()}`;
+  const { isLoggedIn } = useAuth();
+
+  useEffect(() => {
+    const key = localStorage.getItem("key");
+    if (key) {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      setContDownloadUrl(`${apiUrl}/d?k=${key}&r=${Math.random()}`);
+    }
+  }, [setContDownloadUrl]);
+
 
   const images = ["/images/pc_switch_off.jpg", "/images/pc_switch_on.jpg"];
 
@@ -49,9 +58,9 @@ export function Page() {
               onClick={() => {
                 window.open(contDownloadUrl, "_blank");
               }}
-              isDisabled={key ? false : true}
+              isDisabled={isLoggedIn ? false : true}
             >
-              {key ? "点击下载conf" : "未登录无法下载"}
+              {isLoggedIn ? "点击下载conf" : "未登录无法下载"}
             </Button>
             <Button
               bgColor="#1d984b"
@@ -59,7 +68,7 @@ export function Page() {
               onClick={() => {
                 router.push("/wgnum/bind");
               }}
-              visibility={key ? "hidden" : "visible"}
+              visibility={isLoggedIn ? "hidden" : "visible"}
               ml={5}
             >
               点击进行登陆

@@ -4,8 +4,6 @@ import { Flex, Center, List, ListItem, Heading, Image } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 
 export function Page() {
-  const key = localStorage.getItem("key");
-
   const bat_url = process.env.NEXT_PUBLIC_BAT_URL; // 从环境变量获取 API 地址
 
   return (
@@ -31,7 +29,6 @@ export function Page() {
               onClick={() => {
                 window.open(bat_url, "_blank");
               }}
-              isDisabled={key ? false : true}
             >
               点击下载bat
             </Button>
