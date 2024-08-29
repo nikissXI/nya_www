@@ -28,24 +28,12 @@ export default function Page({ params }: { params: { page: number } }) {
           maxW="460px"
         >
           <Text my={3}>
-            玩家都处于一个联机房间后，进游戏创建或加入就行
+            玩家都处于一个联机房间后，房主建房，其他人填喵服IP加入就行
             <br />
-            加入的时候房主别把游戏后台
+            对方搜的时候房主别把游戏后台
             <br />
-            支持安卓、苹果一起联机
+            能否一起联机得看版本号
           </Text>
-
-          <Button
-            size="sm"
-            onClick={() => {
-              window.open(
-                "https://www.bilibili.com/video/BV1svije6Eda/",
-                "_blank"
-              );
-            }}
-          >
-            点击查看视频教程
-          </Button>
         </Flex>
       </Center>
 

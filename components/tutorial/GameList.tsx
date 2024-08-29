@@ -28,6 +28,10 @@ const articles: Article[] = [
   { path: "/tutorial/aresVirus2/1", title: "阿瑞斯病毒2" },
   { path: "/tutorial/stardewValley/1", title: "星露谷物语" },
   { path: "/tutorial/wizardOfLegend/1", title: "传说法师" },
+  { path: "/tutorial/soulKnight/1", title: "元气骑士" },
+  { path: "/tutorial/otherworldLegends/1", title: "战魂铭人" },
+  { path: "/tutorial/minecraft/1", title: "我的世界" },
+  { path: "/tutorial/terraria/1", title: "泰拉瑞亚" },
 ];
 
 export const GameListModal: React.FC<{

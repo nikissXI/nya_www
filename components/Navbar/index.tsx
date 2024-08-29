@@ -24,43 +24,35 @@ const Navbar = ({ path }: { path: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState<string>("");
 
+  const gameTitles: { [key: string]: string } = {
+    "/nya/android": "喵服安卓教程",
+    "/nya/ios": "喵服苹果教程",
+    "/nya/pc": "喵服电脑教程",
+    theEscapists: "联机教程 - 逃脱者",
+    juicyRealm: "联机教程 - 恶果之地",
+    wizardOfLegend: "联机教程 - 传说法师",
+    aresVirus2: "联机教程 - 阿瑞斯病毒2",
+    stardewValley: "联机教程 - 星露谷物语",
+    soulKnight: "联机教程 - 元气骑士",
+    otherworldLegends: "联机教程 - 战魂铭人",
+    minecraft: "联机教程 - 我的世界",
+    terraria: "联机教程 - 泰拉瑞亚",
+  };
+
+  const titles: { [key: string]: string } = {
+    "/": "首页",
+    "/wgnum": "编号绑定",
+    "/wgnum/bind": "身份验证",
+    "/wgnum/query": "绑定查询",
+    "/sponsor": "赞助榜",
+    "/tutorial": "联机教程",
+  };
+
   useEffect(() => {
-    // 根据路由设置标题
-    const titles: { [key: string]: string } = {
-      "/": "首页",
-      "/wgnum": "编号绑定",
-      "/wgnum/bind": "身份验证",
-      "/wgnum/query": "绑定查询",
-      "/sponsor": "赞助榜",
-      "/tutorial": "联机教程",
-      "nya/android": "喵服安卓教程",
-      "nya/ios": "喵服苹果教程",
-      "nya/pc": "喵服电脑教程",
-      "theEscapists": "联机教程 - 逃脱者",
-      "juicyRealm": "联机教程 - 恶果之地",
-      "wizardOfLegend": "联机教程 - 传说法师",
-      "aresVirus2": "联机教程 - 阿瑞斯病毒2",
-      "stardewValley": "联机教程 - 星露谷物语",
-    };
-    if (path.includes("nya/android")) {
-      setTitle(titles["nya/android"]);
-    } else if (path.includes("nya/ios")) {
-      setTitle(titles["nya/ios"]);
-    } else if (path.includes("nya/pc")) {
-      setTitle(titles["nya/pc"]);
-    } else if (path.includes("theEscapists")) {
-      setTitle(titles["theEscapists"]);
-    } else if (path.includes("aresVirus2")) {
-      setTitle(titles["aresVirus2"]);
-    } else if (path.includes("juicyRealm")) {
-      setTitle(titles["juicyRealm"]);
-    } else if (path.includes("wizardOfLegend")) {
-      setTitle(titles["wizardOfLegend"]);
-    } else if (path.includes("stardewValley")) {
-      setTitle(titles["stardewValley"]);
-    } else {
-      setTitle(titles[path]);
-    }
+    const matchedTitle = Object.keys(gameTitles).find((key) =>
+      path.includes(key)
+    );
+    setTitle(matchedTitle ? gameTitles[matchedTitle] : titles[path]);
   }, [path]);
 
   const rootGuide = [

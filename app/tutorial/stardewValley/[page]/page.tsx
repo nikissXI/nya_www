@@ -1,8 +1,7 @@
 "use client";
 
-import { Flex, Box, Center } from "@chakra-ui/react";
+import { Flex, Box, Center, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { Page as Page1 } from "@/components/tutorial/stardewValley/Page1";
 import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { page: number } }) {
@@ -11,11 +10,7 @@ export default function Page({ params }: { params: { page: number } }) {
 
   const router = useRouter();
 
-  const pageMap: { [key: number]: JSX.Element } = {
-    1: <Page1 />,
-  };
-
-  const pageCount = Object.keys(pageMap).length;
+  const pageCount = 1;
 
   return (
     <Flex
@@ -25,7 +20,34 @@ export default function Page({ params }: { params: { page: number } }) {
       mx="5vw"
       minH="50vh"
     >
-      {pageMap[pageId]}
+      <Center>
+        <Flex
+          direction="column"
+          justifyContent="space-between"
+          alignItems="center"
+          maxW="460px"
+        >
+          <Text my={3}>
+            玩家都处于一个联机房间后，房主主持农场（就是创建联机房间），其他玩家填房主的喵服IP加入即可
+            <br />
+            加入的时候房主别把游戏后台
+            <br />
+            只能安卓和安卓联机，电脑和电脑联机
+          </Text>
+
+          <Button
+            size="sm"
+            onClick={() => {
+              window.open(
+                "https://www.bilibili.com/video/BV1U1eGe8Eka/",
+                "_blank"
+              );
+            }}
+          >
+            点击查看视频教程
+          </Button>
+        </Flex>
+      </Center>
 
       <Flex justifyContent="space-between" direction="column" mb={6}>
         <Center mt={6} mb={2}>
