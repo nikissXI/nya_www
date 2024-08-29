@@ -2,8 +2,12 @@
 
 import { Flex, Center, List, ListItem, Text, Heading } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
+import { Button } from "@/components/universal/button";
+import { useRouter } from "next/navigation";
 
 export function Page() {
+  const router = useRouter();
+
   return (
     <Center>
       <Flex
@@ -46,6 +50,20 @@ export function Page() {
             </Text>
           </ListItem>
         </List>
+
+        <Button
+          h="60px"
+          mt={3}
+          size="md"
+          bgColor="#7242ad"
+          onClick={() => {
+            router.push("/tutorial");
+          }}
+        >
+          点击查看已收录
+          <br />
+          的游戏联机教程
+        </Button>
       </Flex>
     </Center>
   );
