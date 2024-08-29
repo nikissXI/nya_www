@@ -46,7 +46,7 @@ export const GameListModal: React.FC<{
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bgColor="#002f5c">
         <ModalHeader textAlign="center">游戏教程列表</ModalHeader>
         <ModalCloseButton />
         <Text textAlign="center" color="#ffc500">

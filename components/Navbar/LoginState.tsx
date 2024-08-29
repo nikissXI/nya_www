@@ -60,7 +60,7 @@ export function LoginStateText() {
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bgColor="#002f5c">
           <ModalHeader>
             {isLoggedIn ? "是要退出登录吗？" : "你还没有登录呢"}
           </ModalHeader>

@@ -58,7 +58,7 @@ const Page = () => {
   return (
     <Center>
       <TableContainer maxH="520px" overflowY="auto" overflowX="hidden">
-        <Table variant="striped" colorScheme="blue" w="320px">
+        <Table variant="striped" colorScheme="transparent" w="320px">
           <Thead position="sticky" top={0} bg="#3e4e63">
             <Tr>
               <Th color="white" fontSize="md" w="100px" p={3}>

@@ -30,7 +30,7 @@ export default function VerifyWarnModal() {
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bgColor="#002f5c">
         <ModalHeader>警告</ModalHeader>
         <ModalBody>
           <Text>您尚未进行身份验证，将无法下载部分文件</Text>
