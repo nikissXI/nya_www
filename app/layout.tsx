@@ -16,7 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      <body> 
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body>
         {/* 全局背景图 */}
         <Box
           zIndex={-1}
