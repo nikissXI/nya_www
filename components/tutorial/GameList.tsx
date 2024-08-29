@@ -22,14 +22,12 @@ interface Article {
   title: string;
 }
 
-const biliPrefix = "https://www.bilibili.com/video/";
-
 const articles: Article[] = [
   { path: "/tutorial/theEscapists", title: "逃脱者2" },
-  { path: biliPrefix + "BV1z14y1W7ee", title: "恶果之地" },
-  { path: biliPrefix + "BV1FLeJeNEq6", title: "阿瑞斯病毒2" },
-  { path: biliPrefix + "BV1U1eGe8Eka", title: "星露谷物语" },
-  { path: biliPrefix + "BV1svije6Eda", title: "传说法师" },
+  { path: "/tutorial/juicyRealm/1", title: "恶果之地" },
+  { path: "/tutorial/aresVirus2/1", title: "阿瑞斯病毒2" },
+  { path: "/tutorial/stardewValley/1", title: "星露谷物语" },
+  { path: "/tutorial/wizardOfLegend/1", title: "传说法师" },
 ];
 
 export const GameListModal: React.FC<{
@@ -48,8 +46,10 @@ export const GameListModal: React.FC<{
       <ModalContent bgColor="#002f5c">
         <ModalHeader textAlign="center">游戏教程列表</ModalHeader>
         <ModalCloseButton />
-        <Text textAlign="center" color="#ffc500">
-          小提示：先学会连接喵服再看哦
+        <Text textAlign="center" color="#ffc500" mx={6}>
+          提示1：先学会连接喵服再看这里
+          <br />
+          提示2：不仅限于支持列表中的游戏联机
         </Text>
         <ModalBody mx={6} mb={5}>
           <Input

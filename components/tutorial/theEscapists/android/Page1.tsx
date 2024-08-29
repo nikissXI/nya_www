@@ -27,7 +27,9 @@ export function Page() {
           点击下载联机工具安装包
         </Button>
 
-        <Text my={3}>这个工具只需要逃脱者的房主运行，其他人直接搜就行，有视频教程</Text>
+        <Text my={3}>
+          这个工具只需要逃脱者的房主运行，其他人直接搜就行，有视频教程
+        </Text>
 
         <Button
           size="sm"
@@ -37,7 +39,6 @@ export function Page() {
         >
           点击查看视频教程
         </Button>
-
       </Flex>
     </Center>
   );

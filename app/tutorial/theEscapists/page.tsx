@@ -26,6 +26,8 @@ export default function AndroidPage0() {
           加Q群961793250
           <br />
           群里有机器人给开房提示
+          <br />
+          支持安卓和苹果联机
         </Text>
 
         <Button

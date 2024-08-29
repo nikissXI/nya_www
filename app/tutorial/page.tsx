@@ -55,11 +55,14 @@ export default function Page() {
       </Center>
 
       <Center mt={6}>
-        <Button h="60px" bgColor="#7242ad" fontSize="20px" onClick={onOpen}>
-          目前已收录的
-          <br />
-          游戏联机教程
-        </Button>
+        <Stack>
+          <Heading size="sm">如要新增教程找群主</Heading>
+          <Button h="60px" bgColor="#7242ad" fontSize="20px" onClick={onOpen}>
+            目前已收录的
+            <br />
+            游戏联机教程
+          </Button>
+        </Stack>
       </Center>
     </Box>
   );

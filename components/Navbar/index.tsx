@@ -25,7 +25,7 @@ const Navbar = ({ path }: { path: string }) => {
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
-    // 根据路由设置标题 
+    // 根据路由设置标题
     const titles: { [key: string]: string } = {
       "/": "首页",
       "/wgnum": "编号绑定",
@@ -33,19 +33,31 @@ const Navbar = ({ path }: { path: string }) => {
       "/wgnum/query": "绑定查询",
       "/sponsor": "赞助榜",
       "/tutorial": "联机教程",
-      "/tutorial/nya/android": "喵服安卓教程",
-      "/tutorial/nya/ios": "喵服苹果教程",
-      "/tutorial/nya/pc": "喵服电脑教程",
-      "/tutorial/theEscapists": "联机教程 - 逃脱者",
+      "nya/android": "喵服安卓教程",
+      "nya/ios": "喵服苹果教程",
+      "nya/pc": "喵服电脑教程",
+      "theEscapists": "联机教程 - 逃脱者",
+      "juicyRealm": "联机教程 - 恶果之地",
+      "wizardOfLegend": "联机教程 - 传说法师",
+      "aresVirus2": "联机教程 - 阿瑞斯病毒2",
+      "stardewValley": "联机教程 - 星露谷物语",
     };
-    if (path.includes("/tutorial/nya/android")) {
-      setTitle(titles["/tutorial/nya/android"]);
-    } else if (path.includes("/tutorial/nya/ios")) {
-      setTitle(titles["/tutorial/nya/ios"]);
-    } else if (path.includes("/tutorial/nya/pc")) {
-      setTitle(titles["/tutorial/nya/pc"]);
-    } else if (path.includes("/tutorial/theEscapists")) {
-      setTitle(titles["/tutorial/theEscapists"]);
+    if (path.includes("nya/android")) {
+      setTitle(titles["nya/android"]);
+    } else if (path.includes("nya/ios")) {
+      setTitle(titles["nya/ios"]);
+    } else if (path.includes("nya/pc")) {
+      setTitle(titles["nya/pc"]);
+    } else if (path.includes("theEscapists")) {
+      setTitle(titles["theEscapists"]);
+    } else if (path.includes("aresVirus2")) {
+      setTitle(titles["aresVirus2"]);
+    } else if (path.includes("juicyRealm")) {
+      setTitle(titles["juicyRealm"]);
+    } else if (path.includes("wizardOfLegend")) {
+      setTitle(titles["wizardOfLegend"]);
+    } else if (path.includes("stardewValley")) {
+      setTitle(titles["stardewValley"]);
     } else {
       setTitle(titles[path]);
     }

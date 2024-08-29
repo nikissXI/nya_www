@@ -3,7 +3,6 @@
 import {
   Flex,
   Center,
-  Text,
   List,
   ListItem,
   Image,
