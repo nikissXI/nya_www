@@ -23,7 +23,7 @@ interface Article {
 }
 
 const articles: Article[] = [
-  { path: "/tutorial/theEscapists", title: "逃脱者2" },
+  { path: "/tutorial/theEscapists", title: "逃脱者：困境突围" },
   { path: "/tutorial/juicyRealm/1", title: "恶果之地" },
   { path: "/tutorial/aresVirus2/1", title: "阿瑞斯病毒2" },
   { path: "/tutorial/stardewValley/1", title: "星露谷物语" },
