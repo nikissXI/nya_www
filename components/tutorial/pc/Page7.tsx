@@ -36,6 +36,10 @@ export function Page() {
             如果游戏的创建者把游戏放后台，会导致其他玩家无法搜索和加入游戏
           </ListItem>
           <ListItem>
+            <WarningIcon mr={2} />
+            各系统只要连上喵服就能互相通信，但至于游戏能不能联机得看游戏自己支不支持
+          </ListItem>
+          <ListItem>
             <Text fontSize="md">
               <WarningIcon mr={2} />
               喵服支持
