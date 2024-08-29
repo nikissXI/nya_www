@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Flex, Center } from "@chakra-ui/react";
+import { Flex, Center, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import HeadingText from "@/components/tutorial/TutorialHeading";
 
@@ -16,6 +16,12 @@ export default function AndroidPage0() {
         mx={3}
       >
         <HeadingText />
+
+        <Heading size="md" mt={5}>
+          苹果因系统原因安装较麻烦
+          <br />
+          不懂就看视频，有完成录屏
+        </Heading>
 
         <Button
           mt={10}
