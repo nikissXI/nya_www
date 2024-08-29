@@ -27,7 +27,7 @@ export function Page() {
           </ListItem>
           <Image
             my={3}
-            src="/images/fangjian.png"
+            src="/images/fangjian.jpg"
             alt="fangjian"
           />
           <ListItem>

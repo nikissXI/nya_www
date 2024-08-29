@@ -44,7 +44,7 @@ export function Page() {
           <ListItem>
             运行这个文件可能会被杀毒软件拦截，如果不放心可以用txt看里面写的什么内容
           </ListItem>
-          <Image src="/images/run_bat_success.png" alt="run_bat_success" />
+          <Image src="/images/run_bat_success.jpg" alt="run_bat_success" />
         </List>
       </Flex>
     </Center>

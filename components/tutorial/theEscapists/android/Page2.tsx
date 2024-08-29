@@ -20,7 +20,7 @@ export function Page() {
             玩家都处于一个联机房间后，房主跟着联机工具的提示操作就行（如下图）
           </ListItem>
           <Image
-            src="/images/the_escapists_tool.png"
+            src="/images/the_escapists_tool.jpg"
             alt="the_escapists_tool"
           />
 
@@ -28,7 +28,7 @@ export function Page() {
             如果房主创建房间成功，群里的机器人会发出如下图的提示，这个时候其他要加入玩家赶紧搜索（建议在1分钟内搜索，这个时候后台会协助玩家搜索），房主的游戏不要后台否则其他人搜不到
           </ListItem>
           <Image
-            src="/images/the_escapists_room_create.png"
+            src="/images/the_escapists_room_create.jpg"
             alt="the_escapists_room_create"
           />
           <ListItem>玩家加入进来后就可以关掉联机工具</ListItem>

@@ -27,7 +27,7 @@ export function Page() {
           <ListItem>我的编号是20，就在群里发“检测20”，注意不要带空格</ListItem>
           <Image
             my={3}
-            src="/images/wg_check.png"
+            src="/images/wg_check.jpg"
             alt="wg_check"
           />
           <ListItem>该命令也可以检测其他人是否连上</ListItem>

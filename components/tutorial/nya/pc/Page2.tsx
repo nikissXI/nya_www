@@ -21,7 +21,7 @@ export function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const contDownloadUrl = `${apiUrl}/d?k=${key}&r=${Math.random()}`;
 
-  const images = ["/images/pc_switch_off.png", "/images/pc_switch_on.png"];
+  const images = ["/images/pc_switch_off.jpg", "/images/pc_switch_on.jpg"];
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 

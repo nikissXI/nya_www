@@ -33,7 +33,7 @@ export function Page() {
             Store下载安卓就行（如果你懂python你用其他类似的软件也可以）
           </ListItem>
           <Image
-            src="/images/the_escapists_tool_py.png"
+            src="/images/the_escapists_tool_py.jpg"
             alt="the_escapists_tool_py"
           />
 
