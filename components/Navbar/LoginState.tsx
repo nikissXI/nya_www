@@ -43,6 +43,8 @@ export function LoginStateText() {
         .catch((error) => {
           console.error("Error fetching the key:", error);
         });
+    } else {
+      toggleLogin(false);
     }
   }, [isLoggedIn, toggleLogin, setWgnum]);
 
@@ -53,7 +55,7 @@ export function LoginStateText() {
     } else {
       router.push("/wgnum/bind");
     }
-    onClose()
+    onClose();
   };
 
   return (
