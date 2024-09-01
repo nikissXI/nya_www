@@ -20,7 +20,7 @@ export default function AndroidPage0() {
         <Heading size="md" mt={5}>
           苹果因系统原因安装较麻烦
           <br />
-          不懂就看视频，有完成录屏
+          不懂就看视频，有完整录屏
         </Heading>
 
         <Button

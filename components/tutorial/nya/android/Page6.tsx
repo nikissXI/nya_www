@@ -64,9 +64,9 @@ export function Page() {
             router.push("/tutorial");
           }}
         >
-          点击查看已收录
+          点击查看
           <br />
-          的游戏联机教程
+          游戏联机教程
         </Button>
       </Flex>
     </Center>

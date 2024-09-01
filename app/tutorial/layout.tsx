@@ -52,7 +52,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <ModalContent bgColor="#002f5c">
             <ModalHeader>不好意思打扰一下！</ModalHeader>
             <ModalBody>
-              检测到您疑似在QQ内访问该网页，会导致下载安装包或文件异常，建议您点击下方按钮复制链接到浏览器粘贴访问，谢谢~
+              检测到您疑似在QQ内访问该网页，会导致下载功能异常，建议您点击下方按钮复制链接到浏览器粘贴访问，谢谢~
             </ModalBody>
             <ModalFooter>
               <Flex

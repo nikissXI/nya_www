@@ -23,7 +23,7 @@ interface Article {
 }
 
 const articles: Article[] = [
-  { path: "/tutorial/theEscapists", title: "逃脱者：困境突围" },
+  { path: "/tutorial/theEscapists", title: "逃脱者：困境突围（内附联机工具）" },
   { path: "/tutorial/juicyRealm/1", title: "恶果之地" },
   { path: "/tutorial/aresVirus2/1", title: "阿瑞斯病毒2" },
   { path: "/tutorial/stardewValley/1", title: "星露谷物语" },
@@ -51,9 +51,9 @@ export const GameListModal: React.FC<{
         <ModalHeader textAlign="center">游戏教程列表</ModalHeader>
         <ModalCloseButton />
         <Text textAlign="center" color="#ffc500" mx={6}>
-          提示1：先学会连接喵服再看这里
+          不仅限于支持列表中的游戏联机
           <br />
-          提示2：不仅限于支持列表中的游戏联机
+          如需新增教程请联系群主
         </Text>
         <ModalBody mx={6} mb={5}>
           <Input
