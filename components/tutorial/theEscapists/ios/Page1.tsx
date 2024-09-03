@@ -27,14 +27,13 @@ export function Page() {
         setDisplayLink(false);
       } else {
         const py_text = await resp.text();
-        setButtonText("复制中...");
         setTimeout(() => {
           navigator.clipboard.writeText(py_text);
-        }, 1000);
+        }, 100);
         setButtonText("已复制到剪切板");
         setTimeout(() => {
           setButtonText("点击复制脚本到剪切板");
-        }, 3000);
+        }, 2000);
       }
     } catch (err) {
       setButtonText("复制失败，请访问链接复制");
