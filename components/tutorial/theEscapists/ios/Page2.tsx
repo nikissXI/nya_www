@@ -17,7 +17,7 @@ export function Page() {
 
         <List spacing={2}>
           <ListItem>
-            玩家都处于一个联机房间后，房主使用py工具运行下载的py脚本，如果是iPad就用悬浮窗运行，如果是iPhone就先放后台
+            玩家都处于一个联机房间后，房主使用py工具运行粘贴的py脚本，如果是iPad就用悬浮窗运行，如果是iPhone就先放后台
           </ListItem>
           <Image
             src="/images/the_escapists_tool_ios.jpg"
