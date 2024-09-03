@@ -27,7 +27,10 @@ export function Page() {
         setDisplayLink(false);
       } else {
         const py_text = await resp.text();
-        navigator.clipboard.writeText(py_text);
+        setButtonText("复制中...");
+        setTimeout(() => {
+          navigator.clipboard.writeText(py_text);
+        }, 1000);
         setButtonText("已复制到剪切板");
         setTimeout(() => {
           setButtonText("点击复制脚本到剪切板");
