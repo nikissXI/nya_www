@@ -11,31 +11,38 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export function Page() {
   const tool_py_url = process.env.NEXT_PUBLIC_TOOL_PY_URL as string; // 从环境变量获取 API 地址
   const [displayLink, setDisplayLink] = useState<boolean>(true);
+  const [pyText, setpytext] = useState<string>("");
   const [copyButtonText, setButtonText] =
     useState<string>("点击复制脚本到剪切板");
 
-  const handleCopy = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const resp = await fetch(tool_py_url);
-      if (!resp.ok) {
-        setButtonText("复制失败，请访问链接复制");
-        setDisplayLink(false);
-      } else {
-        const py_text = await resp.text();
-        setTimeout(() => {
-          navigator.clipboard.writeText(py_text);
-        }, 100);
-        setButtonText("已复制到剪切板");
-        setTimeout(() => {
-          setButtonText("点击复制脚本到剪切板");
-        }, 2000);
+      const response = await fetch(tool_py_url);
+      if (response.ok) {
+        setpytext(await response.text());
       }
     } catch (err) {
+      alert(err);
+    }
+  }, [tool_py_url]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleCopy = () => {
+    if (pyText) {
+      navigator.clipboard.writeText(pyText);
+      setButtonText("已复制到剪切板");
+      setTimeout(() => {
+        setButtonText("点击复制脚本到剪切板");
+      }, 2000);
+    } else {
       setButtonText("复制失败，请访问链接复制");
       setDisplayLink(false);
     }
