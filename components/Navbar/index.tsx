@@ -105,12 +105,13 @@ const Navbar = ({ path }: { path: string }) => {
               </Center>
             </Link>
           ))}
-          {/* 登陆状态 */}
-          <LoginStateText />
         </Flex>
       </Flex>
 
       {/* 移动端菜单按钮，桌面端时不展示（即none） */}
+
+      {/* 登陆状态 */}
+      <LoginStateText />
 
       <Button
         position="fixed"
@@ -159,8 +160,6 @@ const Navbar = ({ path }: { path: string }) => {
                   </Center>
                 </Link>
               ))}
-              {/* 登陆状态 */}
-              <LoginStateText />
             </Flex>
           </DrawerBody>
         </DrawerContent>

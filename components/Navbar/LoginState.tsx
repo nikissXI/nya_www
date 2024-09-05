@@ -79,18 +79,21 @@ export function LoginStateText() {
       </Modal>
 
       <Button
-        mx={{ base: 6, md: "none" }}
-        my={3}
-        py={2}
+        position="fixed"
+        top={3}
+        left={{ md: 20, base: 2 }}
+        variant="outline"
+        colorScheme="whiteAlpha"
+        rounded={10}
+        onClick={onOpen}
+        border={0}
         _hover={{ textDecoration: "none" }}
         _active={{ textDecoration: "none" }}
         bg="transparent"
-        rounded={12}
-        onClick={onOpen}
       >
         <Center>
-          <Text color="white" fontWeight="bold">
-            {isLoggedIn ? `已登录(${wgnum})` : "未登录"}
+          <Text fontSize="lg" color="white" fontWeight="bold">
+            {isLoggedIn ? `编号 ${wgnum}` : "未登录"}
           </Text>
         </Center>
       </Button>
