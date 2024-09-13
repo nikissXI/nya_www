@@ -205,7 +205,7 @@ export default function Page() {
     }
     // 最后设置 loading 状态
     setLoading(false);
-  }, [fetchNetworkLatency, isLanding, isLoggedIn, status]);
+  }, [isLanding, isLoggedIn, status]);
 
   const fetchHandleRoom = async (
     handleType: string,
@@ -498,7 +498,13 @@ export default function Page() {
   return (
     <Stack alignItems="center">
       <Text>在喵服关联群里发“房间”可获取本网页链接</Text>
-      {networkUtils(latencyData, fetchNetworkLatency, checking, checkText)}
+      {networkUtils(
+        wgnum,
+        latencyData,
+        fetchNetworkLatency,
+        checking,
+        checkText
+      )}
       {status === "none" ? nonePage() : roomPage()}
       <Button
         h="36px"
@@ -541,6 +547,7 @@ export default function Page() {
 }
 
 function networkUtils(
+  wgnum: number,
   latencyData: LatencyData | null,
   fetchNetworkLatency: (checkType: string) => {},
   checking: boolean,
@@ -555,9 +562,12 @@ function networkUtils(
   return (
     <>
       <Flex align="center">
+        <Text fontSize={18} fontWeight="bold"  color="#ffd964">
+          你的编号: {wgnum}
+        </Text>
         <Text
           fontSize={18}
-          mr={2}
+          mx={3}
           fontWeight="bold"
           color={latencyData ? "#3fdb1d" : "#e60000"}
         >
