@@ -1,17 +1,16 @@
 "use client";
 
-import { Center, Box, Stack, Heading, useDisclosure } from "@chakra-ui/react";
+import { Center, Box, Stack, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
-import { GameListModal } from "@/components/tutorial/GameList";
+import { useAuth } from "@/components/universal/AuthContext";
 
 export default function Page() {
   const router = useRouter();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { glOnOpen } = useAuth();
 
   return (
     <Box textAlign="center">
-      <GameListModal isOpen={isOpen} onClose={onClose} />
       <Heading my={3}>
         请根据系统类型
         <br />
@@ -50,15 +49,6 @@ export default function Page() {
             }}
           >
             电脑
-          </Button>
-        </Stack>
-      </Center>
-
-      <Center mt={6}>
-        <Stack alignItems="center">
-          <Heading size="md">学会连接喵服后再看这里</Heading>
-          <Button h="42px" w="150px" bgColor="#7242ad" fontSize="20px" onClick={onOpen}>
-            游戏联机教程
           </Button>
         </Stack>
       </Center>

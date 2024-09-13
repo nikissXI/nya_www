@@ -6,9 +6,6 @@ import { Page as Page1 } from "@/components/tutorial/nya/pc/Page1";
 import { Page as Page2 } from "@/components/tutorial/nya/pc/Page2";
 import { Page as Page3 } from "@/components/tutorial/nya/pc/Page3";
 import { Page as Page4 } from "@/components/tutorial/nya/pc/Page4";
-import { Page as Page5 } from "@/components/tutorial/nya/pc/Page5";
-import { Page as Page6 } from "@/components/tutorial/nya/pc/Page6";
-import { Page as Page7 } from "@/components/tutorial/nya/pc/Page7";
 import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { page: number } }) {
@@ -22,9 +19,6 @@ export default function Page({ params }: { params: { page: number } }) {
     2: <Page2 />,
     3: <Page3 />,
     4: <Page4 />,
-    5: <Page5 />,
-    6: <Page6 />,
-    7: <Page7 />,
   };
 
   const pageCount = Object.keys(pageMap).length;

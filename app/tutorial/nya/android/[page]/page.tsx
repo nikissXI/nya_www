@@ -5,9 +5,6 @@ import { Button } from "@/components/universal/button";
 import { Page as Page1 } from "@/components/tutorial/nya/android/Page1";
 import { Page as Page2 } from "@/components/tutorial/nya/android/Page2";
 import { Page as Page3 } from "@/components/tutorial/nya/android/Page3";
-import { Page as Page4 } from "@/components/tutorial/nya/android/Page4";
-import { Page as Page5 } from "@/components/tutorial/nya/android/Page5";
-import { Page as Page6 } from "@/components/tutorial/nya/android/Page6";
 import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { page: number } }) {
@@ -20,9 +17,6 @@ export default function Page({ params }: { params: { page: number } }) {
     1: <Page1 />,
     2: <Page2 />,
     3: <Page3 />,
-    4: <Page4 />,
-    5: <Page5 />,
-    6: <Page6 />,
   };
 
   const pageCount = Object.keys(pageMap).length;

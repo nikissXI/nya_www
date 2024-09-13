@@ -18,11 +18,14 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { LoginStateText } from "./LoginState";
+import { GameListModal } from "@/components/tutorial/GameList";
+import { useAuth } from "../universal/AuthContext";
 
 const Navbar = ({ path }: { path: string }) => {
   const rootPath = "/" + path.split("/")[1];
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState<string>("");
+  const { glIsOpen, glOnClose } = useAuth();
 
   useEffect(() => {
     const gameTitles: { [key: string]: string } = {
@@ -30,15 +33,15 @@ const Navbar = ({ path }: { path: string }) => {
       "/nya/android": "喵服安卓教程",
       "/nya/ios": "喵服苹果教程",
       "/nya/pc": "喵服电脑教程",
-      theEscapists: "联机教程 - 逃脱者：困境突围",
-      juicyRealm: "联机教程 - 恶果之地",
-      wizardOfLegend: "联机教程 - 传说法师",
-      aresVirus2: "联机教程 - 阿瑞斯病毒2",
-      stardewValley: "联机教程 - 星露谷物语",
-      soulKnight: "联机教程 - 元气骑士",
-      otherworldLegends: "联机教程 - 战魂铭人",
-      minecraft: "联机教程 - 我的世界",
-      terraria: "联机教程 - 泰拉瑞亚",
+      theEscapists: "逃脱者：困境突围",
+      juicyRealm: "恶果之地",
+      wizardOfLegend: "传说法师",
+      aresVirus2: "阿瑞斯病毒2",
+      stardewValley: "星露谷物语",
+      soulKnight: "元气骑士",
+      otherworldLegends: "战魂铭人",
+      minecraft: "我的世界",
+      terraria: "泰拉瑞亚",
     };
 
     const titles: { [key: string]: string } = {
@@ -48,7 +51,7 @@ const Navbar = ({ path }: { path: string }) => {
       "/wgnum/query": "绑定查询",
       "/sponsor": "赞助榜",
       "/tutorial": "联机教程",
-      "/room": "联机大厅",
+      "/room": "联机房间",
     };
 
     const matchedTitle = Object.keys(gameTitles).find((key) =>
@@ -62,11 +65,12 @@ const Navbar = ({ path }: { path: string }) => {
     { name: "编号绑定", path: "/wgnum" },
     { name: "联机教程", path: "/tutorial" },
     { name: "赞助榜", path: "/sponsor" },
-    { name: "联机大厅", path: "/room" },
+    { name: "联机房间", path: "/room" },
   ];
 
   return (
     <Box>
+      <GameListModal isOpen={glIsOpen} onClose={glOnClose} />
       <Center
         width="100%"
         color="white"

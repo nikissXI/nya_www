@@ -3,7 +3,7 @@
 import { gotoServerEditor, Inspector } from "react-dev-inspector";
 import { ChakraProvider } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import Navbar from "../Navbar";
 import RelateGroupList from "../relateGroups";
 import { AuthProvider } from "../universal/AuthContext";
@@ -14,7 +14,6 @@ const Frame = ({
   children: React.ReactNode;
 }>) => {
   const pathname = usePathname(); // 获取当前路径名
-
   return (
     <ChakraProvider>
       <AuthProvider>
@@ -54,6 +53,7 @@ const Frame = ({
             <RelateGroupList />
           </Box>
         </Flex>
+
 
         <Inspector
           keys={["Ctrl", "Shift", "\\"]}

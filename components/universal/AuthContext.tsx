@@ -1,5 +1,5 @@
 "use client";
-
+import { useDisclosure } from "@chakra-ui/react";
 import React, { createContext, useContext, useState } from "react";
 
 interface AuthContextType {
@@ -9,6 +9,9 @@ interface AuthContextType {
   setWgnum: (wgnum: number) => void;
   isLanding: boolean;
   toggleLanding: (loggedIn: boolean) => void;
+  glIsOpen: boolean;
+  glOnOpen: () => void;
+  glOnClose: () => void;
 }
 
 // 默认值
@@ -19,6 +22,9 @@ const defaultContextValue: AuthContextType = {
   setWgnum: () => {}, // 默认的空函数
   isLanding: true,
   toggleLanding: () => {}, // 默认的空函数
+  glIsOpen: false,
+  glOnOpen: () => {},
+  glOnClose: () => {},
 };
 
 const AuthContext = createContext<AuthContextType>(defaultContextValue);
@@ -44,6 +50,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setNewWgnum(wgnum);
   };
 
+  const {
+    isOpen: glIsOpen,
+    onOpen: glOnOpen,
+    onClose: glOnClose,
+  } = useDisclosure();
+
   return (
     <AuthContext.Provider
       value={{
@@ -53,6 +65,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setWgnum,
         isLanding,
         toggleLanding,
+        glIsOpen,
+        glOnOpen,
+        glOnClose,
       }}
     >
       {children}
