@@ -19,7 +19,7 @@ const Page = () => {
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
       const response = await fetch(
-        `${apiUrl}/num_check?num=${encodeURIComponent(inputValue)}`
+        `${apiUrl}/numCheck?num=${encodeURIComponent(inputValue)}`
       );
       if (!response.ok) {
         throw new Error("发送请求出错");
@@ -47,6 +47,7 @@ const Page = () => {
       <Center pt={6}>
         {/* 使用 Flex 组件来对齐输入框和按钮 */}
         <Input
+          type="number"
           bgColor="#000c1975"
           placeholder="请输入QQ或编号"
           value={inputValue}

@@ -28,7 +28,7 @@ export function LoginStateText() {
     if (key) {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
       // 如果有 key，发送请求验证有效性
-      fetch(`${apiUrl}/checkKeyNew`, {
+      fetch(`${apiUrl}/checkKey`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${key}`,

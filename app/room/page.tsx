@@ -279,7 +279,14 @@ export default function Page() {
               />
             </ModalBody>
             <ModalFooter>
-              <Button bgColor="#007bc0" onClick={handleJoinRoom} mr={5}>
+              <Button
+                bgColor="#007bc0"
+                onClick={() => {
+                  handleJoinRoom();
+                  joinOnClose();
+                }}
+                mr={5}
+              >
                 加入
               </Button>
               <Button
@@ -368,13 +375,18 @@ export default function Page() {
           <Text mr={3}>刷新列表</Text>
           <IoReloadCircle size={30} color="#35c535" />
         </Button>
-
+        {/* && roomInfo && roomInfo.members.length < 6 */}
         {status === "hoster" && (
           <Button
             bg="transparent"
             onClick={addOnopen}
+            isDisabled={roomInfo && roomInfo.members.length < 6 ? false : true}
           >
-            <Text mr={3}>添加成员</Text>
+            <Text mr={3}>
+              {roomInfo && roomInfo.members.length < 6
+                ? "添加成员"
+                : "房间已满"}
+            </Text>
             <IoMdPersonAdd size={30} color="#35c535" />
           </Button>
         )}
@@ -408,6 +420,9 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
     else if (status === "待加入") return "#b8670f";
     else return "#1a9225";
   }
+  const sortedList = roomInfo.members.sort((a, b) => {
+    return a.wgnum - b.wgnum; // 按编号从小到大往下排
+  });
 
   return (
     <Center>
@@ -435,7 +450,7 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
             </Tr>
           </Thead>
           <Tbody>
-            {roomInfo.members.map((item) => (
+            {sortedList.map((item) => (
               <Tr key={item.ip}>
                 <Td
                   p={3}
