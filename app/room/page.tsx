@@ -268,7 +268,7 @@ export default function Page() {
       <Box textAlign="center">
         <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent bgColor="#002f5c">
             <ModalHeader>加入房间</ModalHeader>
             <ModalBody>
               <Input
@@ -326,7 +326,7 @@ export default function Page() {
     <Box textAlign="center">
       <Modal isOpen={addIsOpen} onClose={addOnClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bgColor="#002f5c">
           <ModalHeader>添加成员</ModalHeader>
           <ModalBody>
             <Input
