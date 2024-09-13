@@ -3,23 +3,13 @@
 import { Flex, Center, List, ListItem, Image, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useAuth } from "@/components/universal/AuthContext";
+import { GetConfUrl } from "@/components/universal/GetConf";
 
 export function Page() {
   const router = useRouter();
 
-  const [contDownloadUrl, setContDownloadUrl] = useState<string>("");
-
-  const { isLoggedIn } = useAuth();
-
-  useEffect(() => {
-    const key = localStorage.getItem("key");
-    if (key) {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      setContDownloadUrl(`${apiUrl}/d?k=${key}&r=${Math.random()}`);
-    }
-  }, [setContDownloadUrl]);
+  const { isLoggedIn, wgnum } = useAuth();
 
   return (
     <Center>
@@ -40,9 +30,7 @@ export function Page() {
           <ListItem>
             <Button
               size="sm"
-              onClick={() => {
-                window.open(contDownloadUrl, "_blank");
-              }}
+              onClick={() => GetConfUrl(wgnum)}
               isDisabled={isLoggedIn ? false : true}
             >
               {isLoggedIn ? "点击下载conf" : "未登录无法下载"}

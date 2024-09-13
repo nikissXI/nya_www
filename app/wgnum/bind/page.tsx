@@ -22,8 +22,7 @@ const Page = () => {
       setShowTutorial("none");
       const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
       const response = await fetch(
-        `${apiUrl}/submitQQ?qq=${encodeURIComponent(inputValue)}`,
-        { method: "GET" }
+        `${apiUrl}/submitQQ?qq=${encodeURIComponent(inputValue)}`
       );
       if (!response.ok) {
         throw new Error("发送请求出错");

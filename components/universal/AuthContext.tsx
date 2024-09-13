@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { createContext, useContext, useState } from "react";
 
@@ -7,6 +7,8 @@ interface AuthContextType {
   toggleLogin: (loggedIn: boolean) => void;
   wgnum: number;
   setWgnum: (wgnum: number) => void;
+  isLanding: boolean;
+  toggleLanding: (loggedIn: boolean) => void;
 }
 
 // 默认值
@@ -15,6 +17,8 @@ const defaultContextValue: AuthContextType = {
   toggleLogin: () => {}, // 默认的空函数
   wgnum: 0,
   setWgnum: () => {}, // 默认的空函数
+  isLanding: true,
+  toggleLanding: () => {}, // 默认的空函数
 };
 
 const AuthContext = createContext<AuthContextType>(defaultContextValue);
@@ -28,6 +32,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoggedIn(loggedIn);
   };
 
+  const [isLanding, setIsLanding] = useState<boolean>(true);
+
+  const toggleLanding = (loggedIn: boolean) => {
+    setIsLanding(loggedIn);
+  };
+
   const [wgnum, setNewWgnum] = useState<number>(0);
 
   const setWgnum = (wgnum: number) => {
@@ -35,7 +45,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, toggleLogin, wgnum, setWgnum }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        toggleLogin,
+        wgnum,
+        setWgnum,
+        isLanding,
+        toggleLanding,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

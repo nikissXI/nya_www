@@ -16,7 +16,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "../universal/AuthContext";
 
-export default function VerifyWarnModal() {
+export default function VerifyWarnModal({
+  forceLogin = false,
+}: {
+  forceLogin?: boolean;
+}) {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoggedIn } = useAuth();
@@ -46,9 +50,21 @@ export default function VerifyWarnModal() {
               前去验证身份
             </Button>
 
-            <Button bgColor="#ff5353" onClick={onClose} mt={3}>
-              无视风险继续访问
-            </Button>
+            {forceLogin ? (
+              <Button
+                bgColor="#ff5353"
+                onClick={() => {
+                  router.push("/");
+                }}
+                mt={3}
+              >
+                返回首页
+              </Button>
+            ) : (
+              <Button bgColor="#ff5353" onClick={onClose} mt={3}>
+                无视风险继续访问
+              </Button>
+            )}
           </Flex>
         </ModalFooter>
       </ModalContent>

@@ -20,33 +20,45 @@ import { useState, useEffect } from "react";
 export function LoginStateText() {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoggedIn, toggleLogin, wgnum, setWgnum } = useAuth();
+  const { isLoggedIn, toggleLogin, wgnum, setWgnum, isLanding, toggleLanding } =
+    useAuth();
 
   useEffect(() => {
     const key = localStorage.getItem("key"); // 替换为你的key名称
     if (key) {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
       // 如果有 key，发送请求验证有效性
-      fetch(`${apiUrl}/checkKey?key=${key}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.code === 1) {
-            // code 为 1，移除 key
-            localStorage.removeItem("key");
-            toggleLogin(false);
-          } else if (data.code === 0) {
-            // code 为 0，设置已登录状态
-            setWgnum(data.wgnum);
-            toggleLogin(true);
+      fetch(`${apiUrl}/checkKeyNew`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      })
+        // .then((response) => response.json())
+        .then((response) => {
+          if (response.status === 401) {
+            throw new Error("key无效");
           }
+          return response.json();
+        })
+        .then((data) => {
+          // 设置已登录状态
+          setWgnum(data.wgnum);
+          toggleLogin(true);
         })
         .catch((error) => {
-          console.error("Error fetching the key:", error);
+          localStorage.removeItem("key");
+          toggleLogin(false);
+          console.error("验证key出错:", error);
+        })
+        .finally(() => {
+          // console.log(loading);
         });
     } else {
       toggleLogin(false);
     }
-  }, [isLoggedIn, toggleLogin, setWgnum]);
+    toggleLanding(false);
+  }, [toggleLogin, setWgnum, toggleLanding]);
 
   const clickAction = () => {
     if (isLoggedIn) {
@@ -92,7 +104,12 @@ export function LoginStateText() {
         bg="transparent"
       >
         <Center>
-          <Text fontSize="lg" color="white" fontWeight="bold">
+          <Text
+            fontSize="lg"
+            color="white"
+            fontWeight="bold"
+            hidden={isLanding}
+          >
             {isLoggedIn ? `编号 ${wgnum}` : "未登录"}
           </Text>
         </Center>

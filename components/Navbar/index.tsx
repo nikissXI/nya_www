@@ -26,6 +26,7 @@ const Navbar = ({ path }: { path: string }) => {
 
   useEffect(() => {
     const gameTitles: { [key: string]: string } = {
+      "/room/": "联机房间",
       "/nya/android": "喵服安卓教程",
       "/nya/ios": "喵服苹果教程",
       "/nya/pc": "喵服电脑教程",
@@ -47,6 +48,7 @@ const Navbar = ({ path }: { path: string }) => {
       "/wgnum/query": "绑定查询",
       "/sponsor": "赞助榜",
       "/tutorial": "联机教程",
+      "/room": "联机大厅",
     };
 
     const matchedTitle = Object.keys(gameTitles).find((key) =>
@@ -60,6 +62,7 @@ const Navbar = ({ path }: { path: string }) => {
     { name: "编号绑定", path: "/wgnum" },
     { name: "联机教程", path: "/tutorial" },
     { name: "赞助榜", path: "/sponsor" },
+    { name: "联机大厅", path: "/room" },
   ];
 
   return (
