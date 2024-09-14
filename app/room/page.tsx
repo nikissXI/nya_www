@@ -142,50 +142,81 @@ export default function Page() {
       .finally(() => {});
   };
 
-  const fetchNetworkLatency = async (checkType: string) => {
-    if (wgnum === 0) {
-      return;
-    }
-    setChecking(true);
-    setCheckText("");
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const response = await fetch(
-      `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
-    );
-    if (!response.ok) {
-      console.error(`访问接口出错: ${response.status}`);
-    }
-    const result = await response.json();
-    if (result.code !== 0) {
-      // 未连接
-      setLatencyData(null);
-    } else {
-      // 已连接
-      setLatencyData(result.data);
+  const fetchNetworkLatency = useCallback(
+    async (checkType: string, auto: boolean = false) => {
+      if (wgnum === 0) {
+        return;
+      }
+      setChecking(true);
+      if (!auto) {
+        setCheckText("");
+      }
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(
+        `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
+      );
+      if (!response.ok) {
+        console.error(`访问接口出错: ${response.status}`);
+      }
+      const result = await response.json();
+      if (result.code !== 0) {
+        // 未连接
+        setLatencyData(null);
+      } else {
+        // 已连接
+        setLatencyData(result.data);
 
-      if (checkType === "long") {
-        setCheckText("约10秒后返回详细网络检测结果");
-        const response = await fetch(
-          `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
-        );
-        if (!response.ok) {
-          console.error(`访问接口出错: ${response.status}`);
-        } else {
-          const result = await response.json();
-          if (result.code !== 0) {
-            // 未连接
-            setLatencyData(null);
+        if (checkType === "long") {
+          setCheckText("约10秒后返回详细网络检测结果");
+          const response = await fetch(
+            `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
+          );
+          if (!response.ok) {
+            console.error(`访问接口出错: ${response.status}`);
           } else {
-            // 已连接
-            setLatencyData(result.data);
-            setCheckText(
-              `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
-            );
+            const result = await response.json();
+            if (result.code !== 0) {
+              // 未连接
+              setLatencyData(null);
+            } else {
+              // 已连接
+              setLatencyData(result.data);
+              setCheckText(
+                `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
+              );
+            }
           }
         }
       }
+      setChecking(false);
+    },
+    [wgnum]
+  );
+
+  const wgReInsert = async () => {
+    const key = localStorage.getItem("key"); // 替换为你的key名称
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
+    setCheckText("修复中。。。");
+    try {
+      const response = await fetch(`${apiUrl}/wgReinsert`, {
+        method: "GET", // 根据需要选择请求方法，通常为 POST
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      });
+
+      if (response.ok) {
+        // 如果响应状态为 200-299，返回 true 表示成功
+        console.log("请求成功");
+        setCheckText("修复成功！把VPN开关重新打开试试");
+      } else {
+        // 如果响应状态不在 200-299 范围内，返回 false 表示失败
+        console.error("请求失败", response.status);
+      }
+    } catch (error) {
+      // 处理网络错误
+      console.error("请求发生错误", error);
     }
-    setChecking(false);
   };
 
   useEffect(() => {
@@ -198,11 +229,11 @@ export default function Page() {
   useEffect(() => {
     if (wgnum !== 0 && !checking) {
       const interval = setInterval(() => {
-        fetchNetworkLatency("short");
+        fetchNetworkLatency("short", true);
       }, 10000); // 每10秒更新一次数据
       return () => clearInterval(interval); // 清理定时器
     }
-  }, [wgnum, checking]);
+  }, [wgnum, checking, fetchNetworkLatency]);
 
   useEffect(() => {
     // 如果已登录就拉房间信息
@@ -212,7 +243,7 @@ export default function Page() {
     }
     // 最后设置 loading 状态
     setLoading(false);
-  }, [wgnum]);
+  }, [wgnum, fetchNetworkLatency]);
 
   const fetchHandleRoom = async (
     handleType: string,
@@ -326,6 +357,12 @@ export default function Page() {
       alert(`请求出错: ${error}`);
     }
   };
+
+  function getColor(latency: number) {
+    if (latency < 80) return "#04f504";
+    else if (latency < 160) return "#ffa524";
+    else return "#ff3b3b";
+  }
 
   // 登陆中或拉取房间中
   if (isLanding || loading) {
@@ -466,7 +503,7 @@ export default function Page() {
             <Text mr={3}>刷新列表</Text>
             <IoReloadCircle size={30} color="#35c535" />
           </Button>
-          {/* && roomInfo && roomInfo.members.length < 6 */}
+
           {status === "hoster" && (
             <Button
               bg="transparent"
@@ -504,70 +541,7 @@ export default function Page() {
   return (
     <Stack alignItems="center">
       <Text>在喵服关联群里发“房间”可获取本网页链接</Text>
-      {networkUtils(
-        wgnum,
-        latencyData,
-        fetchNetworkLatency,
-        checking,
-        checkText
-      )}
-      {status === "none" ? nonePage() : roomPage()}
 
-      <Button
-        h="36px"
-        w="120px"
-        mt={5}
-        bgColor="#7242ad"
-        fontSize="16px"
-        onClick={glOnOpen}
-      >
-        游戏联机教程
-      </Button>
-      <Button
-        h="36px"
-        w="120px"
-        mt={3}
-        bgColor="#b5352a"
-        fontSize="16px"
-        onClick={() => setShowTips(!showTips)}
-      >
-        {showTips ? "隐藏注意事项" : "查看注意事项"}
-      </Button>
-      <Box
-        mx={3}
-        px={3}
-        border="2px" // 边框宽度
-        borderColor="#31b8ce" // 边框颜色
-        borderRadius="md" // 边框圆角
-      >
-        <Collapse in={showTips}>
-          {tips.map((tip, index) => (
-            <Text key={index} mb={2}>
-              <WarningIcon mr={2} />
-              {tip}
-            </Text>
-          ))}
-        </Collapse>
-      </Box>
-    </Stack>
-  );
-}
-
-function networkUtils(
-  wgnum: number,
-  latencyData: LatencyData | null,
-  fetchNetworkLatency: (checkType: string) => {},
-  checking: boolean,
-  checkText: string
-) {
-  function getColor(latency: number) {
-    if (latency < 80) return "#04f504";
-    else if (latency < 160) return "#ffa524";
-    else return "#ff3b3b";
-  }
-
-  return (
-    <>
       <Flex align="center">
         <Text fontSize={18} fontWeight="bold" color="#ffd964">
           你的编号: {wgnum}
@@ -603,8 +577,59 @@ function networkUtils(
           </Box>
         </Button>
       </Flex>
+
+      {!latencyData && !checkText && (
+        <Flex align="center">
+          <Text>喵服连上了还是检测不到？</Text>
+          <Button bg="#aa33ae" p={1} h={7} onClick={wgReInsert}>
+            点我修复
+          </Button>
+        </Flex>
+      )}
+
       <Text>{checkText}</Text>
-    </>
+
+      {status === "none" ? nonePage() : roomPage()}
+
+      <Button
+        h="36px"
+        w="120px"
+        mt={5}
+        bgColor="#7242ad"
+        fontSize="16px"
+        onClick={glOnOpen}
+      >
+        游戏联机教程
+      </Button>
+
+      <Button
+        h="36px"
+        w="120px"
+        mt={3}
+        bgColor="#b5352a"
+        fontSize="16px"
+        onClick={() => setShowTips(!showTips)}
+      >
+        {showTips ? "隐藏注意事项" : "查看注意事项"}
+      </Button>
+
+      <Box
+        mx={3}
+        px={3}
+        border="2px" // 边框宽度
+        borderColor="#31b8ce" // 边框颜色
+        borderRadius="md" // 边框圆角
+      >
+        <Collapse in={showTips}>
+          {tips.map((tip, index) => (
+            <Text key={index} mb={2}>
+              <WarningIcon mr={2} />
+              {tip}
+            </Text>
+          ))}
+        </Collapse>
+      </Box>
+    </Stack>
   );
 }
 
