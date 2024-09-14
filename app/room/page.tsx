@@ -142,49 +142,52 @@ export default function Page() {
       .finally(() => {});
   };
 
-  const fetchNetworkLatency = useCallback(async (checkType: string) => {
-    if (wgnum === 0) {
-      return;
-    }
-    setChecking(true);
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const response = await fetch(
-      `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
-    );
-    if (!response.ok) {
-      throw new Error(`访问接口出错: ${response.status}`);
-    }
-    const result = await response.json();
-    if (result.code !== 0) {
-      // 未连接
-      setLatencyData(null);
-    } else {
-      // 已连接
-      setLatencyData(result.data);
+  const fetchNetworkLatency = useCallback(
+    async (checkType: string) => {
+      if (wgnum === 0) {
+        return;
+      }
+      setChecking(true);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(
+        `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
+      );
+      if (!response.ok) {
+        throw new Error(`访问接口出错: ${response.status}`);
+      }
+      const result = await response.json();
+      if (result.code !== 0) {
+        // 未连接
+        setLatencyData(null);
+      } else {
+        // 已连接
+        setLatencyData(result.data);
 
-      if (checkType === "long") {
-        setCheckText("约10秒后返回详细网络检测结果");
-        const response = await fetch(
-          `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
-        );
-        if (!response.ok) {
-          throw new Error(`访问接口出错: ${response.status}`);
-        }
-        const result = await response.json();
-        if (result.code !== 0) {
-          // 未连接
-          setLatencyData(null);
-        } else {
-          // 已连接
-          setLatencyData(result.data);
-          setCheckText(
-            `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
+        if (checkType === "long") {
+          setCheckText("约10秒后返回详细网络检测结果");
+          const response = await fetch(
+            `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
           );
+          if (!response.ok) {
+            throw new Error(`访问接口出错: ${response.status}`);
+          }
+          const result = await response.json();
+          if (result.code !== 0) {
+            // 未连接
+            setLatencyData(null);
+          } else {
+            // 已连接
+            setLatencyData(result.data);
+            setCheckText(
+              `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
+            );
+          }
         }
       }
-    }
-    setChecking(false);
-  }, [wgnum]);
+      setChecking(false);
+    },
+    [wgnum]
+  );
 
   useEffect(() => {
     if (wgnum !== 0) {
@@ -473,7 +476,6 @@ export default function Page() {
             </Button>
           )}
         </Box>
-        {/* <Divider my={3} /> */}
 
         <Stack alignItems="center">
           <Button
@@ -502,10 +504,11 @@ export default function Page() {
         checkText
       )}
       {status === "none" ? nonePage() : roomPage()}
+
       <Button
         h="36px"
         w="120px"
-        mt={3}
+        mt={5}
         bgColor="#7242ad"
         fontSize="16px"
         onClick={glOnOpen}
@@ -565,9 +568,9 @@ function networkUtils(
           fontSize={18}
           mx={3}
           fontWeight="bold"
-          color={latencyData ? "#3fdb1d" : "#e60000"}
+          color={latencyData ? "#3fdb1d" : "#ff3b3b"}
         >
-          {latencyData ? "已连接" : "未连接"}
+          {latencyData ? "已连接" : "喵服未连接"}
         </Text>
         {latencyData && (
           <Flex align="center">
