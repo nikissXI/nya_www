@@ -147,6 +147,7 @@ export default function Page() {
       return;
     }
     setChecking(true);
+    setCheckText("");
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await fetch(
       `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
