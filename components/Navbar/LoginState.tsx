@@ -58,11 +58,12 @@ export function LoginStateText() {
       toggleLogin(false);
     }
     toggleLanding(false);
-  }, [toggleLogin, setWgnum, toggleLanding]);
+  }, [isLoggedIn]);
 
   const clickAction = () => {
     if (isLoggedIn) {
       toggleLogin(false);
+      setWgnum(0);
       localStorage.removeItem("key");
     } else {
       router.push("/wgnum/bind");
