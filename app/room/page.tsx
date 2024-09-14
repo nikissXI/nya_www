@@ -97,15 +97,7 @@ export default function Page() {
   const [latencyData, setLatencyData] = useState<LatencyData | null>(null);
   const [checking, setChecking] = useState<boolean>(true);
   const [checkText, setCheckText] = useState<string>("");
-  const {
-    isLoggedIn,
-    toggleLogin,
-    wgnum,
-    setWgnum,
-    isLanding,
-    toggleLanding,
-    glOnOpen,
-  } = useAuth();
+  const { isLoggedIn, wgnum, isLanding, glOnOpen } = useAuth();
 
   const [showTips, setShowTips] = useState(false);
 
@@ -150,62 +142,66 @@ export default function Page() {
       .finally(() => {});
   };
 
-  const fetchNetworkLatency = useCallback(
-    async (checkType: string) => {
-      if (wgnum === 0) {
-        return;
-      }
-      setChecking(true);
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(
-        `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
-      );
-      if (!response.ok) {
-        throw new Error(`访问接口出错: ${response.status}`);
-      }
-      const result = await response.json();
-      if (result.code !== 0) {
-        // 未连接
-        setLatencyData(null);
-      } else {
-        // 已连接
-        setLatencyData(result.data);
+  const fetchNetworkLatency = useCallback(async (checkType: string) => {
+    if (wgnum === 0) {
+      return;
+    }
+    setChecking(true);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await fetch(
+      `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
+    );
+    if (!response.ok) {
+      throw new Error(`访问接口出错: ${response.status}`);
+    }
+    const result = await response.json();
+    if (result.code !== 0) {
+      // 未连接
+      setLatencyData(null);
+    } else {
+      // 已连接
+      setLatencyData(result.data);
 
-        if (checkType === "long") {
-          setCheckText("约10秒后返回详细网络检测结果");
-          const response = await fetch(
-            `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
+      if (checkType === "long") {
+        setCheckText("约10秒后返回详细网络检测结果");
+        const response = await fetch(
+          `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
+        );
+        if (!response.ok) {
+          throw new Error(`访问接口出错: ${response.status}`);
+        }
+        const result = await response.json();
+        if (result.code !== 0) {
+          // 未连接
+          setLatencyData(null);
+        } else {
+          // 已连接
+          setLatencyData(result.data);
+          setCheckText(
+            `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
           );
-          if (!response.ok) {
-            throw new Error(`访问接口出错: ${response.status}`);
-          }
-          const result = await response.json();
-          if (result.code !== 0) {
-            // 未连接
-            setLatencyData(null);
-          } else {
-            // 已连接
-            setLatencyData(result.data);
-            setCheckText(
-              `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
-            );
-          }
         }
       }
-      setChecking(false);
-    },
-    [wgnum]
-  );
+    }
+    setChecking(false);
+  }, [wgnum]);
+
+  useEffect(() => {
+    if (wgnum !== 0) {
+      const interval = setInterval(getRoomData, 10000); // 每10秒更新一次数据
+      return () => clearInterval(interval); // 清理定时器
+    }
+  }, [wgnum]);
 
   useEffect(() => {
     // 如果已登录就拉房间信息
-    if (!isLanding && isLoggedIn) {
+    if (wgnum !== 0) {
       getRoomData();
       fetchNetworkLatency("short");
     }
     // 最后设置 loading 状态
     setLoading(false);
-  }, [isLanding, isLoggedIn, status]);
+  }, [wgnum]);
 
   const fetchHandleRoom = async (
     handleType: string,
@@ -562,7 +558,7 @@ function networkUtils(
   return (
     <>
       <Flex align="center">
-        <Text fontSize={18} fontWeight="bold"  color="#ffd964">
+        <Text fontSize={18} fontWeight="bold" color="#ffd964">
           你的编号: {wgnum}
         </Text>
         <Text
