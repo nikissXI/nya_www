@@ -142,35 +142,34 @@ export default function Page() {
       .finally(() => {});
   };
 
-  const fetchNetworkLatency = useCallback(
-    async (checkType: string) => {
-      if (wgnum === 0) {
-        return;
-      }
-      setChecking(true);
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(
-        `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
-      );
-      if (!response.ok) {
-        throw new Error(`访问接口出错: ${response.status}`);
-      }
-      const result = await response.json();
-      if (result.code !== 0) {
-        // 未连接
-        setLatencyData(null);
-      } else {
-        // 已连接
-        setLatencyData(result.data);
+  const fetchNetworkLatency = async (checkType: string) => {
+    if (wgnum === 0) {
+      return;
+    }
+    setChecking(true);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await fetch(
+      `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
+    );
+    if (!response.ok) {
+      console.error(`访问接口出错: ${response.status}`);
+    }
+    const result = await response.json();
+    if (result.code !== 0) {
+      // 未连接
+      setLatencyData(null);
+    } else {
+      // 已连接
+      setLatencyData(result.data);
 
-        if (checkType === "long") {
-          setCheckText("约10秒后返回详细网络检测结果");
-          const response = await fetch(
-            `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
-          );
-          if (!response.ok) {
-            throw new Error(`访问接口出错: ${response.status}`);
-          }
+      if (checkType === "long") {
+        setCheckText("约10秒后返回详细网络检测结果");
+        const response = await fetch(
+          `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
+        );
+        if (!response.ok) {
+          console.error(`访问接口出错: ${response.status}`);
+        } else {
           const result = await response.json();
           if (result.code !== 0) {
             // 未连接
@@ -184,10 +183,9 @@ export default function Page() {
           }
         }
       }
-      setChecking(false);
-    },
-    [wgnum]
-  );
+    }
+    setChecking(false);
+  };
 
   useEffect(() => {
     if (wgnum !== 0) {
@@ -195,6 +193,15 @@ export default function Page() {
       return () => clearInterval(interval); // 清理定时器
     }
   }, [wgnum]);
+
+  useEffect(() => {
+    if (wgnum !== 0 && !checking) {
+      const interval = setInterval(() => {
+        fetchNetworkLatency("short");
+      }, 10000); // 每10秒更新一次数据
+      return () => clearInterval(interval); // 清理定时器
+    }
+  }, [wgnum, checking]);
 
   useEffect(() => {
     // 如果已登录就拉房间信息
