@@ -359,7 +359,7 @@ export default function Page() {
             <ModalBody>
               <Input
                 type="number"
-                placeholder="请输入房主编号"
+                placeholder="请输入房主的编号"
                 value={inputWgnum === 0 ? "" : inputWgnum}
                 onChange={(e) => setInputWgnum(Number(e.target.value))}
               />
