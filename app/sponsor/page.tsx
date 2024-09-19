@@ -15,7 +15,6 @@ import { useEffect, useState, useCallback } from "react";
 interface SponsorItem {
   money: string;
   qqnum: number;
-  wgnum: number;
 }
 
 const Page = () => {
@@ -58,17 +57,14 @@ const Page = () => {
   return (
     <Center>
       <TableContainer maxH="520px" overflowY="auto" overflowX="hidden">
-        <Table variant="striped" colorScheme="transparent" w="320px">
+        <Table variant="striped" colorScheme="transparent" w="300px">
           <Thead position="sticky" top={0} bg="#3e4e63">
             <Tr>
-              <Th color="white" fontSize="md" w="100px" p={3}>
+              <Th color="white" fontSize="md" w="30%" p={3}>
                 金额
               </Th>
-              <Th color="white" fontSize="md" w="120px" p={3}>
+              <Th color="white" fontSize="md" w="70%" p={3}>
                 QQ
-              </Th>
-              <Th color="white" fontSize="md" w="100px%" p={3}>
-                编号
               </Th>
             </Tr>
           </Thead>
@@ -77,7 +73,6 @@ const Page = () => {
               <Tr key={index}>
                 <Td p={3}>{item.money} </Td>
                 <Td p={3}>{item.qqnum}</Td>
-                <Td p={3}>{item.wgnum ? item.wgnum : ""} </Td>
               </Tr>
             ))}
           </Tbody>
