@@ -12,13 +12,13 @@ import {
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/universal/AuthContext";
+import { useUserStateStore } from "@/store/user-state";
 import { GetConfUrl } from "@/components/universal/GetConf";
 
 export function Page() {
   const router = useRouter();
 
-  const { isLoggedIn, wgnum } = useAuth();
+  const { logined, userInfo } = useUserStateStore();
 
   const images = ["/images/pc_switch_off.jpg", "/images/pc_switch_on.jpg"];
 
@@ -45,10 +45,10 @@ export function Page() {
           <ListItem>
             <Button
               size="sm"
-              onClick={() => GetConfUrl(wgnum)}
-              isDisabled={isLoggedIn ? false : true}
+              onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
+              isDisabled={logined ? false : true}
             >
-              {isLoggedIn ? "点击下载conf" : "未登录无法下载"}
+              {logined ? "点击下载conf" : "未登录无法下载"}
             </Button>
             <Button
               bgColor="#1d984b"
@@ -56,7 +56,7 @@ export function Page() {
               onClick={() => {
                 router.push("/wgnum/bind");
               }}
-              visibility={isLoggedIn ? "hidden" : "visible"}
+              visibility={logined ? "hidden" : "visible"}
               ml={5}
             >
               点击进行登陆

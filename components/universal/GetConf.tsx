@@ -1,14 +1,16 @@
 "user client";
 
+import { openToast } from "./toast";
+
 export const GetConfUrl = (wgnum: number) => {
-  const key = localStorage.getItem("key"); // 从 localStorage 获取 key
+  const token = localStorage.getItem("token"); // 从 localStorage 获取 key
   const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
 
-  if (key) {
+  if (token) {
     fetch(`${apiUrl}/downloadConf`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${key}`, // 将 key 放在请求头中
+        Authorization: `Bearer ${token}`, // 将 key 放在请求头中
       },
     })
       .then((response) => {
@@ -29,7 +31,7 @@ export const GetConfUrl = (wgnum: number) => {
         window.URL.revokeObjectURL(url); // 释放 blob URL
       })
       .catch((error) => {
-        alert("登陆凭证失效，请刷新页面");
+        openToast({ content: "登陆凭证失效" });
         console.error("Error downloading the file:", error);
       });
   } else {

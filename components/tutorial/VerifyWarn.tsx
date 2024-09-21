@@ -14,7 +14,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../universal/AuthContext";
+import { useUserStateStore } from "@/store/user-state";
 
 export default function VerifyWarnModal({
   forceLogin = false,
@@ -23,13 +23,13 @@ export default function VerifyWarnModal({
 }) {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoggedIn } = useAuth();
+  const { logging, logined } = useUserStateStore();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!logging && !logined) {
       onOpen();
     }
-  }, [isLoggedIn, onOpen]);
+  }, [logging, logined, onOpen]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>

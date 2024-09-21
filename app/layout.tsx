@@ -39,7 +39,7 @@ export default function RootLayout({
           backgroundImage="url('/images/head_bg.png')" // 替换为你的图片路径
           backgroundRepeat="repeat-x" // 仅在水平方向上重复
         ></Box>
-        <Frame>{children}</Frame>
+          <Frame>{children}</Frame>
       </body>
     </html>
   );

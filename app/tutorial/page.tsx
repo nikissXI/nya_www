@@ -3,11 +3,9 @@
 import { Center, Box, Stack, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/universal/AuthContext";
 
 export default function Page() {
   const router = useRouter();
-  const { glOnOpen } = useAuth();
 
   return (
     <Box textAlign="center">

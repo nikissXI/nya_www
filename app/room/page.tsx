@@ -30,13 +30,14 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/universal/button";
-import { useAuth } from "@/components/universal/AuthContext";
+import { useUserStateStore } from "@/store/user-state";
 import { FiDelete } from "react-icons/fi";
 import { IoMdPersonAdd } from "react-icons/io";
 import { IoReloadCircle } from "react-icons/io5";
 import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
 import { WarningIcon } from "@chakra-ui/icons";
+import { useDisclosureStore } from "@/store/disclosure";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -77,7 +78,6 @@ interface HandleRoomResponse {
 export default function Page() {
   const router = useRouter();
 
-  const [loading, setLoading] = useState<boolean>(true);
   const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
   const [status, setStatus] = useState<"none" | "member" | "hoster">("none");
 
@@ -94,10 +94,15 @@ export default function Page() {
   } = useDisclosure();
 
   const [inputWgnum, setInputWgnum] = useState<number>(0);
+  const [wgnum, setUserWgnum] = useState<number>(0);
   const [latencyData, setLatencyData] = useState<LatencyData | null>(null);
   const [checking, setChecking] = useState<boolean>(true);
   const [checkText, setCheckText] = useState<string>("");
-  const { isLoggedIn, wgnum, isLanding, glOnOpen } = useAuth();
+  const { logined, userInfo } = useUserStateStore();
+
+  const { onToggle } = useDisclosureStore((state) => {
+    return state.modifyGameListDisclosure;
+  });
 
   const [showTips, setShowTips] = useState(false);
 
@@ -220,6 +225,12 @@ export default function Page() {
   };
 
   useEffect(() => {
+    if (userInfo) {
+      setUserWgnum(userInfo.wg_data.wgnum);
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
     if (wgnum !== 0) {
       const interval = setInterval(getRoomData, 10000); // 每10秒更新一次数据
       return () => clearInterval(interval); // 清理定时器
@@ -241,8 +252,6 @@ export default function Page() {
       getRoomData();
       fetchNetworkLatency("short");
     }
-    // 最后设置 loading 状态
-    setLoading(false);
   }, [wgnum, fetchNetworkLatency]);
 
   const fetchHandleRoom = async (
@@ -364,17 +373,8 @@ export default function Page() {
     else return "#ff3b3b";
   }
 
-  // 登陆中或拉取房间中
-  if (isLanding || loading) {
-    return (
-      <Center>
-        <Spinner size="xl" />
-      </Center>
-    );
-  }
-
   // 没登录就让去登录
-  if (!isLoggedIn) {
+  if (!logined) {
     return (
       <Center my={10}>
         <Stack>
@@ -597,7 +597,7 @@ export default function Page() {
         mt={5}
         bgColor="#7242ad"
         fontSize="16px"
-        onClick={glOnOpen}
+        onClick={onToggle}
       >
         游戏联机教程
       </Button>

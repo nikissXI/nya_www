@@ -14,9 +14,6 @@ interface GroupData {
 }
 
 const RelateGroupList = () => {
-  // 使用 useRef 缓存数据
-  // const groupListRef = useRef<{ name: string; qq: number }[]>([]);
-
   const [groupData, setData] = useState<GroupData>({
     main: [],
     relate: [],

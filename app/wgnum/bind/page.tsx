@@ -4,7 +4,7 @@ import { Input, Center, Text, Flex, Heading } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/universal/button";
-import { useAuth } from "@/components/universal/AuthContext";
+import { useUserStateStore } from "@/store/user-state";
 
 const Page = () => {
   const router = useRouter();
@@ -13,7 +13,7 @@ const Page = () => {
   const [buttonText, setButtonText] = useState<string>("提交");
   const [textColor, setTextColor] = useState<string>("white");
   const [showTutorial, setShowTutorial] = useState<string>("none");
-  const { toggleLogin } = useAuth();
+  const { changeLoginState } = useUserStateStore();
 
   const handleSubmit = async () => {
     try {
@@ -36,8 +36,8 @@ const Page = () => {
       if (data.code === 99) {
         setTextColor("#ff5353");
       } else if (data.code === 2) {
-        localStorage.setItem("key", data.key);
-        toggleLogin(true);
+        localStorage.setItem("token", data.key);
+        changeLoginState(true);
         setShowTutorial("Flex");
       }
       setResultText(data.msg);

@@ -25,15 +25,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const userAgent = navigator.userAgent;
     // 检查 User-Agent 是否包含 "QQ"
-    if (userAgent.includes("QQ")) {
-      //   if (1) {
+    if (userAgent.includes("QQ/")) {
       setIsQQBrowser(true);
-      onOpen(); // 打开模态窗口
+      onOpen();
     }
   }, [onOpen]);
 
   const handleCopyLink = () => {
-    // if (window.isSecureContext) {  }
     try {
       navigator.clipboard.writeText(window.location.href);
       setButtonText("链接已复制到剪切板");
@@ -43,8 +41,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       setDisplayLink(false);
     }
   };
-
-
 
   return (
     <>

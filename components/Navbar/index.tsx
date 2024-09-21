@@ -13,19 +13,27 @@ import {
   DrawerHeader,
   Center,
   DrawerOverlay,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { LoginStateText } from "./LoginState";
 import { GameListModal } from "@/components/tutorial/GameList";
-import { useAuth } from "../universal/AuthContext";
+import { useDisclosureStore } from "../../store/disclosure";
 
 const Navbar = ({ path }: { path: string }) => {
   const rootPath = "/" + path.split("/")[1];
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { isOpen: navbarIsOpen, onToggle: navbarOnToggle } = useDisclosureStore(
+    (state) => {
+      return state.modifyNavbarDisclosure;
+    }
+  );
+
   const [title, setTitle] = useState<string>("");
-  const { glIsOpen, glOnClose } = useAuth();
+  const { isOpen: gameListIsOpen, onToggle: gameListOnToggle } =
+    useDisclosureStore((state) => {
+      return state.modifyGameListDisclosure;
+    });
 
   useEffect(() => {
     const gameTitles: { [key: string]: string } = {
@@ -46,9 +54,11 @@ const Navbar = ({ path }: { path: string }) => {
 
     const titles: { [key: string]: string } = {
       "/": "首页",
-      "/wgnum": "编号绑定",
-      "/wgnum/bind": "身份验证",
-      "/wgnum/query": "绑定查询",
+      // "/wgnum": "编号绑定",
+      // "/wgnum/bind": "身份验证",
+      // "/wgnum/query": "绑定查询",
+      "/register": "注册",
+      "/me": "我的信息",
       "/sponsor": "赞助榜",
       "/tutorial": "联机教程",
       "/room": "联机房间",
@@ -62,7 +72,8 @@ const Navbar = ({ path }: { path: string }) => {
 
   const rootGuide = [
     { name: "首页", path: "/" },
-    { name: "编号绑定", path: "/wgnum" },
+    // { name: "编号绑定", path: "/wgnum" },
+    { name: "我的信息", path: "/me" },
     { name: "联机教程", path: "/tutorial" },
     { name: "赞助榜", path: "/sponsor" },
     { name: "联机房间", path: "/room" },
@@ -70,7 +81,7 @@ const Navbar = ({ path }: { path: string }) => {
 
   return (
     <Box>
-      <GameListModal isOpen={glIsOpen} onClose={glOnClose} />
+      <GameListModal isOpen={gameListIsOpen} onClose={gameListOnToggle} />
       <Center
         width="100%"
         color="white"
@@ -128,14 +139,14 @@ const Navbar = ({ path }: { path: string }) => {
         variant="outline"
         colorScheme="whiteAlpha"
         rounded={10}
-        onClick={onOpen}
+        onClick={navbarOnToggle}
         border={0}
       >
         <HamburgerIcon color="white" boxSize={6} />
       </Button>
 
       {/* 移动端抽屉菜单 */}
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+      <Drawer isOpen={navbarIsOpen} placement="left" onClose={navbarOnToggle}>
         <DrawerOverlay />
         <DrawerContent maxWidth="75%" bg="#23314be3">
           <DrawerHeader color="white" textAlign="center" bg="#254c7a">
@@ -155,7 +166,7 @@ const Navbar = ({ path }: { path: string }) => {
                   _hover={{ textDecoration: "none" }}
                   bg={path === item.path ? "#4098f282" : "transparent"}
                   rounded={12}
-                  onClick={onClose}
+                  onClick={navbarOnToggle}
                 >
                   <Center>
                     <Text

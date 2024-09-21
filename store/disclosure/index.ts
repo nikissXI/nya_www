@@ -1,0 +1,70 @@
+import { produce } from "immer";
+import { shallow } from "zustand/shallow";
+import { createWithEqualityFn } from "zustand/traditional";
+
+export interface BasicDisclosure {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  onToggle: () => void;
+}
+
+export interface IDisclosure {
+  modifyGameListDisclosure: BasicDisclosure;
+  modifyNavbarDisclosure: BasicDisclosure;
+}
+
+export const useDisclosureStore = createWithEqualityFn<IDisclosure>((set) => {
+  return {
+    modifyGameListDisclosure: {
+      isOpen: false,
+      onOpen: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyGameListDisclosure.isOpen = true;
+          });
+        });
+      },
+      onClose: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyGameListDisclosure.isOpen = false;
+          });
+        });
+      },
+      onToggle: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyGameListDisclosure.isOpen =
+              !draft.modifyGameListDisclosure.isOpen;
+          });
+        });
+      },
+    },
+    modifyNavbarDisclosure: {
+      isOpen: false,
+      onOpen: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyNavbarDisclosure.isOpen = true;
+          });
+        });
+      },
+      onClose: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyNavbarDisclosure.isOpen = false;
+          });
+        });
+      },
+      onToggle: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyNavbarDisclosure.isOpen =
+              !draft.modifyNavbarDisclosure.isOpen;
+          });
+        });
+      },
+    },
+  };
+}, shallow);
