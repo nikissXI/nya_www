@@ -37,7 +37,7 @@ const Frame = ({
         height="100vh"
       >
         {/* 头部导航栏 */}
-        <Header path={pathname}></Header>
+        <Header path={pathname}/>
 
         {/* 主内容区域 */}
         <Box
@@ -55,7 +55,7 @@ const Frame = ({
         </Box>
 
         {/* 底部 */}
-        <Footer />
+        <Footer path={pathname}/>
         <RelateGroupList />
       </Flex>
 

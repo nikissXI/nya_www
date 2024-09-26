@@ -4,17 +4,25 @@ import { Flex, Stack, Text } from "@chakra-ui/react";
 import { FaHome, FaUsers, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { Button } from "../universal/button";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-export default function Footer() {
+export default function Footer({ path }: { path: string }) {
   const router = useRouter();
+  const rootPath = "/" + path.split("/")[1];
 
   const [activeButton, setActiveButton] = useState<string>("");
 
-  const handleButtonClick = (path: string, buttonName: string) => {
-    router.push(path);
-    setActiveButton(buttonName);
-  };
+  const handleButtonClick = useCallback(
+    (path: string) => {
+      router.push(path);
+      setActiveButton(path);
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    handleButtonClick(rootPath);
+  }, [handleButtonClick, rootPath]);
 
   return (
     <Flex
@@ -33,8 +41,8 @@ export default function Footer() {
         variant="link"
         bg="transparent"
         colorScheme="transparent"
-        color={activeButton === "home" ? "#47cdff" : "white"}
-        onClick={() => handleButtonClick("/", "home")}
+        color={activeButton === "/" ? "#47cdff" : "white"}
+        onClick={() => handleButtonClick("/")}
       >
         <Stack spacing={0} align="center">
           <FaHome />
@@ -47,8 +55,8 @@ export default function Footer() {
         variant="link"
         bg="transparent"
         colorScheme="transparent"
-        color={activeButton === "room" ? "#47cdff" : "white"}
-        onClick={() => handleButtonClick("/room", "room")}
+        color={activeButton === "/room" ? "#47cdff" : "white"}
+        onClick={() => handleButtonClick("/room")}
       >
         <Stack spacing={0} align="center">
           <FaUsers />
@@ -61,8 +69,8 @@ export default function Footer() {
         variant="link"
         bg="transparent"
         colorScheme="transparent"
-        color={activeButton === "me" ? "#47cdff" : "white"}
-        onClick={() => handleButtonClick("/me", "me")}
+        color={activeButton === "/me" ? "#47cdff" : "white"}
+        onClick={() => handleButtonClick("/me")}
       >
         <Stack spacing={0} align="center">
           <FaUser />
