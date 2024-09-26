@@ -295,7 +295,7 @@ export default function Page() {
                       }
                     }}
                   >
-                    校验QQ
+                    验证QQ
                   </Button>
                 </Flex>
 

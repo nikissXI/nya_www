@@ -352,7 +352,7 @@ export default function UserProfilePage() {
                       }
                     }}
                   >
-                    校验QQ
+                    验证QQ
                   </Button>
                 </Flex>
                 <Text color="#ffd648">{verifyQQText}</Text>
