@@ -40,7 +40,7 @@ export default function Page() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
     if (countData.viewCount === -1) {

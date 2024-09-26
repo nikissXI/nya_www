@@ -36,7 +36,7 @@ const Page = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
     if (sponsorData.length === 0) {

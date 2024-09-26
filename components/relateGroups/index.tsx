@@ -37,7 +37,7 @@ const RelateGroupList = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
     if (groupData.main.length === 0) {
