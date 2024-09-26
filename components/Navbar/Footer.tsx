@@ -1,8 +1,9 @@
 "use client";
 
-import { Flex, IconButton, Stack, Text } from "@chakra-ui/react";
+import { Flex, Stack, Text } from "@chakra-ui/react";
 import { FaHome, FaUsers, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { Button } from "../universal/button";
 
 export default function Footer() {
   const router = useRouter();
@@ -17,47 +18,52 @@ export default function Footer() {
       left="0"
       right="0"
       justifyContent="space-around"
-      padding="1rem"
       display={{ md: "none", base: "flex" }}
     >
-      <Stack spacing={0}>
-        <IconButton
-          aria-label="首页"
-          icon={<FaHome />}
-          variant="link"
-          colorScheme="transparent"
-          onClick={() => {
-            router.push("/");
-          }}
-        />
-        <Text fontSize="xs">喵服首页</Text>
-      </Stack>
+      <Button
+        padding="1rem"
+        variant="link"
+        bg="transparent"
+        colorScheme="transparent"
+        onClick={() => {
+          router.push("/");
+        }}
+      >
+        <Stack spacing={0} align="center">
+          <FaHome />
+          <Text fontSize="xs">喵服首页</Text>
+        </Stack>
+      </Button>
 
-      <Stack spacing={0}>
-        <IconButton
-          aria-label="联机房间"
-          icon={<FaUsers />}
-          variant="link"
-          colorScheme="transparent"
-          onClick={() => {
-            router.push("/room");
-          }}
-        />
-        <Text fontSize="xs">联机房间</Text>
-      </Stack>
+      <Button
+        padding="1rem"
+        variant="link"
+        bg="transparent"
+        colorScheme="transparent"
+        onClick={() => {
+          router.push("/room");
+        }}
+      >
+        <Stack spacing={0} align="center">
+          <FaUsers />
+          <Text fontSize="xs">联机房间</Text>
+        </Stack>
+      </Button>
 
-      <Stack spacing={0}>
-        <IconButton
-          aria-label="我的信息"
-          icon={<FaUser />}
-          variant="link"
-          colorScheme="transparent"
-          onClick={() => {
-            router.push("/me");
-          }}
-        />
-        <Text fontSize="xs">我的信息</Text>
-      </Stack>
+      <Button
+        padding="1rem"
+        variant="link"
+        bg="transparent"
+        colorScheme="transparent"
+        onClick={() => {
+          router.push("/me");
+        }}
+      >
+        <Stack spacing={0} align="center">
+          <FaUser />
+          <Text fontSize="xs">我的信息</Text>
+        </Stack>
+      </Button>
     </Flex>
   );
 }
