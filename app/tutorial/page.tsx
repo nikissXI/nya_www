@@ -48,6 +48,17 @@ export default function Page() {
           >
             电脑
           </Button>
+
+          <Button
+            size="lg"
+            variant="link"
+            bgColor="transparent"
+            onClick={() => {
+              router.push("/room");
+            }}
+          >
+            返回
+          </Button>
         </Stack>
       </Center>
     </Box>

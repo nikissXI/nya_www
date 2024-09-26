@@ -4,18 +4,20 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
 // import { openToast } from "@/components/universal/toast";
 // import { getHash } from "@/utils/strings";
+import { getAuthToken, clearAuthToken } from "../authKey";
 
 interface WGData {
   wgnum: number;
   wg_ip: string;
   ttl: number;
+  last_connect_timestamp: number;
 }
 
 export interface UserInfo {
   uid: number;
   username: string;
-  qq: number;
-  tel: number;
+  qq: string;
+  tel: string;
   wg_data: WGData;
 }
 
@@ -66,27 +68,29 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           });
         });
 
-        const token = localStorage.getItem("token");
-        if (token) {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
-          try {
-            const response = await fetch(`${apiUrl}/userInfo`, {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            if (!response.ok) {
-              throw new Error("key无效");
-            }
-            const data = await response.json();
-            get().setUserInfo(data.data);
-            get().changeLoginState(true);
-          } catch (error) {
-            get().logout();
-          } finally {
+        try {
+          const token = getAuthToken();
+          if (!token) {
+            throw new Error("未登录");
           }
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/userInfo`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          });
+          if (!resp.ok) {
+            throw new Error("登陆凭证失效");
+          }
+          const data = await resp.json();
+          get().setUserInfo(data.data);
+          get().changeLoginState(true);
+        } catch (error) {
+          get().logout();
+        } finally {
         }
+
         set((state) => {
           return produce(state, (draft) => {
             draft.logging = false;
@@ -95,7 +99,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       logout: () => {
-        localStorage.removeItem("token");
+        clearAuthToken();
         get().setUserInfo(undefined);
         get().changeLoginState(false);
       },

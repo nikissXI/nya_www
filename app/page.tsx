@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { Flex, Image, Center, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
+import { useUserStateStore } from "@/store/user-state";
+import { useDisclosureStore } from "@/store/disclosure";
 
 interface CountData {
   viewCount: number;
@@ -12,7 +14,11 @@ interface CountData {
 
 export default function Page() {
   const router = useRouter();
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const { logined } = useUserStateStore();
+  const { onToggle: loginToggle } = useDisclosureStore((state) => {
+    return state.modifyLoginDisclosure;
+  });
   const [countData, setData] = useState<CountData>({
     viewCount: -1,
     userCount: -1,
@@ -22,12 +28,11 @@ export default function Page() {
 
   const fetchData = useCallback(async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
-      const response = await fetch(`${apiUrl}/countInfo`);
-      if (!response.ok) {
+      const resp = await fetch(`${apiUrl}/countInfo`);
+      if (!resp.ok) {
         throw new Error("获取计数信息出错");
       }
-      const data = await response.json();
+      const data = await resp.json();
       setData(data);
       // groupListRef.current = groupArray; // 缓存获取到的游戏数据
     } catch (err) {
@@ -85,30 +90,33 @@ export default function Page() {
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
             喵服简介
           </Center>
-          <Center>
+          <Text fontSize="sm">
             一个为玩家提供虚拟组网服务的联机平台，解决异地进行局域网联机难题
-          </Center>
+          </Text>
         </Flex>
 
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
             适用系统
           </Center>
-          <Center>
+          <Text fontSize="sm">
             支持主流操作系统如安卓、苹果、Windows，若游戏支持可实现跨系统联机
-          </Center>
+          </Text>
         </Flex>
       </Flex>
 
       <Button
         mt={6}
-        bgColor="#1d984b"
         fontSize="lg"
         onClick={() => {
-          router.push("/wgnum"); // 匿名函数路由到 /wgnum
+          if (logined) {
+            router.push("/room");
+          } else {
+            loginToggle();
+          }
         }}
       >
-        &gt;&gt; 点我开始使用 &lt;&lt;
+        &gt;&gt; 开始使用 &lt;&lt;
       </Button>
     </Flex>
   );

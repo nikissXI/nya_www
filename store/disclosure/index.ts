@@ -12,6 +12,8 @@ export interface BasicDisclosure {
 export interface IDisclosure {
   modifyGameListDisclosure: BasicDisclosure;
   modifyNavbarDisclosure: BasicDisclosure;
+  modifyLoginDisclosure: BasicDisclosure;
+  modifyGetWgnumDisclosure: BasicDisclosure;
 }
 
 export const useDisclosureStore = createWithEqualityFn<IDisclosure>((set) => {
@@ -62,6 +64,56 @@ export const useDisclosureStore = createWithEqualityFn<IDisclosure>((set) => {
           return produce(state, (draft) => {
             draft.modifyNavbarDisclosure.isOpen =
               !draft.modifyNavbarDisclosure.isOpen;
+          });
+        });
+      },
+    },
+    modifyLoginDisclosure: {
+      isOpen: false,
+      onOpen: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyLoginDisclosure.isOpen = true;
+          });
+        });
+      },
+      onClose: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyLoginDisclosure.isOpen = false;
+          });
+        });
+      },
+      onToggle: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyLoginDisclosure.isOpen =
+              !draft.modifyLoginDisclosure.isOpen;
+          });
+        });
+      },
+    },
+    modifyGetWgnumDisclosure: {
+      isOpen: false,
+      onOpen: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyGetWgnumDisclosure.isOpen = true;
+          });
+        });
+      },
+      onClose: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyGetWgnumDisclosure.isOpen = false;
+          });
+        });
+      },
+      onToggle: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.modifyGetWgnumDisclosure.isOpen =
+              !draft.modifyGetWgnumDisclosure.isOpen;
           });
         });
       },

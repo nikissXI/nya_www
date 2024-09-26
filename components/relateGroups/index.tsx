@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Flex, Center, Divider } from "@chakra-ui/react";
+import { Flex, Center, Box } from "@chakra-ui/react";
 import { ArrowDownIcon } from "@chakra-ui/icons";
 interface GroupItem {
   name: string;
@@ -14,6 +14,8 @@ interface GroupData {
 }
 
 const RelateGroupList = () => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const [groupData, setData] = useState<GroupData>({
     main: [],
     relate: [],
@@ -23,12 +25,11 @@ const RelateGroupList = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
-      const response = await fetch(`${apiUrl}/relateGroup`);
-      if (!response.ok) {
+      const resp = await fetch(`${apiUrl}/relateGroup`);
+      if (!resp.ok) {
         throw new Error("获取关联群信息出错");
       }
-      const data = await response.json();
+      const data = await resp.json();
       setData(data);
       // groupListRef.current = groupArray; // 缓存获取到的游戏数据
     } catch (err) {
@@ -48,7 +49,6 @@ const RelateGroupList = () => {
 
   if (loading) {
     return;
-    // return <Spinner size="md" />;
   }
 
   if (error) {
@@ -56,26 +56,34 @@ const RelateGroupList = () => {
   }
 
   return (
-    <Flex direction="column" alignItems="center">
-      <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
-        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
-        喵服关联QQ群
-        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
-      </Center>
-      {groupData.main.map((group, index) => (
-        <Center key={index} mb={2}>
-          {group.name} - {group.qq}
+    <Box
+      as="footer"
+      minW="240px"
+      flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
+      mt={{ base: "5", md: "24" }}
+      pb={6}
+    >
+      {/* <Flex direction="column" alignItems="center"> */}
+        <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
+          <ArrowDownIcon display={{ base: "flex", md: "none" }} />
+          喵服关联QQ群
+          <ArrowDownIcon display={{ base: "flex", md: "none" }} />
         </Center>
-      ))}
+        {groupData.main.map((group, index) => (
+          <Center key={index} mb={2}>
+            {group.name} - {group.qq}
+          </Center>
+        ))}
 
-      <Divider my={2} opacity={0} />
+        {/* <Divider my={1} opacity={0} /> */}
 
-      {groupData.relate.map((group, index) => (
-        <Center key={index} mb={2}>
-          {group.name} - {group.qq}
-        </Center>
-      ))}
-    </Flex>
+        {groupData.relate.map((group, index) => (
+          <Center key={index} mb={2}>
+            {group.name} - {group.qq}
+          </Center>
+        ))}
+      {/* </Flex> */}
+    </Box>
   );
 };
 

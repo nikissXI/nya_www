@@ -1,10 +1,55 @@
 "use client";
 
-import { Flex, Center, Text, Image, Heading } from "@chakra-ui/react";
+import { Flex, Center, Text, Divider, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
+import { useState } from "react";
+import { useUserStateStore } from "@/store/user-state";
+import { getAuthToken } from "@/store/authKey";
+import { useDisclosureStore } from "@/store/disclosure";
+import { openToast } from "@/components/universal/toast";
 
 export function Page() {
   const wg_apk_url = process.env.NEXT_PUBLIC_WG_APK_URL; // 从环境变量获取 API 地址
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const { logined } = useUserStateStore();
+  const { onToggle: loginToggle } = useDisclosureStore((state) => {
+    return state.modifyLoginDisclosure;
+  });
+
+  const [confKey, setConfKey] = useState("");
+  const [getConfKeyText, setGetConfKeyText] = useState("");
+
+  const handleCopyLink = (confKey: string) => {
+    try {
+      navigator.clipboard.writeText(confKey);
+      setGetConfKeyText("key已复制到剪切板，有效期15分钟");
+    } catch (err) {
+      alert(err);
+      setGetConfKeyText("自动复制失败，请手动复制，有效期15分钟");
+    }
+    setConfKey(confKey);
+  };
+
+  const getConfKey = async () => {
+    const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.code === 0) {
+        handleCopyLink(data.key);
+      } else {
+        openToast({ content: data.msg });
+      }
+    } else {
+      openToast({ content: "服务异常，请联系服主处理" });
+    }
+  };
 
   return (
     <Center>
@@ -27,9 +72,30 @@ export function Page() {
           点击下载WG安装包
         </Button>
 
-        <Text my={3}>安装完成的程序图标</Text>
+        <Divider my={5}></Divider>
 
-        <Image maxW="240px" src="/images/apk_img.jpg" alt="apk_img" />
+        <Heading size="md" mb={3}>
+          获取conf key
+        </Heading>
+
+        <Flex>
+          <Button
+            size="sm"
+            onClick={getConfKey}
+            isDisabled={getConfKeyText ? true : false || logined ? false : true}
+          >
+            {logined ? "点击获取" : "未登录无法获取"}
+          </Button>
+
+          {!logined && (
+            <Button bgColor="#1d984b" size="sm" onClick={loginToggle} ml={5}>
+              点击进行登陆
+            </Button>
+          )}
+        </Flex>
+
+        <Text color="#ffd648">{getConfKeyText}</Text>
+        <Text color="#ffd648">{confKey}</Text>
       </Flex>
     </Center>
   );

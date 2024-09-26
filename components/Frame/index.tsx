@@ -1,12 +1,16 @@
 "use client";
 
 // import { gotoServerEditor, Inspector } from "react-dev-inspector";
-import { ChakraProvider } from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import { Box, Flex } from "@chakra-ui/react";
-import Navbar from "../Navbar";
+import { Header } from "../Navbar/Header";
 import RelateGroupList from "../relateGroups";
 import Toaster from "../universal/Toaster";
+import { useUserStateStore } from "@/store/user-state";
+import { useDisclosureStore } from "../../store/disclosure";
+import { GameListModal } from "@/components/tutorial/GameList";
+import Footer from "../Navbar/Footer";
 
 const Frame = ({
   children,
@@ -14,24 +18,26 @@ const Frame = ({
   children: React.ReactNode;
 }>) => {
   const pathname = usePathname(); // 获取当前路径名
+  const { logging } = useUserStateStore();
+
+  const { isOpen: gameListIsOpen, onToggle: gameListOnToggle } =
+    useDisclosureStore((state) => {
+      return state.modifyGameListDisclosure;
+    });
+
   return (
-    <ChakraProvider>
+    <>
       <Toaster />
+
+      <GameListModal isOpen={gameListIsOpen} onClose={gameListOnToggle} />
+
       <Flex
         position="relative"
         direction={{ base: "column", md: "row" }} // 移动端竖向，桌面端横向
         height="100vh"
       >
-        {/* 头部 */}
-        <Box
-          as="header"
-          minW="240px"
-          flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
-          zIndex={100}
-        >
-          {/* 导航栏 */}
-          <Navbar path={pathname}></Navbar>
-        </Box>
+        {/* 头部导航栏 */}
+        <Header path={pathname}></Header>
 
         {/* 主内容区域 */}
         <Box
@@ -39,19 +45,18 @@ const Frame = ({
           flex={{ base: "1", md: "4" }} // 移动端占据全部宽度，桌面端占据 2/3 宽度
           mt={{ base: 20, md: 100 }}
         >
-          {children}
+          {logging ? (
+            <Center>
+              <Spinner size="lg" />
+            </Center>
+          ) : (
+            children
+          )}
         </Box>
 
         {/* 底部 */}
-        <Box
-          as="footer"
-          minW="240px"
-          flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
-          mt={{ base: "5", md: "100" }}
-          pb={6}
-        >
-          <RelateGroupList />
-        </Box>
+        <Footer />
+        <RelateGroupList />
       </Flex>
 
       {/* <Inspector
@@ -66,7 +71,7 @@ const Frame = ({
           gotoServerEditor(codeInfo);
         }}
       /> */}
-    </ChakraProvider>
+    </>
   );
 };
 export default Frame;

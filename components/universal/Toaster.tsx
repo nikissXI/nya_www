@@ -22,6 +22,7 @@ export const useOpenToast = (
           toast({
             id,
             position: "top",
+            duration: 3000,
             render: () => {
               return <ToastComponent text={content} />;
             },
@@ -30,6 +31,7 @@ export const useOpenToast = (
       } else {
         toast({
           position: "top",
+          duration: 3000,
           render: () => {
             return <ToastComponent text={content} />;
           },

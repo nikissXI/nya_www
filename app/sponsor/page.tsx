@@ -21,15 +21,15 @@ const Page = () => {
   const [sponsorData, setData] = useState<SponsorItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchData = useCallback(async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
-      const response = await fetch(`${apiUrl}/sponsorList`);
-      if (!response.ok) {
+      const resp = await fetch(`${apiUrl}/sponsorList`);
+      if (!resp.ok) {
         throw new Error("获取赞助列表出错");
       }
-      const data = await response.json();
+      const data = await resp.json();
       setData(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "获取赞助列表出错");

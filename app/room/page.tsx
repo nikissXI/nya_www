@@ -9,15 +9,14 @@ import {
   ModalOverlay,
   Heading,
   Center,
-  Stack,
+  VStack,
   Collapse,
   ModalContent,
   ModalHeader,
+  ModalCloseButton,
   ModalBody,
-  Spinner,
   ModalFooter,
   useDisclosure,
-  Divider,
   Table,
   Thead,
   Flex,
@@ -30,14 +29,15 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/universal/button";
-import { useUserStateStore } from "@/store/user-state";
 import { FiDelete } from "react-icons/fi";
 import { IoMdPersonAdd } from "react-icons/io";
 import { IoReloadCircle } from "react-icons/io5";
 import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
 import { WarningIcon } from "@chakra-ui/icons";
+import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
+import { getAuthToken } from "@/store/authKey";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -77,6 +77,7 @@ interface HandleRoomResponse {
 
 export default function Page() {
   const router = useRouter();
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
   const [status, setStatus] = useState<"none" | "member" | "hoster">("none");
@@ -100,14 +101,21 @@ export default function Page() {
   const [checkText, setCheckText] = useState<string>("");
   const { logined, userInfo } = useUserStateStore();
 
-  const { onToggle } = useDisclosureStore((state) => {
+  const { onToggle: gameListToggle } = useDisclosureStore((state) => {
     return state.modifyGameListDisclosure;
+  });
+
+  const { onToggle: getWgnumToggle } = useDisclosureStore((state) => {
+    return state.modifyGetWgnumDisclosure;
+  });
+
+  const { onToggle: loginToggle } = useDisclosureStore((state) => {
+    return state.modifyLoginDisclosure;
   });
 
   const [showTips, setShowTips] = useState(false);
 
   const tips = [
-    "QQ绑定编号后，群昵称会被改成形如“编号（联机IP）”，方便玩家间联机",
     "联机请保持网络流畅，若延迟大于160ms或丢包率大于0代表网络不稳定",
     "如果游戏的创建者把游戏放后台，会导致其他玩家无法搜索和加入游戏",
     "各系统只要连上喵服就能互相通信，但至于游戏能不能联机得看游戏自己支不支持",
@@ -115,16 +123,15 @@ export default function Page() {
   ];
 
   const getRoomData = async () => {
-    const key = localStorage.getItem("key"); // 替换为你的key名称
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
+    // 从环境变量获取 API 地址
 
     fetch(`${apiUrl}/getRoom`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${key}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     })
-      .then((response) => response.json() as Promise<Response>) // 强制转换为 RoomResponse 类型
+      .then((resp) => resp.json() as Promise<Response>) // 强制转换为 RoomResponse 类型
       .then((data) => {
         setRoomData(data.data);
 
@@ -156,14 +163,14 @@ export default function Page() {
       if (!auto) {
         setCheckText("");
       }
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(
+
+      const resp = await fetch(
         `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
       );
-      if (!response.ok) {
-        console.error(`访问接口出错: ${response.status}`);
+      if (!resp.ok) {
+        console.error(`访问接口出错: ${resp.status}`);
       }
-      const result = await response.json();
+      const result = await resp.json();
       if (result.code !== 0) {
         // 未连接
         setLatencyData(null);
@@ -173,13 +180,13 @@ export default function Page() {
 
         if (checkType === "long") {
           setCheckText("约10秒后返回详细网络检测结果");
-          const response = await fetch(
+          const resp = await fetch(
             `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
           );
-          if (!response.ok) {
-            console.error(`访问接口出错: ${response.status}`);
+          if (!resp.ok) {
+            console.error(`访问接口出错: ${resp.status}`);
           } else {
-            const result = await response.json();
+            const result = await resp.json();
             if (result.code !== 0) {
               // 未连接
               setLatencyData(null);
@@ -199,24 +206,24 @@ export default function Page() {
   );
 
   const wgReInsert = async () => {
-    const key = localStorage.getItem("key"); // 替换为你的key名称
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
+    // 从环境变量获取 API 地址
     setCheckText("修复中。。。");
     try {
-      const response = await fetch(`${apiUrl}/wgReinsert`, {
+      const resp = await fetch(`${apiUrl}/wgReinsert`, {
         method: "GET", // 根据需要选择请求方法，通常为 POST
         headers: {
-          Authorization: `Bearer ${key}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       });
 
-      if (response.ok) {
+      if (resp.ok) {
         // 如果响应状态为 200-299，返回 true 表示成功
         console.log("请求成功");
         setCheckText("修复成功！把VPN开关重新打开试试");
       } else {
         // 如果响应状态不在 200-299 范围内，返回 false 表示失败
-        console.error("请求失败", response.status);
+        console.error("请求失败", resp.status);
+        setCheckText("请求失败，请刷新网页再试");
       }
     } catch (error) {
       // 处理网络错误
@@ -258,22 +265,19 @@ export default function Page() {
     handleType: string,
     handleWgnum: number
   ): Promise<HandleRoomResponse> => {
-    const key = localStorage.getItem("key");
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-    const response = await fetch(
+    const resp = await fetch(
       `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${key}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       }
     );
-    if (!response.ok) {
-      throw new Error(`访问接口出错: ${response.status}`);
+    if (!resp.ok) {
+      throw new Error(`访问接口出错: ${resp.status}`);
     }
-    return response.json() as Promise<HandleRoomResponse>;
+    return resp.json() as Promise<HandleRoomResponse>;
   };
 
   // 创建房间
@@ -377,22 +381,40 @@ export default function Page() {
   if (!logined) {
     return (
       <Center my={10}>
-        <Stack>
-          <Heading textAlign="center">
-            你还没登录
-            <br />
-            无法使用该功能
-          </Heading>
+        <VStack spacing={6} align="center">
+          <Heading size="md">你还没登陆呢</Heading>
+
           <Button
-            my={5}
-            bgColor="#007bc0"
-            onClick={() => {
-              router.push("/wgnum/bind");
-            }}
+            variant="outline"
+            rounded={10}
+            onClick={loginToggle}
+            border={0}
           >
             点击登录
           </Button>
-        </Stack>
+        </VStack>
+      </Center>
+    );
+  }
+
+  // 没编号就去获取
+  if (!userInfo?.wg_data) {
+    return (
+      <Center my={10}>
+        <VStack spacing={3} mt={5} align="center">
+          <Heading size="md" color="#ffa629">
+            你还没联机编号呢
+          </Heading>
+
+          <Button
+            rounded={5}
+            onClick={getWgnumToggle}
+            bgColor="#007bc0"
+            size="sm"
+          >
+            点我获取编号
+          </Button>
+        </VStack>
       </Center>
     );
   }
@@ -404,6 +426,9 @@ export default function Page() {
           <ModalOverlay />
           <ModalContent bgColor="#002f5c">
             <ModalHeader>加入房间</ModalHeader>
+
+            <ModalCloseButton />
+
             <ModalBody>
               <Input
                 type="number"
@@ -424,7 +449,7 @@ export default function Page() {
                 加入
               </Button>
               <Button
-                bgColor="#ff5353"
+                bgColor="#d42424"
                 onClick={() => {
                   setInputWgnum(0);
                   joinOnClose();
@@ -438,11 +463,11 @@ export default function Page() {
 
         <Heading my={3}>请选择操作</Heading>
 
-        <Stack spacing={6} alignItems="center">
+        <VStack spacing={6} alignItems="center">
           <Button
             h="50px"
             fontSize="25px"
-            bgColor="#2383c2"
+            // bgColor="#2383c2"
             onClick={handleCreateRoom}
           >
             创建房间
@@ -451,12 +476,12 @@ export default function Page() {
           <Button
             h="50px"
             fontSize="25px"
-            bgColor="#3c9aa7"
+            // bgColor="#3c9aa7"
             onClick={joinOnOpen}
           >
             加入房间
           </Button>
-        </Stack>
+        </VStack>
       </Box>
     );
   }
@@ -468,6 +493,9 @@ export default function Page() {
           <ModalOverlay />
           <ModalContent bgColor="#002f5c">
             <ModalHeader>添加成员</ModalHeader>
+
+            <ModalCloseButton />
+
             <ModalBody>
               <Input
                 placeholder="请输入新成员编号"
@@ -480,7 +508,7 @@ export default function Page() {
                 添加
               </Button>
               <Button
-                bgColor="#ff5353"
+                bgColor="#d42424"
                 onClick={() => {
                   setInputWgnum(0);
                   addOnClose();
@@ -522,7 +550,7 @@ export default function Page() {
           )}
         </Box>
 
-        <Stack alignItems="center">
+        <VStack alignItems="center">
           <Button
             h="2.3rem"
             w="6rem"
@@ -533,15 +561,13 @@ export default function Page() {
           >
             {status === "hoster" ? "关闭房间" : "退出房间"}
           </Button>
-        </Stack>
+        </VStack>
       </Box>
     );
   }
 
   return (
-    <Stack alignItems="center">
-      <Text>在喵服关联群里发“房间”可获取本网页链接</Text>
-
+    <VStack alignItems="center">
       <Flex align="center">
         <Text fontSize={18} fontWeight="bold" color="#ffd964">
           你的编号: {wgnum}
@@ -550,7 +576,7 @@ export default function Page() {
           fontSize={18}
           mx={3}
           fontWeight="bold"
-          color={latencyData ? "#3fdb1d" : "#ff3b3b"}
+          color={latencyData ? "#3fdb1d" : "#ff3838"}
         >
           {latencyData ? "已连接" : "喵服未连接"}
         </Text>
@@ -580,8 +606,15 @@ export default function Page() {
 
       {!latencyData && !checkText && (
         <Flex align="center">
-          <Text>喵服连上了还是检测不到？</Text>
-          <Button bg="#aa33ae" p={1} h={7} onClick={wgReInsert}>
+          <Text>WG打开了还是检测不到？</Text>
+          <Button
+            variant="link"
+            // bg="#aa33ae"
+            size="sm"
+            p={1}
+            h={7}
+            onClick={wgReInsert}
+          >
             点我修复
           </Button>
         </Flex>
@@ -597,9 +630,15 @@ export default function Page() {
         mt={5}
         bgColor="#7242ad"
         fontSize="16px"
-        onClick={onToggle}
+        onClick={() => {
+          if (latencyData) {
+            gameListToggle();
+          } else {
+            router.push("/tutorial");
+          }
+        }}
       >
-        游戏联机教程
+        {latencyData ? "游戏联机教程" : "喵服连接教程"}
       </Button>
 
       <Button
@@ -629,7 +668,7 @@ export default function Page() {
           ))}
         </Collapse>
       </Box>
-    </Stack>
+    </VStack>
   );
 }
 

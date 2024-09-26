@@ -11,14 +11,16 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useUserStateStore } from "@/store/user-state";
 import { GetConfUrl } from "@/components/universal/GetConf";
+import { useDisclosureStore } from "@/store/disclosure";
 
 export function Page() {
-  const router = useRouter();
-
   const { logined, userInfo } = useUserStateStore();
+
+  const { onToggle: loginToggle } = useDisclosureStore((state) => {
+    return state.modifyLoginDisclosure;
+  });
 
   const images = ["/images/pc_switch_off.jpg", "/images/pc_switch_on.jpg"];
 
@@ -50,17 +52,12 @@ export function Page() {
             >
               {logined ? "点击下载conf" : "未登录无法下载"}
             </Button>
-            <Button
-              bgColor="#1d984b"
-              size="sm"
-              onClick={() => {
-                router.push("/wgnum/bind");
-              }}
-              visibility={logined ? "hidden" : "visible"}
-              ml={5}
-            >
-              点击进行登陆
-            </Button>
+
+            {!logined && (
+              <Button bgColor="#1d984b" size="sm" onClick={loginToggle} ml={5}>
+                点击进行登陆
+              </Button>
+            )}
           </ListItem>
 
           <ListItem>

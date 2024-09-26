@@ -17,12 +17,6 @@ export default function AndroidPage0() {
       >
         <HeadingText />
 
-        <Heading size="md" mt={5}>
-          苹果因系统原因安装较麻烦
-          <br />
-          不懂就看视频，有完整录屏
-        </Heading>
-
         <Button
           mt={10}
           w="160px"

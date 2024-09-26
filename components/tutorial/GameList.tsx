@@ -49,11 +49,13 @@ export const GameListModal: React.FC<{
       <ModalOverlay />
       <ModalContent bgColor="#002f5c">
         <ModalHeader textAlign="center">游戏教程列表</ModalHeader>
+
         <ModalCloseButton />
+
         <Text textAlign="center" color="#ffc500" mx={6}>
           不仅限于支持列表中的游戏联机
           <br />
-          如需新增教程请联系群主
+          如需新增教程请联系服主
         </Text>
         <ModalBody mx={6} mb={5}>
           <Input

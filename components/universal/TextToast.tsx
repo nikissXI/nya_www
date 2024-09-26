@@ -6,14 +6,14 @@ export const TextToast = (props: { text: string; onClick?: () => void }) => {
       bg="transparent"
       align="center"
       mt="0.75rem"
-      maxW="80vw"
+      maxW="60vw"
       textAlign="center"
       justifyContent="center"
     >
       <Text
         textAlign="center"
         fontWeight="500"
-        maxW="80vw"
+        maxW="60vw"
         bg="white"
         color="black"
         fontSize="0.875rem"

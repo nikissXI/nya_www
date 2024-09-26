@@ -22,9 +22,9 @@ export function Page() {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch(tool_py_url);
-      if (response.ok) {
-        setpytext(await response.text());
+      const resp = await fetch(tool_py_url);
+      if (resp.ok) {
+        setpytext(await resp.text());
       }
     } catch (err) {
       alert(err);
