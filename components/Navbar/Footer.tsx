@@ -4,9 +4,17 @@ import { Flex, Stack, Text } from "@chakra-ui/react";
 import { FaHome, FaUsers, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { Button } from "../universal/button";
+import { useState } from "react";
 
 export default function Footer() {
   const router = useRouter();
+
+  const [activeButton, setActiveButton] = useState<string>("");
+
+  const handleButtonClick = (path: string, buttonName: string) => {
+    router.push(path);
+    setActiveButton(buttonName);
+  };
 
   return (
     <Flex
@@ -25,9 +33,8 @@ export default function Footer() {
         variant="link"
         bg="transparent"
         colorScheme="transparent"
-        onClick={() => {
-          router.push("/");
-        }}
+        color={activeButton === "home" ? "#47cdff" : "white"}
+        onClick={() => handleButtonClick("/", "home")}
       >
         <Stack spacing={0} align="center">
           <FaHome />
@@ -40,9 +47,8 @@ export default function Footer() {
         variant="link"
         bg="transparent"
         colorScheme="transparent"
-        onClick={() => {
-          router.push("/room");
-        }}
+        color={activeButton === "room" ? "#47cdff" : "white"}
+        onClick={() => handleButtonClick("/room", "room")}
       >
         <Stack spacing={0} align="center">
           <FaUsers />
@@ -55,9 +61,8 @@ export default function Footer() {
         variant="link"
         bg="transparent"
         colorScheme="transparent"
-        onClick={() => {
-          router.push("/me");
-        }}
+        color={activeButton === "me" ? "#47cdff" : "white"}
+        onClick={() => handleButtonClick("/me", "me")}
       >
         <Stack spacing={0} align="center">
           <FaUser />

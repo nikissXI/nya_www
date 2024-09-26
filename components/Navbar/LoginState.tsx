@@ -63,7 +63,7 @@ export function LoginStateText() {
 
   useEffect(() => {
     getUserInfo();
-  }, []);
+  }, [getUserInfo]);
 
   useEffect(() => {
     const loadCaptcha = async () => {
@@ -72,7 +72,7 @@ export function LoginStateText() {
       }
     };
     loadCaptcha();
-  }, [logging, fetchCaptcha, loginIsOpen]);
+  }, [logging, fetchCaptcha, loginIsOpen, logined]);
 
   const handleLogin = async () => {
     if (!(inputNum && inputPassword && inputCaptcha)) {
@@ -132,7 +132,7 @@ export function LoginStateText() {
               <Text color="#ffd648" fontSize="16px">
                 账密系统更新前的用户
                 <br />
-                请通过QQ重置密码登陆
+                点忘记密码，通过QQ重置新密码
               </Text>
 
               <Flex alignItems="center">

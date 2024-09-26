@@ -122,9 +122,8 @@ export default function Page() {
     "喵服支持所有可以填IP直连及大部分搜索加入的游戏联机，已知逃脱者这个游戏联机需要另外下载工具，具体看游戏联机教程",
   ];
 
-  const getRoomData = async () => {
+  const getRoomData = useCallback(async () => {
     // 从环境变量获取 API 地址
-
     fetch(`${apiUrl}/getRoom`, {
       method: "GET",
       headers: {
@@ -152,7 +151,7 @@ export default function Page() {
         console.error("拉取房间信息出错:", error);
       })
       .finally(() => {});
-  };
+  }, [apiUrl]);
 
   const fetchNetworkLatency = useCallback(
     async (checkType: string, auto: boolean = false) => {
@@ -202,7 +201,7 @@ export default function Page() {
       }
       setChecking(false);
     },
-    [wgnum]
+    [wgnum, apiUrl]
   );
 
   const wgReInsert = async () => {
@@ -242,7 +241,7 @@ export default function Page() {
       const interval = setInterval(getRoomData, 10000); // 每10秒更新一次数据
       return () => clearInterval(interval); // 清理定时器
     }
-  }, [wgnum]);
+  }, [wgnum, getRoomData]);
 
   useEffect(() => {
     if (wgnum !== 0 && !checking) {
@@ -254,12 +253,15 @@ export default function Page() {
   }, [wgnum, checking, fetchNetworkLatency]);
 
   useEffect(() => {
-    // 如果已登录就拉房间信息
-    if (wgnum !== 0) {
-      getRoomData();
-      fetchNetworkLatency("short");
-    }
-  }, [wgnum, fetchNetworkLatency]);
+    const fetchData = () => {
+      // 如果已登录就拉房间信息
+      if (wgnum !== 0) {
+        getRoomData();
+        fetchNetworkLatency("short");
+      }
+    };
+    fetchData();
+  }, [wgnum, fetchNetworkLatency, getRoomData]);
 
   const fetchHandleRoom = async (
     handleType: string,

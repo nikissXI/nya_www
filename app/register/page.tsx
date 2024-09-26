@@ -72,7 +72,7 @@ export default function Page() {
         setIsQQ(true);
       }
     }
-  }, [logined]);
+  }, [logined, router]);
 
   useEffect(() => {
     const loadCaptcha = async () => {
@@ -140,7 +140,7 @@ export default function Page() {
       } else {
         openToast({ content: data.msg });
         setCaptchaImage(await fetchCaptcha());
-        setInputCaptcha("")
+        setInputCaptcha("");
       }
     } else {
       openToast({ content: "服务异常，请联系服主处理" });
@@ -216,8 +216,8 @@ export default function Page() {
         <VStack spacing={3} align="stretch">
           {isQQ && (
             <>
-              <Text color="#ffd648" fontSize="16px">
-                如在QQ里打开该页面无法注册账号
+              <Text color="#ffd648" fontSize="18px">
+                在QQ里打开无法注册账号！
               </Text>
               <Button size="sm" onClick={handleCopyLink}>
                 {copyButtonText}
