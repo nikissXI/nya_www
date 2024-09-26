@@ -231,7 +231,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userInfo.wg_data) {
       setUserWgnum(userInfo.wg_data.wgnum);
     }
   }, [userInfo]);
