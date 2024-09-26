@@ -681,9 +681,11 @@ export default function UserProfilePage() {
                     最后连接:
                   </Text>
                   <Text ml={5}>
-                    {timestampToDateString(
-                      userInfo.wg_data.last_connect_timestamp
-                    )}
+                    {userInfo.wg_data.last_connect_timestamp
+                      ? timestampToDateString(
+                          userInfo.wg_data.last_connect_timestamp
+                        )
+                      : "未连接过"}
                   </Text>
                 </Flex>
 
