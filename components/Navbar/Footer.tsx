@@ -17,7 +17,7 @@ export default function Footer() {
       left="0"
       right="0"
       justifyContent="space-around"
-      padding="0.5rem"
+      padding="1rem"
       display={{ md: "none", base: "flex" }}
     >
       <Stack spacing={0}>

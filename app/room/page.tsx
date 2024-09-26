@@ -380,20 +380,13 @@ export default function Page() {
   // 没登录就让去登录
   if (!logined) {
     return (
-      <Center my={10}>
-        <VStack spacing={6} align="center">
-          <Heading size="md">你还没登陆呢</Heading>
+      <VStack spacing={6} align="center">
+        <Heading size="md">你还没登陆呢</Heading>
 
-          <Button
-            variant="outline"
-            rounded={10}
-            onClick={loginToggle}
-            border={0}
-          >
-            点击登录
-          </Button>
-        </VStack>
-      </Center>
+        <Button variant="outline" rounded={10} onClick={loginToggle} border={0}>
+          点击登录
+        </Button>
+      </VStack>
     );
   }
 
