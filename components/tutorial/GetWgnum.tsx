@@ -9,7 +9,6 @@ import {
   ModalContent,
   ModalBody,
   ModalFooter,
-  Button,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -18,6 +17,7 @@ import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
 import { WarningIcon } from "@chakra-ui/icons";
 import { openToast } from "../universal/toast";
+import { Button } from "../universal/button";
 
 export default function GetWgnumModal() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
