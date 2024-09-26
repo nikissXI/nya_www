@@ -204,7 +204,7 @@ export default function Page() {
     <Center>
       <Box p={5} maxW="300px">
         <VStack spacing={3} align="stretch">
-          {!isQQ && (
+          {isQQ && (
             <>
               <Text color="#ffd648" fontSize="18px">
                 在QQ里打开无法重置密码！
