@@ -129,6 +129,12 @@ export function LoginStateText() {
 
           <ModalBody>
             <VStack spacing={2} align="stretch" onKeyDown={handleEnter}>
+              <Text color="#ffd648" fontSize="16px">
+                账密系统更新前的用户
+                <br />
+                请通过QQ重置密码登陆
+              </Text>
+
               <Flex alignItems="center">
                 登陆方式
                 <RadioGroup
