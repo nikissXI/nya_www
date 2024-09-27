@@ -50,7 +50,7 @@ export default function UserProfilePage() {
   const [isQQ, setIsQQ] = useState(false);
   useEffect(() => {
     const userAgent = navigator.userAgent;
-    if (userAgent.includes("QQ/")|| userAgent.includes("WeChat/")) {
+    if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
       setIsQQ(true);
     }
   }, []);
@@ -720,25 +720,25 @@ export default function UserProfilePage() {
               </VStack>
             )}
 
-            <Button
-              mt={5}
-              variant="link"
-              bgColor="transparent"
-              color="#7dfffe"
-              onClick={() => changePassOnopen()}
-            >
-              修改密码
-            </Button>
+            <VStack spacing={5} mt={5}>
+              <Button
+                variant="link"
+                bgColor="transparent"
+                color="#7dfffe"
+                onClick={() => changePassOnopen()}
+              >
+                修改密码
+              </Button>
 
-            <Button
-              mt={2}
-              variant="link"
-              bgColor="transparent"
-              color="#ff3f0b"
-              onClick={() => logout()}
-            >
-              退出登录
-            </Button>
+              <Button
+                variant="link"
+                bgColor="transparent"
+                color="#ff3f0b"
+                onClick={() => logout()}
+              >
+                退出登录
+              </Button>
+            </VStack>
           </VStack>
         ) : (
           <VStack spacing={6} align="center">
