@@ -53,6 +53,13 @@ export default function GetWgnumModal() {
     }
   };
 
+  const tips = [
+    "喵服使用的是WireGuard（简称WG）这个VPN进行组网实现局域网联机功能，获取编号后跟着教程安装WG",
+    "每个账号只能绑定一个编号，同一个编号不能多个设备同时使用，联机时请各用各的编号",
+    "绑定的编号如果连续30天不使用就会解绑，需要就领个新的，解绑的编号可从WG中删除",
+    "仅支持在国内使用，服务器暂时免费使用，暂时还有钱剩",
+  ];
+
   return (
     <Modal isOpen={isOpen} onClose={onToggle}>
       <ModalOverlay />
@@ -62,24 +69,12 @@ export default function GetWgnumModal() {
         <ModalCloseButton />
 
         <ModalBody>
-          <VStack spacing={2} align="stretch">
-            <Text>
-              <WarningIcon mr={2} />
-              喵服使用的是WireGuard（简称WG）这个VPN进行组网实现局域网联机功能，获取编号后跟着教程安装WG
-            </Text>
-            <Text>
-              <WarningIcon mr={2} />
-              每个账号只能绑定一个编号，同一个编号不能多个设备同时使用，联机时请各用各的编号
-            </Text>
-            <Text>
-              <WarningIcon mr={2} />
-              绑定的编号如果连续30天不使用就会解绑，需要就领个新的，解绑的编号可从WG中删除
-            </Text>
-            <Text>
-              <WarningIcon mr={2} />
-              仅支持在国内使用
-            </Text>
-          </VStack>
+            {tips.map((tip, index) => (
+              <Text fontSize="sm" key={index} my={2}>
+                <WarningIcon mr={2} />
+                {tip}
+              </Text>
+            ))}
         </ModalBody>
 
         <ModalFooter alignSelf="center">
