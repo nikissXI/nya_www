@@ -694,7 +694,7 @@ export default function UserProfilePage() {
                   </Text>
                 </Flex>
 
-                <Button
+                {/* <Button
                   mt={2}
                   size="sm"
                   w="100px"
@@ -703,7 +703,7 @@ export default function UserProfilePage() {
                   onClick={() => router.push("/room ")}
                 >
                   前往联机房间
-                </Button>
+                </Button> */}
               </VStack>
             ) : (
               <VStack spacing={3} mt={5} align="center">
