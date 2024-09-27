@@ -11,6 +11,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { GameListModal } from "@/components/tutorial/GameList";
 import Footer from "../Navbar/Footer";
 import GetWgnumModal from "@/components/tutorial/GetWgnum";
+import { LoginModal } from "../Navbar/Login";
 
 export default function Frame({
   children,
@@ -23,6 +24,7 @@ export default function Frame({
   return (
     <>
       <Toaster />
+      <LoginModal />
       <GameListModal />
       <GetWgnumModal />
 

@@ -1,21 +1,8 @@
 "use client";
 
 import NextLink from "next/link";
-import {
-  Box,
-  Flex,
-  Text,
-  Link,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  Center,
-  DrawerOverlay,
-} from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { Box, Flex, Text, Link, Center } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { LoginStateText } from "./LoginState";
 
 export function Header({ path }: { path: string }) {
   const rootPath = "/" + path.split("/")[1];
@@ -113,63 +100,6 @@ export function Header({ path }: { path: string }) {
           ))}
         </Flex>
       </Flex>
-
-      {/* 移动端菜单按钮，桌面端时不展示（即none） */}
-
-      {/* 登陆状态 */}
-      <LoginStateText />
-
-      {/* <Button
-        position="fixed"
-        display={{ base: "flex", md: "none" }}
-        top={3}
-        right={3}
-        px={2}
-        variant="outline"
-        bgColor="transparent"
-        rounded={10}
-        onClick={navbarOnToggle}
-      >
-        <HamburgerIcon color="white" boxSize={6} />
-      </Button> */}
-
-      {/* 移动端抽屉菜单 */}
-      {/* <Drawer isOpen={navbarIsOpen} placement="left" onClose={navbarOnToggle}>
-        <DrawerOverlay />
-        <DrawerContent maxWidth="75%" bg="#23314be3">
-          <DrawerHeader color="white" textAlign="center" bg="#254c7a">
-            网站导航
-          </DrawerHeader>
-
-          <DrawerBody>
-            <Flex as="nav" direction="column" p={4}>
-              {rootGuide.map((item) => (
-                <Link
-                  as={NextLink}
-                  key={item.path}
-                  href={item.path}
-                  mx={6}
-                  my={3}
-                  py={2}
-                  _hover={{ textDecoration: "none" }}
-                  bg={path === item.path ? "#4098f282" : "transparent"}
-                  rounded={12}
-                  onClick={navbarOnToggle}
-                >
-                  <Center>
-                    <Text
-                      color={path === item.path ? "white" : "white"}
-                      fontWeight={path === item.path ? "bold" : "normal"}
-                    >
-                      {item.name}
-                    </Text>
-                  </Center>
-                </Link>
-              ))}
-            </Flex>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer> */}
     </Box>
   );
 }
