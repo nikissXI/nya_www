@@ -358,7 +358,7 @@ export default function Page() {
     try {
       const data = await fetchHandleRoom("delMember", delWgnum);
       if (data.code === 0) {
-        setStatus("member");
+        getRoomData();
       } else {
         alert(data.msg);
       }
@@ -432,6 +432,7 @@ export default function Page() {
                 onClick={() => {
                   handleJoinRoom();
                   joinOnClose();
+                  setInputWgnum(0);
                 }}
                 mr={5}
               >
@@ -440,8 +441,8 @@ export default function Page() {
               <Button
                 bgColor="#d42424"
                 onClick={() => {
-                  setInputWgnum(0);
                   joinOnClose();
+                  setInputWgnum(0);
                 }}
               >
                 取消
