@@ -94,8 +94,11 @@ export function Page() {
           )}
         </Flex>
 
-        <Text color="#ffd648">{getConfKeyText}</Text>
-        <Text color="#ffd648">{confKey}</Text>
+        <Text>{getConfKeyText}</Text>
+        <Text color="#ffd648">
+          {confKey ? "key: " : ""}
+          {confKey}
+        </Text>
       </Flex>
     </Center>
   );
