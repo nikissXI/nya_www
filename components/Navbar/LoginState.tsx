@@ -8,6 +8,7 @@ import {
   ModalContent,
   VStack,
   ModalHeader,
+  ModalFooter,
   Input,
   ModalBody,
   Text,
@@ -129,11 +130,11 @@ export function LoginStateText() {
 
           <ModalBody>
             <VStack spacing={2} align="stretch" onKeyDown={handleEnter}>
-              <Text color="#ffd648" fontSize="16px">
+              {/* <Text color="#ffd648" fontSize="16px">
                 账密系统更新前的用户
                 <br />
                 点忘记密码，通过QQ重置新密码
-              </Text>
+              </Text> */}
 
               <Flex alignItems="center">
                 登陆方式
@@ -193,21 +194,22 @@ export function LoginStateText() {
               </Flex>
 
               <Button onClick={handleLogin}>登录</Button>
+            </VStack>
+          </ModalBody>
 
-              <Flex>
-                <Button
-                  mt={2}
-                  variant="link"
-                  color="#7dfffe"
-                  bgColor="transparent"
-                  onClick={() => {
-                    router.push("/forgetPass");
-                    loginToggle();
-                  }}
-                >
-                  忘记密码
-                </Button>
-              </Flex>
+          <ModalFooter>
+            <VStack spacing={2} align="start" w="full">
+              <Button
+                variant="link"
+                color="#7dfffe"
+                bgColor="transparent"
+                onClick={() => {
+                  router.push("/forgetPass");
+                  loginToggle();
+                }}
+              >
+                忘记密码
+              </Button>
 
               <Flex>
                 没有账号？
@@ -224,7 +226,7 @@ export function LoginStateText() {
                 </Button>
               </Flex>
             </VStack>
-          </ModalBody>
+          </ModalFooter>
         </ModalContent>
       </Modal>
 
