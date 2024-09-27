@@ -68,7 +68,7 @@ export default function Page() {
       router.push("/me");
     } else {
       const userAgent = navigator.userAgent;
-      if (userAgent.includes("QQ/")) {
+      if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
         setIsQQ(true);
       }
     }
