@@ -120,7 +120,7 @@ export function LoginStateText() {
     <>
       <Modal isOpen={loginIsOpen} onClose={loginToggle}>
         <ModalOverlay />
-        <ModalContent bgColor="#274161" maxW="300px">
+        <ModalContent bgColor="#274161" maxW="320px" mx={3}>
           <ModalHeader textAlign="center">
             {logined ? `你好！${userInfo?.username}` : "登录"}
           </ModalHeader>

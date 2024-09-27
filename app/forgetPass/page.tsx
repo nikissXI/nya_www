@@ -68,6 +68,16 @@ export default function Page() {
     }
   }, []);
 
+  const handleCopyLink = () => {
+    try {
+      navigator.clipboard.writeText(window.location.href);
+      setCopyButtonText("链接已复制到剪切板");
+    } catch (err) {
+      alert(err);
+      setCopyButtonText("复制链接失败，请自行复制");
+    }
+  };
+
   useEffect(() => {
     const loadCaptcha = async () => {
       setCaptchaImage(await fetchCaptcha());
@@ -190,169 +200,163 @@ export default function Page() {
     }
   };
 
-  const handleCopyLink = () => {
-    try {
-      navigator.clipboard.writeText(window.location.href);
-      setCopyButtonText("链接已复制到剪切板");
-    } catch (err) {
-      alert(err);
-      setCopyButtonText("复制链接失败");
-    }
-  };
+  if (isQQ) {
+    return (
+      <VStack spacing={3} align="center">
+        <Text color="#ffd648" fontSize="16px">
+          在QQ或微信中无法使用该功能
+          <br />
+          请到浏览器中打开网站再操作
+          <br />
+          如果误触发请联系群主处理，谢谢
+        </Text>
+        <Button size="sm" onClick={handleCopyLink}>
+          {copyButtonText}
+        </Button>
+      </VStack>
+    );
+  }
 
   return (
     <Center>
-      <Box p={5} maxW="300px">
-        <VStack spacing={3} align="stretch">
-          {isQQ && (
-            <>
-              <Text color="#ffd648" fontSize="18px">
-                在QQ里打开无法重置密码！
-              </Text>
-              <Button size="sm" onClick={handleCopyLink}>
-                {copyButtonText}
-              </Button>
-            </>
-          )}
+      <VStack spacing={3} align="stretch" maxW="300px">
+        <Flex>
+          重置方式
+          <RadioGroup
+            ml={5}
+            defaultValue="tel"
+            onChange={(value) => {
+              setInputNum("");
+              setRegisterType(value);
+            }}
+          >
+            <Stack spacing={4} direction="row">
+              <Radio value="tel">手机</Radio>
+              <Radio value="qq">QQ</Radio>
+            </Stack>
+          </RadioGroup>
+        </Flex>
 
-          <Flex>
-            重置方式
-            <RadioGroup
-              ml={5}
-              defaultValue="tel"
-              onChange={(value) => {
-                setInputNum("");
-                setRegisterType(value);
-              }}
-            >
-              <Stack spacing={4} direction="row">
-                <Radio value="tel">手机</Radio>
-                <Radio value="qq">QQ</Radio>
-              </Stack>
-            </RadioGroup>
-          </Flex>
+        {registerType === "tel" ? (
+          <>
+            <Input
+              type="number"
+              value={inputNum}
+              onChange={(e) => setInputNum(e.target.value)}
+              placeholder="请输入手机号"
+            />
 
-          {registerType === "tel" ? (
-            <>
+            <Flex>
               <Input
                 type="number"
-                value={inputNum}
-                onChange={(e) => setInputNum(e.target.value)}
-                placeholder="请输入手机号"
+                value={inputTelCode}
+                onChange={(e) => setInputTelCode(e.target.value)}
+                placeholder="请输入短信验证码"
               />
 
+              <Button
+                ml={1}
+                px={6}
+                fontSize="15px"
+                isDisabled={disableSendSMS}
+                onClick={() => {
+                  if (inputNum) {
+                    if (validateTel(inputNum)) {
+                      sendSMS(inputNum);
+                    } else {
+                      openToast({ content: "请正确输入手机号" });
+                    }
+                  }
+                }}
+              >
+                {sendSMSText}
+              </Button>
+            </Flex>
+          </>
+        ) : (
+          <>
+            <Box>
               <Flex>
                 <Input
                   type="number"
-                  value={inputTelCode}
-                  onChange={(e) => setInputTelCode(e.target.value)}
-                  placeholder="请输入短信验证码"
+                  value={inputNum}
+                  onChange={(e) => {
+                    setInputNum(e.target.value);
+                    setDisableVerifyQQ(false);
+                    setCheckVerifyQQ(false);
+                    setVerifyQQText("");
+                  }}
+                  placeholder="请输入QQ号"
                 />
 
                 <Button
                   ml={1}
                   px={6}
                   fontSize="15px"
-                  isDisabled={disableSendSMS}
+                  isDisabled={disableVerifyQQ}
                   onClick={() => {
                     if (inputNum) {
-                      if (validateTel(inputNum)) {
-                        sendSMS(inputNum);
-                      } else {
-                        openToast({ content: "请正确输入手机号" });
-                      }
+                      sendQQVerify(inputNum, checkVerifyQQ ? 1 : 0);
                     }
                   }}
                 >
-                  {sendSMSText}
+                  验证QQ
                 </Button>
               </Flex>
-            </>
-          ) : (
-            <>
-              <Box>
-                <Flex>
-                  <Input
-                    type="number"
-                    value={inputNum}
-                    onChange={(e) => {
-                      setInputNum(e.target.value);
-                      setDisableVerifyQQ(false);
-                      setCheckVerifyQQ(false);
-                      setVerifyQQText("");
-                    }}
-                    placeholder="请输入QQ号"
-                  />
 
-                  <Button
-                    ml={1}
-                    px={6}
-                    fontSize="15px"
-                    isDisabled={disableVerifyQQ}
-                    onClick={() => {
-                      if (inputNum) {
-                        sendQQVerify(inputNum, checkVerifyQQ ? 1 : 0);
-                      }
-                    }}
-                  >
-                    验证QQ
-                  </Button>
-                </Flex>
+              <Text color="#ffd648">{verifyQQText}</Text>
+            </Box>
+          </>
+        )}
 
-                <Text color="#ffd648">{verifyQQText}</Text>
-              </Box>
-            </>
-          )}
-
-          <Box>
-            <Input
-              type="password"
-              value={inputPassword}
-              onChange={(e) => {
-                setInputPassword(e.target.value);
-                checkPassword(e.target.value, inputPassword2);
-              }}
-              placeholder="请输入新密码"
-            />
-
-            <Text color="#ffd648" fontSize="14px">
-              {passwordAlertText}
-            </Text>
-          </Box>
-
+        <Box>
           <Input
             type="password"
-            value={inputPassword2}
+            value={inputPassword}
             onChange={(e) => {
-              setInputPassword2(e.target.value);
-              checkPassword(inputPassword, e.target.value);
+              setInputPassword(e.target.value);
+              checkPassword(e.target.value, inputPassword2);
             }}
-            placeholder="请重复一次密码"
+            placeholder="请输入新密码"
           />
 
-          <Flex>
-            <Input
-              value={inputCaptcha}
-              onChange={(e) => setInputCaptcha(e.target.value)}
-              placeholder="请输入图片验证码"
-            />
+          <Text color="#ffd648" fontSize="14px">
+            {passwordAlertText}
+          </Text>
+        </Box>
 
-            <Image
-              rounded={5}
-              ml={1}
-              onClick={async () => {
-                setCaptchaImage(await fetchCaptcha());
-                setInputCaptcha("");
-              }}
-              src={captchaImage}
-              alt="验证码"
-              cursor="pointer"
-            />
-          </Flex>
+        <Input
+          type="password"
+          value={inputPassword2}
+          onChange={(e) => {
+            setInputPassword2(e.target.value);
+            checkPassword(inputPassword, e.target.value);
+          }}
+          placeholder="请重复一次密码"
+        />
 
-          <Button onClick={handleReset}>提交</Button>
-        </VStack>
-      </Box>
+        <Flex>
+          <Input
+            value={inputCaptcha}
+            onChange={(e) => setInputCaptcha(e.target.value)}
+            placeholder="请输入图片验证码"
+          />
+
+          <Image
+            rounded={5}
+            ml={1}
+            onClick={async () => {
+              setCaptchaImage(await fetchCaptcha());
+              setInputCaptcha("");
+            }}
+            src={captchaImage}
+            alt="验证码"
+            cursor="pointer"
+          />
+        </Flex>
+
+        <Button onClick={handleReset}>提交</Button>
+      </VStack>
     </Center>
   );
 }

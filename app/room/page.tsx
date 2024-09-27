@@ -76,7 +76,6 @@ interface HandleRoomResponse {
 }
 
 export default function Page() {
-  const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
@@ -116,10 +115,11 @@ export default function Page() {
   const [showTips, setShowTips] = useState(false);
 
   const tips = [
-    "联机请保持网络流畅，若延迟大于160ms或丢包率大于0代表网络不稳定",
-    "如果游戏的创建者把游戏放后台，会导致其他玩家无法搜索和加入游戏",
-    "各系统只要连上喵服就能互相通信，但至于游戏能不能联机得看游戏自己支不支持",
-    "喵服支持所有可以填IP直连及大部分搜索加入的游戏联机，已知逃脱者这个游戏联机需要另外下载工具，具体看游戏联机教程",
+    "建议使用浏览器收藏本网站，方便打开网站进行联机，不建议在QQ里登陆本网站，轻量浏览器推荐via",
+    "连上喵服后，顶部会显示网络延迟，检测可以点击以测试网络稳定性，如果网络差就别联机了",
+    "玩家间联机需要彼此处于一个房间才能通信，就是一个人创建房间，其他人加入，如果加入失败就问房主有没有正确添加成员",
+    "只要设备能连上喵服就能互相通信，不限系统，如果游戏支持，可以实现手机与电脑联机",
+    "本平台支持绝大部分游戏局域网联机，目前已知只有《逃脱者：困境突围》这个游戏联机需要另外下载工具，具体看联机教程",
   ];
 
   const getRoomData = useCallback(async () => {
@@ -205,28 +205,22 @@ export default function Page() {
   );
 
   const wgReInsert = async () => {
-    // 从环境变量获取 API 地址
     setCheckText("修复中。。。");
     try {
       const resp = await fetch(`${apiUrl}/wgReinsert`, {
-        method: "GET", // 根据需要选择请求方法，通常为 POST
+        method: "GET",
         headers: {
           Authorization: `Bearer ${getAuthToken()}`,
         },
       });
 
       if (resp.ok) {
-        // 如果响应状态为 200-299，返回 true 表示成功
-        console.log("请求成功");
         setCheckText("修复成功！把VPN开关重新打开试试");
       } else {
-        // 如果响应状态不在 200-299 范围内，返回 false 表示失败
-        console.error("请求失败", resp.status);
         setCheckText("请求失败，请刷新网页再试");
       }
     } catch (error) {
-      // 处理网络错误
-      console.error("请求发生错误", error);
+      setCheckText("请求发生错误，请刷新网页再试");
     }
   };
 
@@ -621,30 +615,24 @@ export default function Page() {
 
       <Button
         h="36px"
-        w="120px"
+        w="90px"
         mt={5}
         bgColor="#7242ad"
         fontSize="16px"
-        onClick={() => {
-          if (latencyData) {
-            gameListToggle();
-          } else {
-            router.push("/tutorial");
-          }
-        }}
+        onClick={gameListToggle}
       >
-        {latencyData ? "游戏联机教程" : "喵服连接教程"}
+        联机教程
       </Button>
 
       <Button
         h="36px"
-        w="120px"
+        w="90px"
         mt={3}
         bgColor="#b5352a"
         fontSize="16px"
         onClick={() => setShowTips(!showTips)}
       >
-        {showTips ? "隐藏注意事项" : "查看注意事项"}
+        注意事项
       </Button>
 
       <Box
@@ -656,7 +644,7 @@ export default function Page() {
       >
         <Collapse in={showTips}>
           {tips.map((tip, index) => (
-            <Text key={index} mb={2}>
+            <Text fontSize="sm" key={index} my={2}>
               <WarningIcon mr={2} />
               {tip}
             </Text>

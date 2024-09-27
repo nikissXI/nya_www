@@ -20,16 +20,13 @@ const Frame = ({
   const pathname = usePathname(); // 获取当前路径名
   const { logging } = useUserStateStore();
 
-  const { isOpen: gameListIsOpen, onToggle: gameListOnToggle } =
-    useDisclosureStore((state) => {
-      return state.modifyGameListDisclosure;
-    });
+
 
   return (
     <>
       <Toaster />
 
-      <GameListModal isOpen={gameListIsOpen} onClose={gameListOnToggle} />
+      <GameListModal />
 
       <Flex
         position="relative"
@@ -37,7 +34,7 @@ const Frame = ({
         height="100vh"
       >
         {/* 头部导航栏 */}
-        <Header path={pathname}/>
+        <Header path={pathname} />
 
         {/* 主内容区域 */}
         <Box
@@ -55,7 +52,7 @@ const Frame = ({
         </Box>
 
         {/* 底部 */}
-        <Footer path={pathname}/>
+        <Footer path={pathname} />
         <RelateGroupList />
       </Flex>
 
