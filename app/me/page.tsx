@@ -32,7 +32,6 @@ import {
 import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/hooks/GetCaptcha";
 import { useRouter } from "next/navigation";
-import GetWgnumModal from "@/components/tutorial/GetWgnum";
 
 export default function UserProfilePage() {
   const router = useRouter();
@@ -534,8 +533,6 @@ export default function UserProfilePage() {
           </ModalBody>
         </ModalContent>
       </Modal>
-
-      <GetWgnumModal />
 
       <Box px={5} w={{ md: "320px", base: "86vw" }}>
         {userInfo ? (

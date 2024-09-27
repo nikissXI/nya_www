@@ -8,9 +8,9 @@ import { Header } from "../Navbar/Header";
 import RelateGroupList from "../relateGroups";
 import Toaster from "../universal/Toaster";
 import { useUserStateStore } from "@/store/user-state";
-import { useDisclosureStore } from "../../store/disclosure";
 import { GameListModal } from "@/components/tutorial/GameList";
 import Footer from "../Navbar/Footer";
+import GetWgnumModal from "@/components/tutorial/GetWgnum";
 
 const Frame = ({
   children,
@@ -20,13 +20,12 @@ const Frame = ({
   const pathname = usePathname(); // 获取当前路径名
   const { logging } = useUserStateStore();
 
-
-
   return (
     <>
       <Toaster />
 
       <GameListModal />
+      <GetWgnumModal />
 
       <Flex
         position="relative"
