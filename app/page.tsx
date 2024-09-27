@@ -73,6 +73,7 @@ export default function Page() {
           当前用户数量： {countData.userCount}
         </Text>
       </Flex>
+
       <Center>
         <Image
           src="/images/logo.png"

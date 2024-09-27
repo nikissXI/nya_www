@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState, useEffect, useCallback } from "react";
+import { openToast } from "@/components/universal/toast";
 
 export function Page() {
   const tool_py_url = process.env.NEXT_PUBLIC_TOOL_PY_URL as string; // 从环境变量获取 API 地址
@@ -27,7 +28,7 @@ export function Page() {
         setpytext(await resp.text());
       }
     } catch (err) {
-      alert(err);
+      openToast({ content: String(err) });
     }
   }, [tool_py_url]);
 

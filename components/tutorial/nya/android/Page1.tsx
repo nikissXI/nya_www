@@ -24,7 +24,7 @@ export function Page() {
       navigator.clipboard.writeText(confKey);
       setGetConfKeyText("key已复制到剪切板，有效期15分钟");
     } catch (err) {
-      alert(err);
+      openToast({ content: String(err) });
       setGetConfKeyText("自动复制失败，请手动复制，有效期15分钟");
     }
     setConfKey(confKey);

@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
+import { openToast } from "../universal/toast";
 
 export function VerifyWarnModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -70,8 +71,8 @@ export function IsQQBrowserWarnModal() {
       navigator.clipboard.writeText(window.location.href);
       setButtonText("链接已复制到剪切板");
     } catch (err) {
-      alert(err);
-      setButtonText("复制链接失败，请长按下方链接复制");
+      openToast({ content: String(err) });
+      setButtonText("复制链接失败，请手动复制");
       setDisplayLink(false);
     }
   };

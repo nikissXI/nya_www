@@ -79,7 +79,7 @@ export default function Page() {
       navigator.clipboard.writeText(window.location.href);
       setCopyButtonText("链接已复制到剪切板");
     } catch (err) {
-      alert(err);
+      openToast({ content: String(err) });
       setCopyButtonText("复制链接失败，请自行复制");
     }
   };

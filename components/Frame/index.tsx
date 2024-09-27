@@ -12,18 +12,17 @@ import { GameListModal } from "@/components/tutorial/GameList";
 import Footer from "../Navbar/Footer";
 import GetWgnumModal from "@/components/tutorial/GetWgnum";
 
-const Frame = ({
+export default function Frame({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) => {
+}>) {
   const pathname = usePathname(); // 获取当前路径名
   const { logging } = useUserStateStore();
 
   return (
     <>
       <Toaster />
-
       <GameListModal />
       <GetWgnumModal />
 
@@ -69,5 +68,4 @@ const Frame = ({
       /> */}
     </>
   );
-};
-export default Frame;
+}

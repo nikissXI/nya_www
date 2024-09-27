@@ -27,7 +27,7 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
 import { FiDelete } from "react-icons/fi";
 import { IoMdPersonAdd } from "react-icons/io";
@@ -283,10 +283,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        alert(data.msg);
+        openToast({ content: data.msg });
       }
-    } catch (error) {
-      alert(`请求出错: ${error}`);
+    } catch (err) {
+      openToast({ content: String(err) });
     }
   };
 
@@ -297,10 +297,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        alert(data.msg);
+        openToast({ content: data.msg });
       }
-    } catch (error) {
-      alert(`请求出错: ${error}`);
+    } catch (err) {
+      openToast({ content: `请求出错: ${String(err)}` });
     }
   };
 
@@ -313,11 +313,13 @@ export default function Page() {
       const data = await fetchHandleRoom("joinRoom", inputWgnum);
       if (data.code === 0) {
         getRoomData();
+        joinOnClose();
+        setInputWgnum(0);
       } else {
-        alert(data.msg);
+        openToast({ content: data.msg });
       }
-    } catch (error) {
-      alert(`请求出错: ${error}`);
+    } catch (err) {
+      openToast({ content: `请求出错: ${String(err)}` });
     }
   };
 
@@ -328,10 +330,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        alert(data.msg);
+        openToast({ content: data.msg });
       }
-    } catch (error) {
-      alert(`请求出错: ${error}`);
+    } catch (err) {
+      openToast({ content: `请求出错: ${String(err)}` });
     }
   };
 
@@ -345,11 +347,12 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
         addOnClose();
+        setInputWgnum(0);
       } else {
-        alert(data.msg);
+        openToast({ content: data.msg });
       }
-    } catch (error) {
-      alert(`请求出错: ${error}`);
+    } catch (err) {
+      openToast({ content: `请求出错: ${String(err)}` });
     }
   };
 
@@ -360,10 +363,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        alert(data.msg);
+        openToast({ content: data.msg });
       }
-    } catch (error) {
-      alert(`请求出错: ${error}`);
+    } catch (err) {
+      openToast({ content: `请求出错: ${String(err)}` });
     }
   };
 
@@ -431,8 +434,6 @@ export default function Page() {
                 bgColor="#007bc0"
                 onClick={() => {
                   handleJoinRoom();
-                  joinOnClose();
-                  setInputWgnum(0);
                 }}
                 mr={5}
               >
@@ -457,7 +458,6 @@ export default function Page() {
           <Button
             h="50px"
             fontSize="25px"
-            // bgColor="#2383c2"
             onClick={handleCreateRoom}
           >
             创建房间
@@ -466,7 +466,6 @@ export default function Page() {
           <Button
             h="50px"
             fontSize="25px"
-            // bgColor="#3c9aa7"
             onClick={joinOnOpen}
           >
             加入房间
