@@ -571,10 +571,13 @@ export default function UserProfilePage() {
                 }}
                 placeholder="请输入昵称"
               />
-              <Text
+              <Button
                 hidden={hideModifyUsername}
                 ml={1}
                 color="#7dfffe"
+                fontWeight="normal"
+                variant="link"
+                bgColor="transparent"
                 onClick={() => {
                   if (inputUsername) {
                     modifyUsername(inputUsername);
@@ -582,8 +585,7 @@ export default function UserProfilePage() {
                 }}
               >
                 修改
-              </Text>
-              {/* <Text ml={5}>{userInfo.username}</Text> */}
+              </Button>
             </Flex>
 
             <Divider />
