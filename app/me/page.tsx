@@ -538,7 +538,7 @@ export default function UserProfilePage() {
         {userInfo ? (
           <VStack spacing={1} align="stretch">
             <Heading mb={1} size="md" textAlign="center">
-              个人信息
+              账号信息
             </Heading>
 
             <Flex>
