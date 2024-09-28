@@ -68,10 +68,14 @@ export default function Page() {
     }
   }, []);
 
-  const handleCopyLink = () => {
+  const handleCopyLink = async () => {
     try {
-      navigator.clipboard.writeText(window.location.href);
-      setCopyButtonText("链接已复制到剪切板");
+      if (navigator.clipboard && navigator.permissions) {
+        await navigator.clipboard.writeText(window.location.href);
+        setCopyButtonText("链接已复制到剪切板");
+      } else {
+        throw new Error("不支持自动复制");
+      }
     } catch (err) {
       openToast({ content: String(err) });
       setCopyButtonText("复制链接失败，请自行复制");

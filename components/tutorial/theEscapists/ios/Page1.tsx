@@ -2,7 +2,6 @@
 
 import {
   Flex,
-  Text,
   Center,
   List,
   ListItem,
@@ -16,8 +15,8 @@ import { openToast } from "@/components/universal/toast";
 
 export function Page() {
   const tool_py_url = process.env.NEXT_PUBLIC_TOOL_PY_URL as string; // 从环境变量获取 API 地址
-  const [displayLink, setDisplayLink] = useState<boolean>(true);
-  const [pyText, setpytext] = useState<string>("");
+  const [hideLink, setHideLink] = useState(true);
+  const [pyText, setpytext] = useState("");
   const [copyButtonText, setButtonText] =
     useState<string>("点击复制脚本到剪切板");
 
@@ -36,17 +35,27 @@ export function Page() {
     fetchData();
   }, [fetchData]);
 
-  const handleCopy = () => {
-    if (pyText) {
-      navigator.clipboard.writeText(pyText);
-      setButtonText("已复制到剪切板");
-      setTimeout(() => {
-        setButtonText("点击复制脚本到剪切板");
-      }, 2000);
-    } else {
-      setButtonText("复制失败，请访问链接复制");
-      setDisplayLink(false);
+  const handleCopy = async () => {
+    try {
+      if (pyText) {
+        if (navigator.clipboard && navigator.permissions) {
+          await navigator.clipboard.writeText(pyText);
+          setButtonText("已复制到剪切板");
+        } else {
+          throw new Error("不支持自动复制");
+        }
+      } else {
+        throw new Error("不支持自动复制");
+      }
+    } catch (err) {
+      openToast({ content: String(err) });
+      setButtonText("复制失败，请访问链接手动复制");
+      setHideLink(false);
     }
+
+    setTimeout(() => {
+      setButtonText("点击复制脚本到剪切板");
+    }, 2000);
   };
 
   return (
@@ -79,8 +88,8 @@ export function Page() {
             </Button>
           </ListItem>
 
-          <Link hidden={displayLink} my={3} href={tool_py_url} isExternal>
-            点击下载脚本文件
+          <Link hidden={hideLink} my={3} href={tool_py_url} isExternal>
+            点击查看脚本文件
           </Link>
 
           <ListItem>打开py工具，把脚本内容粘贴进去</ListItem>

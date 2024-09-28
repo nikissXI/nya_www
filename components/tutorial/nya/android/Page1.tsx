@@ -19,15 +19,19 @@ export function Page() {
   const [confKey, setConfKey] = useState("");
   const [getConfKeyText, setGetConfKeyText] = useState("");
 
-  const handleCopyLink = (confKey: string) => {
+  const handleCopyLink = async (confKey: string) => {
+    setConfKey(confKey);
     try {
-      navigator.clipboard.writeText(confKey);
-      setGetConfKeyText("key已复制到剪切板，有效期15分钟");
+      if (navigator.clipboard && navigator.permissions) {
+        await navigator.clipboard.writeText(confKey);
+        setGetConfKeyText("key已复制到剪切板，有效期15分钟");
+      } else {
+        throw new Error("不支持自动复制");
+      }
     } catch (err) {
       openToast({ content: String(err) });
       setGetConfKeyText("自动复制失败，请手动复制，有效期15分钟");
     }
-    setConfKey(confKey);
   };
 
   const getConfKey = async () => {
