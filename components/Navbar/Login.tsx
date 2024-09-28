@@ -21,7 +21,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useUserStateStore } from "@/store/user-state";
 import { useEffect, useState } from "react";
-import useCaptcha from "@/hooks/GetCaptcha";
+import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "../universal/toast";
 import { getHash } from "@/utils/strings";
 import { useDisclosureStore } from "@/store/disclosure";

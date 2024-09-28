@@ -14,12 +14,13 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
-import useCaptcha from "@/hooks/GetCaptcha";
+import useCaptcha from "@/utils/GetCaptcha";
 import { useUserStateStore } from "@/store/user-state";
 import { Button } from "@/components/universal/button";
 import { getHash, validatePassword, validateTel } from "@/utils/strings";
 import { useRouter } from "next/navigation";
 import { setAuthToken } from "@/store/authKey";
+import { copyToCilpboard } from "@/utils/strings";
 
 interface ResetReqBody {
   verifyType: string; // 注册类型：qq或tel
@@ -66,16 +67,19 @@ export default function Page() {
     if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
       setIsQQ(true);
     }
+    setIsQQ(true);
   }, []);
 
   const handleCopyLink = async () => {
     try {
-      if (navigator.clipboard && navigator.permissions) {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopyButtonText("链接已复制到剪切板");
-      } else {
-        throw new Error("不支持自动复制");
-      }
+      copyToCilpboard(window.location.href);
+      // if (navigator.clipboard && navigator.permissions) {
+      //   await navigator.clipboard.writeText(window.location.href);
+      //   setCopyButtonText("链接已复制到剪切板");
+      // } else {
+      //   throw new Error("不支持自动复制");
+      // }
+      setCopyButtonText("链接已复制到剪切板");
     } catch (err) {
       openToast({ content: String(err) });
       setCopyButtonText("复制链接失败，请自行复制");

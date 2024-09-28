@@ -14,7 +14,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
-import useCaptcha from "@/hooks/GetCaptcha";
+import useCaptcha from "@/utils/GetCaptcha";
 import { useUserStateStore } from "@/store/user-state";
 import { Button } from "@/components/universal/button";
 import { getHash, validatePassword, validateTel } from "@/utils/strings";

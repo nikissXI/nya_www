@@ -15,7 +15,7 @@ const useCaptcha = () => {
     } else {
       throw new Error("拉取图片验证码失败"); // 错误处理
     }
-  }, [uuid]);
+  }, [uuid, apiUrl]);
 
   return { fetchCaptcha };
 };

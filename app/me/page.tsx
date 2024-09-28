@@ -30,7 +30,7 @@ import {
   timestampToDateString,
 } from "@/utils/strings";
 import { getAuthToken, setAuthToken } from "@/store/authKey";
-import useCaptcha from "@/hooks/GetCaptcha";
+import useCaptcha from "@/utils/GetCaptcha";
 import { useRouter } from "next/navigation";
 
 export default function UserProfilePage() {

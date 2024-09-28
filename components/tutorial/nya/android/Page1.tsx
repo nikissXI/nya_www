@@ -100,7 +100,6 @@ export function Page() {
 
         <Text>{getConfKeyText}</Text>
         <Text color="#ffd648">
-          {confKey ? "key: " : ""}
           {confKey}
         </Text>
       </Flex>
