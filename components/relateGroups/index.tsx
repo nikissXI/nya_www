@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Flex, Center, Box } from "@chakra-ui/react";
+import { Center, Box } from "@chakra-ui/react";
 import { ArrowDownIcon } from "@chakra-ui/icons";
+
 interface GroupItem {
   name: string;
   qq: number;
@@ -31,7 +32,6 @@ const RelateGroupList = () => {
       }
       const data = await resp.json();
       setData(data);
-      // groupListRef.current = groupArray; // 缓存获取到的游戏数据
     } catch (err) {
       setError(err instanceof Error ? err.message : "获取关联群信息出错");
     } finally {
@@ -63,26 +63,23 @@ const RelateGroupList = () => {
       mt={{ base: "5", md: "24" }}
       pb={6}
     >
-      {/* <Flex direction="column" alignItems="center"> */}
-        <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
-          <ArrowDownIcon display={{ base: "flex", md: "none" }} />
-          喵服关联QQ群
-          <ArrowDownIcon display={{ base: "flex", md: "none" }} />
+      <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
+        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
+        喵服关联QQ群
+        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
+      </Center>
+
+      {groupData.main.map((group, index) => (
+        <Center key={index} mb={2}>
+          {group.name} - {group.qq}
         </Center>
-        {groupData.main.map((group, index) => (
-          <Center key={index} mb={2}>
-            {group.name} - {group.qq}
-          </Center>
-        ))}
+      ))}
 
-        {/* <Divider my={1} opacity={0} /> */}
-
-        {groupData.relate.map((group, index) => (
-          <Center key={index} mb={2}>
-            {group.name} - {group.qq}
-          </Center>
-        ))}
-      {/* </Flex> */}
+      {groupData.relate.map((group, index) => (
+        <Center key={index} mb={2}>
+          {group.name} - {group.qq}
+        </Center>
+      ))}
     </Box>
   );
 };
