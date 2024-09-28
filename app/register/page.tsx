@@ -61,7 +61,7 @@ export default function Page() {
 
   // 检测是否在QQ内打开
   const [copyButtonText, setCopyButtonText] =
-    useState("点我复制链接到浏览器打开");
+    useState("点击复制网页链接到剪切板");
   const [isQQ, setIsQQ] = useState(false);
 
   useEffect(() => {
@@ -225,9 +225,20 @@ export default function Page() {
           <br />
           如果误触发请联系群主处理，谢谢
         </Text>
+
         <Button size="sm" onClick={handleCopyLink}>
           {copyButtonText}
         </Button>
+
+        {copyButtonText === "点我复制链接到浏览器打开" ? (
+          ""
+        ) : (
+          <Text>
+            如果复制失败就手动复制吧
+            <br />
+            {window.location.href}
+          </Text>
+        )}
       </VStack>
     );
   }

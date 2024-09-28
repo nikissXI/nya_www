@@ -6,6 +6,7 @@ import {
   List,
   ListItem,
   Image,
+  Text,
   Link,
   Heading,
 } from "@chakra-ui/react";
@@ -15,10 +16,8 @@ import { openToast } from "@/components/universal/toast";
 
 export function Page() {
   const tool_py_url = process.env.NEXT_PUBLIC_TOOL_PY_URL as string; // 从环境变量获取 API 地址
-  const [hideLink, setHideLink] = useState(true);
   const [pyText, setpytext] = useState("");
-  const [copyButtonText, setButtonText] =
-    useState<string>("点击复制脚本到剪切板");
+  const [copyButtonText, setButtonText] = useState("点击复制脚本到剪切板");
 
   const fetchData = useCallback(async () => {
     try {
@@ -45,17 +44,12 @@ export function Page() {
           throw new Error("不支持自动复制");
         }
       } else {
-        throw new Error("不支持自动复制");
+        throw new Error("脚本内容下载失败");
       }
     } catch (err) {
       openToast({ content: String(err) });
-      setButtonText("复制失败，请访问链接手动复制");
-      setHideLink(false);
+      setButtonText("复制失败");
     }
-
-    setTimeout(() => {
-      setButtonText("点击复制脚本到剪切板");
-    }, 2000);
   };
 
   return (
@@ -88,9 +82,17 @@ export function Page() {
             </Button>
           </ListItem>
 
-          <Link hidden={hideLink} my={3} href={tool_py_url} isExternal>
-            点击查看脚本文件
-          </Link>
+          {copyButtonText === "点击复制脚本到剪切板" ? (
+            ""
+          ) : (
+            <Text fontSize="lg" my={3}>
+              如果复制失败就手动复制吧
+              <br />
+              <Link my={3} color="#7dfffe" href={tool_py_url} isExternal>
+                点击查看脚本文件
+              </Link>
+            </Text>
+          )}
 
           <ListItem>打开py工具，把脚本内容粘贴进去</ListItem>
 

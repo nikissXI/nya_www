@@ -54,9 +54,7 @@ export function VerifyWarnModal() {
 export function IsQQBrowserWarnModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [copyButtonText, setCopyButtonText] =
-    useState<string>("点击复制链接到剪切板");
-
-  const [hideLink, setHideLink] = useState<boolean>(true);
+    useState("点击复制网页链接到剪切板");
 
   useEffect(() => {
     const userAgent = navigator.userAgent;
@@ -77,7 +75,6 @@ export function IsQQBrowserWarnModal() {
     } catch (err) {
       openToast({ content: String(err) });
       setCopyButtonText("复制链接失败，请自行复制");
-      setHideLink(false);
     }
   };
 
@@ -95,9 +92,17 @@ export function IsQQBrowserWarnModal() {
         <ModalFooter>
           <Flex direction="column" justify="center" align="center" width="100%">
             <Button onClick={handleCopyLink}>{copyButtonText}</Button>
-            <Text hidden={hideLink} fontSize="lg" my={3}>
-              {window.location.href}
-            </Text>
+
+            {copyButtonText === "点击复制网页链接到剪切板" ? (
+              ""
+            ) : (
+              <Text fontSize="lg" my={3}>
+                如果复制失败就手动复制吧
+                <br />
+                {window.location.href}
+              </Text>
+            )}
+
             <Button onClick={onClose} mt={3}>
               我就看看不下载
             </Button>

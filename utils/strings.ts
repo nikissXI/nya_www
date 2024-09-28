@@ -28,21 +28,3 @@ export function validateTel(tel: string): boolean {
 export function timestampToDateString(timestamp: number): string {
   return dayjs(timestamp * 1000).format("YYYY-MM-DD HH:mm:ss"); // 自定义格式
 }
-
-export async function copyToCilpboard(text: string) {
-  if (navigator.clipboard && navigator.permissions) {
-    await navigator.clipboard.writeText(text);
-  } else {
-    const textArea = document.createElement("textarea"); // 注意这里是 textarea 而不是 textArea
-    textArea.value = text; // 使用 value 而不是 ariaValueText
-    textArea.style.width = "0";
-    textArea.style.position = "fixed";
-    textArea.style.left = "-999px";
-    textArea.style.top = "10px";
-    textArea.setAttribute("readonly", "readonly");
-    document.body.appendChild(textArea);
-    textArea.select(); // 选择文本
-    document.execCommand("copy"); // 复制文本
-    document.body.removeChild(textArea); // 移除 textarea
-  }
-}

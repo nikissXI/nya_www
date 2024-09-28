@@ -24,13 +24,13 @@ export function Page() {
     try {
       if (navigator.clipboard && navigator.permissions) {
         await navigator.clipboard.writeText(confKey);
-        setGetConfKeyText("key已复制到剪切板，有效期15分钟");
+        setGetConfKeyText("key已复制到剪切板，有效期15分钟，如果复制失败就手动复制");
       } else {
         throw new Error("不支持自动复制");
       }
     } catch (err) {
       openToast({ content: String(err) });
-      setGetConfKeyText("自动复制失败，请手动复制，有效期15分钟");
+      setGetConfKeyText("复制失败，请手动复制，key有效期15分钟");
     }
   };
 
@@ -99,9 +99,8 @@ export function Page() {
         </Flex>
 
         <Text>{getConfKeyText}</Text>
-        <Text color="#ffd648">
-          {confKey}
-        </Text>
+
+        <Text color="#ffd648">{confKey}</Text>
       </Flex>
     </Center>
   );
