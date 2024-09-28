@@ -63,6 +63,7 @@ export default function Page() {
   const [copyButtonText, setCopyButtonText] =
     useState("点我复制链接到浏览器打开");
   const [isQQ, setIsQQ] = useState(false);
+
   useEffect(() => {
     if (logined) {
       router.push("/me");

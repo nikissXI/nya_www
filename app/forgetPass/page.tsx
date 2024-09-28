@@ -67,7 +67,6 @@ export default function Page() {
     if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
       setIsQQ(true);
     }
-    setIsQQ(true);
   }, []);
 
   const handleCopyLink = async () => {
