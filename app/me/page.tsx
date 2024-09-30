@@ -720,16 +720,21 @@ export default function UserProfilePage() {
                   </Text>
                 </Flex>
 
-                {/* <Button
+                <Button
                   mt={2}
                   size="sm"
                   w="100px"
                   alignSelf="center"
                   bgColor="#992e98"
-                  onClick={() => router.push("/room ")}
+                  onClick={() => {
+                    window.open(
+                      "https://www.bilibili.com/video/BV1MK4y1s7mS",
+                      "_blank"
+                    );
+                  }}
                 >
-                  前往联机房间
-                </Button> */}
+                  联机教程
+                </Button>
               </VStack>
             ) : (
               <VStack spacing={3} mt={5} align="center">

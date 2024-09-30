@@ -18,7 +18,7 @@ export default function AndroidPage0() {
         fontSize="40px"
         onClick={() => {
           window.open(
-            "https://www.bilibili.com/video/BV1MK4y1s7mS?p=2",
+            "https://www.bilibili.com/video/BV1MK4y1s7mS",
             "_blank"
           );
         }}
