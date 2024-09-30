@@ -707,16 +707,17 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
                 >
                   {item.wgnum === roomInfo.hoster_wgnum ? "房主" : "成员"}
                 </Td>
-                <Td
-                  p={3}
-                  color={
-                    item.wgnum === roomInfo.hoster_wgnum ? "#ffd964" : "white"
-                  }
-                  fontWeight={
-                    item.wgnum === roomInfo.hoster_wgnum ? "bold" : "normal"
-                  }
-                >
-                  {item.wgnum}
+                <Td p={3}>
+                  <Text
+                    color={
+                      item.wgnum === roomInfo.hoster_wgnum ? "#ffd964" : "white"
+                    }
+                    fontWeight={
+                      item.wgnum === roomInfo.hoster_wgnum ? "bold" : "normal"
+                    }
+                  >
+                    {item.wgnum}
+                  </Text>
                 </Td>
                 <Td p={3}>{item.ip}</Td>
                 <Td p={2} bg={getColor(item.status)}>
