@@ -60,7 +60,7 @@ const RelateGroupList = () => {
       as="footer"
       minW="240px"
       flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
-      mt={{ base: "5", md: "24" }}
+      my={{ base: "5", md: "24" }}
       pb={6}
     >
       <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
