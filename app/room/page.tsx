@@ -164,43 +164,44 @@ export default function Page() {
       if (!auto) {
         setCheckText("");
       }
+      try {
+        const resp = await fetch(
+          `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
+        );
+        if (!resp.ok) {
+          console.error(`访问接口出错: ${resp.status}`);
+        }
+        const result = await resp.json();
+        if (result.code !== 0) {
+          // 未连接
+          setLatencyData(null);
+        } else {
+          // 已连接
+          setLatencyData(result.data);
 
-      const resp = await fetch(
-        `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
-      );
-      if (!resp.ok) {
-        console.error(`访问接口出错: ${resp.status}`);
-      }
-      const result = await resp.json();
-      if (result.code !== 0) {
-        // 未连接
-        setLatencyData(null);
-      } else {
-        // 已连接
-        setLatencyData(result.data);
-
-        if (checkType === "long") {
-          setCheckText("约10秒后返回详细网络检测结果");
-          const resp = await fetch(
-            `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
-          );
-          if (!resp.ok) {
-            console.error(`访问接口出错: ${resp.status}`);
-          } else {
-            const result = await resp.json();
-            if (result.code !== 0) {
-              // 未连接
-              setLatencyData(null);
+          if (checkType === "long") {
+            setCheckText("约10秒后返回详细网络检测结果");
+            const resp = await fetch(
+              `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
+            );
+            if (!resp.ok) {
+              console.error(`访问接口出错: ${resp.status}`);
             } else {
-              // 已连接
-              setLatencyData(result.data);
-              setCheckText(
-                `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
-              );
+              const result = await resp.json();
+              if (result.code !== 0) {
+                // 未连接
+                setLatencyData(null);
+              } else {
+                // 已连接
+                setLatencyData(result.data);
+                setCheckText(
+                  `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
+                );
+              }
             }
           }
         }
-      }
+      } catch (err) {}
       setChecking(false);
     },
     [wgnum, apiUrl]
