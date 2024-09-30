@@ -121,7 +121,7 @@ export default function Page() {
     "只要设备能连上喵服就能互相通信，不限系统，如果游戏支持，可以实现手机与电脑联机",
     "本平台支持绝大部分游戏局域网联机，目前已知只有《逃脱者：困境突围》这个游戏联机需要另外下载工具，具体看联机教程",
     "如果发现打开WG后浏览器无法正常使用，换一个浏览器试试，再把情况告诉服主便于修复这个问题",
-    "如果遇到教程无法解决的问题，就找服主（QQ:1299577815）"
+    "如果遇到教程无法解决的问题，就找服主（QQ:1299577815）",
   ];
 
   const getRoomData = useCallback(async () => {
@@ -457,19 +457,11 @@ export default function Page() {
         <Heading my={3}>请选择操作</Heading>
 
         <VStack spacing={6} alignItems="center">
-          <Button
-            h="50px"
-            fontSize="25px"
-            onClick={handleCreateRoom}
-          >
+          <Button h="50px" fontSize="25px" onClick={handleCreateRoom}>
             创建房间
           </Button>
 
-          <Button
-            h="50px"
-            fontSize="25px"
-            onClick={joinOnOpen}
-          >
+          <Button h="50px" fontSize="25px" onClick={joinOnOpen}>
             加入房间
           </Button>
         </VStack>
@@ -715,7 +707,17 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
                 >
                   {item.wgnum === roomInfo.hoster_wgnum ? "房主" : "成员"}
                 </Td>
-                <Td p={3}>{item.wgnum}</Td>
+                <Td
+                  p={3}
+                  color={
+                    item.wgnum === roomInfo.hoster_wgnum ? "#ffd964" : "white"
+                  }
+                  fontWeight={
+                    item.wgnum === roomInfo.hoster_wgnum ? "bold" : "normal"
+                  }
+                >
+                  {item.wgnum}
+                </Td>
                 <Td p={3}>{item.ip}</Td>
                 <Td p={2} bg={getColor(item.status)}>
                   {item.status}
