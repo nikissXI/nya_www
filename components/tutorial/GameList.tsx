@@ -62,10 +62,9 @@ export const GameListModal = () => {
 
         <ModalBody mx={2} my={3}>
           <VStack mb={3}>
-            <Text>联机需先学会使用WG连接喵服</Text>
+            <Text>联机先学会使用WG连接喵服</Text>
 
             <Button
-              size="sm"
               onClick={() => {
                 gameListOnToggle();
                 router.push("/tutorial");
