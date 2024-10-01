@@ -711,10 +711,10 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
                 <Td p={3}>
                   <Text
                     color={
-                      item.wgnum === roomInfo.hoster_wgnum ? "#ffd964" : "white"
+                      item.wgnum === roomInfo.user_wgnum ? "#ffd964" : "white"
                     }
                     fontWeight={
-                      item.wgnum === roomInfo.hoster_wgnum ? "bold" : "normal"
+                      item.wgnum === roomInfo.user_wgnum ? "bold" : "normal"
                     }
                   >
                     {item.wgnum}
