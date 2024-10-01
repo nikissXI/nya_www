@@ -639,7 +639,7 @@ export default function UserProfilePage() {
                     setVerifyQQText("");
                   }}
                 >
-                  {userInfo.qq ? "换绑" : "点击绑定"}
+                  {userInfo.qq ? "换绑" : "点击绑定（非必要）"}
                 </Button>
               </Flex>
             </Flex>
@@ -669,7 +669,7 @@ export default function UserProfilePage() {
                     setInputTelCode("");
                   }}
                 >
-                  {userInfo.tel ? "换绑" : "点击绑定"}
+                  {userInfo.tel ? "换绑" : "点击绑定（非必要）"}
                 </Button>
               </Flex>
             </Flex>
