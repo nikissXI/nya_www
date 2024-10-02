@@ -58,7 +58,7 @@ export default function Page({ params }: { params: { page: number } }) {
             <Button
               bgColor="#b23333"
               onClick={() => {
-                router.push(`/tutorial`);
+                router.push(`/room`);
               }}
             >
               返回
