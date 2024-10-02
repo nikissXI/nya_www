@@ -34,6 +34,19 @@ export default function Page({ params }: { params: { page: number } }) {
             <br />
             基岩和Java都可以用，但想互通得靠第三方mod或插件
           </Text>
+
+          <Button
+            size="sm"
+            bgColor="#c1447d"
+            onClick={() => {
+              window.open(
+                "https://www.bilibili.com/video/BV1UX4GegEAf/",
+                "_blank"
+              );
+            }}
+          >
+            点击查看视频教程
+          </Button>
         </Flex>
       </Center>
 

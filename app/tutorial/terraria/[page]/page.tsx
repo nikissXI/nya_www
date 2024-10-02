@@ -34,6 +34,19 @@ export default function Page({ params }: { params: { page: number } }) {
             <br />
             能否一起联机得看版本号
           </Text>
+
+          <Button
+            size="sm"
+            bgColor="#c1447d"
+            onClick={() => {
+              window.open(
+                "https://www.bilibili.com/video/BV1a64ge6Ecs/",
+                "_blank"
+              );
+            }}
+          >
+            点击查看视频教程
+          </Button>
         </Flex>
       </Center>
 

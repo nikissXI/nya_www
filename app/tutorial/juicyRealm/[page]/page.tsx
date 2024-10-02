@@ -39,6 +39,7 @@ export default function Page({ params }: { params: { page: number } }) {
 
           <Button
             size="sm"
+            bgColor="#c1447d"
             onClick={() => {
               window.open(
                 "https://www.bilibili.com/video/BV1z14y1W7ee/",
