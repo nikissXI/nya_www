@@ -699,12 +699,12 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
                   p={3}
                   bg={
                     item.wgnum === roomInfo.hoster_wgnum
-                      ? "#cbd100"
+                      ? "#00bcd380"
                       : "transparent"
                   }
-                  color={
-                    item.wgnum === roomInfo.hoster_wgnum ? "black" : "white"
-                  }
+                  // color={
+                  //   item.wgnum === roomInfo.hoster_wgnum ? "black" : "white"
+                  // }
                 >
                   {item.wgnum === roomInfo.hoster_wgnum ? "房主" : "成员"}
                 </Td>
