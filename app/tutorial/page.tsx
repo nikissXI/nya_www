@@ -9,13 +9,26 @@ export default function Page() {
 
   return (
     <VStack spacing={6}>
+      <Button
+        py={7}
+        px={3}
+        bgColor="#c54572"
+        fontSize="30px"
+        onClick={() => {
+          window.open("https://www.bilibili.com/video/BV1MK4y1s7mS", "_blank");
+        }}
+      >
+        视频教程
+      </Button>
+
       <Heading>请选择系统</Heading>
+
       <Button
         p={7}
         bgColor="#148f14"
         fontSize="30px"
         onClick={() => {
-          router.push("/tutorial/nya/android");
+          router.push("/tutorial/nya/android/1");
         }}
       >
         安卓
@@ -26,7 +39,7 @@ export default function Page() {
         bgColor="#2383c2"
         fontSize="30px"
         onClick={() => {
-          router.push("/tutorial/nya/ios");
+          router.push("/tutorial/nya/ios/1");
         }}
       >
         苹果
@@ -37,7 +50,7 @@ export default function Page() {
         bgColor="#753030"
         fontSize="30px"
         onClick={() => {
-          router.push("/tutorial/nya/pc");
+          router.push("/tutorial/nya/pc/1");
         }}
       >
         电脑

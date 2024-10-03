@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { page: number } }) {
             <Button
               bgColor="#b23333"
               onClick={() => {
-                router.push(`/tutorial/nya/android`);
+                router.push(`/tutorial`);
               }}
             >
               返回

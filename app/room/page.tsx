@@ -38,6 +38,7 @@ import { WarningIcon } from "@chakra-ui/icons";
 import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
+import { useRouter } from "next/navigation";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -77,6 +78,7 @@ interface HandleRoomResponse {
 
 export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
 
   const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
   const [status, setStatus] = useState<"none" | "member" | "hoster">("none");
@@ -589,19 +591,37 @@ export default function Page() {
       </Flex>
 
       {!latencyData && !checkText && (
-        <Flex align="center">
-          <Text>WG打开了还是检测不到？</Text>
-          <Button
-            variant="link"
-            // bg="#aa33ae"
-            size="sm"
-            p={1}
-            h={7}
-            onClick={wgReInsert}
-          >
-            点我修复
-          </Button>
-        </Flex>
+        <>
+          <Flex align="center">
+            <Text>不知道怎么连接喵服？</Text>
+            <Button
+              variant="link"
+              bg="#aa33ae"
+              size="sm"
+              p={1}
+              h={7}
+              onClick={() => {
+                router.push("/tutorial");
+              }}
+            >
+              点我学习
+            </Button>
+          </Flex>
+
+          <Flex align="center">
+            <Text>WG打开了还是检测不到？</Text>
+            <Button
+              variant="link"
+              // bg="#aa33ae"
+              size="sm"
+              p={1}
+              h={7}
+              onClick={wgReInsert}
+            >
+              点我修复
+            </Button>
+          </Flex>
+        </>
       )}
 
       <Text>{checkText}</Text>

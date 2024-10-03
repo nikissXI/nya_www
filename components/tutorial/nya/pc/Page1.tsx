@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Center, Text, Image, Heading } from "@chakra-ui/react";
+import { Flex, Center, Text, Image, Heading, Divider } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 
 export function Page() {
@@ -14,6 +14,16 @@ export function Page() {
         alignItems="center"
         maxW="460px"
       >
+        <Heading size="sm">
+          Windows只支持win10和win11
+          <br />
+          苹果电脑也行，去下一个WG就行
+          <br />
+          教程用windows演示（我没Mac）
+        </Heading>
+
+        <Divider my={3} />
+
         <Heading size="md" mb={3}>
           下载并安装WG
         </Heading>
