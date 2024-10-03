@@ -28,6 +28,7 @@ import {
   validatePassword,
   validateTel,
   timestampToDateString,
+  isInteger,
 } from "@/utils/strings";
 import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
@@ -119,6 +120,11 @@ export default function UserProfilePage() {
   const [checkVerifyQQ, setCheckVerifyQQ] = useState(false);
 
   const sendQQVerify = async (qq: string, verified: number) => {
+    if (!isInteger(qq)) {
+      openToast({ content: `请正确填写QQ号` });
+      return;
+    }
+
     const resp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
     if (resp.ok) {
       const data = await resp.json();
@@ -189,6 +195,11 @@ export default function UserProfilePage() {
   const [inputTelCode, setInputTelCode] = useState("");
 
   const sendSMS = async (tel: string) => {
+    if (!isInteger(tel)) {
+      openToast({ content: `请正确填写手机号` });
+      return;
+    }
+
     const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
     if (resp.ok) {
       const data = await resp.json();

@@ -28,3 +28,8 @@ export function validateTel(tel: string): boolean {
 export function timestampToDateString(timestamp: number): string {
   return dayjs(timestamp * 1000).format("YYYY-MM-DD HH:mm:ss"); // 自定义格式
 }
+
+export function isInteger(value: string): boolean {
+  const regex = /^[0-9]+$/; // 仅允许 0 到 9 的数字
+  return regex.test(value);
+}

@@ -41,7 +41,7 @@ export interface ILoginStateSlice {
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
     return {
-      uuid: uuidv4(),
+      uuid: "",
 
       logging: true,
       changeloggingState: (loggingState: boolean) => {

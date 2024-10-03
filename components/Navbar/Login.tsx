@@ -23,7 +23,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { useEffect, useState } from "react";
 import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "../universal/toast";
-import { getHash } from "@/utils/strings";
+import { getHash, isInteger } from "@/utils/strings";
 import { useDisclosureStore } from "@/store/disclosure";
 import { setAuthToken } from "@/store/authKey";
 
@@ -51,7 +51,7 @@ export function LoginModal() {
   const [captchaImage, setCaptchaImage] = useState("");
 
   // 填写的表单数据
-  const [registerType, setRegisterType] = useState("tel");
+  const [verifyType, setVerifyType] = useState("tel");
   const [inputNum, setInputNum] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
@@ -80,8 +80,14 @@ export function LoginModal() {
       return;
     }
 
+    if (!isInteger(inputNum)) {
+      const text = verifyType === "tel" ? "手机号" : "QQ号";
+      openToast({ content: `请正确填写${text}` });
+      return;
+    }
+
     const req_data: LoginReqBody = {
-      verifyType: registerType,
+      verifyType: verifyType,
       num: Number(inputNum),
       password: getHash(inputPassword),
       uuid: uuid,
@@ -142,7 +148,7 @@ export function LoginModal() {
                 defaultValue="tel"
                 onChange={(value) => {
                   setInputNum("");
-                  setRegisterType(value);
+                  setVerifyType(value);
                 }}
               >
                 <Stack spacing={4} direction="row">
@@ -158,7 +164,7 @@ export function LoginModal() {
                 value={inputNum}
                 onChange={(e) => setInputNum(e.target.value)}
                 placeholder={
-                  registerType === "tel" ? "请输入手机号" : "请输入QQ号"
+                  verifyType === "tel" ? "请输入手机号" : "请输入QQ号"
                 }
               />
             </Flex>

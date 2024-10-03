@@ -17,7 +17,12 @@ import { openToast } from "@/components/universal/toast";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useUserStateStore } from "@/store/user-state";
 import { Button } from "@/components/universal/button";
-import { getHash, validatePassword, validateTel } from "@/utils/strings";
+import {
+  getHash,
+  validatePassword,
+  validateTel,
+  isInteger,
+} from "@/utils/strings";
 import { useRouter } from "next/navigation";
 import { setAuthToken } from "@/store/authKey";
 
@@ -50,7 +55,7 @@ export default function Page() {
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   // 填写的表单数据
-  const [registerType, setRegisterType] = useState("tel");
+  const [verifyType, setVerifyType] = useState("tel");
   const [inputNum, setInputNum] = useState("");
   const [inputTelCode, setInputTelCode] = useState("");
   const [inputPassword, setInputPassword] = useState("");
@@ -111,7 +116,7 @@ export default function Page() {
       !(
         inputNum &&
         inputCaptcha &&
-        ((registerType === "tel" && inputTelCode) || registerType === "qq")
+        ((verifyType === "tel" && inputTelCode) || verifyType === "qq")
       )
     ) {
       openToast({ content: "请完成资料填写" });
@@ -119,7 +124,7 @@ export default function Page() {
     }
 
     const req_data: ResetReqBody = {
-      verifyType: registerType,
+      verifyType: verifyType,
       num: Number(inputNum),
       tel_verify_code: inputTelCode,
       password: getHash(inputPassword),
@@ -152,6 +157,11 @@ export default function Page() {
   };
 
   const sendSMS = async (tel: string) => {
+    if (!isInteger(tel)) {
+      openToast({ content: `请正确填写手机号` });
+      return;
+    }
+
     const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
     if (resp.ok) {
       const data = await resp.json();
@@ -176,6 +186,11 @@ export default function Page() {
   };
 
   const sendQQVerify = async (qq: string, verified: number) => {
+    if (!isInteger(qq)) {
+      openToast({ content: `请正确填写QQ号` });
+      return;
+    }
+
     const resp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
     if (resp.ok) {
       const data = await resp.json();
@@ -242,7 +257,7 @@ export default function Page() {
             defaultValue="tel"
             onChange={(value) => {
               setInputNum("");
-              setRegisterType(value);
+              setVerifyType(value);
             }}
           >
             <Stack spacing={4} direction="row">
@@ -252,7 +267,7 @@ export default function Page() {
           </RadioGroup>
         </Flex>
 
-        {registerType === "tel" ? (
+        {verifyType === "tel" ? (
           <>
             <Input
               type="number"
