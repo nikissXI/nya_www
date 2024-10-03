@@ -738,10 +738,7 @@ export default function UserProfilePage() {
                   alignSelf="center"
                   bgColor="#992e98"
                   onClick={() => {
-                    window.open(
-                      "https://www.bilibili.com/video/BV1MK4y1s7mS",
-                      "_blank"
-                    );
+                    router.push("/tutorial");
                   }}
                 >
                   联机教程
