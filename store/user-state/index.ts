@@ -68,6 +68,22 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           });
         });
 
+        const _uuid = localStorage.getItem("uuid");
+        if (_uuid) {
+          set((state) => {
+            return produce(state, (draft) => {
+              draft.uuid = _uuid;
+            });
+          });
+        } else {
+          set((state) => {
+            return produce(state, (draft) => {
+              draft.uuid = uuidv4();
+              localStorage.setItem("uuid", draft.uuid);
+            });
+          });
+        }
+
         try {
           const token = getAuthToken();
           if (!token) {
