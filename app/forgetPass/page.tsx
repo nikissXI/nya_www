@@ -50,7 +50,6 @@ export default function Page() {
 
   const [verifyQQText, setVerifyQQText] = useState("");
   const [disableVerifyQQ, setDisableVerifyQQ] = useState(false);
-  const [checkVerifyQQ, setCheckVerifyQQ] = useState(false);
 
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
@@ -185,7 +184,7 @@ export default function Page() {
     }
   };
 
-  const sendQQVerify = async (qq: string, verified: number) => {
+  const sendQQVerify = async (qq: string) => {
     if (!isInteger(qq)) {
       openToast({ content: `请正确填写QQ号` });
       return;
@@ -197,18 +196,12 @@ export default function Page() {
       if (data.code === 0) {
         setVerifyQQText("该QQ号未被注册");
       } else {
-        const resp = await fetch(
-          `${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}&verified=${verified}`
-        );
+        const resp = await fetch(`${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
             setVerifyQQText(data.msg);
-            if (verified === 0) {
-              setCheckVerifyQQ(true);
-            } else {
-              setDisableVerifyQQ(true);
-            }
+            setDisableVerifyQQ(true);
           } else {
             setVerifyQQText(data.msg);
           }
@@ -313,7 +306,6 @@ export default function Page() {
                   onChange={(e) => {
                     setInputNum(e.target.value);
                     setDisableVerifyQQ(false);
-                    setCheckVerifyQQ(false);
                     setVerifyQQText("");
                   }}
                   placeholder="请输入QQ号"
@@ -326,7 +318,7 @@ export default function Page() {
                   isDisabled={disableVerifyQQ}
                   onClick={() => {
                     if (inputNum) {
-                      sendQQVerify(inputNum, checkVerifyQQ ? 1 : 0);
+                      sendQQVerify(inputNum);
                     }
                   }}
                 >
