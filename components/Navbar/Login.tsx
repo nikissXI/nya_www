@@ -17,6 +17,7 @@ import {
   Stack,
   Image,
   Radio,
+  Grid,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useUserStateStore } from "@/store/user-state";
@@ -56,6 +57,8 @@ export function LoginModal() {
   const [inputPassword, setInputPassword] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
 
+  const [disableLogin, setDisableLogin] = useState(true);
+
   const handleEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
       handleLogin();
@@ -74,6 +77,18 @@ export function LoginModal() {
     };
     loadCaptcha();
   }, [logging, fetchCaptcha, loginIsOpen, logined]);
+
+  const toggleLoginButton = (
+    inputNum: string,
+    inputPassword: string,
+    inputCaptcha: string
+  ) => {
+    if (inputNum && inputPassword && inputCaptcha) {
+      setDisableLogin(false);
+    } else {
+      setDisableLogin(true);
+    }
+  };
 
   const handleLogin = async () => {
     if (!(inputNum && inputPassword && inputCaptcha)) {
@@ -141,7 +156,7 @@ export function LoginModal() {
                 点忘记密码，通过QQ重置新密码
               </Text> */}
 
-            <Flex alignItems="center">
+            <Flex>
               登陆方式
               <RadioGroup
                 ml={5}
@@ -149,6 +164,7 @@ export function LoginModal() {
                 onChange={(value) => {
                   setInputNum("");
                   setVerifyType(value);
+                  toggleLoginButton("", inputPassword, inputCaptcha);
                 }}
               >
                 <Stack spacing={4} direction="row">
@@ -158,35 +174,72 @@ export function LoginModal() {
               </RadioGroup>
             </Flex>
 
-            <Flex alignItems="center">
+            <Flex border="1px" borderColor="#379fff" borderRadius="md">
               <Input
+                px={3}
+                py={2}
+                variant="unstyled"
                 type="number"
                 value={inputNum}
-                onChange={(e) => setInputNum(e.target.value)}
+                onChange={(e) => {
+                  setInputNum(e.target.value);
+                  toggleLoginButton(
+                    e.target.value,
+                    inputPassword,
+                    inputCaptcha
+                  );
+                }}
                 placeholder={
                   verifyType === "tel" ? "请输入手机号" : "请输入QQ号"
                 }
               />
             </Flex>
 
-            <Flex alignItems="center">
+            <Flex border="1px" borderColor="#379fff" borderRadius="md">
               <Input
+                px={3}
+                py={2}
+                variant="unstyled"
                 type="password"
                 value={inputPassword}
-                onChange={(e) => setInputPassword(e.target.value)}
+                onChange={(e) => {
+                  setInputPassword(e.target.value);
+                  toggleLoginButton(inputNum, e.target.value, inputCaptcha);
+                }}
                 placeholder="请输入密码"
               />
+
+              <Button
+                mr={4}
+                variant="link"
+                color="#7dfffe"
+                bgColor="transparent"
+                fontSize="sm"
+                onClick={() => {
+                  router.push("/forgetPass");
+                  loginToggle();
+                }}
+              >
+                忘记密码?
+              </Button>
             </Flex>
 
-            <Flex alignItems="center">
+            <Flex border="1px" borderColor="#379fff" borderRadius="md">
               <Input
+                px={3}
+                py={2}
+                variant="unstyled"
                 value={inputCaptcha}
-                onChange={(e) => setInputCaptcha(e.target.value)}
+                onChange={(e) => {
+                  setInputCaptcha(e.target.value);
+                  toggleLoginButton(inputNum, inputPassword, e.target.value);
+                }}
                 placeholder="请输入图片验证码"
               />
 
               <Image
-                rounded={5}
+                p={1}
+                rounded="lg"
                 ml={1}
                 onClick={async () => {
                   setCaptchaImage(await fetchCaptcha());
@@ -198,12 +251,25 @@ export function LoginModal() {
               />
             </Flex>
 
-            <Button onClick={handleLogin}>登录</Button>
+            <Grid templateColumns="1fr 1fr" gap={2}>
+              <Button
+                // bgColor="transparent"
+                onClick={() => {
+                  router.push("/register");
+                  loginToggle();
+                }}
+              >
+                注册
+              </Button>
+              <Button onClick={handleLogin} isDisabled={disableLogin}>
+                登录
+              </Button>
+            </Grid>
           </VStack>
         </ModalBody>
 
-        <ModalFooter>
-          <VStack spacing={2} align="start" w="full">
+        <ModalFooter py={2}>
+          {/* <VStack spacing={2} align="start" w="full">
             <Button
               variant="link"
               color="#7dfffe"
@@ -213,11 +279,11 @@ export function LoginModal() {
                 loginToggle();
               }}
             >
-              忘记密码
+              重置密码
             </Button>
 
             <Flex>
-              没有账号？
+              首次使用？
               <Button
                 variant="link"
                 color="#7dfffe"
@@ -227,10 +293,10 @@ export function LoginModal() {
                   loginToggle();
                 }}
               >
-                注册一个
+                点我注册
               </Button>
             </Flex>
-          </VStack>
+          </VStack> */}
         </ModalFooter>
       </ModalContent>
     </Modal>
