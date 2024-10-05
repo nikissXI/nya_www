@@ -627,7 +627,7 @@ export default function UserProfilePage() {
                 {userInfo.qq}
 
                 <Button
-                  ml={3}
+                  ml={1}
                   color="#7dfffe"
                   fontWeight="normal"
                   variant="link"
@@ -656,7 +656,7 @@ export default function UserProfilePage() {
                 {userInfo.tel}
 
                 <Button
-                  ml={3}
+                  ml={1}
                   color="#7dfffe"
                   fontWeight="normal"
                   variant="link"
