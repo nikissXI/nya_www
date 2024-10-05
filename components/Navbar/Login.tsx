@@ -197,6 +197,7 @@ export function LoginModal() {
 
             <Flex border="1px" borderColor="#379fff" borderRadius="md">
               <Input
+                mr={5}
                 px={3}
                 py={2}
                 variant="unstyled"
