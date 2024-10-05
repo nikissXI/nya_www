@@ -105,6 +105,12 @@ export default function Page() {
     setPasswordAlertText("");
   };
 
+  const handleEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleReset();
+    }
+  };
+
   const handleReset = async () => {
     if (passwordAlertText) {
       openToast({ content: "密码不符合要求" });
@@ -242,7 +248,7 @@ export default function Page() {
 
   return (
     <Center>
-      <VStack spacing={3} align="stretch" maxW="300px">
+      <VStack spacing={3} align="stretch" maxW="300px" onKeyDown={handleEnter}>
         <Flex>
           重置方式
           <RadioGroup

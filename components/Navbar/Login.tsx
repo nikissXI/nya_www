@@ -157,7 +157,8 @@ export function LoginModal() {
               </Text> */}
 
             <Flex>
-              登陆方式
+              <Text ml={3}>登陆方式</Text>
+              
               <RadioGroup
                 ml={5}
                 defaultValue="tel"
@@ -213,7 +214,7 @@ export function LoginModal() {
               <Button
                 mr={4}
                 variant="link"
-                color="#7dfffe"
+                // color="#7dfffe"
                 bgColor="transparent"
                 fontSize="sm"
                 onClick={() => {
