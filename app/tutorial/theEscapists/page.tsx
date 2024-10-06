@@ -91,10 +91,18 @@ export default function AndroidPage0() {
           点击查看视频教程
         </Button>
 
-        <Text>由于这游戏的联机机制很傻逼，联机需要辅助手段，喵服这边已经给你做了最简化操作</Text>
-        <Text>房主那边连上喵服后进游戏创建多人游戏就行，加入者那边需要用下面两种方式中的一种才能搜索到房间</Text>
-        <Text>两种方式本质上是一样的，只不过一种在网页操作，一种在QQ里操作</Text>
-        <Text>每次搜索房间都得操作一遍，你不要觉得麻烦，这是全网最简单的操作了，懒的搞就换个游戏吧</Text>
+        <Text>
+          由于这游戏的联机机制很傻逼，联机需要辅助手段，喵服这边已经给你做了最简化操作
+        </Text>
+        <Text>
+          房主那边连上喵服后进游戏创建多人游戏就行，加入者那边需要用下面两种方式中的一种才能搜索到房间
+        </Text>
+        <Text>
+          两种方式本质上是一样的，只不过一种在网页操作，一种在QQ里操作
+        </Text>
+        <Text>
+          每次搜索房间都得操作一遍，你不要觉得麻烦，这是全网最简单的操作了，懒的搞就换个游戏吧
+        </Text>
 
         <Heading size="md" mt={2}>
           方式一（网页操作）
@@ -105,35 +113,33 @@ export default function AndroidPage0() {
 
         <Flex>
           {logined ? (
-            <Box>
-              <Flex>
-                <Input
-                  w="130px"
-                  type="number"
-                  value={inputNum}
-                  onChange={(e) => {
-                    setInputNum(e.target.value);
-                  }}
-                  placeholder="要加入的编号"
-                />
+            <Flex>
+              <Input
+                w="130px"
+                type="number"
+                value={inputNum}
+                onChange={(e) => {
+                  setInputNum(e.target.value);
+                }}
+                placeholder="要加入的编号"
+              />
 
-                <Button
-                  onClick={() => {
-                    createHelper(inputNum);
-                  }}
-                >
-                  提交
-                </Button>
-              </Flex>
-
-              <Text color="#ffd648">{showText}</Text>
-            </Box>
+              <Button
+                onClick={() => {
+                  createHelper(inputNum);
+                }}
+              >
+                提交
+              </Button>
+            </Flex>
           ) : (
             <Button bgColor="#1d984b" size="sm" onClick={loginToggle}>
               请登录后再操作，点击登录
             </Button>
           )}
         </Flex>
+
+        <Text color="#ffd648">{showText}</Text>
 
         <Heading size="md" mt={2}>
           方式二（QQ群操作）
