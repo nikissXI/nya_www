@@ -704,7 +704,7 @@ export default function UserProfilePage() {
                   <Text w="80px" textAlign="right">
                     可用天数:
                   </Text>
-                  <Text ml={5}>{userInfo.wg_data.ttl}</Text>
+                  <Text ml={5}>{userInfo.wg_data.ttl}（联机后次日重置）</Text>
                 </Flex>
 
                 <Divider />
