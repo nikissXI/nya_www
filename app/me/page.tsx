@@ -197,7 +197,7 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 1) {
-        openToast({ content: "该手机号未被注册" });
+        openToast({ content: "该手机号已被注册" });
       } else {
         const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
         if (resp.ok) {
