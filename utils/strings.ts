@@ -12,12 +12,10 @@ export function validatePassword(password: string): boolean {
   }
   // 检查是否包含数字
   const hasNumber = /[0-9]/.test(password);
-  // 检查是否包含大写字母
-  const hasUpperCase = /[A-Z]/.test(password);
-  // 检查是否包含小写字母
-  const hasLowerCase = /[a-z]/.test(password);
+  // 检查是否包含字母
+  const hasCase = /[A-Za-z]/.test(password);
   // 返回最终结果
-  return hasNumber && hasUpperCase && hasLowerCase;
+  return hasNumber && hasCase;
 }
 
 export function validateTel(tel: string): boolean {

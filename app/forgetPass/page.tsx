@@ -99,7 +99,7 @@ export default function Page() {
       return;
     }
     if (pass1 && !validatePassword(pass1)) {
-      setPasswordAlertText("不低于8位，包含数字和大小写字母");
+      setPasswordAlertText("不低于8位，包含数字和字母");
       return;
     }
     setPasswordAlertText("");
@@ -113,7 +113,7 @@ export default function Page() {
 
   const handleReset = async () => {
     if (passwordAlertText) {
-      openToast({ content: "密码不符合要求" });
+      openToast({ content: "密码要求：不低于8位，包含数字和字母" });
       return;
     }
 
