@@ -148,17 +148,17 @@ export function LoginModal() {
 
         <ModalCloseButton />
 
-        <ModalBody>
+        <ModalBody pt={0}>
           <VStack spacing={2} align="stretch" onKeyDown={handleEnter}>
-            {/* <Text color="#ffd648" fontSize="16px">
-                账密系统更新前的用户
-                <br />
-                点忘记密码，通过QQ重置新密码
-              </Text> */}
+            {verifyType !== "tel" && (
+              <Text color="#ffd648" fontSize="16px">
+                提示：是用Q号做账号，不是用登陆QQ的账密，新用户先注册
+              </Text>
+            )}
 
             <Flex>
               <Text ml={3}>登陆方式</Text>
-              
+
               <RadioGroup
                 ml={5}
                 defaultValue="tel"

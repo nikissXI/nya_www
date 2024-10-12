@@ -266,6 +266,12 @@ export default function Page() {
         maxW="300px"
         onKeyDown={handleEnter}
       >
+        {verifyType !== "tel" && (
+          <Text color="#ffd648" fontSize="16px">
+            提示：只是用Q号做账号，跟登陆QQ的账密无关
+          </Text>
+        )}
+
         <Flex>
           注册方式
           <RadioGroup
