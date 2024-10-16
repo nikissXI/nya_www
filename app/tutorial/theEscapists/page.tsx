@@ -135,14 +135,12 @@ export default function AndroidPage0() {
 
         <Button
           my={5}
-          size="lg"
-          variant="link"
-          bgColor="transparent"
+          bgColor="#b23333"
           onClick={() => {
-            router.push("/room");
+            router.push(`/room`);
           }}
         >
-          返回上一级
+          返回
         </Button>
       </VStack>
     </Center>
