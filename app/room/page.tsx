@@ -532,10 +532,10 @@ export default function Page() {
               }
 
               setDisableGetRoom(true);
-              // 设置定时器，3秒后重新启用按钮
+              // 设置定时器，2秒后重新启用按钮
               setTimeout(() => {
                 setDisableGetRoom(false); // 启用按钮
-              }, 3000);
+              }, 2000);
               getRoomData();
             }}
           >
