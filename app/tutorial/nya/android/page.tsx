@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   Flex,
   Center,
@@ -8,6 +9,8 @@ import {
   Heading,
   VStack,
   Box,
+  List,
+  ListItem,
   Collapse,
   Image,
 } from "@chakra-ui/react";
@@ -18,9 +21,11 @@ import { getAuthToken } from "@/store/authKey";
 import { useDisclosureStore } from "@/store/disclosure";
 import { openToast } from "@/components/universal/toast";
 
-export function Page() {
+export default function Page() {
   const wg_apk_url = process.env.NEXT_PUBLIC_WG_APK_URL; // 从环境变量获取 API 地址
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
+
   const { logined } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
@@ -75,11 +80,18 @@ export function Page() {
         direction="column"
         justifyContent="space-between"
         alignItems="center"
+        mb={5}
+        mx="5vw"
         maxW="460px"
+        minH="50vh"
       >
         <Heading size="md" mb={3}>
           下载并安装WG
         </Heading>
+
+        <Text mb={3}>
+          如果出现无法正常导入，请尝试来着下载新的（有时候版本升级，老版本就用不了），更新了还不行就找群主处理
+        </Text>
 
         <Button
           size="sm"
@@ -90,11 +102,13 @@ export function Page() {
           点击下载WG安装包
         </Button>
 
-        <Divider my={5}></Divider>
+        <Divider my={5} />
 
         <Heading size="md" mb={3}>
           获取conf key
         </Heading>
+
+        <Text mb={3}>下一步导入用得上</Text>
 
         <Flex>
           <Button
@@ -116,7 +130,22 @@ export function Page() {
 
         <Text color="#ffd648">{confKey}</Text>
 
-        <Divider my={5}></Divider>
+        <Divider my={5} />
+
+        <Heading size="md" mb={3}>
+          导入编号并连上喵服
+        </Heading>
+
+        <List spacing={2}>
+          <ListItem>步骤 1: 运行WireGuard，即WG</ListItem>
+          <ListItem>步骤 2: 点击右下方的加号</ListItem>
+          <ListItem>步骤 3: 点击“通过conf key导入”</ListItem>
+          <ListItem>步骤 4: 粘贴上一步获取的conf key完成导入</ListItem>
+          <ListItem>步骤 5: 把开关打开连上喵服</ListItem>
+          <Image my={3} src="/images/android_switch.jpg" alt="android_switch" />
+        </List>
+
+        <Divider my={5} />
 
         <VStack spacing={0}>
           <Button
@@ -158,6 +187,43 @@ export function Page() {
             </Collapse>
           </Box>
         </VStack>
+
+        <Divider my={5} />
+
+        <Heading size="md" mb={3}>
+          使用联机房间开始联机
+        </Heading>
+
+        <Text mx={5}>
+          现在可以返回联机房间界面查看是否连上喵服了
+          <br />
+          看一看注意事项的内容，或许能带来帮助
+          <br />
+          喵服关联群的群主就是服主，如果遇到教程解决不了的问题就私聊他
+        </Text>
+
+        <Button
+          h="40px"
+          mt={3}
+          size="md"
+          bgColor="#992e98"
+          onClick={() => {
+            router.push("/room");
+          }}
+        >
+          &gt;&gt; 前往联机房间 &lt;&lt;
+        </Button>
+
+        <Divider my={5} />
+
+        <Button
+          bgColor="#b23333"
+          onClick={() => {
+            router.push(`/tutorial`);
+          }}
+        >
+          返回上一级
+        </Button>
       </Flex>
     </Center>
   );
