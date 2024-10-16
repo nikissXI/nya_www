@@ -70,7 +70,7 @@ export default function Page() {
           网站访问人次： {countData.viewCount}
         </Text>
         <Text w="200px" textAlign={{ md: "center" }}>
-          当前用户数量： {countData.userCount}
+          注册用户数量： {countData.userCount}
         </Text>
       </Flex>
 

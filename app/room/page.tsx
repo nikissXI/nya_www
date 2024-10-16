@@ -83,6 +83,10 @@ export default function Page() {
   const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
   const [status, setStatus] = useState<"none" | "member" | "hoster">("none");
 
+  const [loading, setLoading] = useState(false);
+
+  const [disableGetRoom, setDisableGetRoom] = useState(false);
+
   const {
     isOpen: joinIsOpen,
     onOpen: joinOnOpen,
@@ -121,7 +125,7 @@ export default function Page() {
     "连上喵服后，顶部会显示网络延迟，检测可以点击以测试网络稳定性，如果网络差就别联机了",
     "玩家间联机需要彼此处于一个房间才能通信，就是一个人创建房间，其他人加入，如果加入失败就问房主有没有正确添加成员",
     "只要设备能连上喵服就能互相通信，不限系统，如果游戏支持，可以实现手机与电脑联机",
-    "本平台支持绝大部分游戏局域网联机，目前已知只有《逃脱者：困境突围》这个游戏联机需要另外下载工具，具体看联机教程",
+    "本平台支持绝大部分游戏局域网联机，目前已知只有《逃脱者：困境突围》这个游戏联机需要额外辅助，具体看联机教程",
     "如果发现打开WG后浏览器无法正常使用，换一个浏览器试试，再把情况告诉服主便于修复这个问题",
     "如果遇到教程无法解决的问题，就找服主（QQ:1299577815）",
   ];
@@ -237,7 +241,7 @@ export default function Page() {
 
   useEffect(() => {
     if (wgnum !== 0) {
-      const interval = setInterval(getRoomData, 10000); // 每10秒更新一次数据
+      const interval = setInterval(getRoomData, 30000); // 每10秒更新一次房间列表
       return () => clearInterval(interval); // 清理定时器
     }
   }, [wgnum, getRoomData]);
@@ -246,7 +250,7 @@ export default function Page() {
     if (wgnum !== 0 && !checking) {
       const interval = setInterval(() => {
         fetchNetworkLatency("short", true);
-      }, 10000); // 每10秒更新一次数据
+      }, 30000); /// 每10秒更新一一次延迟
       return () => clearInterval(interval); // 清理定时器
     }
   }, [wgnum, checking, fetchNetworkLatency]);
@@ -262,10 +266,16 @@ export default function Page() {
     fetchData();
   }, [wgnum, fetchNetworkLatency, getRoomData]);
 
-  const fetchHandleRoom = async (
+  // 发送房间操作请求
+  const handleRoomFetch = async (
     handleType: string,
     handleWgnum: number
   ): Promise<HandleRoomResponse> => {
+    if (loading === true) {
+      throw new Error(`请不要点太快`);
+    }
+
+    setLoading(true);
     const resp = await fetch(
       `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}`,
       {
@@ -275,6 +285,7 @@ export default function Page() {
         },
       }
     );
+    setLoading(false);
     if (!resp.ok) {
       throw new Error(`访问接口出错: ${resp.status}`);
     }
@@ -284,7 +295,7 @@ export default function Page() {
   // 创建房间
   const handleCreateRoom = async () => {
     try {
-      const data = await fetchHandleRoom("createRoom", 0);
+      const data = await handleRoomFetch("createRoom", 0);
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -298,7 +309,7 @@ export default function Page() {
   // 关闭房间
   const handleCloseRoom = async () => {
     try {
-      const data = await fetchHandleRoom("closeRoom", 0);
+      const data = await handleRoomFetch("closeRoom", 0);
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -315,7 +326,7 @@ export default function Page() {
       return;
     }
     try {
-      const data = await fetchHandleRoom("joinRoom", inputWgnum);
+      const data = await handleRoomFetch("joinRoom", inputWgnum);
       if (data.code === 0) {
         getRoomData();
         joinOnClose();
@@ -331,7 +342,7 @@ export default function Page() {
   // 退出房间
   const handleExitRoom = async () => {
     try {
-      const data = await fetchHandleRoom("exitRoom", 0);
+      const data = await handleRoomFetch("exitRoom", 0);
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -348,7 +359,7 @@ export default function Page() {
       return;
     }
     try {
-      const data = await fetchHandleRoom("addMember", inputWgnum);
+      const data = await handleRoomFetch("addMember", inputWgnum);
       if (data.code === 0) {
         getRoomData();
         addOnClose();
@@ -364,7 +375,7 @@ export default function Page() {
   // 删除成员
   const handleDelMember = async (delWgnum: number) => {
     try {
-      const data = await fetchHandleRoom("delMember", delWgnum);
+      const data = await handleRoomFetch("delMember", delWgnum);
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -513,7 +524,21 @@ export default function Page() {
           onOpen={addOnopen}
         />
         <Box>
-          <Button bg="transparent" onClick={getRoomData}>
+          <Button
+            bg="transparent"
+            onClick={() => {
+              if (disableGetRoom === true) {
+                return;
+              }
+
+              setDisableGetRoom(true);
+              // 设置定时器，3秒后重新启用按钮
+              setTimeout(() => {
+                setDisableGetRoom(false); // 启用按钮
+              }, 3000);
+              getRoomData();
+            }}
+          >
             <Text mr={3}>刷新列表</Text>
             <IoReloadCircle size={30} color="#35c535" />
           </Button>
