@@ -148,7 +148,7 @@ export function LoginModal() {
 
         <ModalCloseButton />
 
-        <ModalBody pt={0}>
+        <ModalBody py={0}>
           <VStack spacing={2} align="stretch" onKeyDown={handleEnter}>
             {verifyType !== "tel" && (
               <Text color="#ffd648" fontSize="16px">
@@ -253,7 +253,11 @@ export function LoginModal() {
               />
             </Flex>
 
-            <Grid templateColumns="1fr 1fr" gap={2}>
+            <Button onClick={handleLogin} isDisabled={disableLogin}>
+              登录
+            </Button>
+
+            {/* <Grid templateColumns="1fr 1fr" gap={2}>
               <Button
                 // bgColor="transparent"
                 onClick={() => {
@@ -266,24 +270,12 @@ export function LoginModal() {
               <Button onClick={handleLogin} isDisabled={disableLogin}>
                 登录
               </Button>
-            </Grid>
+            </Grid> */}
           </VStack>
         </ModalBody>
 
-        <ModalFooter py={2}>
-          {/* <VStack spacing={2} align="start" w="full">
-            <Button
-              variant="link"
-              color="#7dfffe"
-              bgColor="transparent"
-              onClick={() => {
-                router.push("/forgetPass");
-                loginToggle();
-              }}
-            >
-              重置密码
-            </Button>
-
+        <ModalFooter>
+          <VStack spacing={2} align="start" w="full">
             <Flex>
               首次使用？
               <Button
@@ -291,14 +283,14 @@ export function LoginModal() {
                 color="#7dfffe"
                 bgColor="transparent"
                 onClick={() => {
-                  router.push("/register");
                   loginToggle();
+                  router.push("/register");
                 }}
               >
                 点我注册
               </Button>
             </Flex>
-          </VStack> */}
+          </VStack>
         </ModalFooter>
       </ModalContent>
     </Modal>

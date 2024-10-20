@@ -14,11 +14,14 @@ import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
 import { useDisclosureStore } from "@/store/disclosure";
 import { useUserStateStore } from "@/store/user-state";
-import { GetConfUrl } from "@/components/universal/GetConf";
+// import { GetConfUrl } from "@/components/universal/GetConf";
 import { useState } from "react";
+import { getAuthToken } from "@/store/authKey";
+import { openToast } from "@/components/universal/toast";
 
 export default function Page() {
   const router = useRouter();
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const wg_msi_url = process.env.NEXT_PUBLIC_WG_PC_URL; // 从环境变量获取 API 地址
   const bat_url = process.env.NEXT_PUBLIC_BAT_URL; // 从环境变量获取 API 地址
 
@@ -33,6 +36,28 @@ export default function Page() {
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
+  const downloadConf = async () => {
+    const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.code === 0) {
+        // 用拿到的data.key下载conf
+        window.open(`${apiUrl}/downloadConf?key=${data.key}`, "_blank");
+      } else {
+        openToast({ content: data.msg });
+      }
+    } else {
+      openToast({ content: "服务异常，请联系服主处理" });
+    }
   };
 
   return (
@@ -83,7 +108,8 @@ export default function Page() {
           <ListItem>
             <Button
               size="sm"
-              onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
+              // onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
+              onClick={downloadConf}
               isDisabled={logined ? false : true}
             >
               {logined ? "点击下载conf" : "未登录无法下载"}

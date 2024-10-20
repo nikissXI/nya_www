@@ -392,6 +392,17 @@ export default function Page() {
     else return "#ff3b3b";
   }
 
+  const handleAddMemberEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleAddMember();
+    }
+  };
+  const handleJoinRoomEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleJoinRoom();
+    }
+  };
+
   // 没登录就让去登录
   if (!logined) {
     return (
@@ -437,7 +448,7 @@ export default function Page() {
 
             <ModalCloseButton />
 
-            <ModalBody>
+            <ModalBody onKeyDown={handleJoinRoomEnter}>
               <Input
                 type="number"
                 placeholder="请输入房主的编号"
@@ -493,7 +504,7 @@ export default function Page() {
 
             <ModalCloseButton />
 
-            <ModalBody>
+            <ModalBody onKeyDown={handleAddMemberEnter}>
               <Input
                 placeholder="请输入新成员编号"
                 type="number"
@@ -548,11 +559,11 @@ export default function Page() {
               bg="transparent"
               onClick={addOnopen}
               isDisabled={
-                roomInfo && roomInfo.members.length < 6 ? false : true
+                roomInfo && roomInfo.members.length < 5 ? false : true
               }
             >
               <Text mr={3}>
-                {roomInfo && roomInfo.members.length < 6
+                {roomInfo && roomInfo.members.length < 5
                   ? "添加成员"
                   : "房间已满"}
               </Text>
