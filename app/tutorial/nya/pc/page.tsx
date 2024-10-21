@@ -14,7 +14,7 @@ import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
 import { useDisclosureStore } from "@/store/disclosure";
 import { useUserStateStore } from "@/store/user-state";
-// import { GetConfUrl } from "@/components/universal/GetConf";
+import { GetConfUrl } from "@/components/universal/GetConf";
 import { useState } from "react";
 import { getAuthToken } from "@/store/authKey";
 import { openToast } from "@/components/universal/toast";
@@ -104,26 +104,41 @@ export default function Page() {
         </Heading>
 
         <List spacing={2}>
-          <ListItem>点击下方按钮下载conf文件</ListItem>
           <ListItem>
-            <Button
-              size="sm"
-              // onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
-              onClick={downloadConf}
-              isDisabled={logined ? false : true}
-            >
-              {logined ? "点击下载conf" : "未登录无法下载"}
-            </Button>
+            点击下方按钮下载conf文件 <br />
+            两个通道都能下载，1不行就用2
+          </ListItem>
+          <ListItem>
+            {logined ? (
+              <>
+                <Button
+                  size="sm"
+                  onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
+                  isDisabled={logined ? false : true}
+                >
+                  下载通道1
+                </Button>
 
-            {!logined && (
+                <Button
+                  ml={5}
+                  size="sm"
+                  onClick={downloadConf}
+                  isDisabled={logined ? false : true}
+                >
+                  下载通道2
+                </Button>
+              </>
+            ) : (
               <Button bgColor="#1d984b" size="sm" onClick={loginToggle} ml={5}>
-                点击进行登陆
+                登陆才能下载
               </Button>
             )}
           </ListItem>
+
           <ListItem>
             在左下角点新建隧道，然后选下载的conf文件，完成导入
           </ListItem>
+
           <ListItem>点连接按钮，连上喵服</ListItem>
         </List>
 

@@ -14,14 +14,14 @@ import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
 import { useDisclosureStore } from "@/store/disclosure";
 import { useUserStateStore } from "@/store/user-state";
-// import { GetConfUrl } from "@/components/universal/GetConf";
+import { GetConfUrl } from "@/components/universal/GetConf";
 import { getAuthToken } from "@/store/authKey";
 import { openToast } from "@/components/universal/toast";
 
 export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
-  const { logined } = useUserStateStore();
+  const { logined, userInfo } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
   });
@@ -39,10 +39,12 @@ export default function Page() {
       const data = await resp.json();
       if (data.code === 0) {
         // 用拿到的data.key下载conf
-        window.open(`${apiUrl}/downloadConf?key=${data.key}`, "_blank");
+        window.open(`${apiUrl}/downloadConf2?key=${data.key}`, "_blank");
       } else {
         openToast({ content: data.msg });
       }
+    } else if (resp.status === 401) {
+      openToast({ content: "登陆凭证无效" });
     } else {
       openToast({ content: "服务异常，请联系服主处理" });
     }
@@ -92,21 +94,33 @@ export default function Page() {
 
         <List spacing={2}>
           <ListItem>
-            点击下方按钮下载conf文件，如果下载不了就换Safari浏览器
+            点击下方按钮下载conf文件，建议使用Safari浏览器下载
+            <br />
+            两个通道都能下载，1不行就用2
           </ListItem>
           <ListItem>
-            <Button
-              size="sm"
-              // onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
-              onClick={downloadConf}
-              isDisabled={logined ? false : true}
-            >
-              {logined ? "点击下载conf" : "未登录无法下载"}
-            </Button>
+            {logined ? (
+              <>
+                <Button
+                  size="sm"
+                  onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
+                  isDisabled={logined ? false : true}
+                >
+                  下载通道1
+                </Button>
 
-            {!logined && (
+                <Button
+                  ml={5}
+                  size="sm"
+                  onClick={downloadConf}
+                  isDisabled={logined ? false : true}
+                >
+                  下载通道2
+                </Button>
+              </>
+            ) : (
               <Button bgColor="#1d984b" size="sm" onClick={loginToggle} ml={5}>
-                点击进行登陆
+                登陆才能下载
               </Button>
             )}
           </ListItem>
