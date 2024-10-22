@@ -36,6 +36,7 @@ const articles: Article[] = [
   { path: "/tutorial/otherworldLegends", title: "战魂铭人" },
   { path: "/tutorial/minecraft", title: "我的世界" },
   { path: "/tutorial/terraria", title: "泰拉瑞亚" },
+  { path: "/tutorial/l4d2", title: "求生之路2" },
 ];
 
 export const GameListModal = () => {
