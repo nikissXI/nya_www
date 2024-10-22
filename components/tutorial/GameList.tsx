@@ -57,13 +57,11 @@ export const GameListModal = () => {
     <Modal isOpen={gameListIsOpen} onClose={gameListOnToggle}>
       <ModalOverlay />
       <ModalContent bgColor="#002f5c" mx={3} my={12}>
-        {/* <ModalHeader pb={0} textAlign="center">联机教程</ModalHeader> */}
-
         <ModalCloseButton />
 
         <ModalBody mx={2} my={3}>
           <VStack mb={3}>
-            <Text>联机先学会使用WG连接喵服</Text>
+            <Text fontSize="md">联机先学会使用WG连接喵服</Text>
 
             <Button
               onClick={() => {
@@ -75,7 +73,9 @@ export const GameListModal = () => {
             </Button>
           </VStack>
 
-          <Text textAlign="center">支持但不限于以下游戏，欢迎补充</Text>
+          <Text fontSize="md" textAlign="center">
+            支持但不限于以下游戏，欢迎补充
+          </Text>
 
           <Input
             placeholder="输入关键字搜索"
@@ -88,6 +88,7 @@ export const GameListModal = () => {
               {filteredArticles.map((article) => (
                 <ListItem key={article.path}>
                   <Link
+                    fontSize="md"
                     as={NextLink}
                     href={article.path}
                     color="#7dfffe"
