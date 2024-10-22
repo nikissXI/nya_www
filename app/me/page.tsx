@@ -285,7 +285,7 @@ export default function UserProfilePage() {
 
   const handleBindEmail = async () => {
     const req_data = {
-      tel: inputAccount,
+      email: inputAccount,
       verify_code: inputVerifyCode,
       uuid: uuid,
       captcha_code: inputCaptcha,
@@ -497,7 +497,7 @@ export default function UserProfilePage() {
                   cursor="pointer"
                 />
               </Flex>
-              <Button onClick={handleBindTEL}>提交</Button>
+              <Button onClick={handleBindEmail}>提交</Button>
             </VStack>
           </ModalBody>
         </ModalContent>
