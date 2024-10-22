@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Tooltip,
   Flex,
   Text,
   VStack,
@@ -647,7 +648,7 @@ export default function UserProfilePage() {
         </ModalContent>
       </Modal>
 
-      <Box px={5} w={{ md: "320px", base: "86vw" }}>
+      <Box maxW={{ md: "100%", base: "90vw" }}>
         {userInfo ? (
           <VStack spacing={1} align="stretch">
             <Heading mb={1} size="md" textAlign="center">
@@ -658,7 +659,7 @@ export default function UserProfilePage() {
               <Text w="50px" textAlign="right">
                 UID:
               </Text>
-              <Text ml={5}>{userInfo.uid}</Text>
+              <Text ml={3}>{userInfo.uid}</Text>
             </Flex>
 
             <Divider />
@@ -669,7 +670,7 @@ export default function UserProfilePage() {
               </Text>
 
               <Input
-                ml={5}
+                ml={3}
                 w="8rem"
                 fontSize="md"
                 size="xs"
@@ -707,7 +708,7 @@ export default function UserProfilePage() {
               <Text w="50px" textAlign="right">
                 手机:
               </Text>
-              <Flex ml={5}>
+              <Flex ml={3}>
                 {userInfo.tel}
 
                 <Button
@@ -732,12 +733,22 @@ export default function UserProfilePage() {
 
             <Divider />
 
-            <Flex>
+            <Flex whiteSpace="nowrap">
               <Text w="50px" textAlign="right">
                 邮箱:
               </Text>
-              <Flex ml={5}>
-                {userInfo.email}
+              <Flex ml={3}>
+                <Tooltip label={userInfo.email} placement="top" hasArrow>
+                  <Box
+                    maxWidth={{ md: "100%", base: "55vw" }} // 设置最大宽度
+                    whiteSpace="nowrap" // 不换行
+                    overflow="hidden" // 溢出隐藏
+                    textOverflow="ellipsis" // 使用省略号表示溢出内容
+                    cursor="pointer" // 鼠标悬停时显示手型光标
+                  >
+                    {userInfo.email}
+                  </Box>
+                </Tooltip>
 
                 <Button
                   ml={1}
@@ -765,7 +776,7 @@ export default function UserProfilePage() {
               <Text w="50px" textAlign="right">
                 QQ:
               </Text>
-              <Flex ml={5}>
+              <Flex ml={3}>
                 {userInfo.qq}
 
                 <Button
@@ -798,7 +809,7 @@ export default function UserProfilePage() {
                   <Text w="80px" textAlign="right">
                     联机编号:
                   </Text>
-                  <Text ml={5}>{userInfo.wg_data.wgnum}</Text>
+                  <Text ml={3}>{userInfo.wg_data.wgnum}</Text>
                 </Flex>
 
                 <Divider />
@@ -807,7 +818,7 @@ export default function UserProfilePage() {
                   <Text w="80px" textAlign="right">
                     IP地址:
                   </Text>
-                  <Text ml={5}>{userInfo.wg_data.wg_ip}</Text>
+                  <Text ml={3}>{userInfo.wg_data.wg_ip}</Text>
                 </Flex>
 
                 <Divider />
@@ -816,7 +827,7 @@ export default function UserProfilePage() {
                   <Text w="80px" textAlign="right">
                     可用天数:
                   </Text>
-                  <Text ml={5}>{userInfo.wg_data.ttl}（联机后次日重置）</Text>
+                  <Text ml={3}>{userInfo.wg_data.ttl}（联机后次日重置）</Text>
                 </Flex>
 
                 <Divider />
@@ -825,7 +836,7 @@ export default function UserProfilePage() {
                   <Text w="80px" textAlign="right">
                     最后连接:
                   </Text>
-                  <Text ml={5}>
+                  <Text ml={3}>
                     {userInfo.wg_data.last_connect_timestamp
                       ? timestampToDateString(
                           userInfo.wg_data.last_connect_timestamp
