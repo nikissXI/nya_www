@@ -17,20 +17,19 @@ import {
   Stack,
   Image,
   Radio,
-  Grid,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useUserStateStore } from "@/store/user-state";
 import { useEffect, useState } from "react";
 import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "../universal/toast";
-import { getHash, isInteger } from "@/utils/strings";
+import { getHash, validateTel, validateEmail } from "@/utils/strings";
 import { useDisclosureStore } from "@/store/disclosure";
 import { setAuthToken } from "@/store/authKey";
 
 interface LoginReqBody {
   verifyType: string; // 注册类型：qq或tel
-  num: number; // 手机或QQ
+  account: string; // 手机或QQ
   password: string; // 登陆密码sha256
   uuid: string; // 表单uuid
   captcha_code: string; // 表单图片验证码
@@ -53,7 +52,7 @@ export function LoginModal() {
 
   // 填写的表单数据
   const [verifyType, setVerifyType] = useState("tel");
-  const [inputNum, setInputNum] = useState("");
+  const [inputAccount, setInputAccount] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
 
@@ -79,11 +78,11 @@ export function LoginModal() {
   }, [logging, fetchCaptcha, loginIsOpen, logined]);
 
   const toggleLoginButton = (
-    inputNum: string,
+    inputAccount: string,
     inputPassword: string,
     inputCaptcha: string
   ) => {
-    if (inputNum && inputPassword && inputCaptcha) {
+    if (inputAccount && inputPassword && inputCaptcha) {
       setDisableLogin(false);
     } else {
       setDisableLogin(true);
@@ -91,19 +90,25 @@ export function LoginModal() {
   };
 
   const handleLogin = async () => {
-    if (!(inputNum && inputPassword && inputCaptcha)) {
+    if (!(inputAccount && inputPassword && inputCaptcha)) {
       return;
     }
 
-    if (!isInteger(inputNum)) {
-      const text = verifyType === "tel" ? "手机号" : "QQ号";
-      openToast({ content: `请正确填写${text}` });
-      return;
+    if (verifyType === "tel") {
+      if (!validateTel(inputAccount)) {
+        openToast({ content: `请正确填写手机号` });
+        return;
+      }
+    } else {
+      if (!validateEmail(inputAccount)) {
+        openToast({ content: `请正确填写电子邮箱` });
+        return;
+      }
     }
 
     const req_data: LoginReqBody = {
       verifyType: verifyType,
-      num: Number(inputNum),
+      account: inputAccount,
       password: getHash(inputPassword),
       uuid: uuid,
       captcha_code: inputCaptcha.toLowerCase(),
@@ -142,9 +147,7 @@ export function LoginModal() {
     <Modal isOpen={loginIsOpen} onClose={loginToggle}>
       <ModalOverlay />
       <ModalContent bgColor="#274161" maxW="320px" mx={3}>
-        <ModalHeader textAlign="center">
-          {logined ? `你好！${userInfo?.username}` : "登录"}
-        </ModalHeader>
+        <ModalHeader textAlign="center">登录</ModalHeader>
 
         <ModalCloseButton />
 
@@ -152,7 +155,9 @@ export function LoginModal() {
           <VStack spacing={2} align="stretch" onKeyDown={handleEnter}>
             {verifyType !== "tel" && (
               <Text color="#ffd648" fontSize="16px">
-                提示：是用Q号做账号，不是用登陆QQ的账密，新用户先注册
+                提示：以前的QQ验证改为QQ邮箱
+                <br />
+                填写格式“QQ号@qq.com”
               </Text>
             )}
 
@@ -160,17 +165,17 @@ export function LoginModal() {
               <Text ml={3}>登陆方式</Text>
 
               <RadioGroup
-                ml={5}
+                ml={3}
                 defaultValue="tel"
                 onChange={(value) => {
-                  setInputNum("");
+                  setInputAccount("");
                   setVerifyType(value);
                   toggleLoginButton("", inputPassword, inputCaptcha);
                 }}
               >
-                <Stack spacing={4} direction="row">
+                <Stack spacing={3} direction="row">
                   <Radio value="tel">手机</Radio>
-                  <Radio value="qq">QQ</Radio>
+                  <Radio value="email">电子邮箱</Radio>
                 </Stack>
               </RadioGroup>
             </Flex>
@@ -180,10 +185,10 @@ export function LoginModal() {
                 px={3}
                 py={2}
                 variant="unstyled"
-                type="number"
-                value={inputNum}
+                type="text"
+                value={inputAccount}
                 onChange={(e) => {
-                  setInputNum(e.target.value);
+                  setInputAccount(e.target.value);
                   toggleLoginButton(
                     e.target.value,
                     inputPassword,
@@ -191,7 +196,7 @@ export function LoginModal() {
                   );
                 }}
                 placeholder={
-                  verifyType === "tel" ? "请输入手机号" : "请输入QQ号"
+                  verifyType === "tel" ? "请输入手机号" : "请输入电子邮箱"
                 }
               />
             </Flex>
@@ -206,7 +211,7 @@ export function LoginModal() {
                 value={inputPassword}
                 onChange={(e) => {
                   setInputPassword(e.target.value);
-                  toggleLoginButton(inputNum, e.target.value, inputCaptcha);
+                  toggleLoginButton(inputAccount, e.target.value, inputCaptcha);
                 }}
                 placeholder="请输入密码"
               />
@@ -234,7 +239,11 @@ export function LoginModal() {
                 value={inputCaptcha}
                 onChange={(e) => {
                   setInputCaptcha(e.target.value);
-                  toggleLoginButton(inputNum, inputPassword, e.target.value);
+                  toggleLoginButton(
+                    inputAccount,
+                    inputPassword,
+                    e.target.value
+                  );
                 }}
                 placeholder="请输入图片验证码"
               />
@@ -256,21 +265,6 @@ export function LoginModal() {
             <Button onClick={handleLogin} isDisabled={disableLogin}>
               登录
             </Button>
-
-            {/* <Grid templateColumns="1fr 1fr" gap={2}>
-              <Button
-                // bgColor="transparent"
-                onClick={() => {
-                  router.push("/register");
-                  loginToggle();
-                }}
-              >
-                注册
-              </Button>
-              <Button onClick={handleLogin} isDisabled={disableLogin}>
-                登录
-              </Button>
-            </Grid> */}
           </VStack>
         </ModalBody>
 

@@ -24,11 +24,12 @@ import { Button } from "@/components/universal/button";
 import { useState, useEffect } from "react";
 import { openToast } from "@/components/universal/toast";
 import {
+  isInteger,
   getHash,
   validatePassword,
   validateTel,
   timestampToDateString,
-  isInteger,
+  validateEmail,
 } from "@/utils/strings";
 import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
@@ -45,38 +46,30 @@ export default function UserProfilePage() {
     return state.modifyGetWgnumDisclosure;
   });
 
-  // 检测是否在QQ内打开
-  const [copyButtonText, setCopyButtonText] =
-    useState("点击复制网页链接到剪切板");
-  const [isQQ, setIsQQ] = useState(false);
-  useEffect(() => {
-    const userAgent = navigator.userAgent;
-    if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
-      setIsQQ(true);
-    }
-  }, []);
+  // // 检测是否在QQ内打开
+  // const [copyButtonText, setCopyButtonText] =
+  //   useState("点击复制网页链接到剪切板");
+  // const [isQQ, setIsQQ] = useState(false);
+  // useEffect(() => {
+  //   const userAgent = navigator.userAgent;
+  //   if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
+  //     setIsQQ(true);
+  //   }
+  // }, []);
 
-  const handleCopyLink = async () => {
-    try {
-      if (navigator.clipboard && navigator.permissions) {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopyButtonText("链接已复制到剪切板");
-      } else {
-        throw new Error("不支持自动复制");
-      }
-    } catch (err) {
-      openToast({ content: String(err) });
-      setCopyButtonText("复制链接失败，请自行复制");
-    }
-  };
-
-  // 验证码拉取和图片
-  const { fetchCaptcha } = useCaptcha();
-  const [captchaImage, setCaptchaImage] = useState("");
-
-  // 填写的表单数据
-  const [inputNum, setInputNum] = useState("");
-  const [inputCaptcha, setInputCaptcha] = useState("");
+  // const handleCopyLink = async () => {
+  //   try {
+  //     if (navigator.clipboard && navigator.permissions) {
+  //       await navigator.clipboard.writeText(window.location.href);
+  //       setCopyButtonText("链接已复制到剪切板");
+  //     } else {
+  //       throw new Error("不支持自动复制");
+  //     }
+  //   } catch (err) {
+  //     openToast({ content: String(err) });
+  //     setCopyButtonText("复制链接失败，请自行复制");
+  //   }
+  // };
 
   // 修改用户名
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
@@ -107,6 +100,19 @@ export default function UserProfilePage() {
       openToast({ content: "服务异常，请联系服主处理" });
     }
   };
+
+  // 验证码拉取和图片
+  const { fetchCaptcha } = useCaptcha();
+  const [captchaImage, setCaptchaImage] = useState("");
+
+  // 填写的表单数据
+  const [inputAccount, setInputAccount] = useState("");
+  const [inputCaptcha, setInputCaptcha] = useState("");
+
+  // 绑定验证用的
+  const [sendVerifyButtonText, setSendVerifyButtonText] =
+    useState("获取验证码");
+  const [inputVerifyCode, setInputVerifyCode] = useState("");
 
   // 绑定QQ相关
   const {
@@ -148,7 +154,7 @@ export default function UserProfilePage() {
 
   const handleBindQQ = async () => {
     const req_data = {
-      qq: inputNum,
+      qq: inputAccount,
       uuid: uuid,
       captcha_code: inputCaptcha,
     };
@@ -183,12 +189,8 @@ export default function UserProfilePage() {
     onClose: bindTELOnClose,
   } = useDisclosure();
 
-  const [sendSMSText, setSendSMSText] = useState("获取验证码");
-  const [disableSendSMS, setDisableSendSMS] = useState(false);
-  const [inputTelCode, setInputTelCode] = useState("");
-
   const sendSMS = async (tel: string) => {
-    if (!isInteger(tel)) {
+    if (!validateTel(tel)) {
       openToast({ content: `请正确填写手机号` });
       return;
     }
@@ -204,8 +206,7 @@ export default function UserProfilePage() {
           const data = await resp.json();
           if (data.code === 0) {
             openToast({ content: data.msg });
-            setDisableSendSMS(true);
-            setSendSMSText("验证码已送");
+            setSendVerifyButtonText("验证码已发");
           } else {
             openToast({ content: data.msg });
           }
@@ -218,8 +219,8 @@ export default function UserProfilePage() {
 
   const handleBindTEL = async () => {
     const req_data = {
-      tel: inputNum,
-      tel_verify_code: inputTelCode,
+      tel: inputAccount,
+      verify_code: inputVerifyCode,
       uuid: uuid,
       captcha_code: inputCaptcha,
     };
@@ -236,6 +237,72 @@ export default function UserProfilePage() {
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "绑定新手机成功" });
+        getUserInfo();
+        bindTELOnClose();
+      } else {
+        openToast({ content: data.msg });
+        setCaptchaImage(await fetchCaptcha());
+      }
+    } else {
+      openToast({ content: "服务异常，请联系服主处理" });
+    }
+  };
+
+  // 绑定邮箱相关
+  const {
+    isOpen: bindEmailIsOpen,
+    onOpen: bindEmailOnopen,
+    onClose: bindEmailOnClose,
+  } = useDisclosure();
+
+  const sendEmail = async (email: string) => {
+    if (!validateEmail(email)) {
+      openToast({ content: `请正确填写电子邮箱` });
+      return;
+    }
+
+    const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.code === 1) {
+        openToast({ content: "该电子邮箱已被注册" });
+      } else {
+        const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.code === 0) {
+            openToast({ content: data.msg });
+            setSendVerifyButtonText("验证码已发");
+          } else {
+            openToast({ content: data.msg });
+          }
+        }
+      }
+    } else {
+      openToast({ content: "服务异常，请联系服主处理" });
+    }
+  };
+
+  const handleBindEmail = async () => {
+    const req_data = {
+      tel: inputAccount,
+      verify_code: inputVerifyCode,
+      uuid: uuid,
+      captcha_code: inputCaptcha,
+    };
+    const resp = await fetch(`${apiUrl}/bindEmail`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+      body: JSON.stringify(req_data),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.code === 0) {
+        openToast({ content: "绑定新电子邮箱成功" });
         getUserInfo();
         bindTELOnClose();
       } else {
@@ -312,99 +379,6 @@ export default function UserProfilePage() {
 
   return (
     <Center>
-      <Modal isOpen={bindQQIsOpen} onClose={bindQQOnClose}>
-        <ModalOverlay />
-        <ModalContent bgColor="#274161" maxW="320px">
-          <ModalHeader textAlign="center">
-            {userInfo?.qq ? "改绑QQ" : "绑定QQ"}
-          </ModalHeader>
-
-          <ModalCloseButton />
-
-          <ModalBody>
-            <VStack spacing={2} align="stretch">
-              {isQQ ? (
-                <>
-                  <Text color="#ffd648" fontSize="16px">
-                    在QQ或微信中无法使用该功能
-                    <br />
-                    请到浏览器中打开网站再操作
-                    <br />
-                    如果误触发请联系群主处理，谢谢
-                  </Text>
-
-                  <Button size="sm" onClick={handleCopyLink}>
-                    {copyButtonText}
-                  </Button>
-
-                  {copyButtonText === "点我复制链接到浏览器打开" ? (
-                    ""
-                  ) : (
-                    <Text>
-                      如果复制失败就手动复制吧
-                      <br />
-                      {window.location.href}
-                    </Text>
-                  )}
-                </>
-              ) : (
-                <>
-                  <Box>
-                    <Flex>
-                      <Input
-                        type="number"
-                        value={inputNum}
-                        onChange={(e) => {
-                          setInputNum(e.target.value);
-                          setDisableVerifyQQ(false);
-                          setVerifyQQText("");
-                        }}
-                        placeholder="请输入QQ号"
-                      />
-
-                      <Button
-                        ml={1}
-                        px={6}
-                        fontSize="15px"
-                        isDisabled={disableVerifyQQ}
-                        onClick={() => {
-                          if (inputNum) {
-                            sendQQVerify(inputNum);
-                          }
-                        }}
-                      >
-                        验证QQ
-                      </Button>
-                    </Flex>
-                    <Text color="#ffd648">{verifyQQText}</Text>
-                  </Box>
-                  <Flex>
-                    <Input
-                      value={inputCaptcha}
-                      onChange={(e) => setInputCaptcha(e.target.value)}
-                      placeholder="请输入图片验证码"
-                    />
-
-                    <Image
-                      rounded={5}
-                      ml={1}
-                      onClick={async () => {
-                        setCaptchaImage(await fetchCaptcha());
-                        setInputCaptcha("");
-                      }}
-                      src={captchaImage}
-                      alt="验证码"
-                      cursor="pointer"
-                    />
-                  </Flex>
-                  <Button onClick={handleBindQQ}>提交</Button>
-                </>
-              )}
-            </VStack>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
       <Modal isOpen={bindTELIsOpen} onClose={bindTELOnClose}>
         <ModalOverlay />
         <ModalContent bgColor="#274161" maxW="320px">
@@ -416,87 +390,179 @@ export default function UserProfilePage() {
 
           <ModalBody>
             <VStack spacing={2} align="stretch">
-              {isQQ ? (
-                <>
-                  <Text color="#ffd648" fontSize="16px">
-                    在QQ或微信中无法使用该功能
-                    <br />
-                    请到浏览器中打开网站再操作
-                    <br />
-                    如果误触发请联系群主处理，谢谢
-                  </Text>
+              <Input
+                type="number"
+                value={inputAccount}
+                onChange={(e) => setInputAccount(e.target.value)}
+                placeholder="请输入手机号"
+              />
 
-                  <Button size="sm" onClick={handleCopyLink}>
-                    {copyButtonText}
-                  </Button>
+              <Flex>
+                <Input
+                  type="number"
+                  value={inputVerifyCode}
+                  onChange={(e) => setInputVerifyCode(e.target.value)}
+                  placeholder="请输入短信验证码"
+                />
 
-                  {copyButtonText === "点我复制链接到浏览器打开" ? (
-                    ""
-                  ) : (
-                    <Text>
-                      如果复制失败就手动复制吧
-                      <br />
-                      {window.location.href}
-                    </Text>
-                  )}
-                </>
-              ) : (
-                <>
-                  {" "}
+                <Button
+                  ml={1}
+                  px={6}
+                  fontSize="15px"
+                  onClick={() => {
+                    if (inputAccount) sendSMS(inputAccount);
+                  }}
+                >
+                  {sendVerifyButtonText}
+                </Button>
+              </Flex>
+
+              <Flex>
+                <Input
+                  value={inputCaptcha}
+                  onChange={(e) => setInputCaptcha(e.target.value)}
+                  placeholder="请输入图片验证码"
+                />
+
+                <Image
+                  rounded={5}
+                  ml={1}
+                  onClick={async () => {
+                    setCaptchaImage(await fetchCaptcha());
+                    setInputCaptcha("");
+                  }}
+                  src={captchaImage}
+                  alt="验证码"
+                  cursor="pointer"
+                />
+              </Flex>
+              <Button onClick={handleBindTEL}>提交</Button>
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={bindEmailIsOpen} onClose={bindEmailOnClose}>
+        <ModalOverlay />
+        <ModalContent bgColor="#274161" maxW="320px">
+          <ModalHeader textAlign="center">
+            {userInfo?.email ? "改绑电子邮箱" : "绑定电子邮箱"}
+          </ModalHeader>
+
+          <ModalCloseButton />
+
+          <ModalBody>
+            <VStack spacing={2} align="stretch">
+              <Input
+                type="text"
+                value={inputAccount}
+                onChange={(e) => setInputAccount(e.target.value)}
+                placeholder="请输入电子邮箱"
+              />
+              <Flex>
+                <Input
+                  type="number"
+                  value={inputVerifyCode}
+                  onChange={(e) => setInputVerifyCode(e.target.value)}
+                  placeholder="请输入邮件验证码"
+                />
+
+                <Button
+                  ml={1}
+                  px={6}
+                  fontSize="15px"
+                  onClick={() => {
+                    if (inputAccount) sendEmail(inputAccount);
+                  }}
+                >
+                  {sendVerifyButtonText}
+                </Button>
+              </Flex>
+              <Flex>
+                <Input
+                  value={inputCaptcha}
+                  onChange={(e) => setInputCaptcha(e.target.value)}
+                  placeholder="请输入图片验证码"
+                />
+
+                <Image
+                  rounded={5}
+                  ml={1}
+                  onClick={async () => {
+                    setCaptchaImage(await fetchCaptcha());
+                    setInputCaptcha("");
+                  }}
+                  src={captchaImage}
+                  alt="验证码"
+                  cursor="pointer"
+                />
+              </Flex>
+              <Button onClick={handleBindTEL}>提交</Button>
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={bindQQIsOpen} onClose={bindQQOnClose}>
+        <ModalOverlay />
+        <ModalContent bgColor="#274161" maxW="320px">
+          <ModalHeader textAlign="center">
+            {userInfo?.qq ? "改绑QQ" : "绑定QQ"}
+          </ModalHeader>
+
+          <ModalCloseButton />
+
+          <ModalBody>
+            <VStack spacing={2} align="stretch">
+              <Box>
+                <Flex>
                   <Input
                     type="number"
-                    value={inputNum}
-                    onChange={(e) => setInputNum(e.target.value)}
-                    placeholder="请输入手机号"
+                    value={inputAccount}
+                    onChange={(e) => {
+                      setInputAccount(e.target.value);
+                      setDisableVerifyQQ(false);
+                      setVerifyQQText("");
+                    }}
+                    placeholder="请输入QQ号"
                   />
-                  <Flex>
-                    <Input
-                      type="number"
-                      value={inputTelCode}
-                      onChange={(e) => setInputTelCode(e.target.value)}
-                      placeholder="请输入短信验证码"
-                    />
 
-                    <Button
-                      ml={1}
-                      px={6}
-                      fontSize="15px"
-                      isDisabled={disableSendSMS}
-                      onClick={() => {
-                        if (inputNum) {
-                          if (validateTel(inputNum)) {
-                            sendSMS(inputNum);
-                          } else {
-                            openToast({ content: "请正确输入手机号" });
-                          }
-                        }
-                      }}
-                    >
-                      {sendSMSText}
-                    </Button>
-                  </Flex>
-                  <Flex>
-                    <Input
-                      value={inputCaptcha}
-                      onChange={(e) => setInputCaptcha(e.target.value)}
-                      placeholder="请输入图片验证码"
-                    />
+                  <Button
+                    ml={1}
+                    px={6}
+                    fontSize="15px"
+                    isDisabled={disableVerifyQQ}
+                    onClick={() => {
+                      if (inputAccount) {
+                        sendQQVerify(inputAccount);
+                      }
+                    }}
+                  >
+                    验证QQ
+                  </Button>
+                </Flex>
+                <Text color="#ffd648">{verifyQQText}</Text>
+              </Box>
+              <Flex>
+                <Input
+                  value={inputCaptcha}
+                  onChange={(e) => setInputCaptcha(e.target.value)}
+                  placeholder="请输入图片验证码"
+                />
 
-                    <Image
-                      rounded={5}
-                      ml={1}
-                      onClick={async () => {
-                        setCaptchaImage(await fetchCaptcha());
-                        setInputCaptcha("");
-                      }}
-                      src={captchaImage}
-                      alt="验证码"
-                      cursor="pointer"
-                    />
-                  </Flex>
-                  <Button onClick={handleBindTEL}>提交</Button>
-                </>
-              )}
+                <Image
+                  rounded={5}
+                  ml={1}
+                  onClick={async () => {
+                    setCaptchaImage(await fetchCaptcha());
+                    setInputCaptcha("");
+                  }}
+                  src={captchaImage}
+                  alt="验证码"
+                  cursor="pointer"
+                />
+              </Flex>
+              <Button onClick={handleBindQQ}>提交</Button>
             </VStack>
           </ModalBody>
         </ModalContent>
@@ -621,35 +687,6 @@ export default function UserProfilePage() {
 
             <Flex>
               <Text w="50px" textAlign="right">
-                QQ:
-              </Text>
-              <Flex ml={5}>
-                {userInfo.qq}
-
-                <Button
-                  ml={1}
-                  color="#7dfffe"
-                  fontWeight="normal"
-                  variant="link"
-                  bgColor="transparent"
-                  onClick={async () => {
-                    setCaptchaImage(await fetchCaptcha());
-                    bindQQOnOpen();
-                    setInputNum("");
-                    setInputCaptcha("");
-                    setDisableVerifyQQ(false);
-                    setVerifyQQText("");
-                  }}
-                >
-                  {userInfo.qq ? "换绑" : "点击绑定（非必要）"}
-                </Button>
-              </Flex>
-            </Flex>
-
-            <Divider />
-
-            <Flex>
-              <Text w="50px" textAlign="right">
                 手机:
               </Text>
               <Flex ml={5}>
@@ -664,14 +701,71 @@ export default function UserProfilePage() {
                   onClick={async () => {
                     setCaptchaImage(await fetchCaptcha());
                     bindTELOnopen();
-                    setInputNum("");
+                    setInputAccount("");
+                    setInputVerifyCode("");
                     setInputCaptcha("");
-                    setSendSMSText("获取验证码");
-                    setDisableSendSMS(false);
-                    setInputTelCode("");
+                    setSendVerifyButtonText("获取验证码");
                   }}
                 >
                   {userInfo.tel ? "换绑" : "点击绑定（非必要）"}
+                </Button>
+              </Flex>
+            </Flex>
+
+            <Divider />
+
+            <Flex>
+              <Text w="50px" textAlign="right">
+                邮箱:
+              </Text>
+              <Flex ml={5}>
+                {userInfo.email}
+
+                <Button
+                  ml={1}
+                  color="#7dfffe"
+                  fontWeight="normal"
+                  variant="link"
+                  bgColor="transparent"
+                  onClick={async () => {
+                    setCaptchaImage(await fetchCaptcha());
+                    bindEmailOnopen();
+                    setInputAccount("");
+                    setInputVerifyCode("");
+                    setInputCaptcha("");
+                    setSendVerifyButtonText("获取验证码");
+                  }}
+                >
+                  {userInfo.email ? "换绑" : "点击绑定（非必要）"}
+                </Button>
+              </Flex>
+            </Flex>
+
+            <Divider />
+
+            <Flex>
+              <Text w="50px" textAlign="right">
+                QQ:
+              </Text>
+              <Flex ml={5}>
+                {userInfo.qq}
+
+                <Button
+                  ml={1}
+                  color="#7dfffe"
+                  fontWeight="normal"
+                  variant="link"
+                  bgColor="transparent"
+                  onClick={async () => {
+                    setCaptchaImage(await fetchCaptcha());
+                    bindQQOnOpen();
+                    setInputAccount("");
+                    setVerifyQQText("");
+                    setInputCaptcha("");
+                    setDisableVerifyQQ(false);
+                  }}
+                >
+                  {userInfo.qq ? "换绑" : "点击绑定（非必要）"}
                 </Button>
               </Flex>
             </Flex>
@@ -732,7 +826,7 @@ export default function UserProfilePage() {
                     router.push("/tutorial");
                   }}
                 >
-                  联机教程
+                  连接喵服教程
                 </Button>
               </VStack>
             ) : (
@@ -757,7 +851,13 @@ export default function UserProfilePage() {
                 variant="link"
                 bgColor="transparent"
                 color="#7dfffe"
-                onClick={() => changePassOnopen()}
+                onClick={() => {
+                  setInputPassword0("");
+                  setInputPassword("");
+                  setInputPassword2("");
+                  setPasswordAlertText("");
+                  changePassOnopen();
+                }}
               >
                 修改密码
               </Button>

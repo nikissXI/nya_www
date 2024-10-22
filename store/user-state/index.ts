@@ -16,8 +16,9 @@ interface WGData {
 export interface UserInfo {
   uid: number;
   username: string;
-  qq: string;
   tel: string;
+  email: string;
+  qq: string;
   wg_data: WGData;
 }
 

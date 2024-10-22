@@ -31,3 +31,8 @@ export function isInteger(value: string): boolean {
   const regex = /^[0-9]+$/; // 仅允许 0 到 9 的数字
   return regex.test(value);
 }
+
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};

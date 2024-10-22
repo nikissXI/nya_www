@@ -21,15 +21,15 @@ import {
   getHash,
   validatePassword,
   validateTel,
-  isInteger,
+  validateEmail,
 } from "@/utils/strings";
 import { useRouter } from "next/navigation";
 import { setAuthToken } from "@/store/authKey";
 
 interface RegisterReqBody {
-  verifyType: string; // 注册类型：qq或tel
-  num: number; // 手机或QQ
-  tel_verify_code: string; // 手机验证码
+  verifyType: string; // 注册类型：tel或email
+  account: string; // 手机或邮箱
+  verify_code: string; // 手机验证码
   username: string; // 登陆用户名
   password: string; // 登陆密码sha256
   uuid: string; // 表单uuid
@@ -46,52 +46,51 @@ export default function Page() {
   const { fetchCaptcha } = useCaptcha();
   const [captchaImage, setCaptchaImage] = useState("");
 
-  const [sendSMSText, setSendSMSText] = useState("获取验证码");
-  const [disableSendSMS, setDisableSendSMS] = useState(false);
+  const [sendVerifyButtonText, setSendVerifyButtonText] = useState("获取验证码");
 
-  const [verifyQQText, setVerifyQQText] = useState("");
-  const [disableVerifyQQ, setDisableVerifyQQ] = useState(false);
+  // const [verifyQQText, setVerifyQQText] = useState("");
+  // const [disableVerifyQQ, setDisableVerifyQQ] = useState(false);
 
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   // 填写的表单数据
   const [verifyType, setVerifyType] = useState("tel");
-  const [inputNum, setInputNum] = useState("");
-  const [inputTelCode, setInputTelCode] = useState("");
+  const [inputAccount, setInputAccount] = useState("");
+  const [inputVerifyCode, setInputVerifyCode] = useState("");
   const [inputUsername, setInputUsername] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputPassword2, setInputPassword2] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
 
-  // 检测是否在QQ内打开
-  const [copyButtonText, setCopyButtonText] =
-    useState("点击复制网页链接到剪切板");
-  const [isQQ, setIsQQ] = useState(false);
+  // // 检测是否在QQ内打开
+  // const [copyButtonText, setCopyButtonText] =
+  //   useState("点击复制网页链接到剪切板");
+  // const [isQQ, setIsQQ] = useState(false);
 
-  useEffect(() => {
-    if (logined) {
-      router.push("/me");
-    } else {
-      const userAgent = navigator.userAgent;
-      if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
-        setIsQQ(true);
-      }
-    }
-  }, [logined, router]);
+  // useEffect(() => {
+  //   if (logined) {
+  //     router.push("/me");
+  //   } else {
+  //     const userAgent = navigator.userAgent;
+  //     if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
+  //       setIsQQ(true);
+  //     }
+  //   }
+  // }, [logined, router]);
 
-  const handleCopyLink = async () => {
-    try {
-      if (navigator.clipboard && navigator.permissions) {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopyButtonText("链接已复制到剪切板");
-      } else {
-        throw new Error("不支持自动复制");
-      }
-    } catch (err) {
-      openToast({ content: String(err) });
-      setCopyButtonText("复制链接失败，请自行复制");
-    }
-  };
+  // const handleCopyLink = async () => {
+  //   try {
+  //     if (navigator.clipboard && navigator.permissions) {
+  //       await navigator.clipboard.writeText(window.location.href);
+  //       setCopyButtonText("链接已复制到剪切板");
+  //     } else {
+  //       throw new Error("不支持自动复制");
+  //     }
+  //   } catch (err) {
+  //     openToast({ content: String(err) });
+  //     setCopyButtonText("复制链接失败，请自行复制");
+  //   }
+  // };
 
   useEffect(() => {
     const loadCaptcha = async () => {
@@ -126,12 +125,12 @@ export default function Page() {
 
     if (
       !(
-        inputNum &&
+        inputAccount &&
+        inputVerifyCode &&
         inputUsername &&
         inputPassword &&
         inputPassword2 &&
-        inputCaptcha &&
-        ((verifyType === "tel" && inputTelCode) || verifyType === "qq")
+        inputCaptcha
       )
     ) {
       openToast({ content: "请完成资料填写" });
@@ -140,13 +139,14 @@ export default function Page() {
 
     const req_data: RegisterReqBody = {
       verifyType: verifyType,
-      num: Number(inputNum),
-      tel_verify_code: inputTelCode,
+      account: inputAccount,
+      verify_code: inputVerifyCode,
       username: inputUsername,
       password: getHash(inputPassword),
       uuid: uuid,
       captcha_code: inputCaptcha.toLowerCase(),
     };
+
     const resp = await fetch(`${apiUrl}/register`, {
       method: "POST",
       headers: {
@@ -173,7 +173,7 @@ export default function Page() {
   };
 
   const sendSMS = async (tel: string) => {
-    if (!isInteger(tel)) {
+    if (!validateTel(tel)) {
       openToast({ content: `请正确填写手机号` });
       return;
     }
@@ -189,8 +189,7 @@ export default function Page() {
           const data = await resp.json();
           if (data.code === 0) {
             openToast({ content: data.msg });
-            setDisableSendSMS(true);
-            setSendSMSText("验证码已送");
+            setSendVerifyButtonText("验证码已发");
           } else {
             openToast({ content: data.msg });
           }
@@ -201,61 +200,89 @@ export default function Page() {
     }
   };
 
-  const sendQQVerify = async (qq: string) => {
-    if (!isInteger(qq)) {
-      openToast({ content: `请正确填写QQ号` });
+  const sendEmail = async (email: string) => {
+    if (!validateEmail(email)) {
+      openToast({ content: `请正确填写电子邮箱` });
       return;
     }
 
-    const resp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
+    const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 1) {
-        setVerifyQQText("该QQ号已被注册");
+        openToast({ content: "该电子邮箱已被注册" });
       } else {
-        const resp = await fetch(`${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}`);
+        const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
-            setVerifyQQText(data.msg);
-            setDisableVerifyQQ(true);
+            openToast({ content: data.msg });
+            setSendVerifyButtonText("验证码已发");
           } else {
-            setVerifyQQText(data.msg);
+            openToast({ content: data.msg });
           }
         }
       }
     } else {
-      setVerifyQQText("服务异常，请联系服主处理");
+      openToast({ content: "服务异常，请联系服主处理" });
     }
   };
 
-  if (isQQ) {
-    return (
-      <VStack spacing={3} align="center">
-        <Text color="#ffd648" fontSize="16px">
-          在QQ或微信中无法使用该功能
-          <br />
-          请到浏览器中打开网站再操作
-          <br />
-          如果误触发请联系群主处理，谢谢
-        </Text>
+  // const sendQQVerify = async (qq: string) => {
+  //   if (!isInteger(qq)) {
+  //     openToast({ content: `请正确填写QQ号` });
+  //     return;
+  //   }
 
-        <Button size="sm" onClick={handleCopyLink}>
-          {copyButtonText}
-        </Button>
+  //   const resp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
+  //   if (resp.ok) {
+  //     const data = await resp.json();
+  //     if (data.code === 1) {
+  //       setVerifyQQText("该QQ号已被注册");
+  //     } else {
+  //       const resp = await fetch(`${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}`);
+  //       if (resp.ok) {
+  //         const data = await resp.json();
+  //         if (data.code === 0) {
+  //           setVerifyQQText(data.msg);
+  //           setDisableVerifyQQ(true);
+  //         } else {
+  //           setVerifyQQText(data.msg);
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     setVerifyQQText("服务异常，请联系服主处理");
+  //   }
+  // };
 
-        {copyButtonText === "点我复制链接到浏览器打开" ? (
-          ""
-        ) : (
-          <Text>
-            如果复制失败就手动复制吧
-            <br />
-            {window.location.href}
-          </Text>
-        )}
-      </VStack>
-    );
-  }
+  // if (isQQ) {
+  //   return (
+  //     <VStack spacing={3} align="center">
+  //       <Text color="#ffd648" fontSize="16px">
+  //         在QQ或微信中无法使用该功能
+  //         <br />
+  //         请到浏览器中打开网站再操作
+  //         <br />
+  //         如果误触发请联系群主处理，谢谢
+  //       </Text>
+
+  //       <Button size="sm" onClick={handleCopyLink}>
+  //         {copyButtonText}
+  //       </Button>
+
+  //       {copyButtonText === "点我复制链接到浏览器打开" ? (
+  //         ""
+  //       ) : (
+  //         <Text>
+  //           如果复制失败就手动复制吧
+  //           <br />
+  //           {window.location.href}
+  //         </Text>
+  //       )}
+  //     </VStack>
+  //   );
+  // }
 
   return (
     <Center>
@@ -266,97 +293,87 @@ export default function Page() {
         maxW="300px"
         onKeyDown={handleEnter}
       >
-        {verifyType !== "tel" && (
-          <Text color="#ffd648" fontSize="16px">
-            提示：只是用Q号做账号，跟登陆QQ的账密无关
-          </Text>
-        )}
-
         <Flex>
           注册方式
           <RadioGroup
-            ml={5}
+            ml={3}
             defaultValue="tel"
             onChange={(value) => {
-              setInputNum("");
+              setInputAccount("");
+              setSendVerifyButtonText("获取验证码");
               setVerifyType(value);
             }}
           >
-            <Stack spacing={4} direction="row">
+            <Stack spacing={3} direction="row">
               <Radio value="tel">手机</Radio>
-              <Radio value="qq">QQ</Radio>
+              <Radio value="email">电子邮箱</Radio>
             </Stack>
           </RadioGroup>
         </Flex>
 
-        {verifyType === "tel" ? (
-          <>
-            <Input
-              type="number"
-              value={inputNum}
-              onChange={(e) => setInputNum(e.target.value)}
-              placeholder="请输入手机号"
-            />
+        <Input
+          type="text"
+          value={inputAccount}
+          onChange={(e) => setInputAccount(e.target.value)}
+          placeholder={verifyType === "tel" ? "请输入手机号" : "请输入电子邮箱"}
+        />
 
-            <Flex>
-              <Input
-                type="number"
-                value={inputTelCode}
-                onChange={(e) => setInputTelCode(e.target.value)}
-                placeholder="请输入短信验证码"
-              />
+        <Flex>
+          <Input
+            type="number"
+            value={inputVerifyCode}
+            onChange={(e) => setInputVerifyCode(e.target.value)}
+            placeholder="请输入验证码"
+          />
 
-              <Button
-                ml={1}
-                px={6}
-                fontSize="15px"
-                isDisabled={disableSendSMS}
-                onClick={() => {
-                  if (inputNum) {
-                    if (validateTel(inputNum)) {
-                      sendSMS(inputNum);
-                    } else {
-                      openToast({ content: "请正确输入手机号" });
-                    }
-                  }
-                }}
-              >
-                {sendSMSText}
-              </Button>
-            </Flex>
-          </>
-        ) : (
-          <Box>
-            <Flex>
-              <Input
-                type="number"
-                value={inputNum}
-                onChange={(e) => {
-                  setInputNum(e.target.value);
-                  setDisableVerifyQQ(false);
-                  setVerifyQQText("");
-                }}
-                placeholder="请输入QQ号"
-              />
+          <Button
+            ml={1}
+            px={6}
+            fontSize="15px"
+            onClick={() => {
+              if (!inputAccount) return;
 
-              <Button
-                ml={1}
-                px={6}
-                fontSize="15px"
-                isDisabled={disableVerifyQQ}
-                onClick={() => {
-                  if (inputNum) {
-                    sendQQVerify(inputNum);
-                  }
-                }}
-              >
-                验证QQ
-              </Button>
-            </Flex>
+              if (verifyType === "tel") sendSMS(inputAccount);
+              else sendEmail(inputAccount);
+            }}
+          >
+            {sendVerifyButtonText}
+          </Button>
+        </Flex>
 
-            <Text color="#ffd648">{verifyQQText}</Text>
-          </Box>
-        )}
+        {/* {verifyType === "tel" ? ( 
+        // ) : (
+        //   <Box>
+        //     <Flex>
+        //       <Input
+        //         type="number"
+        //         value={inputAccount}
+        //         onChange={(e) => {
+        //           setInputAccount(e.target.value);
+        //           setDisableVerifyQQ(false);
+        //           setVerifyQQText("");
+        //         }}
+        //         placeholder="请输入QQ号"
+        //       />
+
+        //       <Button
+        //         ml={1}
+        //         px={6}
+        //         fontSize="15px"
+        //         isDisabled={disableVerifyQQ}
+        //         onClick={() => {
+        //           if (inputAccount) {
+        //             sendQQVerify(inputAccount);
+        //           }
+        //         }}
+        //       >
+        //         验证QQ
+        //       </Button>
+        //     </Flex>
+
+        //     <Text color="#ffd648">{verifyQQText}</Text>
+        //   </Box>
+        // )} */}
 
         <Box>
           <Input
