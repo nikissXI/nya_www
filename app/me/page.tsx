@@ -388,7 +388,7 @@ export default function UserProfilePage() {
 
           <ModalCloseButton />
 
-          <ModalBody>
+          <ModalBody onKeyDown={handleBindTEL}>
             <VStack spacing={2} align="stretch">
               <Input
                 type="number"
@@ -451,7 +451,7 @@ export default function UserProfilePage() {
 
           <ModalCloseButton />
 
-          <ModalBody>
+          <ModalBody onKeyDown={handleBindEmail}>
             <VStack spacing={2} align="stretch">
               <Input
                 type="text"
@@ -512,7 +512,7 @@ export default function UserProfilePage() {
 
           <ModalCloseButton />
 
-          <ModalBody>
+          <ModalBody onKeyDown={handleBindQQ}>
             <VStack spacing={2} align="stretch">
               <Box>
                 <Flex>
