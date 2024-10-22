@@ -182,6 +182,12 @@ export default function UserProfilePage() {
     }
   };
 
+  const handleBindQQEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleBindQQ();
+    }
+  };
+
   // 绑定手机相关
   const {
     isOpen: bindTELIsOpen,
@@ -248,6 +254,12 @@ export default function UserProfilePage() {
     }
   };
 
+  const handleBindTELEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleBindTEL();
+    }
+  };
+
   // 绑定邮箱相关
   const {
     isOpen: bindEmailIsOpen,
@@ -311,6 +323,12 @@ export default function UserProfilePage() {
       }
     } else {
       openToast({ content: "服务异常，请联系服主处理" });
+    }
+  };
+
+  const handleBindEmailEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleBindEmail();
     }
   };
 
@@ -388,7 +406,7 @@ export default function UserProfilePage() {
 
           <ModalCloseButton />
 
-          <ModalBody onKeyDown={handleBindTEL}>
+          <ModalBody onKeyDown={handleBindTELEnter}>
             <VStack spacing={2} align="stretch">
               <Input
                 type="number"
@@ -451,7 +469,7 @@ export default function UserProfilePage() {
 
           <ModalCloseButton />
 
-          <ModalBody onKeyDown={handleBindEmail}>
+          <ModalBody onKeyDown={handleBindEmailEnter}>
             <VStack spacing={2} align="stretch">
               <Input
                 type="text"
@@ -512,7 +530,7 @@ export default function UserProfilePage() {
 
           <ModalCloseButton />
 
-          <ModalBody onKeyDown={handleBindQQ}>
+          <ModalBody onKeyDown={handleBindQQEnter}>
             <VStack spacing={2} align="stretch">
               <Box>
                 <Flex>

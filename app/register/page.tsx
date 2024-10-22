@@ -111,7 +111,7 @@ export default function Page() {
     setPasswordAlertText("");
   };
 
-  const handleEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleRegisterEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
       handleRegister();
     }
@@ -291,7 +291,7 @@ export default function Page() {
         spacing={3}
         align="stretch"
         maxW="300px"
-        onKeyDown={handleEnter}
+        onKeyDown={handleRegisterEnter}
       >
         <Flex>
           注册方式
