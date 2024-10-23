@@ -559,11 +559,11 @@ export default function Page() {
               bg="transparent"
               onClick={addOnopen}
               isDisabled={
-                roomInfo && roomInfo.members.length < 5 ? false : true
+                roomInfo && roomInfo.members.length < 16 ? false : true
               }
             >
               <Text mr={3}>
-                {roomInfo && roomInfo.members.length < 5
+                {roomInfo && roomInfo.members.length < 16
                   ? "添加成员"
                   : "房间已满"}
               </Text>
