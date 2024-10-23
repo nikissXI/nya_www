@@ -24,6 +24,7 @@ export function Header({ path }: { path: string }) {
       otherworldLegends: "战魂铭人",
       minecraft: "我的世界",
       terraria: "泰拉瑞亚",
+      l4d2: "求生之路2",
     };
 
     const titles: { [key: string]: string } = {
