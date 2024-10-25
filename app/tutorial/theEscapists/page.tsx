@@ -4,7 +4,7 @@ import {
   Heading,
   VStack,
   Text,
-  Box,
+  Divider,
   Input,
   Flex,
   Center,
@@ -89,9 +89,9 @@ export default function AndroidPage0() {
           如果出现搜索不到的情况请联系群主处理，因为我只拿了个别版本测试。
         </Text>
 
-        <Heading size="md" mt={2}>
-          方式一（网页操作）
-        </Heading>
+        <Divider my={5} />
+
+        <Heading size="md">方式一（网页操作）</Heading>
         <Text>
           在下方填写要加入的编号（不是喵服联机房间的房主编号，别搞混了），如要搜索2号创建的多人游戏，就填“2”然后点提交
         </Text>
@@ -126,15 +126,17 @@ export default function AndroidPage0() {
 
         <Text color="#ffd648">{showText}</Text>
 
-        <Heading size="md" mt={2}>
-          方式二（QQ群操作）
-        </Heading>
+        <Divider my={5} />
+
+        <Heading size="md">方式二（QQ群操作）</Heading>
         <Text>
           加入QQ群961793250，在群里发命令“搜索”，如要搜索2号创建的多人游戏，就发“搜索2”，机器人会给对应提示
         </Text>
 
+        <Divider my={5} />
+
         <Button
-          my={5}
+          mb={5}
           bgColor="#b23333"
           onClick={() => {
             router.push(`/room`);

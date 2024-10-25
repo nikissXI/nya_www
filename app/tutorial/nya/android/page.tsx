@@ -147,25 +147,19 @@ export default function Page() {
 
         <Divider my={5} />
 
+        <Heading size="md" mb={3}>
+          小米（红米）手机或平板必看
+        </Heading>
+
         <VStack spacing={0}>
           <Button
-            w="160px"
-            h="40px"
             mb={1}
             size="sm"
             bgColor="#d46500"
             fontSize="16px"
             onClick={() => setShowXM(!showXM)}
           >
-            {showXM ? (
-              "点击收起"
-            ) : (
-              <Text fontSize="sm">
-                如果是小米/红米用户
-                <br />
-                请点我，不是请忽略
-              </Text>
-            )}
+            {showXM ? "点击收起" : "点击查看"}
           </Button>
 
           <Box
@@ -176,10 +170,10 @@ export default function Page() {
             borderRadius="md" // 边框圆角
           >
             <Collapse in={showXM}>
-              <Text fontSize="sm">
-                MIUI的加速会拦截VPN流量，具体现象就是不进游戏没事，一进游戏就掉线
+              <Text>
+                游戏加速的“网络优化”会导致无法联机，即使已经显示已连接
                 <br />
-                具体操作：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
+                关闭方法：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
                 <br />
                 如下图（系统版本不同可能不一样，脑子灵活点）
               </Text>
