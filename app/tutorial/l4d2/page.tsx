@@ -27,14 +27,13 @@ export default function Page() {
 
         <Divider my={5} />
 
-        <Text my={3}>服务器类型选“本地服务器”，邀请Steam好友加入就行</Text>
+        <Text my={3}>服务器类型选“本地服务器”，然后直接开始游戏</Text>
         <Image src="/images/l4d2_3.jpg" alt="l4d2_3" />
 
         <Divider my={5} />
 
         <Text my={3}>
-          如果没加Steam好友，创建游戏的玩家大厅权限设置为“公共”，加入的玩家按波浪键“~”调出控制台，使用命令“connect
-          房主IP”即可加入
+          加入的玩家按波浪键“~”调出控制台，使用命令“connect 房主IP”即可加入
         </Text>
 
         <Button
