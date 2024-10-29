@@ -36,7 +36,7 @@ export default function Page() {
 
         <Divider my={5} />
 
-        <Text my={3}>选“创建新战役大厅”，如果其他好友创建了这里能搜到</Text>
+        <Text my={3}>选“创建新战役大厅”</Text>
         <Image src="/images/l4d2_2.jpg" alt="l4d2_2" />
 
         <Divider my={5} />
