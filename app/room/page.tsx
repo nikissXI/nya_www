@@ -20,13 +20,13 @@ import {
   Table,
   Thead,
   Flex,
-  keyframes,
   Tbody,
   Tr,
   Th,
   Td,
   TableContainer,
 } from "@chakra-ui/react";
+import { keyframes } from '@emotion/react';
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
 import { FiDelete } from "react-icons/fi";
