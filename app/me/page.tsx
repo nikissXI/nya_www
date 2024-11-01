@@ -777,7 +777,7 @@ export default function UserProfilePage() {
                 QQ:
               </Text>
               <Flex ml={3}>
-                {userInfo.qq === "0" ? "" : userInfo.qq}
+                {userInfo.qq}
 
                 <Button
                   ml={1}
