@@ -606,7 +606,7 @@ export default function Page() {
 
           {status === "hoster" && (
             <Button
-              px={2}
+              px={0}
               bg="transparent"
               onClick={addOnopen}
               isDisabled={
