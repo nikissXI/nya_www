@@ -573,6 +573,17 @@ export default function Page() {
           onOpen={addOnopen}
         />
         <HStack justify="center">
+          <Text fontWeight="bold">任意加入</Text>
+          <Switch
+            size="md"
+            colorScheme="green"
+            isChecked={roomInfo?.public_room ? true : false}
+            isDisabled={status !== "hoster"}
+            onChange={() => {
+              publicRoomSwitch(roomInfo?.public_room ? 0 : 1);
+            }}
+          />
+
           <Button
             px={2}
             bg="transparent"
@@ -593,28 +604,17 @@ export default function Page() {
             <IoReloadCircle size={30} color="#35c535" />
           </Button>
 
-          <Text fontWeight="bold">任意加入</Text>
-          <Switch
-            size="md"
-            colorScheme="green"
-            isChecked={roomInfo?.public_room ? true : false}
-            isDisabled={status !== "hoster"}
-            onChange={() => {
-              publicRoomSwitch(roomInfo?.public_room ? 0 : 1);
-            }}
-          />
-
           {status === "hoster" && (
             <Button
               px={2}
               bg="transparent"
               onClick={addOnopen}
               isDisabled={
-                roomInfo && roomInfo.members.length < 16 ? false : true
+                roomInfo && roomInfo.members.length < 8 ? false : true
               }
             >
               <Text mr={1}>
-                {roomInfo && roomInfo.members.length < 16
+                {roomInfo && roomInfo.members.length < 8
                   ? "添加成员"
                   : "房间已满"}
               </Text>
