@@ -44,14 +44,14 @@ export function LoginModal() {
       return state.modifyLoginDisclosure;
     }
   );
-  const { logging, logined, userInfo, uuid, getUserInfo } = useUserStateStore();
+  const { logging, logined, uuid, getUserInfo } = useUserStateStore();
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();
   const [captchaImage, setCaptchaImage] = useState("");
 
   // 填写的表单数据
-  const [verifyType, setVerifyType] = useState("tel");
+  const [verifyType, setVerifyType] = useState("email");
   const [inputAccount, setInputAccount] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
@@ -153,20 +153,20 @@ export function LoginModal() {
 
         <ModalBody py={0}>
           <VStack spacing={2} align="stretch" onKeyDown={handleEnter}>
-            {verifyType !== "tel" && (
+            {/* {verifyType !== "tel" && (
               <Text color="#ffd648" fontSize="16px">
                 提示：以前的QQ验证改为QQ邮箱
                 <br />
                 填写格式“QQ号@qq.com”
               </Text>
-            )}
+            )} */}
 
             <Flex>
               <Text ml={3}>登陆方式</Text>
 
               <RadioGroup
                 ml={3}
-                defaultValue="tel"
+                value={verifyType}
                 onChange={(value) => {
                   setInputAccount("");
                   setVerifyType(value);
@@ -174,8 +174,8 @@ export function LoginModal() {
                 }}
               >
                 <Stack spacing={3} direction="row">
-                  <Radio value="tel">手机</Radio>
                   <Radio value="email">电子邮箱</Radio>
+                  <Radio value="tel">手机</Radio>
                 </Stack>
               </RadioGroup>
             </Flex>
@@ -256,7 +256,7 @@ export function LoginModal() {
                   setCaptchaImage(await fetchCaptcha());
                   setInputCaptcha("");
                 }}
-                src={captchaImage}
+                src={captchaImage ? captchaImage : undefined}
                 alt="验证码"
                 cursor="pointer"
               />

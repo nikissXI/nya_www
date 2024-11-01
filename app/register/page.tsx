@@ -46,7 +46,8 @@ export default function Page() {
   const { fetchCaptcha } = useCaptcha();
   const [captchaImage, setCaptchaImage] = useState("");
 
-  const [sendVerifyButtonText, setSendVerifyButtonText] = useState("获取验证码");
+  const [sendVerifyButtonText, setSendVerifyButtonText] =
+    useState("获取验证码");
 
   // const [verifyQQText, setVerifyQQText] = useState("");
   // const [disableVerifyQQ, setDisableVerifyQQ] = useState(false);
@@ -54,7 +55,7 @@ export default function Page() {
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   // 填写的表单数据
-  const [verifyType, setVerifyType] = useState("tel");
+  const [verifyType, setVerifyType] = useState("email");
   const [inputAccount, setInputAccount] = useState("");
   const [inputVerifyCode, setInputVerifyCode] = useState("");
   const [inputUsername, setInputUsername] = useState("");
@@ -297,7 +298,7 @@ export default function Page() {
           注册方式
           <RadioGroup
             ml={3}
-            defaultValue="tel"
+            value={verifyType}
             onChange={(value) => {
               setInputAccount("");
               setSendVerifyButtonText("获取验证码");
@@ -305,8 +306,8 @@ export default function Page() {
             }}
           >
             <Stack spacing={3} direction="row">
-              <Radio value="tel">手机</Radio>
               <Radio value="email">电子邮箱</Radio>
+              <Radio value="tel">手机</Radio>
             </Stack>
           </RadioGroup>
         </Flex>
@@ -340,40 +341,6 @@ export default function Page() {
             {sendVerifyButtonText}
           </Button>
         </Flex>
-
-        {/* {verifyType === "tel" ? ( 
-        // ) : (
-        //   <Box>
-        //     <Flex>
-        //       <Input
-        //         type="number"
-        //         value={inputAccount}
-        //         onChange={(e) => {
-        //           setInputAccount(e.target.value);
-        //           setDisableVerifyQQ(false);
-        //           setVerifyQQText("");
-        //         }}
-        //         placeholder="请输入QQ号"
-        //       />
-
-        //       <Button
-        //         ml={1}
-        //         px={6}
-        //         fontSize="15px"
-        //         isDisabled={disableVerifyQQ}
-        //         onClick={() => {
-        //           if (inputAccount) {
-        //             sendQQVerify(inputAccount);
-        //           }
-        //         }}
-        //       >
-        //         验证QQ
-        //       </Button>
-        //     </Flex>
-
-        //     <Text color="#ffd648">{verifyQQText}</Text>
-        //   </Box>
-        // )} */}
 
         <Box>
           <Input
@@ -427,7 +394,7 @@ export default function Page() {
               setCaptchaImage(await fetchCaptcha());
               setInputCaptcha("");
             }}
-            src={captchaImage}
+            src={captchaImage ? captchaImage : undefined}
             alt="验证码"
             cursor="pointer"
           />

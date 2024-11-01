@@ -13,7 +13,7 @@ interface WGData {
   last_connect_timestamp: number;
 }
 
-export interface UserInfo {
+interface UserInfo {
   uid: number;
   username: string;
   tel: string;
@@ -22,7 +22,7 @@ export interface UserInfo {
   wg_data: WGData;
 }
 
-export interface ILoginStateSlice {
+interface ILoginStateSlice {
   uuid: string;
 
   logging: boolean;

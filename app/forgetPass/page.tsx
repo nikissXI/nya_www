@@ -45,7 +45,8 @@ export default function Page() {
   const { fetchCaptcha } = useCaptcha();
   const [captchaImage, setCaptchaImage] = useState("");
 
-  const [sendVerifyButtonText, setSendVerifyButtonText] = useState("获取验证码");
+  const [sendVerifyButtonText, setSendVerifyButtonText] =
+    useState("获取验证码");
   // const [disableSendSMS, setDisableSendSMS] = useState(false);
 
   // const [verifyQQText, setVerifyQQText] = useState("");
@@ -54,37 +55,12 @@ export default function Page() {
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   // 填写的表单数据
-  const [verifyType, setVerifyType] = useState("tel");
+  const [verifyType, setVerifyType] = useState("email");
   const [inputAccount, setInputAccount] = useState("");
   const [inputVerifyCode, setInputVerifyCode] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputPassword2, setInputPassword2] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
-
-  // // 检测是否在QQ内打开
-  // const [copyButtonText, setCopyButtonText] =
-  //   useState("点击复制网页链接到剪切板");
-  // const [isQQ, setIsQQ] = useState(false);
-  // useEffect(() => {
-  //   const userAgent = navigator.userAgent;
-  //   if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
-  //     setIsQQ(true);
-  //   }
-  // }, []);
-
-  // const handleCopyLink = async () => {
-  //   try {
-  //     if (navigator.clipboard && navigator.permissions) {
-  //       await navigator.clipboard.writeText(window.location.href);
-  //       setCopyButtonText("链接已复制到剪切板");
-  //     } else {
-  //       throw new Error("不支持自动复制");
-  //     }
-  //   } catch (err) {
-  //     openToast({ content: String(err) });
-  //     setCopyButtonText("复制链接失败，请自行复制");
-  //   }
-  // };
 
   useEffect(() => {
     const loadCaptcha = async () => {
@@ -211,62 +187,6 @@ export default function Page() {
     }
   };
 
-  // const sendQQVerify = async (qq: string) => {
-  //   if (!isInteger(qq)) {
-  //     openToast({ content: `请正确填写QQ号` });
-  //     return;
-  //   }
-
-  //   const resp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
-  //   if (resp.ok) {
-  //     const data = await resp.json();
-  //     if (data.code === 0) {
-  //       setVerifyQQText("该QQ号未被注册");
-  //     } else {
-  //       const resp = await fetch(`${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}`);
-  //       if (resp.ok) {
-  //         const data = await resp.json();
-  //         if (data.code === 0) {
-  //           setVerifyQQText(data.msg);
-  //           setDisableVerifyQQ(true);
-  //         } else {
-  //           setVerifyQQText(data.msg);
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     setVerifyQQText("服务异常，请联系服主处理");
-  //   }
-  // };
-
-  // if (isQQ) {
-  //   return (
-  //     <VStack spacing={3} align="center">
-  //       <Text color="#ffd648" fontSize="16px">
-  //         在QQ或微信中无法使用该功能
-  //         <br />
-  //         请到浏览器中打开网站再操作
-  //         <br />
-  //         如果误触发请联系群主处理，谢谢
-  //       </Text>
-
-  //       <Button size="sm" onClick={handleCopyLink}>
-  //         {copyButtonText}
-  //       </Button>
-
-  //       {copyButtonText === "点我复制链接到浏览器打开" ? (
-  //         ""
-  //       ) : (
-  //         <Text>
-  //           如果复制失败就手动复制吧
-  //           <br />
-  //           {window.location.href}
-  //         </Text>
-  //       )}
-  //     </VStack>
-  //   );
-  // }
-
   return (
     <Center>
       <VStack spacing={3} align="stretch" maxW="300px" onKeyDown={handleEnter}>
@@ -274,7 +194,7 @@ export default function Page() {
           重置方式
           <RadioGroup
             ml={3}
-            defaultValue="tel"
+            value={verifyType}
             onChange={(value) => {
               setInputAccount("");
               setSendVerifyButtonText("获取验证码");
@@ -282,8 +202,8 @@ export default function Page() {
             }}
           >
             <Stack spacing={3} direction="row">
-              <Radio value="tel">手机</Radio>
               <Radio value="email">电子邮箱</Radio>
+              <Radio value="tel">手机</Radio>
             </Stack>
           </RadioGroup>
         </Flex>
@@ -358,7 +278,7 @@ export default function Page() {
               setCaptchaImage(await fetchCaptcha());
               setInputCaptcha("");
             }}
-            src={captchaImage}
+            src={captchaImage ? captchaImage : undefined}
             alt="验证码"
             cursor="pointer"
           />

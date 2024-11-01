@@ -9,6 +9,7 @@ import {
   ModalOverlay,
   Heading,
   Center,
+  HStack,
   VStack,
   Collapse,
   ModalContent,
@@ -25,8 +26,9 @@ import {
   Th,
   Td,
   TableContainer,
+  Switch,
 } from "@chakra-ui/react";
-import { keyframes } from '@emotion/react';
+import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
 import { FiDelete } from "react-icons/fi";
@@ -64,6 +66,7 @@ interface RoomInfo {
   hoster_wgnum: number;
   hoster_ip: string;
   members: Member[];
+  public_room: number;
 }
 
 interface Response {
@@ -230,6 +233,41 @@ export default function Page() {
       }
     } catch (error) {
       setCheckText("请求发生错误，请刷新网页再试");
+    }
+  };
+
+  // 创建房间
+  const publicRoomSwitch = async (publicRoom: number) => {
+    try {
+      if (loading === true) {
+        throw new Error(`请不要点太快`);
+      }
+
+      setLoading(true);
+      const resp = await fetch(`${apiUrl}/publicRoom?public=${publicRoom}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      });
+      setLoading(false);
+      if (!resp.ok) {
+        throw new Error(`访问接口出错: ${resp.status}`);
+      }
+
+      const data = await resp.json();
+      if (data.code === 0) {
+        if (roomInfo)
+          setRoomData({
+            ...roomInfo,
+            public_room: publicRoom === 1 ? 1 : 0,
+          });
+        openToast({ content: data.msg });
+      } else {
+        openToast({ content: data.msg });
+      }
+    } catch (err) {
+      openToast({ content: String(err) });
     }
   };
 
@@ -534,8 +572,9 @@ export default function Page() {
           onDelete={handleDelMember}
           onOpen={addOnopen}
         />
-        <Box>
+        <HStack justify="center">
           <Button
+            px={2}
             bg="transparent"
             onClick={() => {
               if (disableGetRoom === true) {
@@ -550,27 +589,40 @@ export default function Page() {
               getRoomData();
             }}
           >
-            <Text mr={3}>刷新列表</Text>
+            <Text mr={1}>刷新</Text>
             <IoReloadCircle size={30} color="#35c535" />
           </Button>
 
+          <Text fontWeight="bold">任意加入</Text>
+          <Switch
+            size="md"
+            colorScheme="green"
+            isChecked={roomInfo?.public_room ? true : false}
+            isDisabled={status !== "hoster"}
+            onChange={() => {
+              publicRoomSwitch(roomInfo?.public_room ? 0 : 1);
+            }}
+          />
+
           {status === "hoster" && (
             <Button
+              px={2}
               bg="transparent"
               onClick={addOnopen}
               isDisabled={
                 roomInfo && roomInfo.members.length < 16 ? false : true
               }
             >
-              <Text mr={3}>
+              <Text mr={1}>
                 {roomInfo && roomInfo.members.length < 16
                   ? "添加成员"
                   : "房间已满"}
               </Text>
+
               <IoMdPersonAdd size={30} color="#35c535" />
             </Button>
           )}
-        </Box>
+        </HStack>
 
         <VStack alignItems="center">
           <Button
