@@ -2,8 +2,6 @@ import { produce } from "immer";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
-// import { openToast } from "@/components/universal/toast";
-// import { getHash } from "@/utils/strings";
 import { getAuthToken, clearAuthToken } from "../authKey";
 
 interface WGData {

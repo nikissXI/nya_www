@@ -47,31 +47,6 @@ export default function UserProfilePage() {
     return state.modifyGetWgnumDisclosure;
   });
 
-  // // 检测是否在QQ内打开
-  // const [copyButtonText, setCopyButtonText] =
-  //   useState("点击复制网页链接到剪切板");
-  // const [isQQ, setIsQQ] = useState(false);
-  // useEffect(() => {
-  //   const userAgent = navigator.userAgent;
-  //   if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
-  //     setIsQQ(true);
-  //   }
-  // }, []);
-
-  // const handleCopyLink = async () => {
-  //   try {
-  //     if (navigator.clipboard && navigator.permissions) {
-  //       await navigator.clipboard.writeText(window.location.href);
-  //       setCopyButtonText("链接已复制到剪切板");
-  //     } else {
-  //       throw new Error("不支持自动复制");
-  //     }
-  //   } catch (err) {
-  //     openToast({ content: String(err) });
-  //     setCopyButtonText("复制链接失败，请自行复制");
-  //   }
-  // };
-
   // 修改用户名
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
   const [hideModifyUsername, setHideModifyUsername] = useState(true);
@@ -92,13 +67,13 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "修改成功" });
+        openToast({ content: "修改成功", status: "success" });
         getUserInfo();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
@@ -127,7 +102,7 @@ export default function UserProfilePage() {
 
   const sendQQVerify = async (qq: string) => {
     if (!isInteger(qq)) {
-      openToast({ content: `请正确填写QQ号` });
+      openToast({ content: `请正确填写QQ号`, status: "warning" });
       return;
     }
 
@@ -171,15 +146,15 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "绑定新QQ成功" });
+        openToast({ content: "绑定新QQ成功", status: "success" });
         getUserInfo();
         bindQQOnClose();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
@@ -198,7 +173,7 @@ export default function UserProfilePage() {
 
   const sendSMS = async (tel: string) => {
     if (!validateTel(tel)) {
-      openToast({ content: `请正确填写手机号` });
+      openToast({ content: `请正确填写手机号`, status: "warning" });
       return;
     }
 
@@ -206,21 +181,21 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 1) {
-        openToast({ content: "该手机号已被注册" });
+        openToast({ content: "该手机号已被注册", status: "warning" });
       } else {
         const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "success" });
             setSendVerifyButtonText("验证码已发");
           } else {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "warning" });
           }
         }
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
@@ -243,15 +218,15 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "绑定新手机成功" });
+        openToast({ content: "绑定新手机成功", status: "success" });
         getUserInfo();
         bindTELOnClose();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
@@ -270,7 +245,7 @@ export default function UserProfilePage() {
 
   const sendEmail = async (email: string) => {
     if (!validateEmail(email)) {
-      openToast({ content: `请正确填写电子邮箱` });
+      openToast({ content: `请正确填写电子邮箱`, status: "warning" });
       return;
     }
 
@@ -278,21 +253,21 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 1) {
-        openToast({ content: "该电子邮箱已被注册" });
+        openToast({ content: "该电子邮箱已被注册", status: "warning" });
       } else {
         const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "success" });
             setSendVerifyButtonText("验证码已发");
           } else {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "warning" });
           }
         }
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
@@ -315,15 +290,15 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "绑定新电子邮箱成功" });
+        openToast({ content: "绑定新电子邮箱成功", status: "success" });
         getUserInfo();
         bindTELOnClose();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
@@ -360,12 +335,15 @@ export default function UserProfilePage() {
 
   const handleChangePass = async () => {
     if (passwordAlertText) {
-      openToast({ content: "密码要求：不低于8位，包含数字和字母" });
+      openToast({
+        content: "密码要求：不低于8位，包含数字和字母",
+        status: "warning",
+      });
       return;
     }
 
     if (!(inputPassword0 && inputPassword && inputPassword2)) {
-      openToast({ content: "请完成资料填写" });
+      openToast({ content: "请完成资料填写", status: "warning" });
       return;
     }
 
@@ -385,14 +363,14 @@ export default function UserProfilePage() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "修改密码成功" });
+        openToast({ content: "修改密码成功", status: "success" });
         setAuthToken(data.token);
         changePassOnClose();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 

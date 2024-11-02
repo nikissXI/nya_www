@@ -73,7 +73,7 @@ export function IsQQBrowserWarnModal() {
         throw new Error("不支持自动复制");
       }
     } catch (err) {
-      openToast({ content: String(err) });
+      openToast({ content: String(err), status: "warning" });
       setCopyButtonText("复制链接失败，请自行复制");
     }
   };

@@ -63,36 +63,6 @@ export default function Page() {
   const [inputPassword2, setInputPassword2] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
 
-  // // 检测是否在QQ内打开
-  // const [copyButtonText, setCopyButtonText] =
-  //   useState("点击复制网页链接到剪切板");
-  // const [isQQ, setIsQQ] = useState(false);
-
-  // useEffect(() => {
-  //   if (logined) {
-  //     router.push("/me");
-  //   } else {
-  //     const userAgent = navigator.userAgent;
-  //     if (userAgent.includes("QQ/") || userAgent.includes("WeChat/")) {
-  //       setIsQQ(true);
-  //     }
-  //   }
-  // }, [logined, router]);
-
-  // const handleCopyLink = async () => {
-  //   try {
-  //     if (navigator.clipboard && navigator.permissions) {
-  //       await navigator.clipboard.writeText(window.location.href);
-  //       setCopyButtonText("链接已复制到剪切板");
-  //     } else {
-  //       throw new Error("不支持自动复制");
-  //     }
-  //   } catch (err) {
-  //     openToast({ content: String(err) });
-  //     setCopyButtonText("复制链接失败，请自行复制");
-  //   }
-  // };
-
   useEffect(() => {
     const loadCaptcha = async () => {
       setCaptchaImage(await fetchCaptcha());
@@ -120,7 +90,10 @@ export default function Page() {
 
   const handleRegister = async () => {
     if (passwordAlertText) {
-      openToast({ content: "密码要求：不低于8位，包含数字和字母" });
+      openToast({
+        content: "密码要求：不低于8位，包含数字和字母",
+        status: "warning",
+      });
       return;
     }
 
@@ -134,7 +107,7 @@ export default function Page() {
         inputCaptcha
       )
     ) {
-      openToast({ content: "请完成资料填写" });
+      openToast({ content: "请完成资料填写", status: "warning" });
       return;
     }
 
@@ -159,23 +132,26 @@ export default function Page() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "注册成功，跳转到“个人中心”页面" });
+        openToast({
+          content: "注册成功，跳转到“个人中心”页面",
+          status: "success",
+        });
         setAuthToken(data.token);
         getUserInfo();
         router.push("/me");
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
         setInputCaptcha("");
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
   const sendSMS = async (tel: string) => {
     if (!validateTel(tel)) {
-      openToast({ content: `请正确填写手机号` });
+      openToast({ content: `请正确填写手机号`, status: "warning" });
       return;
     }
 
@@ -183,27 +159,27 @@ export default function Page() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 1) {
-        openToast({ content: "该手机号已被注册" });
+        openToast({ content: "该手机号已被注册", status: "warning" });
       } else {
         const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "success" });
             setSendVerifyButtonText("验证码已发");
           } else {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "warning" });
           }
         }
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
   const sendEmail = async (email: string) => {
     if (!validateEmail(email)) {
-      openToast({ content: `请正确填写电子邮箱` });
+      openToast({ content: `请正确填写电子邮箱`, status: "warning" });
       return;
     }
 
@@ -211,21 +187,21 @@ export default function Page() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 1) {
-        openToast({ content: "该电子邮箱已被注册" });
+        openToast({ content: "该电子邮箱已被注册", status: "warning" });
       } else {
         const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "success" });
             setSendVerifyButtonText("验证码已发");
           } else {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "warning" });
           }
         }
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 

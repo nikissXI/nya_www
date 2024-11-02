@@ -43,13 +43,13 @@ export default function GetWgnumModal() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "绑定编号成功" });
+        openToast({ content: "绑定编号成功", status: "success" });
         getUserInfo();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
@@ -69,12 +69,12 @@ export default function GetWgnumModal() {
         <ModalCloseButton />
 
         <ModalBody>
-            {tips.map((tip, index) => (
-              <Text fontSize="sm" key={index} my={2}>
-                <WarningIcon mr={2} />
-                {tip}
-              </Text>
-            ))}
+          {tips.map((tip, index) => (
+            <Text fontSize="sm" key={index} my={2}>
+              <WarningIcon mr={2} />
+              {tip}
+            </Text>
+          ))}
         </ModalBody>
 
         <ModalFooter alignSelf="center">

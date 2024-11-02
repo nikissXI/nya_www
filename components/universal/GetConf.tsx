@@ -30,7 +30,7 @@ export const GetConfUrl = (wgnum: number) => {
       window.URL.revokeObjectURL(url); // 释放 blob URL
     })
     .catch((error) => {
-      openToast({ content: "登陆凭证失效" });
+      openToast({ content: "登陆凭证失效", status: "warning" });
       console.error("Error downloading the file:", error);
     });
 };

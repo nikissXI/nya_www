@@ -89,12 +89,15 @@ export default function Page() {
 
   const handleReset = async () => {
     if (passwordAlertText) {
-      openToast({ content: "密码要求：不低于8位，包含数字和字母" });
+      openToast({
+        content: "密码要求：不低于8位，包含数字和字母",
+        status: "warning",
+      });
       return;
     }
 
     if (!(inputAccount && inputVerifyCode && inputPassword && inputCaptcha)) {
-      openToast({ content: "请完成资料填写" });
+      openToast({ content: "请完成资料填写", status: "warning" });
       return;
     }
 
@@ -117,23 +120,26 @@ export default function Page() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "重置密码成功，跳转到“个人中心”页面" });
+        openToast({
+          content: "重置密码成功，跳转到“个人中心”页面",
+          status: "success",
+        });
         setAuthToken(data.token);
         getUserInfo();
         router.push("/me");
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
         setInputCaptcha("");
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
   const sendSMS = async (tel: string) => {
     if (!validateTel(tel)) {
-      openToast({ content: `请正确填写手机号` });
+      openToast({ content: `请正确填写手机号`, status: "warning" });
       return;
     }
 
@@ -141,27 +147,27 @@ export default function Page() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "该手机号未被注册" });
+        openToast({ content: "该手机号未被注册", status: "warning" });
       } else {
         const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "success" });
             setSendVerifyButtonText("验证码已发");
           } else {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "warning" });
           }
         }
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
   const sendEmail = async (email: string) => {
     if (!validateEmail(email)) {
-      openToast({ content: `请正确填写电子邮箱` });
+      openToast({ content: `请正确填写电子邮箱`, status: "warning" });
       return;
     }
 
@@ -169,21 +175,21 @@ export default function Page() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "该电子邮箱未被注册" });
+        openToast({ content: "该电子邮箱未被注册", status: "warning" });
       } else {
         const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
         if (resp.ok) {
           const data = await resp.json();
           if (data.code === 0) {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "success" });
             setSendVerifyButtonText("验证码已发");
           } else {
-            openToast({ content: data.msg });
+            openToast({ content: data.msg, status: "warning" });
           }
         }
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 

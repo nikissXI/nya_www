@@ -48,7 +48,7 @@ export default function Page() {
         throw new Error("不支持自动复制");
       }
     } catch (err) {
-      openToast({ content: String(err) });
+      openToast({ content: String(err), status: "warning" });
       setGetConfKeyText("复制失败，请手动复制，key有效期15分钟");
     }
   };
@@ -67,10 +67,10 @@ export default function Page() {
       if (data.code === 0) {
         handleCopyLink(data.key);
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
       }
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 

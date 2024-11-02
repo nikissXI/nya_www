@@ -236,7 +236,7 @@ export default function Page() {
     }
   };
 
-  // 创建房间
+  // 开关任意加入
   const publicRoomSwitch = async (publicRoom: number) => {
     try {
       if (loading === true) {
@@ -262,12 +262,12 @@ export default function Page() {
             ...roomInfo,
             public_room: publicRoom === 1 ? 1 : 0,
           });
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "success" });
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "error" });
       }
     } catch (err) {
-      openToast({ content: String(err) });
+      openToast({ content: String(err), status: "error" });
     }
   };
 
@@ -337,10 +337,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "success" });
       }
     } catch (err) {
-      openToast({ content: String(err) });
+      openToast({ content: String(err), status: "error" });
     }
   };
 
@@ -351,10 +351,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "error" });
       }
     } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}` });
+      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
   };
 
@@ -370,10 +370,10 @@ export default function Page() {
         joinOnClose();
         setInputWgnum(0);
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "error" });
       }
     } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}` });
+      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
   };
 
@@ -384,10 +384,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "error" });
       }
     } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}` });
+      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
   };
 
@@ -403,10 +403,10 @@ export default function Page() {
         addOnClose();
         setInputWgnum(0);
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "error" });
       }
     } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}` });
+      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
   };
 
@@ -417,10 +417,10 @@ export default function Page() {
       if (data.code === 0) {
         getRoomData();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "error" });
       }
     } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}` });
+      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
   };
 

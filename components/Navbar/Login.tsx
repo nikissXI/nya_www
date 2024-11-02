@@ -96,12 +96,12 @@ export function LoginModal() {
 
     if (verifyType === "tel") {
       if (!validateTel(inputAccount)) {
-        openToast({ content: `请正确填写手机号` });
+        openToast({ content: `请正确填写手机号`, status: "warning" });
         return;
       }
     } else {
       if (!validateEmail(inputAccount)) {
-        openToast({ content: `请正确填写电子邮箱` });
+        openToast({ content: `请正确填写电子邮箱`, status: "warning" });
         return;
       }
     }
@@ -125,21 +125,21 @@ export function LoginModal() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.code === 0) {
-        openToast({ content: "登陆成功" });
+        openToast({ content: "登陆成功", status: "success" });
         setAuthToken(data.token);
         getUserInfo();
         loginToggle();
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
         setInputCaptcha("");
       }
     } else if (resp.status === 401) {
-      openToast({ content: "账号或密码错误" });
+      openToast({ content: "账号或密码错误", status: "warning" });
       setCaptchaImage(await fetchCaptcha());
       setInputCaptcha("");
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 

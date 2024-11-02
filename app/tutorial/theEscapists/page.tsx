@@ -34,7 +34,7 @@ export default function AndroidPage0() {
     }
 
     if (!isInteger(hosterWgnum)) {
-      openToast({ content: `请输入正确的编号` });
+      openToast({ content: `请输入正确的编号`, status: "warning" });
       return;
     }
 

@@ -41,12 +41,12 @@ export default function Page() {
         // 用拿到的data.key下载conf
         window.open(`${apiUrl}/downloadConf2?key=${data.key}`, "_blank");
       } else {
-        openToast({ content: data.msg });
+        openToast({ content: data.msg, status: "warning" });
       }
     } else if (resp.status === 401) {
-      openToast({ content: "登陆凭证无效" });
+      openToast({ content: "登陆凭证无效", status: "warning" });
     } else {
-      openToast({ content: "服务异常，请联系服主处理" });
+      openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
 
