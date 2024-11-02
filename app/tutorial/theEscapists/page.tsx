@@ -90,7 +90,7 @@ export default function AndroidPage0() {
 
         <Heading size="md">方法一（网页操作）</Heading>
         <Text>
-          在下方填写要加入的编号（不是喵服联机房间的房主编号，别搞混了），如要搜索2号创建的多人游戏，就填“2”然后点提交
+          在下方填写要加入的玩家编号，如要搜索2号创建的多人游戏，就填“2”然后点提交
         </Text>
 
         <Flex>
