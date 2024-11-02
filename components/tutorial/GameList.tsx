@@ -5,7 +5,6 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalCloseButton,
   ModalBody,
   VStack,
@@ -27,7 +26,7 @@ interface Article {
 }
 
 const articles: Article[] = [
-  { path: "/tutorial/theEscapists", title: "逃脱者：困境突围（附联机工具）" },
+  { path: "/tutorial/theEscapists", title: "逃脱者（不看搜不到房间）" },
   { path: "/tutorial/juicyRealm", title: "恶果之地" },
   { path: "/tutorial/aresVirus2", title: "阿瑞斯病毒2" },
   { path: "/tutorial/stardewValley", title: "星露谷物语" },
