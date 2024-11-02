@@ -25,7 +25,7 @@ export const useOpenToast = () => {
       });
       clearToast();
     }
-  }, [clearToast, content, toast]);
+  }, [clearToast, content, status, toast]);
 };
 
 export default function Toaster() {
