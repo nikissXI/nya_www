@@ -225,7 +225,7 @@ export default function Page() {
       });
 
       if (resp.ok) {
-        setCheckText("修复成功！把VPN开关重新打开试试");
+        setCheckText("VPN重连试试，还不行请检查编号是否有效");
       } else {
         setCheckText("请求失败，请刷新网页再试");
       }
