@@ -1,5 +1,6 @@
 import hash from "hash.js";
 import dayjs from "dayjs";
+import { openToast } from "@/components/universal/toast";
 
 export function getHash(contentStr: string): string {
   return hash.sha256().update(contentStr).digest("hex");
@@ -35,4 +36,15 @@ export function isInteger(value: string): boolean {
 export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+};
+
+export const copyText = async (text: string) => {
+  try {
+    if (navigator.clipboard && navigator.permissions) {
+      await navigator.clipboard.writeText(text);
+      openToast({ content: "已复制", status: "info" });
+    } else {
+      throw new Error("不支持自动复制");
+    }
+  } catch (err) {}
 };

@@ -5,11 +5,13 @@ import { Button as ChakraButton, ButtonProps } from "@chakra-ui/react";
 interface CustomButtonProps extends ButtonProps {
   children: React.ReactNode; // 按钮内容
   bgColor?: string;
+  colorScheme?: string;
   color?: string;
 }
 export const Button: React.FC<CustomButtonProps> = ({
   children,
   bgColor = "#3e71bd",
+  colorScheme = "transparent",
   color = "white",
   ...props
 }) => {
@@ -19,7 +21,7 @@ export const Button: React.FC<CustomButtonProps> = ({
       // variant="ghost" // 使用 ghost 变体，没有背景色
       color={color}
       bgColor={bgColor}
-      colorScheme="transparent" // 或者定义一个透明的颜色方案
+      colorScheme={colorScheme} // 或者定义一个透明的颜色方案
       sx={{
         border: "none",
         _hover: {

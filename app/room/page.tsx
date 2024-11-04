@@ -26,7 +26,9 @@ import {
   Th,
   Td,
   TableContainer,
+  Divider,
   Switch,
+  Tag,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -41,6 +43,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
 import { useRouter } from "next/navigation";
+import { copyText } from "@/utils/strings";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -55,6 +58,7 @@ interface LatencyData {
 }
 
 interface Member {
+  username: string;
   wgnum: number;
   ip: string;
   status: "未连接" | "待加入" | "已加入";
@@ -131,36 +135,42 @@ export default function Page() {
     "如果遇到教程无法解决的问题，就找服主（QQ:1299577815）",
   ];
 
-  const getRoomData = useCallback(async () => {
-    // 从环境变量获取 API 地址
-    fetch(`${apiUrl}/getRoom`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-    })
-      .then((resp) => resp.json() as Promise<Response>) // 强制转换为 RoomResponse 类型
-      .then((data) => {
-        setRoomData(data.data);
+  const getRoomData = useCallback(
+    async (noToast: boolean = true) => {
+      // 从环境变量获取 API 地址
+      fetch(`${apiUrl}/getRoom`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      })
+        .then((resp) => resp.json() as Promise<Response>) // 强制转换为 RoomResponse 类型
+        .then((data) => {
+          setRoomData(data.data);
 
-        // 使用局部变量进行状态判断
-        const currentRoomData = data.data;
-        if (currentRoomData) {
-          // 房主或成员
-          if (currentRoomData.user_wgnum === currentRoomData.hoster_wgnum) {
-            setStatus("hoster");
+          // 使用局部变量进行状态判断
+          const currentRoomData = data.data;
+          if (currentRoomData) {
+            // 房主或成员
+            if (currentRoomData.user_wgnum === currentRoomData.hoster_wgnum) {
+              setStatus("hoster");
+            } else {
+              setStatus("member");
+            }
           } else {
-            setStatus("member");
+            setStatus("none");
           }
-        } else {
-          setStatus("none");
-        }
-      })
-      .catch((error) => {
-        console.error("拉取房间信息出错:", error);
-      })
-      .finally(() => {});
-  }, [apiUrl]);
+          if (!noToast)
+            openToast({ content: `房间信息已刷新`, status: "info" });
+        })
+        .catch((error) => {
+          console.error(`拉取房间信息出错:${error}`);
+          openToast({ content: `拉取房间信息出错:${error}`, status: "error" });
+        })
+        .finally(() => {});
+    },
+    [apiUrl]
+  );
 
   const fetchNetworkLatency = useCallback(
     async (checkType: string, auto: boolean = false) => {
@@ -277,7 +287,9 @@ export default function Page() {
 
   useEffect(() => {
     if (wgnum !== 0) {
-      const interval = setInterval(getRoomData, 30000); // 每10秒更新一次房间列表
+      const interval = setInterval(() => {
+        getRoomData();
+      }, 30000); // 每10秒更新一次房间列表
       return () => clearInterval(interval); // 清理定时器
     }
   }, [wgnum, getRoomData]);
@@ -586,16 +598,14 @@ export default function Page() {
             px={2}
             bg="transparent"
             onClick={() => {
-              if (disableGetRoom === true) {
-                return;
-              }
+              if (disableGetRoom === true) return;
 
               setDisableGetRoom(true);
               // 设置定时器，2秒后重新启用按钮
               setTimeout(() => {
                 setDisableGetRoom(false); // 启用按钮
-              }, 2000);
-              getRoomData();
+              }, 3000);
+              getRoomData(false);
             }}
           >
             <Text mr={1}>刷新</Text>
@@ -642,7 +652,7 @@ export default function Page() {
     <VStack alignItems="center">
       <Flex align="center">
         <Text fontSize={18} fontWeight="bold" color="#ffd964">
-          你的编号: {wgnum}
+          {status !== "none" ? `房间编号 ${wgnum}` : `你的编号 ${wgnum}`}
         </Text>
         <Text
           fontSize={18}
@@ -767,17 +777,69 @@ interface IPListProps {
 
 function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
   function getColor(status: "未连接" | "待加入" | "已加入"): string {
-    if (status === "未连接") return "#a72f1d";
+    if (status === "未连接") return "#d80000";
     else if (status === "待加入") return "#b8670f";
     else return "#1a9225";
   }
-  const sortedList = roomInfo.members.sort((a, b) => {
-    return a.wgnum - b.wgnum; // 按编号从小到大往下排
-  });
+  // const sortedList = roomInfo.members.sort((a, b) => {
+  //   return a.wgnum - b.wgnum; // 按编号从小到大往下排
+  // });
 
   return (
-    <Center>
-      <TableContainer>
+    <VStack>
+      {roomInfo.members.map((item, index) => (
+        <Box w="full" key={item.ip}>
+          <Flex>
+            <Text fontWeight="bold">{item.username}</Text>
+            {item.wgnum === roomInfo.hoster_wgnum && (
+              <Tag fontWeight="bold" ml={3} bg="#ffd012">
+                房主
+              </Tag>
+            )}
+            <Tag ml="auto" color="white" bg={getColor(item.status)}>
+              {item.status}
+            </Tag>
+          </Flex>
+
+          <Flex my={2}>
+            <Tag
+              onClick={() => {
+                copyText(String(item.wgnum));
+              }}
+            >
+              编号: {item.wgnum}
+            </Tag>
+            <Tag
+              ml={3}
+              onClick={() => {
+                copyText(item.ip);
+              }}
+            >
+              联机IP: {item.ip}
+            </Tag>
+
+            {isOwner && (
+              <Button
+                h="26px"
+                size="sm"
+                lineHeight={0}
+                bgColor="#d83636"
+                ml="auto"
+                hidden={item.wgnum === roomInfo.hoster_wgnum}
+                onClick={() => onDelete(item.wgnum)}
+              >
+                踢出
+              </Button>
+            )}
+          </Flex>
+
+          {index < roomInfo.members.length - 1 && (
+            <Divider borderWidth={2} mt={1} />
+          )}
+        </Box>
+      ))}
+
+      {/* <TableContainer>
         <Table variant="striped" colorScheme="transparent">
           <Thead position="sticky" top={0} bg="#3e4e63">
             <Tr>
@@ -848,7 +910,7 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
             ))}
           </Tbody>
         </Table>
-      </TableContainer>
-    </Center>
+      </TableContainer> */}
+    </VStack>
   );
 }
