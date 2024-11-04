@@ -18,14 +18,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-  Table,
-  Thead,
   Flex,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
   Divider,
   Switch,
   Tag,
@@ -782,9 +775,6 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
     else if (status === "待加入") return "#b8670f";
     else return "#1a9225";
   }
-  // const sortedList = roomInfo.members.sort((a, b) => {
-  //   return a.wgnum - b.wgnum; // 按编号从小到大往下排
-  // });
 
   return (
     <VStack>
@@ -839,79 +829,6 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
           )}
         </Box>
       ))}
-
-      {/* <TableContainer>
-        <Table variant="striped" colorScheme="transparent">
-          <Thead position="sticky" top={0} bg="#3e4e63">
-            <Tr>
-              <Th color="white" fontSize="md" p={3}>
-                身份
-              </Th>
-              <Th color="white" fontSize="md" p={3}>
-                编号
-              </Th>
-              <Th color="white" fontSize="md" p={3}>
-                IP
-              </Th>
-              <Th color="white" fontSize="md" p={2}>
-                状态
-              </Th>
-              {isOwner && (
-                <Th color="white" fontSize="md" p={3}>
-                  移除
-                </Th>
-              )}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {sortedList.map((item) => (
-              <Tr key={item.ip}>
-                <Td
-                  p={3}
-                  bg={
-                    item.wgnum === roomInfo.hoster_wgnum
-                      ? "#00bcd380"
-                      : "transparent"
-                  }
-                  // color={
-                  //   item.wgnum === roomInfo.hoster_wgnum ? "black" : "white"
-                  // }
-                >
-                  {item.wgnum === roomInfo.hoster_wgnum ? "房主" : "成员"}
-                </Td>
-                <Td p={3}>
-                  <Text
-                    color={
-                      item.wgnum === roomInfo.user_wgnum ? "#ffd964" : "white"
-                    }
-                    fontWeight={
-                      item.wgnum === roomInfo.user_wgnum ? "bold" : "normal"
-                    }
-                  >
-                    {item.wgnum}
-                  </Text>
-                </Td>
-                <Td p={3}>{item.ip}</Td>
-                <Td p={2} bg={getColor(item.status)}>
-                  {item.status}
-                </Td>
-                {isOwner && (
-                  <Td p={0}>
-                    <Button
-                      bg="transparent"
-                      h={1}
-                      hidden={item.wgnum === roomInfo.hoster_wgnum}
-                      onClick={() => onDelete(item.wgnum)}
-                    >
-                      <FiDelete size={30} color="#d83636" />
-                    </Button>
-                  </Td>
-                )}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer> */}
     </VStack>
   );
 }
