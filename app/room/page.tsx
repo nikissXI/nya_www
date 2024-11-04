@@ -808,7 +808,7 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
                 copyText(String(item.wgnum));
               }}
             >
-              编号: {item.wgnum}
+              编号 {item.wgnum}
             </Tag>
             <Tag
               ml={3}
@@ -816,7 +816,7 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
                 copyText(item.ip);
               }}
             >
-              联机IP: {item.ip}
+              IP {item.ip}
             </Tag>
 
             {isOwner && (
