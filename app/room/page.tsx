@@ -582,6 +582,7 @@ export default function Page() {
           onDelete={handleDelMember}
           onOpen={addOnopen}
         />
+
         <HStack justify="center">
           <Text fontWeight="bold">任意加入</Text>
           <Switch
@@ -788,7 +789,7 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
   return (
     <VStack>
       {roomInfo.members.map((item, index) => (
-        <Box w="full" key={item.ip}>
+        <Box w="300px" key={item.ip}>
           <Flex>
             <Text fontWeight="bold">{item.username}</Text>
             {item.wgnum === roomInfo.hoster_wgnum && (
