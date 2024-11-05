@@ -7,6 +7,7 @@ import {
   Text,
   VStack,
   Heading,
+  Collapse,
   Divider,
   Image,
   Center,
@@ -24,6 +25,7 @@ import { useDisclosureStore } from "@/store/disclosure";
 import { Button } from "@/components/universal/button";
 import { useState, useEffect } from "react";
 import { openToast } from "@/components/universal/toast";
+import { WarningIcon } from "@chakra-ui/icons";
 import {
   isInteger,
   getHash,
@@ -46,6 +48,17 @@ export default function UserProfilePage() {
   const { onToggle: getWgnumToggle } = useDisclosureStore((state) => {
     return state.modifyGetWgnumDisclosure;
   });
+
+  const [showTips, setShowTips] = useState(false);
+
+  const tips = [
+    "获取编号后看《连接喵服教程》学会连接喵服",
+    "同一个编号不能多个设备同时连接，否则会互相挤掉线。仅支持在中国境内使用（港澳台除外）",
+    "绑定的编号如果连续30天不使用就会解绑，需要就领个新的，失效的编号可从WG中删除",
+    "只要设备能连上喵服就能互相通信，不限系统，如果游戏支持，可以实现手机与电脑联机",
+    "如果发现打开WG后浏览器无法正常使用，换一个浏览器试试，再把情况告诉服主便于修复这个问题",
+    "如果遇到教程无法解决的问题，就找服主（QQ:1299577815）",
+  ];
 
   // 修改用户名
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
@@ -628,157 +641,159 @@ export default function UserProfilePage() {
 
       <Box maxW={{ md: "100%", base: "90vw" }}>
         {userInfo ? (
-          <VStack spacing={1} align="stretch">
-            <Heading mb={1} size="md" textAlign="center">
-              账号信息
-            </Heading>
+          <VStack spacing={1} align="center">
+            <VStack spacing={1} align="stretch" w="260px">
+              <Heading mb={1} size="md" textAlign="center">
+                账号信息
+              </Heading>
 
-            <Flex>
-              <Text w="50px" textAlign="right">
-                UID:
-              </Text>
-              <Text ml={3}>{userInfo.uid}</Text>
-            </Flex>
+              <Flex>
+                <Text w="50px" textAlign="right">
+                  UID:
+                </Text>
+                <Text ml={3}>{userInfo.uid}</Text>
+              </Flex>
 
-            <Divider />
+              <Divider />
 
-            <Flex>
-              <Text w="50px" textAlign="right">
-                昵称:
-              </Text>
+              <Flex>
+                <Text w="50px" textAlign="right">
+                  昵称:
+                </Text>
 
-              <Input
-                ml={3}
-                w="8rem"
-                fontSize="md"
-                size="xs"
-                value={inputUsername}
-                onChange={(e) => {
-                  setInputUsername(e.target.value);
-                  if (e.target.value === userInfo.username) {
-                    setHideModifyUsername(true);
-                  } else {
-                    setHideModifyUsername(false);
-                  }
-                }}
-                placeholder="请输入昵称"
-              />
-              <Button
-                hidden={hideModifyUsername}
-                ml={1}
-                color="#7dfffe"
-                fontWeight="normal"
-                variant="link"
-                bgColor="transparent"
-                onClick={() => {
-                  if (inputUsername) {
-                    modifyUsername(inputUsername);
-                  }
-                }}
-              >
-                修改
-              </Button>
-            </Flex>
-
-            <Divider />
-
-            <Flex>
-              <Text w="50px" textAlign="right">
-                手机:
-              </Text>
-              <Flex ml={3}>
-                {userInfo.tel}
-
+                <Input
+                  ml={3}
+                  w="8rem"
+                  fontSize="md"
+                  size="xs"
+                  value={inputUsername}
+                  onChange={(e) => {
+                    setInputUsername(e.target.value);
+                    if (e.target.value === userInfo.username) {
+                      setHideModifyUsername(true);
+                    } else {
+                      setHideModifyUsername(false);
+                    }
+                  }}
+                  placeholder="请输入昵称"
+                />
                 <Button
+                  hidden={hideModifyUsername}
                   ml={1}
                   color="#7dfffe"
                   fontWeight="normal"
                   variant="link"
                   bgColor="transparent"
-                  onClick={async () => {
-                    setCaptchaImage(await fetchCaptcha());
-                    bindTELOnopen();
-                    setInputAccount("");
-                    setInputVerifyCode("");
-                    setInputCaptcha("");
-                    setSendVerifyButtonText("获取验证码");
+                  onClick={() => {
+                    if (inputUsername) {
+                      modifyUsername(inputUsername);
+                    }
                   }}
                 >
-                  {userInfo.tel ? "换绑" : "点击绑定（非必要）"}
+                  修改
                 </Button>
               </Flex>
-            </Flex>
 
-            <Divider />
+              <Divider />
 
-            <Flex whiteSpace="nowrap">
-              <Text w="50px" textAlign="right">
-                邮箱:
-              </Text>
-              <Flex ml={3}>
-                <Tooltip label={userInfo.email} placement="top" hasArrow>
-                  <Box
-                    maxWidth={{ md: "100%", base: "55vw" }} // 设置最大宽度
-                    whiteSpace="nowrap" // 不换行
-                    overflow="hidden" // 溢出隐藏
-                    textOverflow="ellipsis" // 使用省略号表示溢出内容
-                    cursor="pointer" // 鼠标悬停时显示手型光标
+              <Flex>
+                <Text w="50px" textAlign="right">
+                  手机:
+                </Text>
+                <Flex ml={3}>
+                  {userInfo.tel}
+
+                  <Button
+                    ml={1}
+                    color="#7dfffe"
+                    fontWeight="normal"
+                    variant="link"
+                    bgColor="transparent"
+                    onClick={async () => {
+                      setCaptchaImage(await fetchCaptcha());
+                      bindTELOnopen();
+                      setInputAccount("");
+                      setInputVerifyCode("");
+                      setInputCaptcha("");
+                      setSendVerifyButtonText("获取验证码");
+                    }}
                   >
-                    {userInfo.email}
-                  </Box>
-                </Tooltip>
-
-                <Button
-                  ml={1}
-                  color="#7dfffe"
-                  fontWeight="normal"
-                  variant="link"
-                  bgColor="transparent"
-                  onClick={async () => {
-                    setCaptchaImage(await fetchCaptcha());
-                    bindEmailOnopen();
-                    setInputAccount("");
-                    setInputVerifyCode("");
-                    setInputCaptcha("");
-                    setSendVerifyButtonText("获取验证码");
-                  }}
-                >
-                  {userInfo.email ? "换绑" : "点击绑定（非必要）"}
-                </Button>
+                    {userInfo.tel ? "换绑" : "点击绑定（非必要）"}
+                  </Button>
+                </Flex>
               </Flex>
-            </Flex>
 
-            <Divider />
+              <Divider />
 
-            <Flex>
-              <Text w="50px" textAlign="right">
-                QQ:
-              </Text>
-              <Flex ml={3}>
-                {userInfo.qq}
+              <Flex whiteSpace="nowrap">
+                <Text w="50px" textAlign="right">
+                  邮箱:
+                </Text>
+                <Flex ml={3}>
+                  <Tooltip label={userInfo.email} placement="top" hasArrow>
+                    <Box
+                      maxWidth={{ md: "100%", base: "55vw" }} // 设置最大宽度
+                      whiteSpace="nowrap" // 不换行
+                      overflow="hidden" // 溢出隐藏
+                      textOverflow="ellipsis" // 使用省略号表示溢出内容
+                      cursor="pointer" // 鼠标悬停时显示手型光标
+                    >
+                      {userInfo.email}
+                    </Box>
+                  </Tooltip>
 
-                <Button
-                  ml={1}
-                  color="#7dfffe"
-                  fontWeight="normal"
-                  variant="link"
-                  bgColor="transparent"
-                  onClick={async () => {
-                    setCaptchaImage(await fetchCaptcha());
-                    bindQQOnOpen();
-                    setInputAccount("");
-                    setVerifyQQText("");
-                    setInputCaptcha("");
-                    setDisableVerifyQQ(false);
-                  }}
-                >
-                  {userInfo.qq ? "换绑" : "点击绑定（非必要）"}
-                </Button>
+                  <Button
+                    ml={1}
+                    color="#7dfffe"
+                    fontWeight="normal"
+                    variant="link"
+                    bgColor="transparent"
+                    onClick={async () => {
+                      setCaptchaImage(await fetchCaptcha());
+                      bindEmailOnopen();
+                      setInputAccount("");
+                      setInputVerifyCode("");
+                      setInputCaptcha("");
+                      setSendVerifyButtonText("获取验证码");
+                    }}
+                  >
+                    {userInfo.email ? "换绑" : "点击绑定（非必要）"}
+                  </Button>
+                </Flex>
               </Flex>
-            </Flex>
+
+              <Divider />
+
+              <Flex>
+                <Text w="50px" textAlign="right">
+                  QQ:
+                </Text>
+                <Flex ml={3}>
+                  {userInfo.qq}
+
+                  <Button
+                    ml={1}
+                    color="#7dfffe"
+                    fontWeight="normal"
+                    variant="link"
+                    bgColor="transparent"
+                    onClick={async () => {
+                      setCaptchaImage(await fetchCaptcha());
+                      bindQQOnOpen();
+                      setInputAccount("");
+                      setVerifyQQText("");
+                      setInputCaptcha("");
+                      setDisableVerifyQQ(false);
+                    }}
+                  >
+                    {userInfo.qq ? "换绑" : "点击绑定（非必要）"}
+                  </Button>
+                </Flex>
+              </Flex>
+            </VStack>
 
             {userInfo.wg_data ? (
-              <VStack spacing={1} mt={5} align="stretch">
+              <VStack spacing={1} mt={5} align="stretch" w="260px">
                 <Heading mb={1} size="md" textAlign="center">
                   联机信息
                 </Heading>
@@ -852,6 +867,34 @@ export default function UserProfilePage() {
                 </Button>
               </VStack>
             )}
+
+            <Button
+              size="sm"
+              alignSelf="center"
+              mt={3}
+              bgColor="#b5352a"
+              fontSize="16px"
+              onClick={() => setShowTips(!showTips)}
+            >
+              注意事项
+            </Button>
+
+            <Box
+              mx={3}
+              px={3}
+              border="2px" // 边框宽度
+              borderColor="#31b8ce" // 边框颜色
+              borderRadius="md" // 边框圆角
+            >
+              <Collapse in={showTips}>
+                {tips.map((tip, index) => (
+                  <Text fontSize="sm" key={index} my={2}>
+                    <WarningIcon mr={2} />
+                    {tip}
+                  </Text>
+                ))}
+              </Collapse>
+            </Box>
 
             <VStack spacing={5} mt={5}>
               <Button

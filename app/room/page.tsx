@@ -11,7 +11,6 @@ import {
   Center,
   HStack,
   VStack,
-  Collapse,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
@@ -26,12 +25,10 @@ import {
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
-import { FiDelete } from "react-icons/fi";
 import { IoMdPersonAdd } from "react-icons/io";
 import { IoReloadCircle } from "react-icons/io5";
 import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
-import { WarningIcon } from "@chakra-ui/icons";
 import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
@@ -118,15 +115,6 @@ export default function Page() {
     return state.modifyLoginDisclosure;
   });
 
-  const [showTips, setShowTips] = useState(false);
-
-  const tips = [
-    "建议使用浏览器收藏本网站，方便打开网站进行联机，不建议在QQ里登陆本网站（可能会过几天又要登陆一次）",
-    "连上喵服后，顶部会显示网络延迟，检测可以点击以测试网络稳定性，如果网络差就别联机了",
-    "只要设备能连上喵服就能互相通信，不限系统，如果游戏支持，可以实现手机与电脑联机",
-    "如果发现打开WG后浏览器无法正常使用，换一个浏览器试试，再把情况告诉服主便于修复这个问题",
-    "如果遇到教程无法解决的问题，就找服主（QQ:1299577815）",
-  ];
 
   const getRoomData = useCallback(
     async (noToast: boolean = true) => {
@@ -721,7 +709,7 @@ export default function Page() {
       <Button
         h="36px"
         w="90px"
-        mt={5}
+        mt={3}
         bgColor="#7242ad"
         fontSize="16px"
         onClick={gameListToggle}
@@ -730,34 +718,6 @@ export default function Page() {
       </Button>
 
       <Text>里面有已收录的游戏联机教程</Text>
-
-      <Button
-        h="36px"
-        w="90px"
-        mt={3}
-        bgColor="#b5352a"
-        fontSize="16px"
-        onClick={() => setShowTips(!showTips)}
-      >
-        注意事项
-      </Button>
-
-      <Box
-        mx={3}
-        px={3}
-        border="2px" // 边框宽度
-        borderColor="#31b8ce" // 边框颜色
-        borderRadius="md" // 边框圆角
-      >
-        <Collapse in={showTips}>
-          {tips.map((tip, index) => (
-            <Text fontSize="sm" key={index} my={2}>
-              <WarningIcon mr={2} />
-              {tip}
-            </Text>
-          ))}
-        </Collapse>
-      </Box>
     </VStack>
   );
 }
