@@ -480,7 +480,7 @@ export default function Page() {
             <ModalBody onKeyDown={handleJoinRoomEnter}>
               <Input
                 type="number"
-                placeholder="请输入房间编号"
+                placeholder="请输入房间号"
                 value={inputWgnum}
                 onChange={(e) => {
                   setInputWgnum(e.target.value);
@@ -682,7 +682,7 @@ export default function Page() {
     <VStack alignItems="center">
       <Flex align="center">
         <Text fontSize={18} fontWeight="bold" color="#ffd964">
-          {status !== "none" ? `房间编号 ${wgnum}` : `你的编号 ${wgnum}`}
+          {status === "none" ? "" : `房间号 ${wgnum}`}
         </Text>
         <Text
           fontSize={18}
