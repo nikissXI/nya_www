@@ -416,7 +416,7 @@ export default function Page() {
   };
 
   function getColor(latency: number) {
-    if (latency < 80) return "#04f504";
+    if (latency < 80) return "#3fdb1d";
     else if (latency < 160) return "#ffa524";
     else return "#ff3b3b";
   }
@@ -641,25 +641,6 @@ export default function Page() {
             <Text mr={1}>刷新</Text>
             <IoReloadCircle size={30} color="#35c535" />
           </Button>
-
-          {/* {status === "hoster" && (
-            <Button
-              px={0}
-              bg="transparent"
-              onClick={addOnopen}
-              isDisabled={
-                roomInfo && roomInfo.members.length < 8 ? false : true
-              }
-            >
-              <Text mr={1}>
-                {roomInfo && roomInfo.members.length < 8
-                  ? "添加成员"
-                  : "房间已满"}
-              </Text>
-
-              <IoMdPersonAdd size={30} color="#35c535" />
-            </Button>
-          )} */}
         </HStack>
 
         <VStack alignItems="center">
@@ -688,9 +669,9 @@ export default function Page() {
           fontSize={18}
           mx={3}
           fontWeight="bold"
-          color={latencyData ? "#3fdb1d" : "#ff3838"}
+          color={latencyData ? "#3fdb1d" : "#d80000"}
         >
-          {latencyData ? "已连接" : "喵服未连接"}
+          {latencyData ? "已连接" : "未连接"}
         </Text>
         {latencyData && (
           <Flex align="center">
@@ -707,7 +688,7 @@ export default function Page() {
           }}
           isDisabled={checking}
         >
-          <Text fontSize={18} fontWeight="normal" color="#49ffb6" ml={2}>
+          <Text fontSize={18} fontWeight="normal" color="#3fdb1d" ml={2}>
             检测
           </Text>
           <Box animation={checking ? `${spin} 1s linear infinite` : "none"}>
@@ -722,7 +703,7 @@ export default function Page() {
             <Text>不知道怎么连接喵服？</Text>
             <Button
               variant="link"
-              bg="#aa33ae"
+              bg="#7242ad"
               size="sm"
               p={1}
               h={7}
@@ -738,7 +719,6 @@ export default function Page() {
             <Text>WG打开了还是检测不到？</Text>
             <Button
               variant="link"
-              // bg="#aa33ae"
               size="sm"
               p={1}
               h={7}
@@ -791,7 +771,7 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
             <Tag
               ml="auto"
               color="white"
-              bg={item.status === "在线" ? "#1a9225" : "#d80000"}
+              bg={item.status === "在线" ? "#1c9f00" : "#d80000"}
             >
               {item.status}
             </Tag>
