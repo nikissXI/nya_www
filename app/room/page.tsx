@@ -261,6 +261,7 @@ export default function Page() {
       } else {
         openToast({ content: data.msg, status: "warning" });
       }
+      if (setPassIsOpen) setPassOnClose();
     } catch (err) {
       openToast({ content: String(err), status: "error" });
     }
@@ -586,38 +587,42 @@ export default function Page() {
         />
 
         <HStack justify="center">
-          <Text fontWeight="bold">任意加入</Text>
-          <Switch
-            size="md"
-            colorScheme="green"
-            isChecked={roomInfo?.room_passwd ? false : true}
-            onChange={() => {
-              // 已设置密码就清空密码
-              if (roomInfo?.room_passwd) {
-                setInputPasswd("");
-                handleSetRoomPasswd();
-              } else {
-                setInputPasswd(
-                  roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
-                );
-                setPassOnOpen();
-              }
-            }}
-          />
+          {status === "hoster" && (
+            <HStack>
+              <Text fontWeight="bold">任意加入</Text>
+              <Switch
+                size="md"
+                colorScheme="green"
+                isChecked={roomInfo?.room_passwd ? false : true}
+                onChange={() => {
+                  // 已设置密码就清空密码
+                  if (roomInfo?.room_passwd) {
+                    setInputPasswd("");
+                    handleSetRoomPasswd();
+                  } else {
+                    setInputPasswd(
+                      roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                    );
+                    setPassOnOpen();
+                  }
+                }}
+              />
 
-          <Button
-            px={0}
-            bg="transparent"
-            onClick={() => {
-              setInputPasswd(
-                roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
-              );
-              setPassOnOpen();
-            }}
-            isDisabled={roomInfo?.room_passwd ? false : true}
-          >
-            <Text>设置密码</Text>
-          </Button>
+              <Button
+                px={0}
+                bg="transparent"
+                onClick={() => {
+                  setInputPasswd(
+                    roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                  );
+                  setPassOnOpen();
+                }}
+                isDisabled={roomInfo?.room_passwd ? false : true}
+              >
+                <Text>设置密码</Text>
+              </Button>
+            </HStack>
+          )}
 
           <Button
             px={2}
