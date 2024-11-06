@@ -25,7 +25,7 @@ import {
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
-import { IoMdPersonAdd } from "react-icons/io";
+// import { IoMdPersonAdd } from "react-icons/io";
 import { IoReloadCircle } from "react-icons/io5";
 import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
@@ -33,7 +33,8 @@ import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
 import { useRouter } from "next/navigation";
-import { copyText } from "@/utils/strings";
+import { copyText, isInteger } from "@/utils/strings";
+import { input } from "framer-motion/client";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -51,7 +52,7 @@ interface Member {
   username: string;
   wgnum: number;
   ip: string;
-  status: "未连接" | "待加入" | "已加入";
+  status: "在线" | "离线";
 }
 
 interface RoomInfo {
@@ -60,7 +61,7 @@ interface RoomInfo {
   hoster_wgnum: number;
   hoster_ip: string;
   members: Member[];
-  public_room: number;
+  room_passwd: string;
 }
 
 interface Response {
@@ -91,16 +92,19 @@ export default function Page() {
   } = useDisclosure();
 
   const {
-    isOpen: addIsOpen,
-    onOpen: addOnopen,
-    onClose: addOnClose,
+    isOpen: setPassIsOpen,
+    onOpen: setPassOnOpen,
+    onClose: setPassOnClose,
   } = useDisclosure();
 
-  const [inputWgnum, setInputWgnum] = useState<number>(0);
-  const [wgnum, setUserWgnum] = useState<number>(0);
+  const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
+
+  const [inputWgnum, setInputWgnum] = useState("");
+  const [inputPasswd, setInputPasswd] = useState("");
+  const [wgnum, setUserWgnum] = useState(0);
   const [latencyData, setLatencyData] = useState<LatencyData | null>(null);
-  const [checking, setChecking] = useState<boolean>(true);
-  const [checkText, setCheckText] = useState<string>("");
+  const [checking, setChecking] = useState(true);
+  const [checkText, setCheckText] = useState("");
   const { logined, userInfo } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
@@ -114,7 +118,6 @@ export default function Page() {
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
   });
-
 
   const getRoomData = useCallback(
     async (noToast: boolean = true) => {
@@ -226,19 +229,22 @@ export default function Page() {
   };
 
   // 开关任意加入
-  const publicRoomSwitch = async (publicRoom: number) => {
+  const handleSetRoomPasswd = async () => {
     try {
       if (loading === true) {
         throw new Error(`请不要点太快`);
       }
 
       setLoading(true);
-      const resp = await fetch(`${apiUrl}/publicRoom?public=${publicRoom}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      });
+      const resp = await fetch(
+        `${apiUrl}/setRoomPasswd?roomPasswd=${inputPasswd}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+        }
+      );
       setLoading(false);
       if (!resp.ok) {
         throw new Error(`访问接口出错: ${resp.status}`);
@@ -249,11 +255,11 @@ export default function Page() {
         if (roomInfo)
           setRoomData({
             ...roomInfo,
-            public_room: publicRoom === 1 ? 1 : 0,
+            room_passwd: inputPasswd,
           });
         openToast({ content: data.msg, status: "success" });
       } else {
-        openToast({ content: data.msg, status: "error" });
+        openToast({ content: data.msg, status: "warning" });
       }
     } catch (err) {
       openToast({ content: String(err), status: "error" });
@@ -298,7 +304,8 @@ export default function Page() {
   // 发送房间操作请求
   const handleRoomFetch = async (
     handleType: string,
-    handleWgnum: number
+    handleWgnum: number,
+    roomPasswd: string = ""
   ): Promise<HandleRoomResponse> => {
     if (loading === true) {
       throw new Error(`请不要点太快`);
@@ -306,7 +313,7 @@ export default function Page() {
 
     setLoading(true);
     const resp = await fetch(
-      `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}`,
+      `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}&roomPasswd=${roomPasswd}`,
       {
         method: "GET",
         headers: {
@@ -354,14 +361,25 @@ export default function Page() {
     if (!inputWgnum) {
       return;
     }
+
+    if (!isInteger(inputWgnum)) {
+      openToast({ content: "房间号仅支持数字", status: "warning" });
+    }
+
     try {
-      const data = await handleRoomFetch("joinRoom", inputWgnum);
+      const data = await handleRoomFetch(
+        "joinRoom",
+        Number(inputWgnum),
+        inputPasswd
+      );
       if (data.code === 0) {
         getRoomData();
         joinOnClose();
-        setInputWgnum(0);
       } else {
-        openToast({ content: data.msg, status: "error" });
+        if (data.msg === "加入该房间需要密码") {
+          setHideJoinPassInput(false);
+        }
+        openToast({ content: data.msg, status: "warning" });
       }
     } catch (err) {
       openToast({ content: `请求出错: ${String(err)}`, status: "error" });
@@ -374,25 +392,6 @@ export default function Page() {
       const data = await handleRoomFetch("exitRoom", 0);
       if (data.code === 0) {
         getRoomData();
-      } else {
-        openToast({ content: data.msg, status: "error" });
-      }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  };
-
-  // 添加成员
-  const handleAddMember = async () => {
-    if (!inputWgnum) {
-      return;
-    }
-    try {
-      const data = await handleRoomFetch("addMember", inputWgnum);
-      if (data.code === 0) {
-        getRoomData();
-        addOnClose();
-        setInputWgnum(0);
       } else {
         openToast({ content: data.msg, status: "error" });
       }
@@ -421,9 +420,9 @@ export default function Page() {
     else return "#ff3b3b";
   }
 
-  const handleAddMemberEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleSetPassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
-      handleAddMember();
+      handleSetRoomPasswd();
     }
   };
   const handleJoinRoomEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -480,30 +479,44 @@ export default function Page() {
             <ModalBody onKeyDown={handleJoinRoomEnter}>
               <Input
                 type="number"
-                placeholder="请输入房主的编号"
-                value={inputWgnum === 0 ? "" : inputWgnum}
-                onChange={(e) => setInputWgnum(Number(e.target.value))}
+                placeholder="请输入房间编号"
+                value={inputWgnum}
+                onChange={(e) => {
+                  setInputWgnum(e.target.value);
+                  setHideJoinPassInput(true);
+                }}
+              />
+
+              <Input
+                mt={3}
+                type="text"
+                placeholder="请输入房间密码"
+                value={inputPasswd}
+                onChange={(e) => {
+                  setInputPasswd(e.target.value);
+                }}
+                hidden={hideJoinPassInput}
               />
             </ModalBody>
+
             <ModalFooter>
               <Button
                 bgColor="#007bc0"
                 onClick={() => {
                   handleJoinRoom();
                 }}
-                mr={5}
+                // mr={5}
               >
                 加入
               </Button>
-              <Button
+              {/* <Button
                 bgColor="#d42424"
                 onClick={() => {
                   joinOnClose();
-                  setInputWgnum(0);
                 }}
               >
                 取消
-              </Button>
+              </Button> */}
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -515,7 +528,16 @@ export default function Page() {
             创建房间
           </Button>
 
-          <Button h="50px" fontSize="25px" onClick={joinOnOpen}>
+          <Button
+            h="50px"
+            fontSize="25px"
+            onClick={() => {
+              joinOnOpen();
+              setHideJoinPassInput(true);
+              setInputWgnum("");
+              setInputPasswd("");
+            }}
+          >
             加入房间
           </Button>
         </VStack>
@@ -526,33 +548,33 @@ export default function Page() {
   function roomPage() {
     return (
       <Box textAlign="center">
-        <Modal isOpen={addIsOpen} onClose={addOnClose}>
+        <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
           <ModalOverlay />
           <ModalContent bgColor="#002f5c">
-            <ModalHeader>添加成员</ModalHeader>
+            <ModalHeader>设置房间密码</ModalHeader>
 
             <ModalCloseButton />
 
-            <ModalBody onKeyDown={handleAddMemberEnter}>
+            <ModalBody onKeyDown={handleSetPassEnter}>
               <Input
-                placeholder="请输入新成员编号"
-                type="number"
-                onChange={(e) => setInputWgnum(Number(e.target.value))}
+                type="text"
+                placeholder="请输入房间密码"
+                value={inputPasswd}
+                onChange={(e) => setInputPasswd(e.target.value)}
               />
             </ModalBody>
             <ModalFooter>
-              <Button bgColor="#007bc0" onClick={handleAddMember} mr={5}>
-                添加
+              <Button bgColor="#007bc0" onClick={handleSetRoomPasswd}>
+                提交
               </Button>
-              <Button
+              {/* <Button
                 bgColor="#d42424"
                 onClick={() => {
-                  setInputWgnum(0);
-                  addOnClose();
+                  setPassOnClose();
                 }}
               >
                 取消
-              </Button>
+              </Button> */}
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -561,7 +583,6 @@ export default function Page() {
           roomInfo={roomInfo as RoomInfo}
           isOwner={status === "hoster" ? true : false}
           onDelete={handleDelMember}
-          onOpen={addOnopen}
         />
 
         <HStack justify="center">
@@ -569,12 +590,34 @@ export default function Page() {
           <Switch
             size="md"
             colorScheme="green"
-            isChecked={roomInfo?.public_room ? true : false}
-            isDisabled={status !== "hoster"}
+            isChecked={roomInfo?.room_passwd ? false : true}
             onChange={() => {
-              publicRoomSwitch(roomInfo?.public_room ? 0 : 1);
+              // 已设置密码就清空密码
+              if (roomInfo?.room_passwd) {
+                setInputPasswd("");
+                handleSetRoomPasswd();
+              } else {
+                setInputPasswd(
+                  roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                );
+                setPassOnOpen();
+              }
             }}
           />
+
+          <Button
+            px={0}
+            bg="transparent"
+            onClick={() => {
+              setInputPasswd(
+                roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+              );
+              setPassOnOpen();
+            }}
+            isDisabled={roomInfo?.room_passwd ? false : true}
+          >
+            <Text>设置密码</Text>
+          </Button>
 
           <Button
             px={2}
@@ -594,7 +637,7 @@ export default function Page() {
             <IoReloadCircle size={30} color="#35c535" />
           </Button>
 
-          {status === "hoster" && (
+          {/* {status === "hoster" && (
             <Button
               px={0}
               bg="transparent"
@@ -611,7 +654,7 @@ export default function Page() {
 
               <IoMdPersonAdd size={30} color="#35c535" />
             </Button>
-          )}
+          )} */}
         </HStack>
 
         <VStack alignItems="center">
@@ -726,16 +769,9 @@ interface IPListProps {
   roomInfo: RoomInfo;
   isOwner: boolean;
   onDelete: (wgnum: number) => void; // 删除IP的回调函数
-  onOpen: () => void;
 }
 
 function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
-  function getColor(status: "未连接" | "待加入" | "已加入"): string {
-    if (status === "未连接") return "#d80000";
-    else if (status === "待加入") return "#b8670f";
-    else return "#1a9225";
-  }
-
   return (
     <VStack>
       {roomInfo.members.map((item, index) => (
@@ -747,7 +783,11 @@ function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
                 房主
               </Tag>
             )}
-            <Tag ml="auto" color="white" bg={getColor(item.status)}>
+            <Tag
+              ml="auto"
+              color="white"
+              bg={item.status === "在线" ? "#1a9225" : "#d80000"}
+            >
               {item.status}
             </Tag>
           </Flex>
