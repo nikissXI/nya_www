@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Center, Divider, Text } from "@chakra-ui/react";
+import { Flex, Center, Divider, Text, Image } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
 
@@ -20,9 +20,7 @@ export default function Page() {
         <Text my={3}>
           玩家都处于一个联机房间后，房主主持农场（就是创建联机房间），其他玩家填房主的喵服IP加入即可
           <br />
-          加入的时候房主别把游戏后台
-          <br />
-          只能安卓和安卓联机，电脑和电脑联机
+          支持安卓、苹果、Steam一起联机
         </Text>
 
         <Button
@@ -36,6 +34,15 @@ export default function Page() {
         >
           点击查看视频教程
         </Button>
+
+        <Divider my={5} />
+
+        <Text>下图是移动端1.6.X解锁联机模式的方法，搬自官网</Text>
+
+        <Image
+          src="/images/星露谷1.6.X移动端解锁联机模式方法.jpg"
+          alt="星露谷1.6.X移动端解锁联机模式方法"
+        />
 
         <Divider my={5} />
 
