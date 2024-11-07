@@ -689,7 +689,7 @@ export default function Page() {
                 setDisableGetRoom(false); // 启用按钮
               }, 3000);
 
-              fetchNetworkLatency("short");
+              if (!checking) fetchNetworkLatency("short");
               getRoomData(false);
             }}
           >
