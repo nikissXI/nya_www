@@ -65,9 +65,11 @@ export default function UserProfilePage() {
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
   const [hideModifyUsername, setHideModifyUsername] = useState(true);
 
-  const modifyUsername = async (username: string) => {
+  const modifyUsername = async () => {
+    if (!inputUsername) return;
+
     const req_data = {
-      username: username,
+      username: inputUsername,
     };
     const resp = await fetch(`${apiUrl}/modifyUsername`, {
       method: "POST",
@@ -88,6 +90,14 @@ export default function UserProfilePage() {
       }
     } else {
       openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    }
+  };
+
+  const handlemodifyUsernameEnter = (
+    event: React.KeyboardEvent<HTMLDivElement>
+  ) => {
+    if (event.key === "Enter") {
+      modifyUsername();
     }
   };
 
@@ -677,6 +687,7 @@ export default function UserProfilePage() {
                     }
                   }}
                   placeholder="请输入昵称"
+                  onKeyDown={handlemodifyUsernameEnter}
                 />
                 <Button
                   hidden={hideModifyUsername}
@@ -686,9 +697,7 @@ export default function UserProfilePage() {
                   variant="link"
                   bgColor="transparent"
                   onClick={() => {
-                    if (inputUsername) {
-                      modifyUsername(inputUsername);
-                    }
+                    modifyUsername();
                   }}
                 >
                   修改

@@ -585,16 +585,16 @@ export default function Page() {
             <Box w="300px" key={item.ip}>
               <Flex>
                 <Text fontWeight="bold">{item.username}</Text>
-                {item.wgnum === roomInfo.hoster_wgnum && (
+                {item.wgnum === userInfo?.wg_data.wgnum && (
                   <Tag fontWeight="bold" ml={3} bg="#ffd012">
-                    房主
+                    你
                   </Tag>
                 )}
 
                 <Tag
                   ml="auto"
                   color="white"
-                  bg={item.status === "在线" ? "#1c9f00" : "#d80000"}
+                  bg={item.status === "在线" ? "#1c9f00" : "#be1c1c"}
                 >
                   {item.status}
                 </Tag>
@@ -622,7 +622,7 @@ export default function Page() {
                     h="26px"
                     size="sm"
                     lineHeight={0}
-                    bgColor="#d83636"
+                    bgColor="#be1c1c"
                     ml="auto"
                     hidden={item.wgnum === roomInfo.hoster_wgnum}
                     onClick={() => handleDelMember(item.wgnum)}
@@ -704,7 +704,7 @@ export default function Page() {
             w="6rem"
             mt={3}
             size="lg"
-            bg="#8f2424"
+            bg="#be1c1c"
             onClick={status === "hoster" ? handleCloseRoom : handleExitRoom}
           >
             {status === "hoster" ? "关闭房间" : "退出房间"}
