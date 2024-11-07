@@ -740,12 +740,16 @@ export default function Page() {
   return (
     <VStack alignItems="center">
       <Flex align="center">
-        <Text fontSize={18} fontWeight="bold">
-          {status === "none" ? "" : `房间号 ${wgnum}`}
-        </Text>
+        {status !== "none" && (
+          <Text fontSize={18} fontWeight="bold" mr={3}>
+            房间号 {wgnum}
+          </Text>
+        )}
+
         <Text
           fontSize={18}
-          mx={3}
+          p={0}
+          mr={1}
           fontWeight="bold"
           color={latencyData ? "#3fdb1d" : "#ff0000"}
         >
