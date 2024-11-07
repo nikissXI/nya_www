@@ -18,7 +18,6 @@ import {
   ModalFooter,
   useDisclosure,
   Flex,
-  Divider,
   Switch,
   Tag,
 } from "@chakra-ui/react";
@@ -34,7 +33,8 @@ import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
 import { useRouter } from "next/navigation";
 import { copyText, isInteger } from "@/utils/strings";
-import { input } from "framer-motion/client";
+import { IoIosExit } from "react-icons/io";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -229,7 +229,7 @@ export default function Page() {
   // };
 
   // 开关任意加入
-  const handleSetRoomPasswd = async () => {
+  const handleSetRoomPasswd = async (newPasswd: string) => {
     try {
       if (loading === true) {
         throw new Error(`请不要点太快`);
@@ -237,7 +237,7 @@ export default function Page() {
 
       setLoading(true);
       const resp = await fetch(
-        `${apiUrl}/setRoomPasswd?roomPasswd=${inputPasswd}`,
+        `${apiUrl}/setRoomPasswd?roomPasswd=${newPasswd}`,
         {
           method: "GET",
           headers: {
@@ -255,7 +255,7 @@ export default function Page() {
         if (roomInfo)
           setRoomData({
             ...roomInfo,
-            room_passwd: inputPasswd,
+            room_passwd: newPasswd,
           });
         openToast({ content: data.msg, status: "success" });
       } else {
@@ -423,7 +423,7 @@ export default function Page() {
 
   const handleSetPassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
-      handleSetRoomPasswd();
+      handleSetRoomPasswd(inputPasswd);
     }
   };
   const handleJoinRoomEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -565,8 +565,11 @@ export default function Page() {
               />
             </ModalBody>
             <ModalFooter>
-              <Button bgColor="#007bc0" onClick={handleSetRoomPasswd}>
-                提交
+              <Button
+                bgColor="#007bc0"
+                onClick={() => handleSetRoomPasswd(inputPasswd)}
+              >
+                更新密码
               </Button>
               {/* <Button
                 bgColor="#d42424"
@@ -582,103 +585,136 @@ export default function Page() {
 
         <VStack>
           {roomInfo?.members.map((item, index) => (
-            <Box w="300px" key={item.ip}>
+            <Box
+              w="300px"
+              key={item.ip}
+              bg="rgb(75 127 187 / 38%)"
+              p={2}
+              borderRadius={12}
+            >
               <Flex>
-                <Text fontWeight="bold">{item.username}</Text>
-                {item.wgnum === userInfo?.wg_data.wgnum && (
+                <Text
+                  fontWeight="bold"
+                  fontSize="1.1rem"
+                  ml={2}
+                  color={
+                    item.wgnum === userInfo?.wg_data.wgnum ? "#ffd012" : "white"
+                  }
+                >
+                  {item.username}
+                </Text>
+                {/* {item.wgnum === userInfo?.wg_data.wgnum && (
                   <Tag fontWeight="bold" ml={3} bg="#ffd012">
-                    你
+                    自己
                   </Tag>
-                )}
+                )} */}
 
                 <Tag
+                  size="md"
                   ml="auto"
-                  color="white"
-                  bg={item.status === "在线" ? "#1c9f00" : "#be1c1c"}
+                  // color="white"
+                  bg="transparent"
+                  fontWeight="bold"
+                  color={item.status === "在线" ? "#3fdb1d" : "#ff4444"}
                 >
                   {item.status}
                 </Tag>
               </Flex>
 
-              <Flex my={2}>
+              <Flex mt={1}>
                 <Tag
                   onClick={() => {
                     copyText(String(item.wgnum));
                   }}
+                  color="white"
+                  bg="transparent"
                 >
-                  编号 {item.wgnum}
+                  编号{item.wgnum}
                 </Tag>
                 <Tag
-                  ml={3}
                   onClick={() => {
                     copyText(item.ip);
                   }}
+                  color="white"
+                  bg="transparent"
                 >
-                  IP {item.ip}
+                  ip {item.ip}
                 </Tag>
 
-                {status === "hoster" && (
-                  <Button
-                    h="26px"
-                    size="sm"
-                    lineHeight={0}
-                    bgColor="#be1c1c"
-                    ml="auto"
-                    hidden={item.wgnum === roomInfo.hoster_wgnum}
-                    onClick={() => handleDelMember(item.wgnum)}
-                  >
-                    踢出
-                  </Button>
-                )}
+                {status === "hoster" &&
+                  item.wgnum !== roomInfo.hoster_wgnum && (
+                    <Tag
+                      ml="auto"
+                      color="white"
+                      bg="#be1c1c"
+                      onClick={() => handleDelMember(item.wgnum)}
+                      cursor="pointer"
+                    >
+                      踢出
+                    </Tag>
+                  )}
               </Flex>
 
-              {index < roomInfo.members.length - 1 && (
+              {/* {index < roomInfo.members.length - 1 && (
                 <Divider borderWidth={2} mt={1} />
-              )}
+              )} */}
             </Box>
           ))}
         </VStack>
 
-        <HStack justify="center">
-          {status === "hoster" && (
-            <HStack>
-              <Text fontWeight="bold">任意加入</Text>
-              <Switch
-                size="md"
-                colorScheme="green"
-                isChecked={roomInfo?.room_passwd ? false : true}
-                onChange={() => {
-                  // 已设置密码就清空密码
-                  if (roomInfo?.room_passwd) {
-                    setInputPasswd("");
-                    handleSetRoomPasswd();
-                  } else {
-                    setInputPasswd(
-                      roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
-                    );
-                    setPassOnOpen();
-                  }
-                }}
-              />
+        {status === "hoster" && (
+          <HStack justify="center" mt={3} spacing={0}>
+            <Text fontWeight="bold">允许直接加入</Text>
+            {roomInfo?.room_passwd ? <FaTimes /> : <FaCheck />}
 
-              <Button
-                px={0}
-                bg="transparent"
-                onClick={() => {
+            <Switch
+              px={2}
+              size="md"
+              colorScheme="green"
+              isChecked={roomInfo?.room_passwd ? false : true}
+              onChange={() => {
+                // 已设置密码就清空密码
+                if (roomInfo?.room_passwd) {
+                  setInputPasswd("");
+                  handleSetRoomPasswd("");
+                } else {
                   setInputPasswd(
                     roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
                   );
                   setPassOnOpen();
-                }}
-                isDisabled={roomInfo?.room_passwd ? false : true}
-              >
-                <Text>设置密码</Text>
-              </Button>
-            </HStack>
-          )}
+                }
+              }}
+            />
+
+            <Button
+              variant="link"
+              bg="transparent"
+              hidden={roomInfo?.room_passwd ? false : true}
+              onClick={() => {
+                setInputPasswd(
+                  roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                );
+                setPassOnOpen();
+              }}
+              isDisabled={roomInfo?.room_passwd ? false : true}
+            >
+              <Text>查看房间密码</Text>
+            </Button>
+          </HStack>
+        )}
+
+        <HStack justify="center">
+          <Button
+            size="lg"
+            bg="transparent"
+            onClick={status === "hoster" ? handleCloseRoom : handleExitRoom}
+          >
+            {status === "hoster" ? "关闭房间" : "退出房间"}
+            <IoIosExit size={30} color="#ff4444" />
+          </Button>
 
           <Button
-            px={2}
+            size="lg"
             bg="transparent"
             onClick={() => {
               if (disableGetRoom === true) return;
@@ -693,23 +729,10 @@ export default function Page() {
               getRoomData(false);
             }}
           >
-            <Text mr={1}>刷新</Text>
-            <IoReloadCircle size={30} color="#35c535" />
+            刷新房间
+            <IoReloadCircle size={26} color="#35c535" />
           </Button>
         </HStack>
-
-        <VStack alignItems="center">
-          <Button
-            h="2.3rem"
-            w="6rem"
-            mt={3}
-            size="lg"
-            bg="#be1c1c"
-            onClick={status === "hoster" ? handleCloseRoom : handleExitRoom}
-          >
-            {status === "hoster" ? "关闭房间" : "退出房间"}
-          </Button>
-        </VStack>
       </Box>
     );
   }
@@ -717,7 +740,7 @@ export default function Page() {
   return (
     <VStack alignItems="center">
       <Flex align="center">
-        <Text fontSize={18} fontWeight="bold" color="#ffd012">
+        <Text fontSize={18} fontWeight="bold">
           {status === "none" ? "" : `房间号 ${wgnum}`}
         </Text>
         <Text
@@ -754,18 +777,17 @@ export default function Page() {
 
       {!latencyData && !checkText && (
         <Flex align="center">
-          <Text>不知道怎么连接喵服？</Text>
+          {/* <Text>不知道怎么连接喵服？</Text> */}
           <Button
             variant="link"
-            bg="#7242ad"
-            size="sm"
-            p={1}
-            h={7}
+            bg="transparent"
+            size="lg"
             onClick={() => {
               router.push("/tutorial");
             }}
+            color="#a8d1ff"
           >
-            点我学习
+            不知道怎么连接喵服？点我学习
           </Button>
         </Flex>
         // <>
@@ -790,17 +812,17 @@ export default function Page() {
       {status === "none" ? nonePage() : roomPage()}
 
       <Button
-        h="36px"
-        w="90px"
-        mt={3}
-        bgColor="#7242ad"
-        fontSize="16px"
+        bg="transparent"
+        size="lg"
+        // bg="#7242ad"
+        // fontSize="16px"
         onClick={gameListToggle}
+        color="#a8d1ff"
       >
-        联机教程
+        点我查看联机教程
       </Button>
 
-      <Text>里面有已收录的游戏联机教程</Text>
+      {/* <Text>里面有已收录的游戏联机教程</Text> */}
     </VStack>
   );
 }
