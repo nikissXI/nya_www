@@ -669,7 +669,7 @@ export default function Page() {
           fontSize={18}
           mx={3}
           fontWeight="bold"
-          color={latencyData ? "#3fdb1d" : "#d80000"}
+          color={latencyData ? "#3fdb1d" : "#ff0000"}
         >
           {latencyData ? "已连接" : "未连接"}
         </Text>
@@ -698,36 +698,36 @@ export default function Page() {
       </Flex>
 
       {!latencyData && !checkText && (
-        <>
-          <Flex align="center">
-            <Text>不知道怎么连接喵服？</Text>
-            <Button
-              variant="link"
-              bg="#7242ad"
-              size="sm"
-              p={1}
-              h={7}
-              onClick={() => {
-                router.push("/tutorial");
-              }}
-            >
-              点我学习
-            </Button>
-          </Flex>
+        <Flex align="center">
+          <Text>不知道怎么连接喵服？</Text>
+          <Button
+            variant="link"
+            bg="#7242ad"
+            size="sm"
+            p={1}
+            h={7}
+            onClick={() => {
+              router.push("/tutorial");
+            }}
+          >
+            点我学习
+          </Button>
+        </Flex>
+        // <>
 
-          <Flex align="center">
-            <Text>WG打开了还是检测不到？</Text>
-            <Button
-              variant="link"
-              size="sm"
-              p={1}
-              h={7}
-              onClick={wgReInsert}
-            >
-              点我修复
-            </Button>
-          </Flex>
-        </>
+        //   <Flex align="center">
+        //     <Text>WG打开了还是检测不到？</Text>
+        //     <Button
+        //       variant="link"
+        //       size="sm"
+        //       p={1}
+        //       h={7}
+        //       onClick={wgReInsert}
+        //     >
+        //       点我修复
+        //     </Button>
+        //   </Flex>
+        // </>
       )}
 
       <Text>{checkText}</Text>
