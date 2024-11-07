@@ -208,25 +208,25 @@ export default function Page() {
     [wgnum, apiUrl]
   );
 
-  const wgReInsert = async () => {
-    setCheckText("修复中。。。");
-    try {
-      const resp = await fetch(`${apiUrl}/wgReinsert`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      });
+  // const wgReInsert = async () => {
+  //   setCheckText("修复中。。。");
+  //   try {
+  //     const resp = await fetch(`${apiUrl}/wgReinsert`, {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${getAuthToken()}`,
+  //       },
+  //     });
 
-      if (resp.ok) {
-        setCheckText("VPN重连试试，还不行请检查编号是否有效");
-      } else {
-        setCheckText("请求失败，请刷新网页再试");
-      }
-    } catch (error) {
-      setCheckText("请求发生错误，请刷新网页再试");
-    }
-  };
+  //     if (resp.ok) {
+  //       setCheckText("VPN重连试试，还不行请检查编号是否有效");
+  //     } else {
+  //       setCheckText("请求失败，请刷新网页再试");
+  //     }
+  //   } catch (error) {
+  //     setCheckText("请求发生错误，请刷新网页再试");
+  //   }
+  // };
 
   // 开关任意加入
   const handleSetRoomPasswd = async () => {
@@ -273,23 +273,23 @@ export default function Page() {
     }
   }, [userInfo]);
 
-  useEffect(() => {
-    if (wgnum !== 0) {
-      const interval = setInterval(() => {
-        getRoomData();
-      }, 30000); // 每10秒更新一次房间列表
-      return () => clearInterval(interval); // 清理定时器
-    }
-  }, [wgnum, getRoomData]);
+  // useEffect(() => {
+  //   if (wgnum !== 0) {
+  //     const interval = setInterval(() => {
+  //       getRoomData();
+  //     }, 30000); // 每10秒更新一次房间列表
+  //     return () => clearInterval(interval); // 清理定时器
+  //   }
+  // }, [wgnum, getRoomData]);
 
-  useEffect(() => {
-    if (wgnum !== 0 && !checking) {
-      const interval = setInterval(() => {
-        fetchNetworkLatency("short", true);
-      }, 30000); /// 每10秒更新一一次延迟
-      return () => clearInterval(interval); // 清理定时器
-    }
-  }, [wgnum, checking, fetchNetworkLatency]);
+  // useEffect(() => {
+  //   if (wgnum !== 0 && !checking) {
+  //     const interval = setInterval(() => {
+  //       fetchNetworkLatency("short", true);
+  //     }, 30000); /// 每10秒更新一一次延迟
+  //     return () => clearInterval(interval); // 清理定时器
+  //   }
+  // }, [wgnum, checking, fetchNetworkLatency]);
 
   useEffect(() => {
     const fetchData = () => {
@@ -580,11 +580,64 @@ export default function Page() {
           </ModalContent>
         </Modal>
 
-        <IPList
-          roomInfo={roomInfo as RoomInfo}
-          isOwner={status === "hoster" ? true : false}
-          onDelete={handleDelMember}
-        />
+        <VStack>
+          {roomInfo?.members.map((item, index) => (
+            <Box w="300px" key={item.ip}>
+              <Flex>
+                <Text fontWeight="bold">{item.username}</Text>
+                {item.wgnum === roomInfo.hoster_wgnum && (
+                  <Tag fontWeight="bold" ml={3} bg="#ffd012">
+                    房主
+                  </Tag>
+                )}
+
+                <Tag
+                  ml="auto"
+                  color="white"
+                  bg={item.status === "在线" ? "#1c9f00" : "#d80000"}
+                >
+                  {item.status}
+                </Tag>
+              </Flex>
+
+              <Flex my={2}>
+                <Tag
+                  onClick={() => {
+                    copyText(String(item.wgnum));
+                  }}
+                >
+                  编号 {item.wgnum}
+                </Tag>
+                <Tag
+                  ml={3}
+                  onClick={() => {
+                    copyText(item.ip);
+                  }}
+                >
+                  IP {item.ip}
+                </Tag>
+
+                {status === "hoster" && (
+                  <Button
+                    h="26px"
+                    size="sm"
+                    lineHeight={0}
+                    bgColor="#d83636"
+                    ml="auto"
+                    hidden={item.wgnum === roomInfo.hoster_wgnum}
+                    onClick={() => handleDelMember(item.wgnum)}
+                  >
+                    踢出
+                  </Button>
+                )}
+              </Flex>
+
+              {index < roomInfo.members.length - 1 && (
+                <Divider borderWidth={2} mt={1} />
+              )}
+            </Box>
+          ))}
+        </VStack>
 
         <HStack justify="center">
           {status === "hoster" && (
@@ -635,6 +688,8 @@ export default function Page() {
               setTimeout(() => {
                 setDisableGetRoom(false); // 启用按钮
               }, 3000);
+
+              fetchNetworkLatency("short");
               getRoomData(false);
             }}
           >
@@ -662,7 +717,7 @@ export default function Page() {
   return (
     <VStack alignItems="center">
       <Flex align="center">
-        <Text fontSize={18} fontWeight="bold" color="#ffd964">
+        <Text fontSize={18} fontWeight="bold" color="#ffd012">
           {status === "none" ? "" : `房间号 ${wgnum}`}
         </Text>
         <Text
@@ -746,74 +801,6 @@ export default function Page() {
       </Button>
 
       <Text>里面有已收录的游戏联机教程</Text>
-    </VStack>
-  );
-}
-
-interface IPListProps {
-  roomInfo: RoomInfo;
-  isOwner: boolean;
-  onDelete: (wgnum: number) => void; // 删除IP的回调函数
-}
-
-function IPList({ roomInfo, isOwner, onDelete }: IPListProps) {
-  return (
-    <VStack>
-      {roomInfo.members.map((item, index) => (
-        <Box w="300px" key={item.ip}>
-          <Flex>
-            <Text fontWeight="bold">{item.username}</Text>
-            {item.wgnum === roomInfo.hoster_wgnum && (
-              <Tag fontWeight="bold" ml={3} bg="#ffd012">
-                房主
-              </Tag>
-            )}
-            <Tag
-              ml="auto"
-              color="white"
-              bg={item.status === "在线" ? "#1c9f00" : "#d80000"}
-            >
-              {item.status}
-            </Tag>
-          </Flex>
-
-          <Flex my={2}>
-            <Tag
-              onClick={() => {
-                copyText(String(item.wgnum));
-              }}
-            >
-              编号 {item.wgnum}
-            </Tag>
-            <Tag
-              ml={3}
-              onClick={() => {
-                copyText(item.ip);
-              }}
-            >
-              IP {item.ip}
-            </Tag>
-
-            {isOwner && (
-              <Button
-                h="26px"
-                size="sm"
-                lineHeight={0}
-                bgColor="#d83636"
-                ml="auto"
-                hidden={item.wgnum === roomInfo.hoster_wgnum}
-                onClick={() => onDelete(item.wgnum)}
-              >
-                踢出
-              </Button>
-            )}
-          </Flex>
-
-          {index < roomInfo.members.length - 1 && (
-            <Divider borderWidth={2} mt={1} />
-          )}
-        </Box>
-      ))}
     </VStack>
   );
 }
