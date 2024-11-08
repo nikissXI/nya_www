@@ -176,6 +176,7 @@ export default function Page() {
         if (result.code !== 0) {
           // 未连接
           setLatencyData(null);
+          openToast({ content: "你还没连接喵服将无法联机！", status: "warning" });
         } else {
           // 已连接
           setLatencyData(result.data);
@@ -791,8 +792,6 @@ export default function Page() {
             }}
             color="#a8d1ff"
           >
-            离线状态无法联机
-            <br />
             点我学习连接喵服
           </Button>
         </Flex>
