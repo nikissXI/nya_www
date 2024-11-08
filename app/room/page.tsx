@@ -753,7 +753,7 @@ export default function Page() {
           fontWeight="bold"
           color={latencyData ? "#3fdb1d" : "#ff0000"}
         >
-          {latencyData ? "已连接" : "未连接"}
+          {latencyData ? "在线" : "离线"}
         </Text>
         {latencyData && (
           <Flex align="center">
@@ -791,7 +791,9 @@ export default function Page() {
             }}
             color="#a8d1ff"
           >
-            不知道怎么连接喵服？点我学习
+            离线状态无法联机
+            <br />
+            点我学习连接喵服
           </Button>
         </Flex>
         // <>
