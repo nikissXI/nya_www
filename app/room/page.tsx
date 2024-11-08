@@ -175,11 +175,36 @@ export default function Page() {
         const result = await resp.json();
         if (result.code !== 0) {
           // 未连接
+          openToast({
+            content: "你还没连接喵服将无法联机！",
+            status: "warning",
+          });
           setLatencyData(null);
-          openToast({ content: "你还没连接喵服将无法联机！", status: "warning" });
+
+          if (roomInfo)
+            setRoomData({
+              ...roomInfo,
+              members: roomInfo.members.map((member) => {
+                if (member.wgnum === userInfo?.wg_data.wgnum) {
+                  return { ...member, status: "离线" }; // 修改状态为离线
+                }
+                return member; // 保持其他成员不变
+              }),
+            });
         } else {
           // 已连接
           setLatencyData(result.data);
+
+          if (roomInfo)
+            setRoomData({
+              ...roomInfo,
+              members: roomInfo.members.map((member) => {
+                if (member.wgnum === userInfo?.wg_data.wgnum) {
+                  return { ...member, status: "在线" }; // 修改状态为离线
+                }
+                return member; // 保持其他成员不变
+              }),
+            });
 
           if (checkType === "long") {
             setCheckText("约10秒后返回详细网络检测结果");
@@ -258,6 +283,7 @@ export default function Page() {
             ...roomInfo,
             room_passwd: newPasswd,
           });
+
         openToast({ content: data.msg, status: "success" });
       } else {
         openToast({ content: data.msg, status: "warning" });
