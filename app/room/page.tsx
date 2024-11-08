@@ -271,7 +271,7 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [loading, roomInfo, setPassIsOpen]
+    [apiUrl, loading, roomInfo, setPassIsOpen, setPassOnClose]
   );
 
   useEffect(() => {
@@ -309,7 +309,7 @@ export default function Page() {
       }
       return resp.json() as Promise<HandleRoomResponse>;
     },
-    [loading]
+    [apiUrl, loading]
   );
 
   // 创建房间
