@@ -270,6 +270,10 @@ export default function Page() {
         maxW="300px"
         onKeyDown={handleRegisterEnter}
       >
+        <Text color="#ffd648" fontSize="16px">
+          注册尽量用邮箱，短信贵T.T
+        </Text>
+
         <Flex>
           注册方式
           <RadioGroup
