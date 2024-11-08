@@ -101,11 +101,10 @@ export default function Page() {
 
   const [inputWgnum, setInputWgnum] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
-  // const [wgnum, setUserWgnum] = useState(0);
   const [latencyData, setLatencyData] = useState<LatencyData | null>(null);
   const [checking, setChecking] = useState(true);
   const [checkText, setCheckText] = useState("");
-  const { logging, logined, userInfo } = useUserStateStore();
+  const { logined, userInfo } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
     return state.modifyGameListDisclosure;
@@ -212,24 +211,6 @@ export default function Page() {
     [userInfo, apiUrl]
   );
 
-  // const updateUserOnlineStatus = ()=>{
-
-
-  // }
-
-  // useEffect(() => {
-  //   if (roomInfo)
-  //     setRoomData({
-  //       ...roomInfo,
-  //       members: roomInfo?.members.map((member) => {
-  //         if (member.wgnum === userInfo?.wg_data?.wgnum) {
-  //           return { ...member, status: latencyData ? "在线" : "离线" }; // 修改状态为离线
-  //         }
-  //         return member; // 保持其他成员不变
-  //       }),
-  //     });
-  // }, [latencyData, userInfo, roomInfo]);
-
   // const wgReInsert = async () => {
   //   setCheckText("修复中。。。");
   //   try {
@@ -251,15 +232,70 @@ export default function Page() {
   // };
 
   // 开关任意加入
-  const handleSetRoomPasswd =  async (newPasswd: string) => {
-    try {
+  const handleSetRoomPasswd = useCallback(
+    async (newPasswd: string) => {
+      try {
+        if (loading === true) {
+          throw new Error(`请不要点太快`);
+        }
+
+        setLoading(true);
+        const resp = await fetch(
+          `${apiUrl}/setRoomPasswd?roomPasswd=${newPasswd}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          }
+        );
+        setLoading(false);
+        if (!resp.ok) {
+          throw new Error(`访问接口出错: ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        if (data.code === 0) {
+          if (roomInfo)
+            setRoomData({
+              ...roomInfo,
+              room_passwd: newPasswd,
+            });
+
+          openToast({ content: data.msg, status: "success" });
+        } else {
+          openToast({ content: data.msg, status: "warning" });
+        }
+        if (setPassIsOpen) setPassOnClose();
+      } catch (err) {
+        openToast({ content: String(err), status: "error" });
+      }
+    },
+    [loading, roomInfo, setPassIsOpen]
+  );
+
+  useEffect(() => {
+    fetchNetworkLatency("short");
+  }, [userInfo, fetchNetworkLatency]);
+
+  useEffect(() => {
+    getRoomData();
+  }, [userInfo, getRoomData]);
+
+  // 发送房间操作请求
+  const handleRoomFetch = useCallback(
+    async (
+      handleType: string,
+      handleWgnum: number,
+      roomPasswd: string = ""
+    ): Promise<HandleRoomResponse> => {
       if (loading === true) {
         throw new Error(`请不要点太快`);
       }
 
       setLoading(true);
       const resp = await fetch(
-        `${apiUrl}/setRoomPasswd?roomPasswd=${newPasswd}`,
+        `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}&roomPasswd=${roomPasswd}`,
         {
           method: "GET",
           headers: {
@@ -271,94 +307,10 @@ export default function Page() {
       if (!resp.ok) {
         throw new Error(`访问接口出错: ${resp.status}`);
       }
-
-      const data = await resp.json();
-      if (data.code === 0) {
-        if (roomInfo)
-          setRoomData({
-            ...roomInfo,
-            room_passwd: newPasswd,
-          });
-
-        openToast({ content: data.msg, status: "success" });
-      } else {
-        openToast({ content: data.msg, status: "warning" });
-      }
-      if (setPassIsOpen) setPassOnClose();
-    } catch (err) {
-      openToast({ content: String(err), status: "error" });
-    }
-  };
-
-  // useEffect(() => {
-  //   if (userInfo && userInfo.wg_data) {
-  //     setUserWgnum(userInfo.wg_data.wgnum);
-  //   }
-  // }, [userInfo]);
-
-  // useEffect(() => {
-  //   if (wgnum !== 0) {
-  //     const interval = setInterval(() => {
-  //       getRoomData();
-  //     }, 30000); // 每10秒更新一次房间列表
-  //     return () => clearInterval(interval); // 清理定时器
-  //   }
-  // }, [wgnum, getRoomData]);
-
-  // useEffect(() => {
-  //   if (wgnum !== 0 && !checking) {
-  //     const interval = setInterval(() => {
-  //       fetchNetworkLatency("short", true);
-  //     }, 30000); /// 每10秒更新一一次延迟
-  //     return () => clearInterval(interval); // 清理定时器
-  //   }
-  // }, [wgnum, checking, fetchNetworkLatency]);
-
-  // useEffect(() => {
-  //   const fetchData = () => {
-  //     // 如果已登录就拉房间信息
-  //     if (wgnum !== 0) {
-  //       getRoomData();
-  //       fetchNetworkLatency("short");
-  //     }
-  //   };
-  //   fetchData();
-  // }, [wgnum, fetchNetworkLatency, getRoomData]);
-
-  useEffect(() => {
-    fetchNetworkLatency("short");
-  }, [userInfo, fetchNetworkLatency]);
-
-  useEffect(() => {
-    getRoomData();
-  }, [userInfo, getRoomData]);
-
-  // 发送房间操作请求
-  const handleRoomFetch = async (
-    handleType: string,
-    handleWgnum: number,
-    roomPasswd: string = ""
-  ): Promise<HandleRoomResponse> => {
-    if (loading === true) {
-      throw new Error(`请不要点太快`);
-    }
-
-    setLoading(true);
-    const resp = await fetch(
-      `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}&roomPasswd=${roomPasswd}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      }
-    );
-    setLoading(false);
-    if (!resp.ok) {
-      throw new Error(`访问接口出错: ${resp.status}`);
-    }
-    return resp.json() as Promise<HandleRoomResponse>;
-  };
+      return resp.json() as Promise<HandleRoomResponse>;
+    },
+    [loading]
+  );
 
   // 创建房间
   const handleCreateRoom = async () => {
@@ -389,21 +341,17 @@ export default function Page() {
   };
 
   // 加入房间
-  const handleJoinRoom = async () => {
-    if (!inputWgnum) {
+  const handleJoinRoom = async (wgnum: string, passwd: string) => {
+    if (!wgnum) {
       return;
     }
 
-    if (!isInteger(inputWgnum)) {
+    if (!isInteger(wgnum)) {
       openToast({ content: "房间号仅支持数字", status: "warning" });
     }
 
     try {
-      const data = await handleRoomFetch(
-        "joinRoom",
-        Number(inputWgnum),
-        inputPasswd
-      );
+      const data = await handleRoomFetch("joinRoom", Number(wgnum), passwd);
       if (data.code === 0) {
         getRoomData();
         joinOnClose();
@@ -459,7 +407,7 @@ export default function Page() {
   };
   const handleJoinRoomEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
-      handleJoinRoom();
+      handleJoinRoom(inputWgnum, inputPasswd);
     }
   };
 
@@ -535,7 +483,7 @@ export default function Page() {
               <Button
                 bgColor="#007bc0"
                 onClick={() => {
-                  handleJoinRoom();
+                  handleJoinRoom(inputWgnum, inputPasswd);
                 }}
                 // mr={5}
               >
