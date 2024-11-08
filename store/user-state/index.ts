@@ -17,7 +17,7 @@ interface UserInfo {
   tel: string;
   email: string;
   qq: string;
-  wg_data: WGData;
+  wg_data: WGData | null;
 }
 
 interface ILoginStateSlice {

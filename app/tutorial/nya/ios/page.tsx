@@ -26,6 +26,10 @@ export default function Page() {
     return state.modifyLoginDisclosure;
   });
 
+  const { onToggle: getWgnumToggle } = useDisclosureStore((state) => {
+    return state.modifyGetWgnumDisclosure;
+  });
+
   const downloadConf = async () => {
     const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
       method: "GET",
@@ -101,22 +105,37 @@ export default function Page() {
           <ListItem>
             {logined ? (
               <>
-                <Button
-                  size="sm"
-                  onClick={() => GetConfUrl(userInfo?.wg_data.wgnum as number)}
-                  isDisabled={logined ? false : true}
-                >
-                  下载通道1
-                </Button>
+                {userInfo?.wg_data ? (
+                  <>
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        GetConfUrl(userInfo.wg_data?.wgnum as number)
+                      }
+                      isDisabled={logined ? false : true}
+                    >
+                      下载通道1
+                    </Button>
 
-                <Button
-                  ml={5}
-                  size="sm"
-                  onClick={downloadConf}
-                  isDisabled={logined ? false : true}
-                >
-                  下载通道2
-                </Button>
+                    <Button
+                      ml={5}
+                      size="sm"
+                      onClick={downloadConf}
+                      isDisabled={logined ? false : true}
+                    >
+                      下载通道2
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    rounded={5}
+                    onClick={getWgnumToggle}
+                    bgColor="#007bc0"
+                    size="sm"
+                  >
+                    你还没获取编号
+                  </Button>
+                )}
               </>
             ) : (
               <Button bgColor="#1d984b" size="sm" onClick={loginToggle} ml={5}>

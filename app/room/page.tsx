@@ -101,11 +101,11 @@ export default function Page() {
 
   const [inputWgnum, setInputWgnum] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
-  const [wgnum, setUserWgnum] = useState(0);
+  // const [wgnum, setUserWgnum] = useState(0);
   const [latencyData, setLatencyData] = useState<LatencyData | null>(null);
   const [checking, setChecking] = useState(true);
   const [checkText, setCheckText] = useState("");
-  const { logined, userInfo } = useUserStateStore();
+  const { logging, logined, userInfo } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
     return state.modifyGameListDisclosure;
@@ -121,6 +121,7 @@ export default function Page() {
 
   const getRoomData = useCallback(
     async (noToast: boolean = true) => {
+      if (!userInfo?.wg_data) return;
       // 从环境变量获取 API 地址
       fetch(`${apiUrl}/getRoom`, {
         method: "GET",
@@ -153,21 +154,20 @@ export default function Page() {
         })
         .finally(() => {});
     },
-    [apiUrl]
+    [userInfo, apiUrl]
   );
 
   const fetchNetworkLatency = useCallback(
     async (checkType: string, auto: boolean = false) => {
-      if (wgnum === 0) {
-        return;
-      }
+      if (!userInfo?.wg_data) return;
+
       setChecking(true);
       if (!auto) {
         setCheckText("");
       }
       try {
         const resp = await fetch(
-          `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=1`
+          `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=1`
         );
         if (!resp.ok) {
           console.error(`访问接口出错: ${resp.status}`);
@@ -180,36 +180,14 @@ export default function Page() {
             status: "warning",
           });
           setLatencyData(null);
-
-          if (roomInfo)
-            setRoomData({
-              ...roomInfo,
-              members: roomInfo.members.map((member) => {
-                if (member.wgnum === userInfo?.wg_data.wgnum) {
-                  return { ...member, status: "离线" }; // 修改状态为离线
-                }
-                return member; // 保持其他成员不变
-              }),
-            });
         } else {
           // 已连接
           setLatencyData(result.data);
 
-          if (roomInfo)
-            setRoomData({
-              ...roomInfo,
-              members: roomInfo.members.map((member) => {
-                if (member.wgnum === userInfo?.wg_data.wgnum) {
-                  return { ...member, status: "在线" }; // 修改状态为离线
-                }
-                return member; // 保持其他成员不变
-              }),
-            });
-
           if (checkType === "long") {
             setCheckText("约10秒后返回详细网络检测结果");
             const resp = await fetch(
-              `${apiUrl}/networkCheck?wgnum=${wgnum}&checkType=2`
+              `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=2`
             );
             if (!resp.ok) {
               console.error(`访问接口出错: ${resp.status}`);
@@ -231,8 +209,26 @@ export default function Page() {
       } catch (err) {}
       setChecking(false);
     },
-    [wgnum, apiUrl]
+    [userInfo, apiUrl]
   );
+
+  // const updateUserOnlineStatus = ()=>{
+
+
+  // }
+
+  // useEffect(() => {
+  //   if (roomInfo)
+  //     setRoomData({
+  //       ...roomInfo,
+  //       members: roomInfo?.members.map((member) => {
+  //         if (member.wgnum === userInfo?.wg_data?.wgnum) {
+  //           return { ...member, status: latencyData ? "在线" : "离线" }; // 修改状态为离线
+  //         }
+  //         return member; // 保持其他成员不变
+  //       }),
+  //     });
+  // }, [latencyData, userInfo, roomInfo]);
 
   // const wgReInsert = async () => {
   //   setCheckText("修复中。。。");
@@ -255,7 +251,7 @@ export default function Page() {
   // };
 
   // 开关任意加入
-  const handleSetRoomPasswd = async (newPasswd: string) => {
+  const handleSetRoomPasswd =  async (newPasswd: string) => {
     try {
       if (loading === true) {
         throw new Error(`请不要点太快`);
@@ -294,11 +290,11 @@ export default function Page() {
     }
   };
 
-  useEffect(() => {
-    if (userInfo && userInfo.wg_data) {
-      setUserWgnum(userInfo.wg_data.wgnum);
-    }
-  }, [userInfo]);
+  // useEffect(() => {
+  //   if (userInfo && userInfo.wg_data) {
+  //     setUserWgnum(userInfo.wg_data.wgnum);
+  //   }
+  // }, [userInfo]);
 
   // useEffect(() => {
   //   if (wgnum !== 0) {
@@ -318,16 +314,24 @@ export default function Page() {
   //   }
   // }, [wgnum, checking, fetchNetworkLatency]);
 
+  // useEffect(() => {
+  //   const fetchData = () => {
+  //     // 如果已登录就拉房间信息
+  //     if (wgnum !== 0) {
+  //       getRoomData();
+  //       fetchNetworkLatency("short");
+  //     }
+  //   };
+  //   fetchData();
+  // }, [wgnum, fetchNetworkLatency, getRoomData]);
+
   useEffect(() => {
-    const fetchData = () => {
-      // 如果已登录就拉房间信息
-      if (wgnum !== 0) {
-        getRoomData();
-        fetchNetworkLatency("short");
-      }
-    };
-    fetchData();
-  }, [wgnum, fetchNetworkLatency, getRoomData]);
+    fetchNetworkLatency("short");
+  }, [userInfo, fetchNetworkLatency]);
+
+  useEffect(() => {
+    getRoomData();
+  }, [userInfo, getRoomData]);
 
   // 发送房间操作请求
   const handleRoomFetch = async (
@@ -625,7 +629,9 @@ export default function Page() {
                   fontSize="1.1rem"
                   ml={2}
                   color={
-                    item.wgnum === userInfo?.wg_data.wgnum ? "#ffd012" : "white"
+                    item.wgnum === userInfo?.wg_data?.wgnum
+                      ? "#ffd012"
+                      : "white"
                   }
                 >
                   {item.username}
@@ -769,7 +775,7 @@ export default function Page() {
       <Flex align="center">
         {status !== "none" && (
           <Text fontSize={18} fontWeight="bold" mr={3}>
-            房间号 {wgnum}
+            房间号 {roomInfo?.hoster_wgnum}
           </Text>
         )}
 
