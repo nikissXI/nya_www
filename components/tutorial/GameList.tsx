@@ -60,7 +60,7 @@ export const GameListModal = () => {
 
         <ModalBody mx={2} my={3}>
           <VStack mb={3}>
-            <Text fontSize="md">联机先学会使用WG连接喵服</Text>
+            {/* <Text fontSize="md">学会连接喵服再看</Text> */}
 
             <Button
               onClick={() => {
@@ -68,7 +68,7 @@ export const GameListModal = () => {
                 router.push("/tutorial");
               }}
             >
-              &gt;&gt; 查看连接喵服教程 &lt;&lt;
+              点我学习连接喵服
             </Button>
           </VStack>
 
