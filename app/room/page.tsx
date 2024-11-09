@@ -501,7 +501,7 @@ export default function Page() {
           </ModalContent>
         </Modal>
 
-        <Heading my={3}>请选择操作</Heading>
+        <Heading mb={5}>请选择操作</Heading>
 
         <VStack spacing={6} alignItems="center">
           <Button h="50px" fontSize="25px" onClick={handleCreateRoom}>
@@ -759,10 +759,8 @@ export default function Page() {
           </Box>
         </Button>
       </Flex>
-
-      {!latencyData && !checkText && (
+      {/* {!latencyData && !checkText && (
         <Flex align="center">
-          {/* <Text>不知道怎么连接喵服？</Text> */}
           <Button
             variant="link"
             bg="transparent"
@@ -790,13 +788,12 @@ export default function Page() {
         //     </Button>
         //   </Flex>
         // </>
-      )}
+      )} */}
 
-      <Text>{checkText}</Text>
-
-      {status === "none" ? nonePage() : roomPage()}
+      {checkText && <Text>{checkText}</Text>}
 
       <Button
+        variant="link"
         bg="transparent"
         size="lg"
         // bg="#7242ad"
@@ -806,6 +803,8 @@ export default function Page() {
       >
         点我查看联机教程
       </Button>
+
+      {status === "none" ? nonePage() : roomPage()}
 
       {/* <Text>里面有已收录的游戏联机教程</Text> */}
     </VStack>

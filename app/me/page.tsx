@@ -848,7 +848,7 @@ export default function UserProfilePage() {
                   </Text>
                 </Flex>
 
-                <Button
+                {/* <Button
                   mt={2}
                   size="sm"
                   w="100px"
@@ -859,7 +859,7 @@ export default function UserProfilePage() {
                   }}
                 >
                   连接喵服教程
-                </Button>
+                </Button> */}
               </VStack>
             ) : (
               <VStack spacing={3} mt={5} align="center">
@@ -886,7 +886,7 @@ export default function UserProfilePage() {
               fontSize="16px"
               onClick={() => setShowTips(!showTips)}
             >
-              注意事项
+              联机注意事项
             </Button>
 
             <Box
