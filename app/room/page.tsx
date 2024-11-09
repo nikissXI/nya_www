@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, use } from "react";
 import {
   Box,
   Text,
@@ -156,6 +156,36 @@ export default function Page() {
     [userInfo, apiUrl]
   );
 
+  const updateMemberStatus = (
+    roomInfo: RoomInfo,
+    userWgnum: number,
+    onlineStatus: "在线" | "离线"
+  ): RoomInfo => {
+    return {
+      ...roomInfo,
+      members: roomInfo.members.map((member) => {
+        if (member.wgnum === userWgnum) {
+          return { ...member, status: onlineStatus }; // 修改状态为离线
+        }
+        return member; // 保持其他成员不变
+      }),
+    };
+  };
+
+  const updatedRoomInfo = useCallback(
+    (onlineStatus: "在线" | "离线") => {
+      if (roomInfo && userInfo?.wg_data)
+        setRoomData(
+          updateMemberStatus(roomInfo, userInfo?.wg_data?.wgnum, onlineStatus)
+        );
+    },
+    [roomInfo, userInfo]
+  );
+
+  useEffect(() => {
+    updatedRoomInfo(latencyData ? "在线" : "离线");
+  }, [latencyData]);
+
   const fetchNetworkLatency = useCallback(
     async (checkType: string, auto: boolean = false) => {
       if (!userInfo?.wg_data) return;
@@ -178,6 +208,7 @@ export default function Page() {
             content: "你还没连接喵服将无法联机！",
             status: "warning",
           });
+
           setLatencyData(null);
         } else {
           // 已连接
