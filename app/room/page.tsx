@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, use } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Text,
@@ -31,10 +31,10 @@ import { TbReload } from "react-icons/tb";
 import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
-import { useRouter } from "next/navigation";
 import { copyText, isInteger } from "@/utils/strings";
 import { IoIosExit } from "react-icons/io";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -76,7 +76,8 @@ interface HandleRoomResponse {
 
 export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const router = useRouter();
+
+  const [tutorialColor, setTutorialColor] = useState(true);
 
   const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
   const [status, setStatus] = useState<"none" | "member" | "hoster">("none");
@@ -241,6 +242,23 @@ export default function Page() {
     },
     [userInfo, apiUrl]
   );
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
+
+    if (!latencyData) {
+      intervalId = setInterval(() => {
+        setTutorialColor((prev) => !prev); // 切换颜色状态
+      }, 500); // 每秒切换一次
+    }
+
+    // 清理定时器
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [latencyData]); // 将 stopChanging 作为依赖项
 
   // const wgReInsert = async () => {
   //   setCheckText("修复中。。。");
@@ -821,7 +839,17 @@ export default function Page() {
         // </>
       )} */}
 
-      {checkText && <Text>{checkText}</Text>}
+      {checkText && (
+        <HStack>
+          <Text>{checkText}</Text>
+          <IoMdCloseCircleOutline
+            size={18}
+            onClick={() => {
+              setCheckText("");
+            }}
+          />
+        </HStack>
+      )}
 
       <Button
         variant="link"
@@ -830,7 +858,7 @@ export default function Page() {
         // bg="#7242ad"
         // fontSize="16px"
         onClick={gameListToggle}
-        color="#a8d1ff"
+        color={latencyData ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
       >
         点我查看联机教程
       </Button>
