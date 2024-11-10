@@ -37,6 +37,12 @@ export default function Page() {
 
         <Divider my={5} />
 
+        <Text>
+          苹果系统玩家如果加入失败，检查星露谷是否有无线数据的权限（在设置里看），如果没有就无法联机。至于怎么让这个权限出现，暂时不清楚。
+        </Text>
+
+        <Divider my={5} />
+
         <Text>下图是移动端1.6.X解锁联机模式的方法，搬自官网</Text>
 
         <Image
