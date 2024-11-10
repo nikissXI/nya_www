@@ -60,7 +60,7 @@ export const GameListModal = () => {
 
         <ModalBody mx={2} my={3}>
           <VStack mb={3}>
-            {/* <Text fontSize="md">学会连接喵服再看</Text> */}
+            <Text fontSize="md">连上喵服就是在线了</Text>
 
             <Button
               onClick={() => {
