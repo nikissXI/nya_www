@@ -52,7 +52,6 @@ export default function UserProfilePage() {
   const [showTips, setShowTips] = useState(false);
 
   const tips = [
-    "获取编号后到联机房间页面，看联机教程学会连接喵服",
     "同一个编号不能多个设备同时连接，否则会互相挤掉线。仅支持在中国境内使用（港澳台除外）",
     "绑定的编号如果连续30天不使用就会解绑，需要就领个新的，失效的编号可从WG中删除",
     "手机联机做多人游戏的主机时，其他玩家加入游戏的时候游戏不能后台，否则无法加入",

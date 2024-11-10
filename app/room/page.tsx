@@ -203,7 +203,7 @@ export default function Page() {
         if (result.code !== 0) {
           // 未连接
           openToast({
-            content: "你还没连接喵服将无法联机！",
+            content: "你还没连接喵服将无法联机",
             status: "warning",
           });
 
@@ -246,8 +246,8 @@ export default function Page() {
 
     if (!latencyData) {
       intervalId = setInterval(() => {
-        setTutorialColor((prev) => !prev); // 切换颜色状态
-      }, 500); // 每秒切换一次
+        setTutorialColor((prev) => !prev);
+      }, 300);
     }
 
     // 清理定时器
@@ -858,7 +858,7 @@ export default function Page() {
         onClick={gameListToggle}
         color={latencyData ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
       >
-        点我查看联机教程
+        点我查看使用教程
       </Button>
 
       {status === "none" ? nonePage() : roomPage()}
