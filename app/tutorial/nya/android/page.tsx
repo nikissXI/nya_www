@@ -90,7 +90,7 @@ export default function Page() {
         </Heading>
 
         <Text mb={3}>
-          请在浏览器中打开网站下载。如果出现无法正常导入，请尝试来着下载新的（有时候版本升级，老版本就用不了），更新了还不行就找群主处理
+          请在浏览器中打开网站下载。如果出现无法正常导入，请尝试来这更新，更新了还不行就找群主处理
         </Text>
 
         <Button
@@ -108,7 +108,7 @@ export default function Page() {
           获取conf key
         </Heading>
 
-        <Text mb={3}>下一步导入用得上</Text>
+        <Text mb={3}>下一步导入用得上，要用这里下载的WG，别的地方下载的无法导入</Text>
 
         <Flex>
           <Button
