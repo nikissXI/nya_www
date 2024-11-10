@@ -173,31 +173,19 @@ export default function Page() {
     };
   };
 
-  // const updatedRoomInfo = useCallback(
-  //   (onlineStatus: "在线" | "离线") => {
-  //     if (roomInfo && userInfo?.wg_data)
-  //       setRoomData(
-  //         updateMemberStatus(roomInfo, userInfo?.wg_data?.wgnum, onlineStatus)
-  //       );
-  //   },
-  //   [roomInfo, userInfo]
-  // );
-
-  // useEffect(() => {
-  //   updatedRoomInfo(latencyData ? "在线" : "离线");
-  // }, [latencyData]);
+  const updatedRoomInfo = useCallback(
+    (onlineStatus: "在线" | "离线") => {
+      if (roomInfo && userInfo?.wg_data)
+        setRoomData(
+          updateMemberStatus(roomInfo, userInfo?.wg_data?.wgnum, onlineStatus)
+        );
+    },
+    [roomInfo, userInfo]
+  );
 
   useEffect(() => {
-    const updatedRoomInfo = (onlineStatus: "在线" | "离线") => {
-      if (roomInfo && userInfo?.wg_data) {
-        setRoomData(
-          updateMemberStatus(roomInfo, userInfo.wg_data.wgnum, onlineStatus)
-        );
-      }
-    };
-
     updatedRoomInfo(latencyData ? "在线" : "离线");
-  }, [latencyData, roomInfo, userInfo]);
+  }, [latencyData]);
 
   const fetchNetworkLatency = useCallback(
     async (checkType: string, auto: boolean = false) => {
