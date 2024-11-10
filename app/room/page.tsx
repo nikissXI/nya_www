@@ -394,7 +394,8 @@ export default function Page() {
     }
 
     if (!isInteger(wgnum)) {
-      openToast({ content: "房间号仅支持数字", status: "warning" });
+      openToast({ content: "房间号是整数，不知道就问房主", status: "warning" });
+      return
     }
 
     try {
@@ -505,7 +506,7 @@ export default function Page() {
 
             <ModalBody onKeyDown={handleJoinRoomEnter}>
               <Input
-                type="number"
+                type="text"
                 placeholder="请输入房间号"
                 value={inputWgnum}
                 onChange={(e) => {
