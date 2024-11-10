@@ -188,13 +188,10 @@ export default function Page() {
   }, [latencyData]);
 
   const fetchNetworkLatency = useCallback(
-    async (checkType: string, auto: boolean = false) => {
+    async (checkType: string) => {
       if (!userInfo?.wg_data) return;
 
       setChecking(true);
-      if (!auto) {
-        setCheckText("");
-      }
       try {
         const resp = await fetch(
           `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=1`
@@ -211,6 +208,7 @@ export default function Page() {
           });
 
           setLatencyData(null);
+          setCheckText("");
         } else {
           // 已连接
           setLatencyData(result.data);
