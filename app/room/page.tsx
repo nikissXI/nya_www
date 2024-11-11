@@ -84,6 +84,7 @@ export default function Page() {
 
   const [loading, setLoading] = useState(false);
 
+  const [disableCheckNet, setDisableCheckNet] = useState(false);
   const [disableGetRoom, setDisableGetRoom] = useState(false);
 
   const {
@@ -395,7 +396,7 @@ export default function Page() {
 
     if (!isInteger(wgnum)) {
       openToast({ content: "房间号是整数，不知道就问房主", status: "warning" });
-      return
+      return;
     }
 
     try {
@@ -794,7 +795,13 @@ export default function Page() {
           bg="transparent"
           h={5}
           px={0}
+          // disabled={disableCheckNet}
           onClick={() => {
+            // setDisableCheckNet(true);
+            // setTimeout(() => {
+            //   setDisableCheckNet(false);
+            // }, 2000);
+
             fetchNetworkLatency("long");
           }}
           isDisabled={checking}
