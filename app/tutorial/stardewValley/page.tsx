@@ -43,6 +43,12 @@ export default function Page() {
 
         <Divider my={5} />
 
+        <Text>
+          如果出现无法移动的情况（这是游戏BUG），就拿剑挥一下或者让朋友给你送一个东西
+        </Text>
+
+        <Divider my={5} />
+
         <Text>下图是移动端1.6.X解锁联机模式的方法，搬自官网</Text>
 
         <Image
