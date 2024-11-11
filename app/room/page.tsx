@@ -204,7 +204,7 @@ export default function Page() {
         if (result.code !== 0) {
           // 未连接
           openToast({
-            content: "你还没连接喵服将无法联机",
+            content: "离线无法联机，不懂就看教程",
             status: "warning",
           });
 
