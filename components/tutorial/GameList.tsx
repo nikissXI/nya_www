@@ -13,6 +13,7 @@ import {
   Text,
   ListItem,
   Box,
+  Divider,
   Link,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -60,17 +61,23 @@ export const GameListModal = () => {
 
         <ModalBody mx={2} my={3}>
           <VStack mb={3}>
-            <Text fontSize="md">连上喵服就是在线了</Text>
-
-            <Button
-              onClick={() => {
-                gameListOnToggle();
-                router.push("/tutorial");
-              }}
-            >
-              点我学习连接喵服
-            </Button>
+            <Text fontSize="md" mx={5}>
+              提示离线不知道做的，WG不知道哪下载怎么连的，
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dfffe"
+                onClick={() => {
+                  gameListOnToggle();
+                  router.push("/tutorial");
+                }}
+              >
+                点我点我点我
+              </Button>
+            </Text>
           </VStack>
+
+          <Divider my={2} />
 
           <Text fontSize="md" textAlign="center">
             支持但不限于以下游戏，欢迎补充
