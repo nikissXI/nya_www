@@ -98,9 +98,9 @@ export default function Page() {
 
         <List spacing={2}>
           <ListItem>
-            点击下方按钮下载conf文件，请使用Safari浏览器下载
+            点击下方按钮下载conf文件，两个通道都能下载，1不行就用2
             <br />
-            两个通道都能下载，1不行就用2
+            <Text color="#fff60b">使用Safari浏览器下载！</Text>
           </ListItem>
           <ListItem>
             {logined ? (

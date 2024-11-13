@@ -47,17 +47,11 @@ export function Header({ path }: { path: string }) {
     { name: "首页", path: "/" },
     { name: "联机房间", path: "/room" },
     { name: "我的信息", path: "/me" },
-    // { name: "联机教程", path: "/tutorial" },
     // { name: "赞助榜", path: "/sponsor" },
   ];
 
   return (
-    <Box
-      as="header"
-      minW="240px"
-      flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
-      zIndex={100}
-    >
+    <Box as="header" minW="200px" flex={{ base: "none", md: "1" }}>
       <Center
         width="100%"
         color="white"
@@ -66,6 +60,7 @@ export function Header({ path }: { path: string }) {
         position="fixed"
         mt={2.5}
         display="flex"
+        zIndex={100}
       >
         {title}
       </Center>
@@ -76,6 +71,8 @@ export function Header({ path }: { path: string }) {
         justifyContent="space-between"
         direction="column"
         pt={12}
+        top={0}
+        position="sticky"
       >
         <Flex as="nav" direction="column" py={10} px={12}>
           {rootGuide.map((item) => (

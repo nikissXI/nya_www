@@ -31,17 +31,13 @@ export default function Frame({
       <Flex
         position="relative"
         direction={{ base: "column", md: "row" }} // 移动端竖向，桌面端横向
-        height="100vh"
+        // height="100vh"
       >
         {/* 头部导航栏 */}
         <Header path={pathname} />
 
         {/* 主内容区域 */}
-        <Box
-          as="main"
-          flex={{ base: "1", md: "4" }} // 移动端占据全部宽度，桌面端占据 2/3 宽度
-          mt={{ base: 20, md: 100 }}
-        >
+        <Box as="main" flex={{ base: "1", md: "4" }} mt={{ base: 20, md: 100 }}>
           {logging ? (
             <Center>
               <Spinner size="lg" />
@@ -53,6 +49,8 @@ export default function Frame({
 
         {/* 底部 */}
         <Footer path={pathname} />
+
+        {/* 群号 */}
         <RelateGroupList />
       </Flex>
 

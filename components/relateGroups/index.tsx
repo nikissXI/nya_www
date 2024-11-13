@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Center, Box } from "@chakra-ui/react";
+import { Center, Box, Flex } from "@chakra-ui/react";
 import { ArrowDownIcon } from "@chakra-ui/icons";
 
 interface GroupItem {
@@ -60,26 +60,33 @@ const RelateGroupList = () => {
       as="footer"
       minW="240px"
       flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
-      mt={{ base: "5", md: "24" }}
-      pb="100px"
     >
-      <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
-        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
-        喵服关联QQ群
-        <ArrowDownIcon display={{ base: "flex", md: "none" }} />
-      </Center>
-
-      {groupData.main.map((group, index) => (
-        <Center key={index} mb={2}>
-          {group.name} - {group.qq}
+      <Flex
+        justifyContent="space-between"
+        direction="column"
+        pt={{ base: "5", md: "24" }}
+        pb="100px"
+        top={0}
+        position="sticky"
+      >
+        <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
+          <ArrowDownIcon display={{ base: "flex", md: "none" }} />
+          喵服关联QQ群
+          <ArrowDownIcon display={{ base: "flex", md: "none" }} />
         </Center>
-      ))}
 
-      {groupData.relate.map((group, index) => (
-        <Center key={index} mb={2}>
-          {group.name} - {group.qq}
-        </Center>
-      ))}
+        {groupData.main.map((group, index) => (
+          <Center key={index} mb={2}>
+            {group.name} - {group.qq}
+          </Center>
+        ))}
+
+        {groupData.relate.map((group, index) => (
+          <Center key={index} mb={2}>
+            {group.name} - {group.qq}
+          </Center>
+        ))}
+      </Flex>
     </Box>
   );
 };

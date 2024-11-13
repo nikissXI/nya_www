@@ -35,6 +35,7 @@ export default function Footer({ path }: { path: string }) {
       right="0"
       justifyContent="space-around"
       display={{ md: "none", base: "flex" }}
+      zIndex={100}
     >
       <Button
         padding="1rem"

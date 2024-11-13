@@ -100,7 +100,7 @@ export default function Page() {
     if (
       !(
         inputAccount &&
-        inputVerifyCode &&
+        // inputVerifyCode &&
         inputUsername &&
         inputPassword &&
         inputPassword2 &&
@@ -108,6 +108,11 @@ export default function Page() {
       )
     ) {
       openToast({ content: "请完成资料填写", status: "warning" });
+      return;
+    }
+
+    if (verifyType === "tel" && !validateTel(inputAccount)) {
+      openToast({ content: `请正确填写手机号`, status: "warning" });
       return;
     }
 
@@ -270,9 +275,9 @@ export default function Page() {
         maxW="300px"
         onKeyDown={handleRegisterEnter}
       >
-        <Text color="#ffd648" fontSize="16px">
+        {/* <Text color="#ffd648" fontSize="16px">
           注册尽量用邮箱，短信贵T.T
-        </Text>
+        </Text> */}
 
         <Flex>
           注册方式
@@ -299,7 +304,7 @@ export default function Page() {
           placeholder={verifyType === "tel" ? "请输入手机号" : "请输入电子邮箱"}
         />
 
-        <Flex>
+        <Flex display={verifyType === "tel" ? "none" : "flex"}>
           <Input
             type="number"
             value={inputVerifyCode}
