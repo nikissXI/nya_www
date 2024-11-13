@@ -151,7 +151,10 @@ export default function Page() {
         })
         .catch((error) => {
           console.error(`拉取房间信息出错:${error}，请更换浏览器再尝试`);
-          openToast({ content: `拉取房间信息出错:${error}，请更换浏览器再尝试`, status: "error" });
+          openToast({
+            content: `拉取房间信息出错:${error}，请更换浏览器再尝试`,
+            status: "error",
+          });
         })
         .finally(() => {});
     },
