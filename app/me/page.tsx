@@ -23,7 +23,7 @@ import {
 import { useUserStateStore } from "@/store/user-state";
 import { useDisclosureStore } from "@/store/disclosure";
 import { Button } from "@/components/universal/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { openToast } from "@/components/universal/toast";
 import { WarningIcon } from "@chakra-ui/icons";
 import {
