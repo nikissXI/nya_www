@@ -102,11 +102,11 @@ export const GameListModal = () => {
           <Divider my={2} />
 
           <Text fontSize="md" textAlign="center">
-            支持但不限于以下游戏，欢迎补充
+            下面只是游戏联机教程，先看上面的
           </Text>
 
           <Input
-            placeholder="输入关键字搜索"
+            placeholder="搜索游戏教程"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             mb={4}
