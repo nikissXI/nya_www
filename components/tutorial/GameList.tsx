@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -42,6 +42,23 @@ const articles: Article[] = [
 export const GameListModal = () => {
   const router = useRouter();
 
+  const [tutorialColor, setTutorialColor] = useState(true);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
+
+    intervalId = setInterval(() => {
+      setTutorialColor((prev) => !prev);
+    }, 500);
+
+    // 清理定时器
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, []); // 将 stopChanging 作为依赖项
+
   const { isOpen: gameListIsOpen, onToggle: gameListOnToggle } =
     useDisclosureStore((state) => {
       return state.modifyGameListDisclosure;
@@ -61,7 +78,12 @@ export const GameListModal = () => {
 
         <ModalBody mx={2} my={3}>
           <VStack mb={3}>
-            <Text fontSize="md" mx={5}>
+            <Text
+              fontSize="md"
+              mx={5}
+              fontWeight="bold"
+              color={tutorialColor ? "#ff0000" : "white"}
+            >
               提示离线不知道做的，WG不知道哪下载怎么连的，
               <Button
                 variant="link"

@@ -95,14 +95,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               Authorization: `Bearer ${getAuthToken()}`,
             },
           });
-          if (!resp.ok) {
+          if (resp.status === 401) {
+            get().logout();
             throw new Error("登陆凭证失效");
+          }
+          if (!resp.ok) {
+            throw new Error("请求出错");
           }
           const data = await resp.json();
           get().setUserInfo(data.data);
           get().changeLoginState(true);
         } catch (error) {
-          get().logout();
         } finally {
         }
 
