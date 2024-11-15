@@ -201,7 +201,7 @@ export default function Page() {
           `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=1`
         );
         if (!resp.ok) {
-          console.error(`访问接口出错: ${resp.status}`);
+          throw new Error(`访问接口出错: ${resp.status}`);
         }
         const result = await resp.json();
         if (result.code !== 0) {
@@ -223,7 +223,7 @@ export default function Page() {
               `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=2`
             );
             if (!resp.ok) {
-              console.error(`访问接口出错: ${resp.status}`);
+              throw new Error(`访问接口出错: ${resp.status}`);
             } else {
               const result = await resp.json();
               if (result.code !== 0) {
