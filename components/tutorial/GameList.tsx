@@ -44,12 +44,18 @@ export const GameListModal = () => {
 
   const [tutorialColor, setTutorialColor] = useState(true);
 
+  const [hideGameList, setHideGameList] = useState(true);
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
 
-    intervalId = setInterval(() => {
-      setTutorialColor((prev) => !prev);
-    }, 500);
+    if (hideGameList) {
+      intervalId = setInterval(() => {
+        setTutorialColor((prev) => !prev);
+      }, 500);
+    } else {
+      setTutorialColor(true);
+    }
 
     // 清理定时器
     return () => {
@@ -57,12 +63,16 @@ export const GameListModal = () => {
         clearInterval(intervalId);
       }
     };
-  }, []); // 将 stopChanging 作为依赖项
+  }, [hideGameList]); // 将 stopChanging 作为依赖项
 
   const { isOpen: gameListIsOpen, onToggle: gameListOnToggle } =
     useDisclosureStore((state) => {
       return state.modifyGameListDisclosure;
     });
+
+  useEffect(() => {
+    setHideGameList(true);
+  }, [gameListIsOpen]); // 将 stopChanging 作为依赖项
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -77,58 +87,80 @@ export const GameListModal = () => {
         <ModalCloseButton />
 
         <ModalBody mx={2} my={3}>
-          <VStack mb={3}>
+          <VStack mb={3} w="full">
             <Text
+              align="center"
               fontSize="md"
               mx={5}
               fontWeight="bold"
-              color={tutorialColor ? "#ff0000" : "white"}
+              color={tutorialColor ? "white" : "#ff6868"}
             >
-              提示离线不知道做的，WG不知道哪下载怎么连的，
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dfffe"
-                onClick={() => {
-                  gameListOnToggle();
-                  router.push("/tutorial");
-                }}
-              >
-                点我点我点我
-              </Button>
+              提示离线不知道做的
+              <br />
+              不知道WG哪下载怎么连的
+              <br />
+              WG隧道不知道哪里下载的
             </Text>
+
+            <Button
+              variant="link"
+              bg="transparent"
+              color="#7dfffe"
+              onClick={() => {
+                gameListOnToggle();
+                router.push("/tutorial");
+              }}
+            >
+              点我点我点我
+            </Button>
+
+            <Divider my={2} />
+
+            <Button
+              variant="link"
+              bg="transparent"
+              color="#7dfffe"
+              onClick={() => {
+                setHideGameList(false);
+              }}
+              hidden={!hideGameList}
+            >
+              我已在线，看游戏的联机教程
+            </Button>
+
+            <Box hidden={hideGameList}>
+              <Text fontSize="md" textAlign="center">
+                欢迎找群主投稿其他游戏的教程
+                <br />
+                联机的玩家都需要连上喵服！
+              </Text>
+
+              <Input
+                placeholder="搜索游戏教程"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                mb={4}
+              />
+              <Box maxHeight="300px" overflowY="auto">
+                <List spacing={2}>
+                  {filteredArticles.map((article) => (
+                    <ListItem key={article.path}>
+                      <Link
+                        fontSize="md"
+                        as={NextLink}
+                        href={article.path}
+                        color="#7dfffe"
+                        _hover={{ textDecoration: "none" }}
+                        onClick={gameListOnToggle}
+                      >
+                        {article.title}
+                      </Link>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </Box>
           </VStack>
-
-          <Divider my={2} />
-
-          <Text fontSize="md" textAlign="center">
-            下面只是游戏联机教程，先看上面的
-          </Text>
-
-          <Input
-            placeholder="搜索游戏教程"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            mb={4}
-          />
-          <Box maxHeight="300px" overflowY="auto">
-            <List spacing={2}>
-              {filteredArticles.map((article) => (
-                <ListItem key={article.path}>
-                  <Link
-                    fontSize="md"
-                    as={NextLink}
-                    href={article.path}
-                    color="#7dfffe"
-                    _hover={{ textDecoration: "none" }}
-                    onClick={gameListOnToggle}
-                  >
-                    {article.title}
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
         </ModalBody>
       </ModalContent>
     </Modal>
