@@ -63,7 +63,7 @@ export const GameListModal = () => {
         clearInterval(intervalId);
       }
     };
-  }, [hideGameList]); // 将 stopChanging 作为依赖项
+  }, [hideGameList]);
 
   const { isOpen: gameListIsOpen, onToggle: gameListOnToggle } =
     useDisclosureStore((state) => {
@@ -72,7 +72,7 @@ export const GameListModal = () => {
 
   useEffect(() => {
     setHideGameList(true);
-  }, [gameListIsOpen]); // 将 stopChanging 作为依赖项
+  }, [gameListIsOpen]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
