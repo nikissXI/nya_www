@@ -218,6 +218,11 @@ export default function Page() {
           setLatencyData(result.data);
 
           if (checkType === "long") {
+            openToast({
+              content: `这个检测不太准，大概看看就行`,
+              status: "info",
+            });
+
             setCheckText("约10秒后返回详细网络检测结果");
             const resp = await fetch(
               `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=2`
