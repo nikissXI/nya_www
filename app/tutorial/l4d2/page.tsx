@@ -41,7 +41,9 @@ export default function Page() {
 
         <Divider my={5} />
 
-        <Text my={3}>服务器类型选“本地服务器”，然后直接开始游戏</Text>
+        <Text my={3}>
+          服务器类型选“本地服务器”，然后直接开始游戏，注意是开始游戏进到地图里！需要房主地图里其他人才能加入
+        </Text>
         <Image src="/images/l4d2_3.jpg" alt="l4d2_3" />
 
         <Divider my={5} />
@@ -52,7 +54,9 @@ export default function Page() {
 
         <Divider my={5} />
 
-        <Text my={3}>建议到创意工坊把这个mod打上，能避免兼容性问题导致无法加入</Text>
+        <Text my={3}>
+          建议到创意工坊把这个mod打上，能避免兼容性问题导致无法加入
+        </Text>
         <Image
           src="/images/l4d2_关闭一致性检查.jpg"
           alt="l4d2_关闭一致性检查"
