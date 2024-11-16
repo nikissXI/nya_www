@@ -753,11 +753,13 @@ export default function Page() {
         >
           {latencyData ? "在线" : "离线"}
         </Text>
-        {latencyData && (
+        {latencyData ? (
           <Flex align="center">
             <GiNetworkBars size={20} color={getColor(latencyData)} />
             <Box ml={1}>{latencyData}ms</Box>
           </Flex>
+        ) : (
+          ""
         )}
         <Button
           bg="transparent"
