@@ -32,7 +32,7 @@ export function Header({ path }: { path: string }) {
       "/register": "注册",
       "/forgetPass": "忘记密码",
       "/me": "我的信息",
-      "/sponsor": "赞助榜",
+      "/sponsor": "赞助喵服",
       "/tutorial": "联机教程",
       "/room": "联机房间",
     };

@@ -54,12 +54,9 @@ export default function GetWgnumModal() {
   };
 
   const tips = [
-    "看教程，教程在联机房间页面",
-    "看教程，教程在联机房间页面",
-    "看教程，教程在联机房间页面",
-    "看教程，教程在联机房间页面",
-    "看教程，教程在联机房间页面",
-    "看教程，教程在联机房间页面",
+    "获取编号后认真看教程，看完再问，教程在联机房间页面",
+    "获取编号后认真看教程，看完再问，教程在联机房间页面",
+    "获取编号后认真看教程，看完再问，教程在联机房间页面",
   ];
 
   return (
@@ -80,7 +77,7 @@ export default function GetWgnumModal() {
         </ModalBody>
 
         <ModalFooter alignSelf="center">
-          <Button bgColor="#9d2e03" size="md" onClick={() => handleGetWgnum()}>
+          <Button size="md" onClick={() => handleGetWgnum()}>
             我已知晓，获取编号
           </Button>
         </ModalFooter>

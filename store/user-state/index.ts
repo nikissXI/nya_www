@@ -17,6 +17,7 @@ interface UserInfo {
   tel: string;
   email: string;
   qq: string;
+  sponsorship: number;
   wg_data: WGData | null;
 }
 

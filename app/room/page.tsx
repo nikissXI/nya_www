@@ -33,6 +33,8 @@ import { getAuthToken } from "@/store/authKey";
 import { copyText, isInteger } from "@/utils/strings";
 import { IoIosExit } from "react-icons/io";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { PiCoffeeBold } from "react-icons/pi";
+import { useRouter } from "next/navigation";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -66,6 +68,7 @@ interface HandleRoomResponse {
 }
 
 export default function Page() {
+  const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const [tutorialColor, setTutorialColor] = useState(true);
@@ -758,9 +761,7 @@ export default function Page() {
             <GiNetworkBars size={20} color={getColor(latencyData)} />
             <Box ml={1}>{latencyData}ms</Box>
           </Flex>
-        ) : (
-          ""
-        )}
+        ) : null}
         <Button
           bg="transparent"
           h={5}
@@ -805,8 +806,6 @@ export default function Page() {
         variant="link"
         bg="transparent"
         size="lg"
-        // bg="#7242ad"
-        // fontSize="16px"
         onClick={gameListToggle}
         color={latencyData ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
       >
@@ -814,6 +813,19 @@ export default function Page() {
       </Button>
 
       {status === "none" ? nonePage() : roomPage()}
+
+      <Box
+        position="fixed"
+        left="12px"
+        bottom="30vh"
+        onClick={() => {
+          router.push(`/sponsor`);
+        }}
+        zIndex={100}
+      >
+        <PiCoffeeBold size={26} />
+        <Text fontSize="sm">赞助</Text>
+      </Box>
 
       {/* <Text>里面有已收录的游戏联机教程</Text> */}
     </VStack>
