@@ -24,7 +24,6 @@ import {
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
-// import { IoMdPersonAdd } from "react-icons/io";
 import { IoReloadCircle } from "react-icons/io5";
 import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
@@ -34,19 +33,11 @@ import { getAuthToken } from "@/store/authKey";
 import { copyText, isInteger } from "@/utils/strings";
 import { IoIosExit } from "react-icons/io";
 import { FaCheck, FaTimes } from "react-icons/fa";
-import { IoMdCloseCircleOutline } from "react-icons/io";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
-
-interface LatencyData {
-  min: number;
-  ave: number;
-  max: number;
-  lost: number;
-}
 
 interface Member {
   username: string;
@@ -103,7 +94,7 @@ export default function Page() {
 
   const [inputWgnum, setInputWgnum] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
-  const [latencyData, setLatencyData] = useState<LatencyData | null>(null);
+  const [latencyData, setLatencyData] = useState(0);
   const [checking, setChecking] = useState(true);
   const [checkText, setCheckText] = useState("");
   const { logined, userInfo } = useUserStateStore();
@@ -191,64 +182,33 @@ export default function Page() {
     updatedRoomInfo(latencyData ? "在线" : "离线");
   }, [latencyData]);
 
-  const fetchNetworkLatency = useCallback(
-    async (checkType: string) => {
-      if (!userInfo?.wg_data) return;
+  const fetchNetworkLatency = useCallback(async () => {
+    if (!userInfo?.wg_data) return;
 
-      setChecking(true);
-      try {
-        const resp = await fetch(
-          `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=1`
-        );
-        if (!resp.ok) {
-          throw new Error(`访问接口出错: ${resp.status}`);
-        }
-        const result = await resp.json();
-        if (result.code !== 0) {
-          // 未连接
-          openToast({
-            content: "离线无法联机，不懂就看教程",
-            status: "warning",
-          });
+    setChecking(true);
+    try {
+      const resp = await fetch(
+        `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}`
+      );
+      if (!resp.ok) {
+        throw new Error(`访问接口出错: ${resp.status}`);
+      }
+      const result = await resp.json();
+      if (result.ms === 0) {
+        // 未连接
+        openToast({
+          content: "离线无法联机，不懂就看教程",
+          status: "warning",
+        });
 
-          setLatencyData(null);
-          setCheckText("");
-        } else {
-          // 已连接
-          setLatencyData(result.data);
-
-          if (checkType === "long") {
-            openToast({
-              content: `这个检测不太准，大概看看就行`,
-              status: "info",
-            });
-
-            setCheckText("约10秒后返回详细网络检测结果");
-            const resp = await fetch(
-              `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}&checkType=2`
-            );
-            if (!resp.ok) {
-              throw new Error(`访问接口出错: ${resp.status}`);
-            } else {
-              const result = await resp.json();
-              if (result.code !== 0) {
-                // 未连接
-                setLatencyData(null);
-              } else {
-                // 已连接
-                setLatencyData(result.data);
-                setCheckText(
-                  `平均${result.data.ave}ms，最高${result.data.max}ms，丢包率${result.data.lost}%`
-                );
-              }
-            }
-          }
-        }
-      } catch (err) {}
-      setChecking(false);
-    },
-    [userInfo, apiUrl]
-  );
+        setLatencyData(0);
+      } else {
+        // 已连接
+        setLatencyData(result.ms);
+      }
+    } catch (err) {}
+    setChecking(false);
+  }, [userInfo, apiUrl]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
@@ -331,7 +291,7 @@ export default function Page() {
   );
 
   useEffect(() => {
-    fetchNetworkLatency("short");
+    fetchNetworkLatency();
   }, [userInfo, fetchNetworkLatency]);
 
   useEffect(() => {
@@ -763,7 +723,7 @@ export default function Page() {
                 setDisableGetRoom(false); // 启用按钮
               }, 3000);
 
-              if (!checking) fetchNetworkLatency("short");
+              if (!checking) fetchNetworkLatency();
               getRoomData(false);
             }}
           >
@@ -795,22 +755,22 @@ export default function Page() {
         </Text>
         {latencyData && (
           <Flex align="center">
-            <GiNetworkBars size={20} color={getColor(latencyData.min)} />
-            <Box ml={1}>{latencyData.min}ms</Box>
+            <GiNetworkBars size={20} color={getColor(latencyData)} />
+            <Box ml={1}>{latencyData}ms</Box>
           </Flex>
         )}
         <Button
           bg="transparent"
           h={5}
           px={0}
-          // disabled={disableCheckNet}
+          disabled={disableCheckNet}
           onClick={() => {
-            // setDisableCheckNet(true);
-            // setTimeout(() => {
-            //   setDisableCheckNet(false);
-            // }, 2000);
+            setDisableCheckNet(true);
+            setTimeout(() => {
+              setDisableCheckNet(false);
+            }, 2000);
 
-            fetchNetworkLatency("long");
+            fetchNetworkLatency();
           }}
           isDisabled={checking}
         >
@@ -823,21 +783,7 @@ export default function Page() {
         </Button>
       </Flex>
       {/* {!latencyData && !checkText && (
-        <Flex align="center">
-          <Button
-            variant="link"
-            bg="transparent"
-            size="lg"
-            onClick={() => {
-              router.push("/tutorial");
-            }}
-            color="#a8d1ff"
-          >
-            点我学习连接喵服
-          </Button>
-        </Flex>
         // <>
-
         //   <Flex align="center">
         //     <Text>WG打开了还是检测不到？</Text>
         //     <Button
@@ -852,18 +798,6 @@ export default function Page() {
         //   </Flex>
         // </>
       )} */}
-
-      {checkText && (
-        <HStack>
-          <Text>{checkText}</Text>
-          <IoMdCloseCircleOutline
-            size={18}
-            onClick={() => {
-              setCheckText("");
-            }}
-          />
-        </HStack>
-      )}
 
       <Button
         variant="link"
