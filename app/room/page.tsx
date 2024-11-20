@@ -93,6 +93,12 @@ export default function Page() {
     onClose: setPassOnClose,
   } = useDisclosure();
 
+  const {
+    isOpen: setWarnIsOpen,
+    onOpen: setWarnOnOpen,
+    onClose: setWarnOnClose,
+  } = useDisclosure();
+
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
 
   const [inputWgnum, setInputWgnum] = useState("");
@@ -740,6 +746,23 @@ export default function Page() {
 
   return (
     <VStack alignItems="center">
+      <Text color="#ffca3d" fontWeight="bold" onClick={setWarnOnOpen}>
+        致用户的一些话（点我查看）
+      </Text>
+
+      <Modal isOpen={setWarnIsOpen} onClose={setWarnOnClose}>
+        <ModalOverlay />
+        <ModalContent bgColor="#002f5c">
+          <ModalCloseButton />
+
+          <ModalBody>
+            <Text color="#ffca3d" py={6}>
+              由于用户量急速上升，但服务器素质并没有跟上导致联机卡顿或提示离线，有没有连上看下面是否在线就行，目前已经在尝试优化服务器了。给用户造成不好的使用体验，不好意思。如果有懂相关技术的同好可以与我交流交流，目前喵服就是一个个人维护的公益服务器，有点累。服主QQ1299577815
+            </Text>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
       <Flex align="center">
         {status !== "none" && (
           <Text fontSize={18} fontWeight="bold" mr={3}>
@@ -826,8 +849,6 @@ export default function Page() {
         <PiCoffeeBold size={26} />
         <Text fontSize="sm">赞助</Text>
       </Box>
-
-      {/* <Text>里面有已收录的游戏联机教程</Text> */}
     </VStack>
   );
 }
