@@ -746,18 +746,27 @@ export default function Page() {
 
   return (
     <VStack alignItems="center">
-      <Text color="#ffca3d" fontWeight="bold" onClick={setWarnOnOpen}>
-        致用户的一些话（点我查看）
-      </Text>
+      <Button
+        variant="link"
+        bg="transparent"
+        color="#ffca3d"
+        fontWeight="bold"
+        onClick={setWarnOnOpen}
+      >
+        查看公告（2024/11/22-21:45更新）
+      </Button>
 
       <Modal isOpen={setWarnIsOpen} onClose={setWarnOnClose}>
         <ModalOverlay />
         <ModalContent bgColor="#002f5c">
           <ModalCloseButton />
 
-          <ModalBody>
-            <Text color="#ffca3d" py={6}>
-              由于用户量急速上升，但服务器素质并没有跟上导致联机卡顿或提示离线，有没有连上看下面是否在线就行，目前已经在尝试优化服务器了。给用户造成不好的使用体验，不好意思。如果有懂相关技术的同好可以与我交流交流，目前喵服就是一个个人维护的公益服务器，有点累。服主QQ1299577815
+          <ModalBody py={6}>
+            <Text fontSize="lg" color="#ffca3d">
+              2024/11/22-21:45
+            </Text>
+            <Text pb={3}>
+              安卓APK导入conf key报错，请到教程里下载最新的安装包更新
             </Text>
           </ModalBody>
         </ModalContent>
