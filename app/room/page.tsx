@@ -766,7 +766,7 @@ export default function Page() {
               2024/11/22 - 21:45
             </Text>
             <Text pb={3}>
-              安卓APK导入conf key报错，请到教程里下载最新的安装包更新
+              如果安卓WG导入conf key报错，请到教程里下载最新的安装包更新
             </Text>
           </ModalBody>
         </ModalContent>
