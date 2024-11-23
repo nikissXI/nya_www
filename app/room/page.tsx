@@ -105,7 +105,6 @@ export default function Page() {
   const [inputPasswd, setInputPasswd] = useState("");
   const [latencyData, setLatencyData] = useState(0);
   const [checking, setChecking] = useState(true);
-  const [checkText, setCheckText] = useState("");
   const { logined, userInfo } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
@@ -236,25 +235,33 @@ export default function Page() {
     };
   }, [latencyData]); // 将 stopChanging 作为依赖项
 
-  // const wgReInsert = async () => {
-  //   setCheckText("修复中。。。");
-  //   try {
-  //     const resp = await fetch(`${apiUrl}/wgReinsert`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${getAuthToken()}`,
-  //       },
-  //     });
+  const wgReInsert = async () => {
+    try {
+      const resp = await fetch(`${apiUrl}/wgReinsert`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      });
 
-  //     if (resp.ok) {
-  //       setCheckText("VPN重连试试，还不行请检查编号是否有效");
-  //     } else {
-  //       setCheckText("请求失败，请刷新网页再试");
-  //     }
-  //   } catch (error) {
-  //     setCheckText("请求发生错误，请刷新网页再试");
-  //   }
-  // };
+      if (resp.ok) {
+        openToast({
+          content: "WG重连，还不行请检查编号是否过期",
+          status: "success",
+        });
+      } else {
+        openToast({
+          content: "请求失败，请刷新网页再试",
+          status: "error",
+        });
+      }
+    } catch (error) {
+      openToast({
+        content: "请求失败，请刷新网页再试",
+        status: "error",
+      });
+    }
+  };
 
   // 开关任意加入
   const handleSetRoomPasswd = useCallback(
@@ -817,22 +824,16 @@ export default function Page() {
           </Box>
         </Button>
       </Flex>
-      {/* {!latencyData && !checkText && (
-        // <>
-        //   <Flex align="center">
-        //     <Text>WG打开了还是检测不到？</Text>
-        //     <Button
-        //       variant="link"
-        //       size="sm"
-        //       p={1}
-        //       h={7}
-        //       onClick={wgReInsert}
-        //     >
-        //       点我修复
-        //     </Button>
-        //   </Flex>
-        // </>
-      )} */}
+      {!latencyData && (
+        <>
+          <Flex align="center">
+            <Text>WG连上了还是检测不到？</Text>
+            <Button variant="link" bg="transparent" onClick={wgReInsert}>
+              点我修复
+            </Button>
+          </Flex>
+        </>
+      )}
 
       <Button
         variant="link"
