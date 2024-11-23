@@ -73,6 +73,8 @@ export default function Page() {
 
   const [tutorialColor, setTutorialColor] = useState(true);
 
+  const [showReInsert, setShowReInsert] = useState(true);
+
   const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
   const [status, setStatus] = useState<"none" | "member" | "hoster">("none");
 
@@ -236,6 +238,7 @@ export default function Page() {
   }, [latencyData]); // 将 stopChanging 作为依赖项
 
   const wgReInsert = async () => {
+    setShowReInsert(false);
     try {
       const resp = await fetch(`${apiUrl}/wgReinsert`, {
         method: "GET",
@@ -824,7 +827,7 @@ export default function Page() {
           </Box>
         </Button>
       </Flex>
-      {!latencyData && (
+      {!latencyData && showReInsert && (
         <>
           <Flex align="center">
             <Text>WG连上了还是检测不到？</Text>
