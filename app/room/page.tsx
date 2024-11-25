@@ -36,6 +36,17 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 import { PiCoffeeBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 
+const announcement = [
+  {
+    date: "2024/11/25 - 21:00",
+    content: "解决联机高峰期喵服网络卡顿问题",
+  },
+  {
+    date: "2024/11/22 - 21:45",
+    content: "如果安卓WG导入conf key报错，请到教程里下载最新的安装包更新",
+  },
+];
+
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -620,19 +631,21 @@ export default function Page() {
                 >
                   {item.username}
                 </Text>
-                {/* {item.wgnum === userInfo?.wg_data.wgnum && (
-                  <Tag fontWeight="bold" ml={3} bg="#ffd012">
-                    自己
-                  </Tag>
-                )} */}
 
                 <Tag
                   size="md"
                   ml="auto"
-                  // color="white"
                   bg="transparent"
                   fontWeight="bold"
-                  color={item.status === "在线" ? "#3fdb1d" : "#ff4444"}
+                  color={
+                    item.wgnum === userInfo?.wg_data?.wgnum
+                      ? latencyData
+                        ? "#3fdb1d"
+                        : "#ff4444"
+                      : item.status === "在线"
+                      ? "#3fdb1d"
+                      : "#ff4444"
+                  }
                 >
                   {item.status}
                 </Tag>
@@ -763,7 +776,7 @@ export default function Page() {
         fontWeight="bold"
         onClick={setWarnOnOpen}
       >
-        查看公告（2024/11/22-21:45更新）
+        查看公告（{announcement[0]?.date}更新）
       </Button>
 
       <Modal isOpen={setWarnIsOpen} onClose={setWarnOnClose}>
@@ -772,12 +785,14 @@ export default function Page() {
           <ModalCloseButton />
 
           <ModalBody py={6}>
-            <Text fontWeight="bold" fontSize="lg" color="#ffca3d">
-              2024/11/22 - 21:45
-            </Text>
-            <Text pb={3}>
-              如果安卓WG导入conf key报错，请到教程里下载最新的安装包更新
-            </Text>
+            {announcement.map((message, index) => (
+              <Box key={index}>
+                <Text fontWeight="bold" fontSize="lg" color="#ffca3d">
+                  {message.date}
+                </Text>
+                <Text pb={3}>{message.content}</Text>
+              </Box>
+            ))}
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -827,7 +842,7 @@ export default function Page() {
           </Box>
         </Button>
       </Flex>
-      {!latencyData && showReInsert && (
+      {/* {!latencyData && showReInsert && (
         <>
           <Flex align="center">
             <Text>WG连上了还是检测不到？</Text>
@@ -836,7 +851,7 @@ export default function Page() {
             </Button>
           </Flex>
         </>
-      )}
+      )} */}
 
       <Button
         variant="link"
