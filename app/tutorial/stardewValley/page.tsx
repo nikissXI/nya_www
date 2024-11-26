@@ -51,7 +51,9 @@ export default function Page() {
 
         <Divider my={5} />
 
-        <Text>下图是移动端1.6.X解锁联机模式的方法，搬自官网</Text>
+        <Text>
+          下图是移动端1.6.X解锁联机模式的方法，搬自官网，需要点问号切英文才有4片叶子
+        </Text>
 
         <Image
           src="/images/星露谷1.6.X移动端解锁联机模式方法.jpg"
