@@ -647,7 +647,11 @@ export default function Page() {
                       : "#ff4444"
                   }
                 >
-                  {item.status}
+                  {item.wgnum === userInfo?.wg_data?.wgnum
+                    ? latencyData
+                      ? "在线"
+                      : "离线"
+                    : item.status}
                 </Tag>
               </Flex>
 
