@@ -226,6 +226,12 @@ export default function Page() {
       } else {
         // 已连接
         setLatencyData(result.ms);
+        if (result.ms === -1) {
+          openToast({
+            content: "因防火墙拦截无法检测延迟",
+            status: "warning",
+          });
+        }
       }
     } catch (err) {}
     setChecking(false);
