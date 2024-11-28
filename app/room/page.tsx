@@ -616,6 +616,47 @@ export default function Page() {
         </Modal>
 
         <VStack>
+          {status === "hoster" && (
+            <HStack justify="center" spacing={0}>
+              <Text fontWeight="bold">允许直接加入</Text>
+              {roomInfo?.room_passwd ? <FaTimes /> : <FaCheck />}
+
+              <Switch
+                px={2}
+                size="md"
+                colorScheme="green"
+                isChecked={roomInfo?.room_passwd ? false : true}
+                onChange={() => {
+                  // 已设置密码就清空密码
+                  if (roomInfo?.room_passwd) {
+                    setInputPasswd("");
+                    handleSetRoomPasswd("");
+                  } else {
+                    setInputPasswd(
+                      roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                    );
+                    setPassOnOpen();
+                  }
+                }}
+              />
+
+              <Button
+                variant="link"
+                bg="transparent"
+                hidden={roomInfo?.room_passwd ? false : true}
+                onClick={() => {
+                  setInputPasswd(
+                    roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                  );
+                  setPassOnOpen();
+                }}
+                isDisabled={roomInfo?.room_passwd ? false : true}
+              >
+                <Text>查看房间密码</Text>
+              </Button>
+            </HStack>
+          )}
+
           {roomInfo?.members.map((item, index) => (
             <Box
               w="300px"
@@ -702,49 +743,9 @@ export default function Page() {
           ))}
         </VStack>
 
-        {status === "hoster" && (
-          <HStack justify="center" mt={3} spacing={0}>
-            <Text fontWeight="bold">允许直接加入</Text>
-            {roomInfo?.room_passwd ? <FaTimes /> : <FaCheck />}
-
-            <Switch
-              px={2}
-              size="md"
-              colorScheme="green"
-              isChecked={roomInfo?.room_passwd ? false : true}
-              onChange={() => {
-                // 已设置密码就清空密码
-                if (roomInfo?.room_passwd) {
-                  setInputPasswd("");
-                  handleSetRoomPasswd("");
-                } else {
-                  setInputPasswd(
-                    roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
-                  );
-                  setPassOnOpen();
-                }
-              }}
-            />
-
-            <Button
-              variant="link"
-              bg="transparent"
-              hidden={roomInfo?.room_passwd ? false : true}
-              onClick={() => {
-                setInputPasswd(
-                  roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
-                );
-                setPassOnOpen();
-              }}
-              isDisabled={roomInfo?.room_passwd ? false : true}
-            >
-              <Text>查看房间密码</Text>
-            </Button>
-          </HStack>
-        )}
-
         <HStack justify="center">
           <Button
+            px={0}
             size="lg"
             bg="transparent"
             onClick={status === "hoster" ? handleCloseRoom : handleExitRoom}
@@ -753,7 +754,12 @@ export default function Page() {
             <IoIosExit size={30} color="#ff4444" />
           </Button>
 
+          <Text fontSize="lg" fontWeight="bold" ml={2} mr={3}>
+            {roomInfo?.members.length}/8
+          </Text>
+
           <Button
+            px={0}
             size="lg"
             bg="transparent"
             onClick={() => {
@@ -806,6 +812,16 @@ export default function Page() {
           </ModalBody>
         </ModalContent>
       </Modal>
+
+      <Button
+        variant="link"
+        bg="transparent"
+        size="lg"
+        onClick={gameListToggle}
+        color={latencyData ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
+      >
+        点我查看使用教程
+      </Button>
 
       <Flex align="center">
         {status !== "none" && (
@@ -862,16 +878,6 @@ export default function Page() {
           </Flex>
         </>
       )} */}
-
-      <Button
-        variant="link"
-        bg="transparent"
-        size="lg"
-        onClick={gameListToggle}
-        color={latencyData ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
-      >
-        点我查看使用教程
-      </Button>
 
       {status === "none" ? nonePage() : roomPage()}
 
