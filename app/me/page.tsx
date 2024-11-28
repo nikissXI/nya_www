@@ -841,7 +841,7 @@ export default function UserProfilePage() {
                   <Text w="80px" textAlign="right">
                     可用天数:
                   </Text>
-                  <Text ml={3}>{userInfo.wg_data.ttl}（联机后次日重置）</Text>
+                  <Text ml={3}>{userInfo.wg_data.ttl}（在线后重置15）</Text>
                 </Flex>
 
                 <Divider />
