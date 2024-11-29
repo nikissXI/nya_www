@@ -108,7 +108,9 @@ export default function Page() {
           获取conf key
         </Heading>
 
-        <Text mb={3}>下一步导入用得上，要用这里下载的WG，别的地方下载的无法导入</Text>
+        <Text mb={3}>
+          下一步导入用得上，要用这里下载的WG，别的地方下载的无法导入
+        </Text>
 
         <Flex>
           <Button
@@ -156,7 +158,6 @@ export default function Page() {
             mb={1}
             size="sm"
             bgColor="#d46500"
-            fontSize="16px"
             onClick={() => setShowXM(!showXM)}
           >
             {showXM ? "点击收起" : "点击查看"}
@@ -191,21 +192,21 @@ export default function Page() {
         <Text mx={5}>
           现在可以返回联机房间界面查看是否连上喵服了
           <br />
-          看一看注意事项的内容，或许能带来帮助
+          然后创建或加入房间即可联机，玩家需要都处于一个联机房间且在线状态
           <br />
-          联机的玩家都要跟着教程安装WG连上服务器
+          网站只是用于管理联机房间，关闭不影响联机
+          <br />
+          WG客户端是用于联机通信的，关掉就离线
         </Text>
 
         <Button
-          h="40px"
           mt={3}
-          size="md"
-          bgColor="#992e98"
+          size="sm"
           onClick={() => {
             router.push("/room");
           }}
         >
-          &gt;&gt; 前往联机房间 &lt;&lt;
+          &gt;&gt; 返回联机房间 &lt;&lt;
         </Button>
 
         <Divider my={5} />
