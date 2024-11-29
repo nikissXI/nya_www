@@ -54,7 +54,7 @@ export default function UserProfilePage() {
   const tips = [
     "同一个编号不能多个设备同时连接，否则会互相挤掉线。仅支持在中国境内使用（港澳台除外）",
     "绑定的编号如果可用天数归零就会解绑，失效的隧道可从WG中删除。需要就领取新的，WG隧道也要导入新的",
-    "手机联机做多人游戏的主机时，其他玩家加入游戏的时候游戏不能后台，否则无法加入",
+    "移动设备联机时，其他人加入时，当主机的游戏不能后台，否则无法加入",
     "只要设备能连上喵服就能互相通信，不限系统，如果游戏支持，可以实现手机与电脑联机",
     "如果喵服网站功能异常，先换一个浏览器试试，不行再找服主反馈",
     "遇到阅读教程后无法解决的问题，就找服主（QQ:1299577815）",
@@ -844,9 +844,9 @@ export default function UserProfilePage() {
                   <Text ml={3}>{userInfo.wg_data.ttl}（在线后重置15）</Text>
                 </Flex>
 
-                <Divider />
+                {/* <Divider /> */}
 
-                <Flex>
+                {/* <Flex>
                   <Text w="80px" textAlign="right">
                     最后连接:
                   </Text>
@@ -857,7 +857,7 @@ export default function UserProfilePage() {
                         )
                       : "未连接过"}
                   </Text>
-                </Flex>
+                </Flex> */}
 
                 {/* <Button
                   mt={2}
