@@ -92,7 +92,7 @@ export default function Page() {
             喵服简介
           </Center>
           <Text fontSize="sm">
-            提供组网服务，解决异地局域网联机难题，并且支持广播包转发
+            免费提供组网服务，解决异地局域网联机难题，并且支持广播包转发
           </Text>
         </Flex>
 
