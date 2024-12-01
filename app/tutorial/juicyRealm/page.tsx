@@ -22,7 +22,7 @@ export default function Page() {
           <br />
           对方搜的时候房主别把游戏后台
           <br />
-          游戏里面显示的那个IP用不上，不用管
+          是用喵服网站的IP去联机，不是游戏里显示的那个！
           <br />
           支持安卓、苹果、Steam一起联机
         </Text>
