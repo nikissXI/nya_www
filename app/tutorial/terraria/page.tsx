@@ -23,6 +23,8 @@ export default function Page() {
           对方搜的时候房主别把游戏后台（指手游）
           <br />
           国际版手游能和端游联机（前提版本号相同）
+          <br />
+          如果Windows做主机，其他人加入不了，检查系统防火墙是否放通了泰拉瑞亚端口
         </Text>
 
         <Button
