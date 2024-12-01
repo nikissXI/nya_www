@@ -38,6 +38,20 @@ import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useRouter } from "next/navigation";
 
+const calculateDaysDifference = (timestamp: number): string => {
+  // 计算时间戳差值（毫秒）
+  const timestamp_now = new Date().getTime();
+  const differenceInMilliseconds = Math.abs(timestamp_now - timestamp * 1000);
+
+  // 将差值转换为天数
+  const millisecondsInADay = 1000 * 60 * 60 * 24; // 1天的毫秒数
+  const differenceInDays = Math.floor(
+    differenceInMilliseconds / millisecondsInADay
+  );
+
+  return `${15 - differenceInDays}天`;
+};
+
 export default function UserProfilePage() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -839,9 +853,14 @@ export default function UserProfilePage() {
 
                 <Flex>
                   <Text w="80px" textAlign="right">
-                    可用天数:
+                    剩余天数:
                   </Text>
-                  <Text ml={3}>{userInfo.wg_data.ttl}（在线后重置15）</Text>
+                  <Text ml={3}>
+                    {calculateDaysDifference(
+                      userInfo.wg_data.last_connect_timestamp
+                    )}
+                    （在线后重置15）
+                  </Text>
                 </Flex>
 
                 {/* <Divider /> */}
