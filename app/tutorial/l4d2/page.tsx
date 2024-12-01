@@ -49,13 +49,13 @@ export default function Page() {
         <Divider my={5} />
 
         <Text my={3}>
-          加入的玩家按波浪键“~”调出控制台，使用命令“connect 主机IP”即可加入
+          加入的玩家按波浪键“~”调出控制台，使用命令“connect 主机IP”即可加入，主机IP就是开地图的那个玩家的IP。
         </Text>
 
         <Divider my={5} />
 
         <Text my={3}>
-          建议到创意工坊把这个mod打上，能避免兼容性问题导致无法加入
+          建议到创意工坊把这个mod打上，能避免兼容性问题导致无法加入。如果正确操作还是连不上，检查系统防火墙是否有放通。
         </Text>
         <Image
           src="/images/l4d2_关闭一致性检查.jpg"
