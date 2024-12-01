@@ -7,7 +7,6 @@ import { getAuthToken, clearAuthToken } from "../authKey";
 interface WGData {
   wgnum: number;
   wg_ip: string;
-  ttl: number;
   last_connect_timestamp: number;
 }
 
