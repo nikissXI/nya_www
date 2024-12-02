@@ -411,6 +411,12 @@ export default function UserProfilePage() {
     }
   };
 
+  const handleChangePassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleChangePass();
+    }
+  };
+
   return (
     <Center>
       <Modal isOpen={bindTELIsOpen} onClose={bindTELOnClose}>
@@ -609,7 +615,7 @@ export default function UserProfilePage() {
 
           <ModalCloseButton />
 
-          <ModalBody>
+          <ModalBody onKeyDown={handleChangePassEnter}>
             <VStack spacing={2} align="stretch">
               <Input
                 type="password"
