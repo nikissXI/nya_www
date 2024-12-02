@@ -411,7 +411,9 @@ export default function UserProfilePage() {
     }
   };
 
-  const handleChangePassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleChangePassEnter = (
+    event: React.KeyboardEvent<HTMLDivElement>
+  ) => {
     if (event.key === "Enter") {
       handleChangePass();
     }
@@ -761,7 +763,7 @@ export default function UserProfilePage() {
                 <Flex ml={3}>
                   <Tooltip label={userInfo.email} placement="top" hasArrow>
                     <Box
-                      maxWidth={{ md: "100%", base: "55vw" }} // 设置最大宽度
+                      maxWidth="150px" // 设置最大宽度
                       whiteSpace="nowrap" // 不换行
                       overflow="hidden" // 溢出隐藏
                       textOverflow="ellipsis" // 使用省略号表示溢出内容
