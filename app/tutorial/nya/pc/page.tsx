@@ -24,6 +24,7 @@ export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const wg_msi_url = process.env.NEXT_PUBLIC_WG_PC_URL; // 从环境变量获取 API 地址
   const bat_url = process.env.NEXT_PUBLIC_BAT_URL; // 从环境变量获取 API 地址
+  const bat_fix_url = process.env.NEXT_PUBLIC_BAT_FIX_URL; // 从环境变量获取 API 地址
 
   const { logined, userInfo } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
@@ -156,9 +157,7 @@ export default function Page() {
             )}
           </ListItem>
 
-          <ListItem>
-            在左下角点新建隧道，选刚下载的conf文件，完成导入
-          </ListItem>
+          <ListItem>在左下角点新建隧道，选刚下载的conf文件，完成导入</ListItem>
 
           <ListItem>点连接按钮，连上喵服</ListItem>
         </List>
@@ -170,7 +169,7 @@ export default function Page() {
           mx={4} // 设置图片左右间距
         />
 
-        <Button onClick={handleNext} disabled={images.length <= 1}>
+        <Button size="sm" onClick={handleNext} disabled={images.length <= 1}>
           点击切换图片
         </Button>
 
@@ -202,7 +201,31 @@ export default function Page() {
           <ListItem>
             运行这个文件可能会被杀毒软件拦截，如果不放心可以用txt看里面写的什么内容
           </ListItem>
-          <Image src="/images/run_bat_success.jpg" alt="run_bat_success" />
+          <Image src="/images/run_bat_success.png" alt="run_bat_success" />
+        </List>
+
+        <Divider my={5} />
+
+        <List spacing={2}>
+          <ListItem>
+            如果连接出现报错“Unable to create network
+            adapter”，就下载这个bat文件，然后右键“以管理员身份运行”
+          </ListItem>
+
+          <ListItem>
+            <Button
+              size="sm"
+              onClick={() => {
+                window.open(bat_fix_url, "_blank");
+              }}
+            >
+              点击下载bat
+            </Button>
+          </ListItem>
+
+          <ListItem>
+            这是装过VMware虚拟机导致的，运行这个bat修复就行，如果能正常连接就不用管
+          </ListItem>
         </List>
 
         <Divider my={5} />
