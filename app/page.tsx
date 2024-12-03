@@ -89,19 +89,19 @@ export default function Page() {
       >
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
-            喵服简介
+            免费组网
           </Center>
           <Text fontSize="sm">
-            免费提供组网服务，解决异地局域网联机难题，并且支持广播包转发
+            提供异地组网服务解决联机问题，支持广播包转发，最多8个玩家组网
           </Text>
         </Flex>
 
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
-            适用系统
+            多端互联
           </Center>
           <Text fontSize="sm">
-            支持安卓、苹果、Win、Mac接入，若游戏支持可实现跨系统联机
+            支持安卓、苹果、Windows、Mac接入，若游戏支持可实现跨系统联机
           </Text>
         </Flex>
       </Flex>
