@@ -5,7 +5,6 @@ import { useEffect, useState, useCallback } from "react";
 import { Flex, Image, Center, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
-import { useDisclosureStore } from "@/store/disclosure";
 
 interface CountData {
   viewCount: number;
@@ -16,15 +15,10 @@ export default function Page() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { logined } = useUserStateStore();
-  const { onToggle: loginToggle } = useDisclosureStore((state) => {
-    return state.modifyLoginDisclosure;
-  });
   const [countData, setData] = useState<CountData>({
     viewCount: -1,
     userCount: -1,
   });
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -34,29 +28,16 @@ export default function Page() {
       }
       const data = await resp.json();
       setData(data);
-      // groupListRef.current = groupArray; // 缓存获取到的游戏数据
     } catch (err) {
-      setError(err instanceof Error ? err.message : "获取计数信息出错");
     } finally {
-      setLoading(false);
     }
   }, [apiUrl]);
 
   useEffect(() => {
     if (countData.viewCount === -1) {
       fetchData(); // 只在数据为空时请求
-    } else {
-      setLoading(false); // 数据已缓存，直接设置加载状态
     }
   }, [fetchData, countData]);
-
-  if (loading) {
-    return;
-  }
-
-  if (error) {
-    return <Center color="red.500">{error}</Center>;
-  }
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
