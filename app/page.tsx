@@ -11,10 +11,10 @@ export default function Page() {
   const { logined, getCountData, countData } = useUserStateStore();
 
   useEffect(() => {
-    if (!countData.viewCount) {
+    if (countData === undefined) {
       getCountData(); // 只在数据为空时请求
     }
-  }, []);
+  }, [countData, getCountData]);
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
@@ -25,10 +25,10 @@ export default function Page() {
         mb={6}
       >
         <Text w="200px" textAlign={{ md: "center" }}>
-          网站访问人次： {countData.viewCount}
+          网站访问人次： {countData?.viewCount}
         </Text>
         <Text w="200px" textAlign={{ md: "center" }}>
-          注册用户数量： {countData.userCount}
+          注册用户数量： {countData?.userCount}
         </Text>
       </Flex>
 

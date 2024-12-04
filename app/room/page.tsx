@@ -160,7 +160,7 @@ export default function Page() {
           updateMemberStatus(roomData, userInfo?.wg_data?.wgnum, onlineStatus)
         );
     },
-    [roomData, userInfo]
+    [roomData, userInfo, setRoomData]
   );
 
   useEffect(() => {
@@ -173,13 +173,13 @@ export default function Page() {
       getLatency(userInfo.wg_data.wgnum);
     }
     setChecking(false);
-  }, [userInfo]);
+  }, [userInfo, getLatency, latency]);
 
   useEffect(() => {
     if (userInfo?.wg_data && roomData === undefined) {
       getRoomData();
     }
-  }, [userInfo]);
+  }, [userInfo, getRoomData]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
@@ -227,7 +227,7 @@ export default function Page() {
     }
   };
 
-  // 开关任意加入
+  // 设置房间密码
   const handleSetRoomPasswd = useCallback(
     async (newPasswd: string) => {
       try {
@@ -267,7 +267,7 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [apiUrl, loading, roomData, setPassIsOpen, setPassOnClose]
+    [apiUrl, loading, roomData, setPassIsOpen, setPassOnClose, setRoomData]
   );
 
   // 发送房间操作请求

@@ -38,7 +38,7 @@ interface RoomInfo {
 }
 
 interface ILoginStateSlice {
-  countData: CountData;
+  countData: CountData | undefined;
   getCountData: () => Promise<void>;
   setCountData: (countData: CountData) => void;
 
@@ -74,7 +74,7 @@ interface ILoginStateSlice {
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
     return {
-      countData: { viewCount: null, userCount: null },
+      countData: undefined,
 
       getCountData: async () => {
         try {
