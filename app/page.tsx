@@ -1,43 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect } from "react";
 import { Flex, Image, Center, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
 
-interface CountData {
-  viewCount: number;
-  userCount: number;
-}
-
 export default function Page() {
   const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { logined } = useUserStateStore();
-  const [countData, setData] = useState<CountData>({
-    viewCount: -1,
-    userCount: -1,
-  });
-
-  const fetchData = useCallback(async () => {
-    try {
-      const resp = await fetch(`${apiUrl}/countInfo`);
-      if (!resp.ok) {
-        throw new Error("获取计数信息出错");
-      }
-      const data = await resp.json();
-      setData(data);
-    } catch (err) {
-    } finally {
-    }
-  }, [apiUrl]);
+  const { logined, getCountData, countData } = useUserStateStore();
 
   useEffect(() => {
-    if (countData.viewCount === -1) {
-      fetchData(); // 只在数据为空时请求
+    if (!countData.viewCount) {
+      getCountData(); // 只在数据为空时请求
     }
-  }, [fetchData, countData]);
+  }, []);
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">

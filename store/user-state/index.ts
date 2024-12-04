@@ -20,6 +20,11 @@ interface UserInfo {
   wg_data: WGData | null;
 }
 
+interface CountData {
+  viewCount: number | null;
+  userCount: number | null;
+}
+
 interface ILoginStateSlice {
   uuid: string;
 
@@ -35,6 +40,12 @@ interface ILoginStateSlice {
 
   userInfo: UserInfo | undefined;
   setUserInfo: (profile: UserInfo | undefined) => void;
+
+  getCountData: () => Promise<void>;
+
+  setCountData: (countData: CountData) => void;
+
+  countData: CountData;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
@@ -131,6 +142,30 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           });
         });
       },
+
+      getCountData: async () => {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/countInfo`);
+          if (!resp.ok) {
+            throw new Error("请求出错");
+          }
+          const data = await resp.json();
+          get().setCountData(data);
+        } catch (error) {
+        } finally {
+        }
+      },
+
+      setCountData: (countData: CountData) => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.countData = countData;
+          });
+        });
+      },
+
+      countData: { viewCount: null, userCount: null },
     };
   },
   shallow
