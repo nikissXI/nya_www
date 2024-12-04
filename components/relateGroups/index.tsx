@@ -1,59 +1,110 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+// import { useEffect, useState, useCallback } from "react";
 import { Center, Box, Flex } from "@chakra-ui/react";
 import { ArrowDownIcon } from "@chakra-ui/icons";
 
-interface GroupItem {
-  name: string;
-  qq: number;
-}
+// interface GroupItem {
+//   name: string;
+//   qq: number;
+// }
 
-interface GroupData {
-  main: GroupItem[];
-  relate: GroupItem[];
-}
+// interface GroupData {
+//   main: GroupItem[];
+//   relate: GroupItem[];
+// }
 
 const RelateGroupList = () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  const [groupData, setData] = useState<GroupData>({
-    main: [],
-    relate: [],
-  });
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [groupData, setData] = useState<GroupData>({
+  //   main: [],
+  //   relate: [],
+  // });
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const resp = await fetch(`${apiUrl}/relateGroup`);
-      if (!resp.ok) {
-        throw new Error("获取关联群信息出错");
-      }
-      const data = await resp.json();
-      setData(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "获取关联群信息出错");
-    } finally {
-      setLoading(false);
-    }
-  }, [apiUrl]);
+  // const fetchData = useCallback(async () => {
+  //   try {
+  //     const resp = await fetch(`${apiUrl}/relateGroup`);
+  //     if (!resp.ok) {
+  //       throw new Error("获取关联群信息出错");
+  //     }
+  //     const data = await resp.json();
+  //     setData(data);
+  //   } catch (err) {
+  //     setError(err instanceof Error ? err.message : "获取关联群信息出错");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [apiUrl]);
 
-  useEffect(() => {
-    if (groupData.main.length === 0) {
-      fetchData(); // 只在数据为空时请求
-    } else {
-      setLoading(false); // 数据已缓存，直接设置加载状态
-    }
-  }, [fetchData, groupData]);
+  // useEffect(() => {
+  //   if (groupData.main.length === 0) {
+  //     fetchData(); // 只在数据为空时请求
+  //   } else {
+  //     setLoading(false); // 数据已缓存，直接设置加载状态
+  //   }
+  // }, [fetchData, groupData]);
 
-  if (loading) {
-    return;
-  }
+  // if (loading) {
+  //   return;
+  // }
 
-  if (error) {
-    return <Center color="red.500">{error}</Center>;
-  }
+  // if (error) {
+  //   return <Center color="red.500">{error}</Center>;
+  // }
+
+  const groupData = {
+    main: [
+      {
+        name: "喵服总群",
+        qq: 1047464328,
+      },
+    ],
+    relate: [
+      {
+        name: "战魂铭人",
+        qq: 981280745,
+      },
+      {
+        name: "恶果之地",
+        qq: 981282876,
+      },
+      {
+        name: "传说法师",
+        qq: 981286541,
+      },
+      {
+        name: "逃脱者",
+        qq: 961793250,
+      },
+      {
+        name: "泰拉瑞亚",
+        qq: 976129564,
+      },
+      {
+        name: "阿瑞斯病毒2",
+        qq: 966579113,
+      },
+      {
+        name: "星露谷",
+        qq: 817658554,
+      },
+      {
+        name: "我的世界",
+        qq: 908023778,
+      },
+      {
+        name: "机械战争3",
+        qq: 689358384,
+      },
+      {
+        name: "求生之路2",
+        qq: 138012638,
+      },
+    ],
+  };
 
   return (
     <Box
