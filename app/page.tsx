@@ -113,7 +113,7 @@ export default function Page() {
           if (logined) {
             router.push("/room");
           } else {
-            loginToggle();
+            router.push("/me");
           }
         }}
       >

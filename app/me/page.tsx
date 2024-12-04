@@ -971,7 +971,7 @@ export default function UserProfilePage() {
             </VStack>
           </VStack>
         ) : (
-          <VStack spacing={6} align="center">
+          <VStack spacing={3} align="center">
             <Heading size="md">你还没登陆呢</Heading>
 
             <Button
@@ -982,6 +982,19 @@ export default function UserProfilePage() {
             >
               点击登录
             </Button>
+
+            <Heading size="sm" pt={6}>
+              温馨提示
+            </Heading>
+            <Text px={10}>
+              如果遇到网站功能异常，可以换下面这些浏览器试试，仅做推荐
+              <br />
+              苹果：内置浏览器Safari
+              <br />
+              安卓：via、夸克
+              <br />
+              电脑：谷歌、火狐、edge
+            </Text>
           </VStack>
         )}
       </Box>
