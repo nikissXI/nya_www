@@ -179,7 +179,7 @@ export default function Page() {
     if (userInfo?.wg_data && roomData === undefined) {
       getRoomData();
     }
-  }, [userInfo, getRoomData]);
+  }, [userInfo, roomData, getRoomData]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
