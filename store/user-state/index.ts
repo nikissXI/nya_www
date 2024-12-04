@@ -3,13 +3,16 @@ import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
-
+import { openToast } from "@/components/universal/toast";
+interface CountData {
+  viewCount: number | null;
+  userCount: number | null;
+}
 interface WGData {
   wgnum: number;
   wg_ip: string;
   last_connect_timestamp: number;
 }
-
 interface UserInfo {
   uid: number;
   username: string;
@@ -19,13 +22,26 @@ interface UserInfo {
   sponsorship: number;
   wg_data: WGData | null;
 }
-
-interface CountData {
-  viewCount: number | null;
-  userCount: number | null;
+interface Member {
+  username: string;
+  wgnum: number;
+  ip: string;
+  status: "在线" | "离线";
+}
+interface RoomInfo {
+  user_wgnum: number;
+  user_ip: string;
+  hoster_wgnum: number;
+  hoster_ip: string;
+  members: Member[];
+  room_passwd: string;
 }
 
 interface ILoginStateSlice {
+  countData: CountData;
+  getCountData: () => Promise<void>;
+  setCountData: (countData: CountData) => void;
+
   uuid: string;
 
   logging: boolean;
@@ -41,16 +57,47 @@ interface ILoginStateSlice {
   userInfo: UserInfo | undefined;
   setUserInfo: (profile: UserInfo | undefined) => void;
 
-  getCountData: () => Promise<void>;
+  roomStatus: "none" | "member" | "hoster";
+  setRoomStatus: (roomStatus: "none" | "member" | "hoster") => void;
 
-  setCountData: (countData: CountData) => void;
+  roomData: RoomInfo | undefined | null;
+  getRoomData: () => Promise<void>;
+  setRoomData: (roomData: RoomInfo | undefined | null) => void;
 
-  countData: CountData;
+  latency: number | undefined;
+
+  getLatency: (wgnum: number) => Promise<void>;
+
+  setLatency: (latency: number) => void;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
     return {
+      countData: { viewCount: null, userCount: null },
+
+      getCountData: async () => {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/countInfo`);
+          if (!resp.ok) {
+            throw new Error("请求出错");
+          }
+          const data = await resp.json();
+          get().setCountData(data);
+        } catch (error) {
+        } finally {
+        }
+      },
+
+      setCountData: (countData: CountData) => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.countData = countData;
+          });
+        });
+      },
+
       uuid: "",
 
       logging: true,
@@ -117,6 +164,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           get().setUserInfo(data.data);
           get().changeLoginState(true);
         } catch (error) {
+          openToast({
+            content: "服务器出错，请稍后刷新再试",
+            status: "error",
+          });
         } finally {
         }
 
@@ -143,29 +194,105 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         });
       },
 
-      getCountData: async () => {
-        try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const resp = await fetch(`${apiUrl}/countInfo`);
-          if (!resp.ok) {
-            throw new Error("请求出错");
-          }
-          const data = await resp.json();
-          get().setCountData(data);
-        } catch (error) {
-        } finally {
-        }
-      },
+      roomStatus: "none",
 
-      setCountData: (countData: CountData) => {
+      setRoomStatus: (roomStatus: "none" | "member" | "hoster") => {
         set((state) => {
           return produce(state, (draft) => {
-            draft.countData = countData;
+            draft.roomStatus = roomStatus;
           });
         });
       },
 
-      countData: { viewCount: null, userCount: null },
+      roomData: undefined,
+
+      getRoomData: async () => {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/getRoom`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          });
+          if (!resp.ok) {
+            throw new Error("请求出错");
+          }
+          const data = await resp.json();
+
+          // 使用局部变量进行状态判断
+          if (data.data) {
+            // 房主或成员
+            if (data.data.user_wgnum === data.data.hoster_wgnum) {
+              get().setRoomStatus("hoster");
+            } else {
+              get().setRoomStatus("member");
+            }
+          } else {
+            get().setRoomStatus("none");
+          }
+          openToast({ content: `房间信息已刷新`, status: "info" });
+
+          get().setRoomData(data.data);
+        } catch (error) {
+          openToast({
+            content: "服务器出错，请稍后刷新再试",
+            status: "error",
+          });
+        } finally {
+        }
+      },
+
+      setRoomData: (roomData: RoomInfo | undefined | null) => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.roomData = roomData;
+          });
+        });
+      },
+
+      latency: undefined,
+
+      getLatency: async (wgnum: number) => {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/networkCheck?wgnum=${wgnum}`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          });
+          if (!resp.ok) {
+            throw new Error("请求出错");
+          }
+          const data = await resp.json();
+          if (data.ms === 0) {
+            // 未连接
+            get().setLatency(0);
+            openToast({
+              content: "离线无法联机，不懂就看教程",
+              status: "warning",
+            });
+          } else {
+            // 已连接
+            get().setLatency(data.ms);
+          }
+        } catch (error) {
+          openToast({
+            content: "服务器出错，请稍后刷新再试",
+            status: "error",
+          });
+        } finally {
+        }
+      },
+
+      setLatency: (latency: number) => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.latency = latency;
+          });
+        });
+      },
     };
   },
   shallow

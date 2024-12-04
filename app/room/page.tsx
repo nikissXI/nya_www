@@ -38,6 +38,11 @@ import { useRouter } from "next/navigation";
 
 const announcement = [
   {
+    date: "2024/12/04 - 22:00",
+    content:
+      "如果遇到突然不然联机的问题，试试关闭喵服的房间再创建试试。原因还在排查",
+  },
+  {
     date: "2024/11/25 - 21:00",
     content: "解决联机高峰期喵服网络卡顿问题",
   },
@@ -68,11 +73,6 @@ interface RoomInfo {
   room_passwd: string;
 }
 
-interface Response {
-  code: number;
-  data: RoomInfo | null;
-}
-
 interface HandleRoomResponse {
   code: number;
   msg: string;
@@ -85,9 +85,6 @@ export default function Page() {
   const [tutorialColor, setTutorialColor] = useState(true);
 
   const [showReInsert, setShowReInsert] = useState(true);
-
-  const [roomInfo, setRoomData] = useState<RoomInfo | null>(null);
-  const [status, setStatus] = useState<"none" | "member" | "hoster">("none");
 
   const [loading, setLoading] = useState(false);
 
@@ -116,9 +113,17 @@ export default function Page() {
 
   const [inputWgnum, setInputWgnum] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
-  const [latencyData, setLatencyData] = useState(0);
   const [checking, setChecking] = useState(true);
-  const { logined, userInfo } = useUserStateStore();
+  const {
+    logined,
+    userInfo,
+    roomData,
+    getRoomData,
+    setRoomData,
+    roomStatus,
+    latency,
+    getLatency,
+  } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
     return state.modifyGameListDisclosure;
@@ -132,55 +137,14 @@ export default function Page() {
     return state.modifyLoginDisclosure;
   });
 
-  const getRoomData = useCallback(
-    async (noToast: boolean = true) => {
-      if (!userInfo?.wg_data) return;
-      // 从环境变量获取 API 地址
-      fetch(`${apiUrl}/getRoom`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      })
-        .then((resp) => resp.json() as Promise<Response>) // 强制转换为 RoomResponse 类型
-        .then((data) => {
-          setRoomData(data.data);
-
-          // 使用局部变量进行状态判断
-          const currentRoomData = data.data;
-          if (currentRoomData) {
-            // 房主或成员
-            if (currentRoomData.user_wgnum === currentRoomData.hoster_wgnum) {
-              setStatus("hoster");
-            } else {
-              setStatus("member");
-            }
-          } else {
-            setStatus("none");
-          }
-          if (!noToast)
-            openToast({ content: `房间信息已刷新`, status: "info" });
-        })
-        .catch((error) => {
-          console.error(`拉取房间信息出错:${error}，请更换浏览器再尝试`);
-          openToast({
-            content: `拉取房间信息出错:${error}，请更换浏览器再尝试`,
-            status: "error",
-          });
-        })
-        .finally(() => {});
-    },
-    [userInfo, apiUrl]
-  );
-
   const updateMemberStatus = (
-    roomInfo: RoomInfo,
+    roomData: RoomInfo,
     userWgnum: number,
     onlineStatus: "在线" | "离线"
   ): RoomInfo => {
     return {
-      ...roomInfo,
-      members: roomInfo.members.map((member) => {
+      ...roomData,
+      members: roomData.members.map((member) => {
         if (member.wgnum === userWgnum) {
           return { ...member, status: onlineStatus }; // 修改状态为离线
         }
@@ -191,56 +155,36 @@ export default function Page() {
 
   const updatedRoomInfo = useCallback(
     (onlineStatus: "在线" | "离线") => {
-      if (roomInfo && userInfo?.wg_data)
+      if (roomData && userInfo?.wg_data)
         setRoomData(
-          updateMemberStatus(roomInfo, userInfo?.wg_data?.wgnum, onlineStatus)
+          updateMemberStatus(roomData, userInfo?.wg_data?.wgnum, onlineStatus)
         );
     },
-    [roomInfo, userInfo]
+    [roomData, userInfo]
   );
 
   useEffect(() => {
-    updatedRoomInfo(latencyData ? "在线" : "离线");
-  }, [latencyData]);
+    updatedRoomInfo(latency ? "在线" : "离线");
+  }, [latency]);
 
-  const fetchNetworkLatency = useCallback(async () => {
-    if (!userInfo?.wg_data) return;
-
+  useEffect(() => {
     setChecking(true);
-    try {
-      const resp = await fetch(
-        `${apiUrl}/networkCheck?wgnum=${userInfo.wg_data.wgnum}`
-      );
-      if (!resp.ok) {
-        throw new Error(`访问接口出错: ${resp.status}`);
-      }
-      const result = await resp.json();
-      if (result.ms === 0) {
-        // 未连接
-        openToast({
-          content: "离线无法联机，不懂就看教程",
-          status: "warning",
-        });
-
-        setLatencyData(0);
-      } else {
-        // 已连接
-        setLatencyData(result.ms);
-        if (result.ms === -1) {
-          openToast({
-            content: "因防火墙拦截无法检测延迟",
-            status: "warning",
-          });
-        }
-      }
-    } catch (err) {}
+    if (userInfo?.wg_data?.wgnum && latency === undefined) {
+      getLatency(userInfo.wg_data.wgnum);
+    }
     setChecking(false);
-  }, [userInfo, apiUrl]);
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (userInfo?.wg_data && roomData === undefined) {
+      getRoomData();
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
 
-    if (!latencyData) {
+    if (!latency) {
       intervalId = setInterval(() => {
         setTutorialColor((prev) => !prev);
       }, 300);
@@ -252,7 +196,7 @@ export default function Page() {
         clearInterval(intervalId);
       }
     };
-  }, [latencyData]); // 将 stopChanging 作为依赖项
+  }, [latency]); // 将 stopChanging 作为依赖项
 
   const wgReInsert = async () => {
     setShowReInsert(false);
@@ -308,9 +252,9 @@ export default function Page() {
 
         const data = await resp.json();
         if (data.code === 0) {
-          if (roomInfo)
+          if (roomData)
             setRoomData({
-              ...roomInfo,
+              ...roomData,
               room_passwd: newPasswd,
             });
 
@@ -323,16 +267,8 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [apiUrl, loading, roomInfo, setPassIsOpen, setPassOnClose]
+    [apiUrl, loading, roomData, setPassIsOpen, setPassOnClose]
   );
-
-  useEffect(() => {
-    fetchNetworkLatency();
-  }, [userInfo, fetchNetworkLatency]);
-
-  useEffect(() => {
-    getRoomData();
-  }, [userInfo, getRoomData]);
 
   // 发送房间操作请求
   const handleRoomFetch = useCallback(
@@ -629,24 +565,24 @@ export default function Page() {
         </Modal>
 
         <VStack>
-          {status === "hoster" && (
+          {roomStatus === "hoster" && (
             <HStack justify="center" spacing={0}>
               <Text fontWeight="bold">允许直接加入</Text>
-              {roomInfo?.room_passwd ? <FaTimes /> : <FaCheck />}
+              {roomData?.room_passwd ? <FaTimes /> : <FaCheck />}
 
               <Switch
                 px={2}
                 size="md"
                 colorScheme="green"
-                isChecked={roomInfo?.room_passwd ? false : true}
+                isChecked={roomData?.room_passwd ? false : true}
                 onChange={() => {
                   // 已设置密码就清空密码
-                  if (roomInfo?.room_passwd) {
+                  if (roomData?.room_passwd) {
                     setInputPasswd("");
                     handleSetRoomPasswd("");
                   } else {
                     setInputPasswd(
-                      roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                      roomData?.room_passwd ? roomData?.room_passwd : ""
                     );
                     setPassOnOpen();
                   }
@@ -656,21 +592,21 @@ export default function Page() {
               <Button
                 variant="link"
                 bg="transparent"
-                hidden={roomInfo?.room_passwd ? false : true}
+                hidden={roomData?.room_passwd ? false : true}
                 onClick={() => {
                   setInputPasswd(
-                    roomInfo?.room_passwd ? roomInfo?.room_passwd : ""
+                    roomData?.room_passwd ? roomData?.room_passwd : ""
                   );
                   setPassOnOpen();
                 }}
-                isDisabled={roomInfo?.room_passwd ? false : true}
+                isDisabled={roomData?.room_passwd ? false : true}
               >
                 <Text>查看房间密码</Text>
               </Button>
             </HStack>
           )}
 
-          {roomInfo?.members.map((item, index) => (
+          {roomData?.members.map((item, index) => (
             <Box
               w="300px"
               key={item.ip}
@@ -699,7 +635,7 @@ export default function Page() {
                   fontWeight="bold"
                   color={
                     item.wgnum === userInfo?.wg_data?.wgnum
-                      ? latencyData
+                      ? latency
                         ? "#3fdb1d"
                         : "#ff4444"
                       : item.status === "在线"
@@ -708,7 +644,7 @@ export default function Page() {
                   }
                 >
                   {item.wgnum === userInfo?.wg_data?.wgnum
-                    ? latencyData
+                    ? latency
                       ? "在线"
                       : "离线"
                     : item.status}
@@ -735,8 +671,8 @@ export default function Page() {
                   ip {item.ip}
                 </Tag>
 
-                {status === "hoster" &&
-                  item.wgnum !== roomInfo.hoster_wgnum && (
+                {roomStatus === "hoster" &&
+                  item.wgnum !== roomData.hoster_wgnum && (
                     <Tag
                       ml="auto"
                       color="white"
@@ -749,7 +685,7 @@ export default function Page() {
                   )}
               </Flex>
 
-              {/* {index < roomInfo.members.length - 1 && (
+              {/* {index < roomData.members.length - 1 && (
                 <Divider borderWidth={2} mt={1} />
               )} */}
             </Box>
@@ -761,14 +697,14 @@ export default function Page() {
             px={0}
             size="lg"
             bg="transparent"
-            onClick={status === "hoster" ? handleCloseRoom : handleExitRoom}
+            onClick={roomStatus === "hoster" ? handleCloseRoom : handleExitRoom}
           >
-            {status === "hoster" ? "关闭房间" : "退出房间"}
+            {roomStatus === "hoster" ? "关闭房间" : "退出房间"}
             <IoIosExit size={30} color="#ff4444" />
           </Button>
 
           <Text fontSize="lg" fontWeight="bold" ml={2} mr={3}>
-            {roomInfo?.members.length}/8
+            {roomData?.members.length}/8
           </Text>
 
           <Button
@@ -784,8 +720,10 @@ export default function Page() {
                 setDisableGetRoom(false); // 启用按钮
               }, 3000);
 
-              if (!checking) fetchNetworkLatency();
-              getRoomData(false);
+              if (userInfo?.wg_data?.wgnum) {
+                getLatency(userInfo.wg_data.wgnum);
+              }
+              getRoomData();
             }}
           >
             刷新房间
@@ -831,15 +769,15 @@ export default function Page() {
         bg="transparent"
         size="lg"
         onClick={gameListToggle}
-        color={latencyData ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
+        color={latency ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
       >
         点我查看使用教程
       </Button>
 
       <Flex align="center">
-        {status !== "none" && (
+        {roomStatus !== "none" && (
           <Text fontSize={18} fontWeight="bold" mr={3}>
-            房间号 {roomInfo?.hoster_wgnum}
+            房间号 {roomData?.hoster_wgnum}
           </Text>
         )}
 
@@ -848,14 +786,14 @@ export default function Page() {
           p={0}
           mr={1}
           fontWeight="bold"
-          color={latencyData ? "#3fdb1d" : "#ff0000"}
+          color={latency ? "#3fdb1d" : "#ff0000"}
         >
-          {latencyData ? "在线" : "离线"}
+          {latency ? "在线" : "离线"}
         </Text>
-        {latencyData ? (
+        {latency ? (
           <Flex align="center">
-            <GiNetworkBars size={20} color={getColor(latencyData)} />
-            <Box ml={1}>{latencyData}ms</Box>
+            <GiNetworkBars size={20} color={getColor(latency)} />
+            <Box ml={1}>{latency}ms</Box>
           </Flex>
         ) : null}
         <Button
@@ -869,7 +807,9 @@ export default function Page() {
               setDisableCheckNet(false);
             }, 2000);
 
-            fetchNetworkLatency();
+            if (userInfo?.wg_data?.wgnum) {
+              getLatency(userInfo.wg_data.wgnum);
+            }
           }}
           isDisabled={checking}
         >
@@ -881,7 +821,7 @@ export default function Page() {
           </Box>
         </Button>
       </Flex>
-      {/* {!latencyData && showReInsert && (
+      {/* {!latency && showReInsert && (
         <>
           <Flex align="center">
             <Text>WG连上了还是检测不到？</Text>
@@ -892,7 +832,7 @@ export default function Page() {
         </>
       )} */}
 
-      {status === "none" ? nonePage() : roomPage()}
+      {roomStatus === "none" ? nonePage() : roomPage()}
 
       <Box
         position="fixed"
