@@ -671,10 +671,10 @@ export default function UserProfilePage() {
         </ModalContent>
       </Modal>
 
-      <Box maxW={{ md: "100%", base: "90vw" }}>
+      <Box>
         {userInfo ? (
           <VStack spacing={1} align="center">
-            <VStack spacing={1} align="stretch" w="260px">
+            <VStack spacing={1} align="stretch" w="100%">
               <Heading mb={1} size="md" textAlign="center">
                 账号信息
               </Heading>
@@ -763,7 +763,7 @@ export default function UserProfilePage() {
                 <Flex ml={3}>
                   <Tooltip label={userInfo.email} placement="top" hasArrow>
                     <Box
-                      maxWidth="150px" // 设置最大宽度
+                      maxWidth="180px" // 设置最大宽度
                       whiteSpace="nowrap" // 不换行
                       overflow="hidden" // 溢出隐藏
                       textOverflow="ellipsis" // 使用省略号表示溢出内容
