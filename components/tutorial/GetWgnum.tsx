@@ -47,6 +47,7 @@ export default function GetWgnumModal() {
         getUserInfo();
       } else {
         openToast({ content: data.msg, status: "warning" });
+        window.location.reload();
       }
     } else {
       openToast({ content: "服务异常，请联系服主处理", status: "error" });
