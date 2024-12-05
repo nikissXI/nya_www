@@ -141,34 +141,34 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           });
         }
 
-        try {
-          const token = getAuthToken();
-          if (!token) {
-            throw new Error("未登录");
+        const token = getAuthToken();
+
+        if (token) {
+          try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            const resp = await fetch(`${apiUrl}/userInfo`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${getAuthToken()}`,
+              },
+            });
+            if (resp.status === 401) {
+              get().logout();
+              throw new Error("登陆凭证失效");
+            }
+            if (!resp.ok) {
+              throw new Error("请求出错");
+            }
+            const data = await resp.json();
+            get().setUserInfo(data.data);
+            get().changeLoginState(true);
+          } catch (error) {
+            openToast({
+              content: "服务器出错，请稍后刷新再试",
+              status: "error",
+            });
+          } finally {
           }
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const resp = await fetch(`${apiUrl}/userInfo`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${getAuthToken()}`,
-            },
-          });
-          if (resp.status === 401) {
-            get().logout();
-            throw new Error("登陆凭证失效");
-          }
-          if (!resp.ok) {
-            throw new Error("请求出错");
-          }
-          const data = await resp.json();
-          get().setUserInfo(data.data);
-          get().changeLoginState(true);
-        } catch (error) {
-          openToast({
-            content: "服务器出错，请稍后刷新再试",
-            status: "error",
-          });
-        } finally {
         }
 
         set((state) => {
