@@ -100,7 +100,7 @@ export default function Page() {
           <ListItem>
             点击下方按钮下载conf文件，两个通道都能下载，1不行就用2
             <br />
-            <Text color="#fff60b">使用Safari浏览器下载！</Text>
+            <Text color="#fff60b">使用内置浏览器Safari浏览器下载！</Text>
           </ListItem>
           <ListItem>
             {logined ? (
