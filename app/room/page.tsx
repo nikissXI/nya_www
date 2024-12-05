@@ -137,28 +137,18 @@ export default function Page() {
     return state.modifyLoginDisclosure;
   });
 
-  const updateMemberStatus = (
-    roomData: RoomInfo,
-    userWgnum: number,
-    onlineStatus: "在线" | "离线"
-  ): RoomInfo => {
-    return {
-      ...roomData,
-      members: roomData.members.map((member) => {
-        if (member.wgnum === userWgnum) {
-          return { ...member, status: onlineStatus }; // 修改状态为离线
-        }
-        return member; // 保持其他成员不变
-      }),
-    };
-  };
-
   const updatedRoomInfo = useCallback(
     (onlineStatus: "在线" | "离线") => {
       if (roomData && userInfo?.wg_data)
-        setRoomData(
-          updateMemberStatus(roomData, userInfo?.wg_data?.wgnum, onlineStatus)
-        );
+        setRoomData({
+          ...roomData,
+          members: roomData.members.map((member) => {
+            if (member.wgnum === userInfo?.wg_data?.wgnum) {
+              return { ...member, status: onlineStatus }; // 修改状态为离线
+            }
+            return member; // 保持其他成员不变
+          }),
+        });
     },
     [roomData, userInfo, setRoomData]
   );
