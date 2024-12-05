@@ -220,6 +220,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           const data = await resp.json();
 
+          if (data.code === 1) {
+            // 编号失效刷新页面
+            window.location.reload();
+          }
+
           // 使用局部变量进行状态判断
           if (data.data) {
             // 房主或成员

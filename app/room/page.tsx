@@ -270,7 +270,6 @@ export default function Page() {
       if (loading === true) {
         throw new Error(`请不要点太快`);
       }
-
       setLoading(true);
       const resp = await fetch(
         `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}&roomPasswd=${roomPasswd}`,
@@ -285,7 +284,14 @@ export default function Page() {
       if (!resp.ok) {
         throw new Error(`访问接口出错: ${resp.status}`);
       }
-      return resp.json() as Promise<HandleRoomResponse>;
+
+      const data: HandleRoomResponse = await resp.json();
+
+      if (data.code === 1) {
+        // 编号失效刷新页面
+        window.location.reload();
+      }
+      return data;
     },
     [apiUrl, loading]
   );
