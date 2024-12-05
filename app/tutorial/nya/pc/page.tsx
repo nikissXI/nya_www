@@ -180,7 +180,7 @@ export default function Page() {
         </Heading>
         <List spacing={2}>
           <ListItem>
-            下载这个bat文件，然后右键“以管理员身份运行”，不运行该文件会导致检测失败
+            下载这个bat文件，然后右键“以管理员身份运行”，不运行该文件会ping失败导致显示离线。如果系统没运行防火墙可以忽略这一步。
           </ListItem>
 
           <ListItem>
