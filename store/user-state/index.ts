@@ -220,7 +220,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           const data = await resp.json();
 
-          if (data.code === 1) {
+          if (data.code === -1) {
             // 编号失效刷新页面
             window.location.reload();
           }

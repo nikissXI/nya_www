@@ -287,7 +287,7 @@ export default function Page() {
 
       const data: HandleRoomResponse = await resp.json();
 
-      if (data.code === 1) {
+      if (data.code === -1) {
         // 编号失效刷新页面
         window.location.reload();
       }
