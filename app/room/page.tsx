@@ -38,9 +38,8 @@ import { useRouter } from "next/navigation";
 
 const announcement = [
   {
-    date: "2024/12/04 - 22:00",
-    content:
-      "如果遇到突然不然联机的问题，试试关闭喵服的房间再创建试试。原因还在排查",
+    date: "2024/12/05 - 22:00",
+    content: "更新了连接喵服的视频教程，就是怎么离线变在线",
   },
   {
     date: "2024/11/25 - 21:00",
