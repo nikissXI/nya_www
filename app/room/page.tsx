@@ -63,15 +63,6 @@ interface Member {
   status: "在线" | "离线";
 }
 
-interface RoomInfo {
-  user_wgnum: number;
-  user_ip: string;
-  hoster_wgnum: number;
-  hoster_ip: string;
-  members: Member[];
-  room_passwd: string;
-}
-
 interface HandleRoomResponse {
   code: number;
   msg: string;
