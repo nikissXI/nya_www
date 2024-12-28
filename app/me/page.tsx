@@ -38,7 +38,10 @@ import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useRouter } from "next/navigation";
 
-const calculateDaysDifference = (timestamp: number): string => {
+const calculateDaysDifference = (
+  release_days: number,
+  timestamp: number
+): string => {
   // 计算时间戳差值（毫秒）
   const timestamp_now = new Date().getTime();
   const differenceInMilliseconds = Math.abs(timestamp_now - timestamp * 1000);
@@ -49,7 +52,7 @@ const calculateDaysDifference = (timestamp: number): string => {
     differenceInMilliseconds / millisecondsInADay
   );
 
-  return `${15 - differenceInDays}天`;
+  return `${release_days - differenceInDays}天`;
 };
 
 export default function UserProfilePage() {
@@ -865,9 +868,10 @@ export default function UserProfilePage() {
                   </Text>
                   <Text ml={3}>
                     {calculateDaysDifference(
+                      userInfo.wg_data.release_days,
                       userInfo.wg_data.last_connect_timestamp
                     )}
-                    （在线后重置15）
+                    （在线后重置{userInfo.wg_data.release_days}）
                   </Text>
                 </Flex>
 

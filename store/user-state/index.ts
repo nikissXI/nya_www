@@ -12,6 +12,7 @@ interface WGData {
   wgnum: number;
   wg_ip: string;
   last_connect_timestamp: number;
+  release_days: number;
 }
 interface UserInfo {
   uid: number;
