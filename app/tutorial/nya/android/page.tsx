@@ -13,66 +13,50 @@ import {
   ListItem,
   Collapse,
   Image,
+  Input,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUserStateStore } from "@/store/user-state";
-import { getAuthToken } from "@/store/authKey";
 import { useDisclosureStore } from "@/store/disclosure";
 import { openToast } from "@/components/universal/toast";
+import { WarningText } from "@/components/tutorial/PlayWarning";
 
 export default function Page() {
   const wg_apk_url = process.env.NEXT_PUBLIC_WG_APK_URL; // 从环境变量获取 API 地址
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
-  const { logined } = useUserStateStore();
+  const { logined, confKey, getConfKey } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
   });
 
-  const [confKey, setConfKey] = useState("");
-  const [getConfKeyText, setGetConfKeyText] = useState("");
+  // const [getConfKeyText, setGetConfKeyText] = useState("");
 
   const [showXM, setShowXM] = useState(false);
 
   const handleCopyLink = async (confKey: string) => {
-    setConfKey(confKey);
     try {
       if (navigator.clipboard && navigator.permissions) {
         await navigator.clipboard.writeText(confKey);
-        setGetConfKeyText(
-          "key已复制到剪切板，有效期15分钟，如果复制失败就手动复制"
-        );
+        // setGetConfKeyText(
+        //   "key已复制到剪切板，有效期15分钟，如果复制失败就手动复制"
+        // );
+        openToast({ content: "key已复制到剪切板", status: "warning" });
       } else {
         throw new Error("不支持自动复制");
       }
     } catch (err) {
-      openToast({ content: String(err), status: "warning" });
-      setGetConfKeyText("复制失败，请手动复制，key有效期15分钟");
+      // openToast({ content: String(err), status: "warning" });
+      // setGetConfKeyText("复制失败，请手动复制，key有效期15分钟");
     }
   };
 
-  const getConfKey = async () => {
-    const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-    });
-
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 0) {
-        handleCopyLink(data.key);
-      } else {
-        openToast({ content: data.msg, status: "warning" });
-      }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+  useEffect(() => {
+    if (logined) {
+      getConfKey();
     }
-  };
+  }, [logined]);
 
   return (
     <Center>
@@ -90,7 +74,7 @@ export default function Page() {
         </Heading>
 
         <Text mb={3}>
-          请在浏览器中打开网站下载。如果出现无法正常导入，请尝试来这更新，更新了还不行就找群主处理
+          请在浏览器中打开网站下载，不要在QQ、微信等其他非浏览器中下载
         </Text>
 
         <Button
@@ -102,7 +86,7 @@ export default function Page() {
           点击下载WG安装包
         </Button>
 
-        <Divider my={5} />
+        {/* <Divider my={5} />
 
         <Heading size="md" mb={3}>
           获取conf key
@@ -128,9 +112,7 @@ export default function Page() {
           )}
         </Flex>
 
-        <Text>{getConfKeyText}</Text>
-
-        <Text color="#ffd648">{confKey}</Text>
+        <Text>{getConfKeyText}</Text> */}
 
         <Divider my={5} />
 
@@ -142,7 +124,46 @@ export default function Page() {
           <ListItem>步骤 1: 运行WireGuard，即WG</ListItem>
           <ListItem>步骤 2: 点击右下方的加号</ListItem>
           <ListItem>步骤 3: 点击“通过conf key导入”</ListItem>
-          <ListItem>步骤 4: 粘贴上一步获取的conf key完成导入</ListItem>
+          <ListItem>
+            步骤 4:{" "}
+            {logined && confKey ? (
+              <>
+                粘贴这段代码（黄字）完成导入
+                <Button
+                  color="#7dfffe"
+                  fontWeight="normal"
+                  variant="link"
+                  bgColor="transparent"
+                  onClick={() => {
+                    getConfKey();
+                  }}
+                >
+                  刷新
+                </Button>
+                <Input
+                  readOnly
+                  color="#ffd648"
+                  value={confKey}
+                  onClick={() => {
+                    handleCopyLink(confKey);
+                  }}
+                  h="min"
+                />
+              </>
+            ) : (
+              <>
+                请登录后再操作
+                <Button
+                  bgColor="#1d984b"
+                  size="sm"
+                  onClick={loginToggle}
+                  ml={5}
+                >
+                  点击进行登陆
+                </Button>
+              </>
+            )}
+          </ListItem>
           <ListItem>步骤 5: 把开关打开连上喵服</ListItem>
           <Image my={3} src="/images/android_switch.jpg" alt="android_switch" />
         </List>
@@ -171,7 +192,7 @@ export default function Page() {
             borderRadius="md" // 边框圆角
           >
             <Collapse in={showXM}>
-              <Text>
+              <Text fontSize="sm">
                 游戏加速的“网络优化”会导致无法联机，即使已经显示已连接
                 <br />
                 关闭方法：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
@@ -186,16 +207,10 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          使用联机房间开始联机
+          注意事项
         </Heading>
 
-        <Text mx={5}>
-          在线后创建或加入房间即可联机，玩家都连上WG在线，并处于同一个联机房间才能联机
-          <br />
-          网站只是用于管理联机房间，关闭不影响联机
-          <br />
-          WG客户端是用于联机通信的，关掉就离线
-        </Text>
+        <WarningText />
 
         <Button
           mt={3}

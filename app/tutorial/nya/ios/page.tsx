@@ -17,17 +17,14 @@ import { useUserStateStore } from "@/store/user-state";
 import { GetConfUrl } from "@/components/universal/GetConf";
 import { getAuthToken } from "@/store/authKey";
 import { openToast } from "@/components/universal/toast";
+import { WarningText } from "@/components/tutorial/PlayWarning";
 
 export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
-  const { logined, userInfo } = useUserStateStore();
+  const { logined, userInfo, getWgnum } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
-  });
-
-  const { onToggle: getWgnumToggle } = useDisclosureStore((state) => {
-    return state.modifyGetWgnumDisclosure;
   });
 
   const downloadConf = async () => {
@@ -129,11 +126,11 @@ export default function Page() {
                 ) : (
                   <Button
                     rounded={5}
-                    onClick={getWgnumToggle}
+                    onClick={getWgnum}
                     bgColor="#007bc0"
                     size="sm"
                   >
-                    你还没获取编号
+                    点击获取编号
                   </Button>
                 )}
               </>
@@ -156,16 +153,10 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          使用联机房间开始联机
+          注意事项
         </Heading>
 
-        <Text mx={5}>
-          在线后创建或加入房间即可联机，玩家都连上WG在线，并处于同一个联机房间才能联机
-          <br />
-          网站只是用于管理联机房间，关闭不影响联机
-          <br />
-          WG客户端是用于联机通信的，关掉就离线
-        </Text>
+        <WarningText />
 
         <Button
           mt={3}

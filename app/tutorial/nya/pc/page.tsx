@@ -18,6 +18,7 @@ import { GetConfUrl } from "@/components/universal/GetConf";
 import { useState } from "react";
 import { getAuthToken } from "@/store/authKey";
 import { openToast } from "@/components/universal/toast";
+import { WarningText } from "@/components/tutorial/PlayWarning";
 
 export default function Page() {
   const router = useRouter();
@@ -26,13 +27,9 @@ export default function Page() {
   const bat_url = process.env.NEXT_PUBLIC_BAT_URL; // 从环境变量获取 API 地址
   const bat_fix_url = process.env.NEXT_PUBLIC_BAT_FIX_URL; // 从环境变量获取 API 地址
 
-  const { logined, userInfo } = useUserStateStore();
+  const { logined, userInfo, getWgnum } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
-  });
-
-  const { onToggle: getWgnumToggle } = useDisclosureStore((state) => {
-    return state.modifyGetWgnumDisclosure;
   });
 
   const images = ["/images/pc_switch_off.jpg", "/images/pc_switch_on.jpg"];
@@ -142,11 +139,11 @@ export default function Page() {
                 ) : (
                   <Button
                     rounded={5}
-                    onClick={getWgnumToggle}
+                    onClick={getWgnum}
                     bgColor="#007bc0"
                     size="sm"
                   >
-                    你还没获取编号
+                    点击获取编号
                   </Button>
                 )}
               </>
@@ -175,37 +172,6 @@ export default function Page() {
 
         <Divider my={5} />
 
-        <Heading size="md" mb={3}>
-          允许ping协议通过防火墙
-        </Heading>
-        <List spacing={2}>
-          <ListItem>
-            下载这个bat文件，然后右键“以管理员身份运行”，不运行该文件会ping失败导致显示离线。如果系统没运行防火墙可以忽略这一步。
-          </ListItem>
-
-          <ListItem>
-            <Button
-              size="sm"
-              onClick={() => {
-                window.open(bat_url, "_blank");
-              }}
-            >
-              点击下载bat
-            </Button>
-          </ListItem>
-          <Image src="/images/run_bat.png" alt="run_bat" />
-
-          <ListItem>
-            如果浏览器把文件拦截了不知道怎么点，可以看视频教程，全程录屏
-          </ListItem>
-          <ListItem>
-            运行这个文件可能会被杀毒软件拦截，如果不放心可以用txt看里面写的什么内容
-          </ListItem>
-          <Image src="/images/run_bat_success.png" alt="run_bat_success" />
-        </List>
-
-        <Divider my={5} />
-
         <List spacing={2}>
           <ListItem>
             如果连接出现报错“Unable to create network
@@ -219,7 +185,7 @@ export default function Page() {
                 window.open(bat_fix_url, "_blank");
               }}
             >
-              点击下载bat
+              点击下载修复脚本
             </Button>
           </ListItem>
 
@@ -231,16 +197,34 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          使用联机房间开始联机
+          允许ping协议通过防火墙
+        </Heading>
+        <List spacing={2}>
+          <ListItem>
+            下载这个bat文件，然后右键“以管理员身份运行”，不运行该文件会ping失败导致显示离线。如果系统没运行防火墙可以忽略这一步（像网吧的机子一般没有）。
+          </ListItem>
+
+          <ListItem>
+            <Button
+              size="sm"
+              onClick={() => {
+                window.open(bat_url, "_blank");
+              }}
+            >
+              点击下载防火墙脚本
+            </Button>
+          </ListItem>
+          <Image src="/images/run_bat.png" alt="run_bat" />
+          <Image src="/images/run_bat_success.png" alt="run_bat_success" />
+        </List>
+
+        <Divider my={5} />
+
+        <Heading size="md" mb={3}>
+          注意事项
         </Heading>
 
-        <Text mx={5}>
-          在线后创建或加入房间即可联机，玩家都连上WG在线，并处于同一个联机房间才能联机
-          <br />
-          网站只是用于管理联机房间，关闭不影响联机
-          <br />
-          WG客户端是用于联机通信的，关掉就离线
-        </Text>
+        <WarningText />
 
         <Button
           mt={3}

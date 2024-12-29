@@ -113,14 +113,11 @@ export default function Page() {
     roomStatus,
     latency,
     getLatency,
+    getWgnum,
   } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
     return state.modifyGameListDisclosure;
-  });
-
-  const { onToggle: getWgnumToggle } = useDisclosureStore((state) => {
-    return state.modifyGetWgnumDisclosure;
   });
 
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
@@ -421,13 +418,8 @@ export default function Page() {
             你还没联机编号呢
           </Heading>
 
-          <Button
-            rounded={5}
-            onClick={getWgnumToggle}
-            bgColor="#007bc0"
-            size="sm"
-          >
-            点我获取编号
+          <Button rounded={5} onClick={getWgnum} bgColor="#007bc0" size="sm">
+          点击获取编号
           </Button>
         </VStack>
       </Center>

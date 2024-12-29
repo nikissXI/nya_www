@@ -1,6 +1,6 @@
 "use client";
 
-import { Center, Box, VStack, Heading } from "@chakra-ui/react";
+import { Text, VStack, Heading, Box } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
 
@@ -9,19 +9,34 @@ export default function Page() {
 
   return (
     <VStack spacing={6}>
-      <Button
-        py={7}
-        px={3}
-        bgColor="#c54572"
-        fontSize="30px"
-        onClick={() => {
-          window.open("https://www.bilibili.com/video/BV1MK4y1s7mS", "_blank");
-        }}
-      >
-        视频教程
-      </Button>
+      <Box textAlign="center">
+        <Text>
+          视频教程更新不太及时
+          <br />
+          请以图文教程为准
+        </Text>
+        <Button
+          // py={7}
+          // px={3}
+          size="md"
+          bgColor="#c54572"
+          // fontSize="30px"
+          onClick={() => {
+            window.open(
+              "https://www.bilibili.com/video/BV1MK4y1s7mS",
+              "_blank"
+            );
+          }}
+        >
+          视频教程
+        </Button>
+      </Box>
 
-      <Heading>请选择系统</Heading>
+      <Heading size="md" textAlign="center">
+        请选择对应系统
+        <br />
+        查看图文教程
+      </Heading>
 
       <Button
         p={7}

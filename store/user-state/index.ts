@@ -45,6 +45,11 @@ interface ILoginStateSlice {
 
   uuid: string;
 
+  confKey: string | null;
+  getConfKey: () => void;
+
+  getWgnum: () => void;
+
   logging: boolean;
   changeloggingState: (state: boolean) => void;
 
@@ -69,7 +74,7 @@ interface ILoginStateSlice {
 
   getLatency: (wgnum: number) => Promise<void>;
 
-  setLatency: (latency: number) => void;
+  setLatency: (latency: number | undefined) => void;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
@@ -100,6 +105,64 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       uuid: "",
+
+      confKey: null,
+
+      getConfKey: async () => {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          });
+
+          if (!resp.ok) {
+            throw new Error("请求出错");
+          }
+          const data = await resp.json();
+          if (data.code === 0) {
+            set((state) => {
+              return produce(state, (draft) => {
+                draft.confKey = data.key;
+              });
+            });
+          } else {
+            openToast({ content: data.msg, status: "warning" });
+          }
+        } catch (error) {
+          openToast({ content: "服务异常，请联系服主处理", status: "error" });
+        } finally {
+        }
+      },
+
+      getWgnum: async () => {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/getWgnum`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          });
+
+          if (!resp.ok) {
+            throw new Error("请求出错");
+          }
+          const data = await resp.json();
+          if (data.code === 0) {
+            openToast({ content: "绑定编号成功", status: "success" });
+            get().getUserInfo();
+          } else {
+            openToast({ content: data.msg, status: "warning" });
+            window.location.reload();
+          }
+        } catch (error) {
+          openToast({ content: "服务异常，请联系服主处理", status: "error" });
+        } finally {
+        }
+      },
 
       logging: true,
       changeloggingState: (loggingState: boolean) => {
@@ -181,8 +244,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       logout: () => {
         clearAuthToken();
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.uuid = uuidv4();
+            localStorage.setItem("uuid", draft.uuid);
+          });
+        });
         get().setUserInfo(undefined);
         get().changeLoginState(false);
+        get().setRoomStatus("none");
+        get().setRoomData(undefined);
+        get().setLatency(undefined);
       },
 
       userInfo: undefined,
@@ -292,7 +364,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      setLatency: (latency: number) => {
+      setLatency: (latency: number | undefined) => {
         set((state) => {
           return produce(state, (draft) => {
             draft.latency = latency;

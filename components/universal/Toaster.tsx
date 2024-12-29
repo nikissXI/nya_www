@@ -19,9 +19,6 @@ export const useOpenToast = () => {
         status: status,
         duration: 3000,
         isClosable: true,
-        // render: () => {
-        //   return <ToastComponent text={content} />;
-        // },
       });
       clearToast();
     }

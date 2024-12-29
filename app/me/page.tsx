@@ -58,24 +58,10 @@ const calculateDaysDifference = (
 export default function UserProfilePage() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { uuid, getUserInfo, userInfo, logout } = useUserStateStore();
+  const { uuid, getUserInfo, userInfo, logout, getWgnum } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
   });
-  const { onToggle: getWgnumToggle } = useDisclosureStore((state) => {
-    return state.modifyGetWgnumDisclosure;
-  });
-
-  const [showTips, setShowTips] = useState(false);
-
-  const tips = [
-    "同一个编号不能多个设备同时连接，否则会互相挤掉线。这些网络环境容易连接喵服失败：校园网、公司网、中国大陆外",
-    "绑定的编号如果可用天数归零就会解绑，失效的隧道可从WG中删除。需要就领取新的，WG隧道也要导入新的",
-    "移动设备联机时，其他人加入时，当主机的游戏不能后台，否则无法加入",
-    "只要设备能连上喵服就能互相通信，不限系统，如果游戏支持，可以实现手机与电脑联机",
-    "如果遇到网站功能异常，可以换这些浏览器试试，仅做推荐；苹果：内置浏览器Safari；安卓：via、夸克;电脑：谷歌、火狐、edge",
-    "遇到阅读教程后无法解决的问题，就找服主（QQ:1299577815）",
-  ];
 
   // 修改用户名
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
@@ -871,37 +857,24 @@ export default function UserProfilePage() {
                       userInfo.wg_data.release_days,
                       userInfo.wg_data.last_connect_timestamp
                     )}
-                    （在线后重置{userInfo.wg_data.release_days}）
+                    <Button
+                      ml={3}
+                      color="#7dfffe"
+                      fontWeight="normal"
+                      variant="link"
+                      bgColor="transparent"
+                      onClick={() => {
+                        openToast({
+                          content:
+                            "在线会刷新天数，如果到期被回收获取个新的编号就行",
+                          status: "info",
+                        });
+                      }}
+                    >
+                      有疑问点我
+                    </Button>
                   </Text>
                 </Flex>
-
-                {/* <Divider /> */}
-
-                {/* <Flex>
-                  <Text w="80px" textAlign="right">
-                    最后连接:
-                  </Text>
-                  <Text ml={3}>
-                    {userInfo.wg_data.last_connect_timestamp
-                      ? timestampToDateString(
-                          userInfo.wg_data.last_connect_timestamp
-                        )
-                      : "未连接过"}
-                  </Text>
-                </Flex> */}
-
-                {/* <Button
-                  mt={2}
-                  size="sm"
-                  w="100px"
-                  alignSelf="center"
-                  bgColor="#992e98"
-                  onClick={() => {
-                    router.push("/tutorial");
-                  }}
-                >
-                  连接喵服教程
-                </Button> */}
               </VStack>
             ) : (
               <VStack spacing={3} mt={5} align="center">
@@ -911,42 +884,14 @@ export default function UserProfilePage() {
 
                 <Button
                   rounded={5}
-                  onClick={getWgnumToggle}
+                  onClick={getWgnum}
                   bgColor="#007bc0"
                   size="sm"
                 >
-                  点我获取编号
+                  点击获取编号
                 </Button>
               </VStack>
             )}
-
-            <Button
-              size="sm"
-              alignSelf="center"
-              mt={3}
-              bgColor="#b5352a"
-              fontSize="16px"
-              onClick={() => setShowTips(!showTips)}
-            >
-              联机注意事项
-            </Button>
-
-            <Box
-              mx={3}
-              px={3}
-              border="2px" // 边框宽度
-              borderColor="#31b8ce" // 边框颜色
-              borderRadius="md" // 边框圆角
-            >
-              <Collapse in={showTips}>
-                {tips.map((tip, index) => (
-                  <Text fontSize="sm" key={index} my={2}>
-                    <WarningIcon mr={2} />
-                    {tip}
-                  </Text>
-                ))}
-              </Collapse>
-            </Box>
 
             <VStack spacing={5} mt={5}>
               <Button

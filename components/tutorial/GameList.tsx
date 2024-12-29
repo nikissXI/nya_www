@@ -20,6 +20,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useDisclosureStore } from "@/store/disclosure";
 import { Button } from "../universal/button";
+import { useUserStateStore } from "@/store/user-state";
 
 interface Article {
   path: string;
@@ -46,6 +47,8 @@ export const GameListModal = () => {
 
   const [hideGameList, setHideGameList] = useState(true);
 
+  const { latency } = useUserStateStore();
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
 
@@ -65,14 +68,14 @@ export const GameListModal = () => {
     };
   }, [hideGameList]);
 
+  useEffect(() => {
+    if (latency) setHideGameList(false);
+  }, [latency]);
+
   const { isOpen: gameListIsOpen, onToggle: gameListOnToggle } =
     useDisclosureStore((state) => {
       return state.modifyGameListDisclosure;
     });
-
-  useEffect(() => {
-    setHideGameList(true);
-  }, [gameListIsOpen]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -114,25 +117,30 @@ export const GameListModal = () => {
               点我点我点我
             </Button>
 
-            <Divider my={2} />
+            <Divider my={0} />
 
-            <Button
-              variant="link"
-              bg="transparent"
-              color="#7dfffe"
-              onClick={() => {
-                setHideGameList(false);
-              }}
-              hidden={!hideGameList}
-            >
-              我已在线，看游戏的联机教程
-            </Button>
+            <Box hidden={!hideGameList} textAlign="center">
+              <Text textAlign="left">
+                教程分两部分，上面是连接喵服的教程，下面的具体游戏的联机教程
+              </Text>
+
+              <Divider my={2} />
+
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dfffe"
+                onClick={() => {
+                  setHideGameList(false);
+                }}
+              >
+                我已在线，看游戏的联机教程
+              </Button>
+            </Box>
 
             <Box hidden={hideGameList}>
               <Text fontSize="md" textAlign="center">
                 欢迎找群主投稿其他游戏的教程
-                <br />
-                联机的玩家都需要连上喵服！
               </Text>
 
               <Input

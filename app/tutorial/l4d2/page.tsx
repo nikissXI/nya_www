@@ -49,13 +49,17 @@ export default function Page() {
         <Divider my={5} />
 
         <Text my={3}>
-          加入的玩家按波浪键“~”调出控制台，使用命令“connect 主机IP”即可加入，主机IP就是开地图的那个玩家的IP。
+          加入的玩家按波浪键“~”调出控制台，使用命令“connect
+          主机IP”即可加入，主机IP就是开地图的那个玩家的IP，不是写自己的IP！
+          <br />
+          下图就是连接失败的报错，这种情况就检查IP是否填对，防火墙是否放通游戏（不会放就直接把防火墙关了试试）
         </Text>
+        <Image src="/images/l4d2_4.jpg" alt="l4d2_4" />
 
         <Divider my={5} />
 
         <Text my={3}>
-          建议到创意工坊把这个mod打上，能避免兼容性问题导致无法加入。如果正确操作还是连不上，检查系统防火墙是否有放通。
+          建议到创意工坊把这个mod打上，能一定程度上避免兼容性问题导致无法加入。
         </Text>
         <Image
           src="/images/l4d2_关闭一致性检查.jpg"
