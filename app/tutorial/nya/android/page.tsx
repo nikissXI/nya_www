@@ -140,15 +140,15 @@ export default function Page() {
                 >
                   刷新
                 </Button>
-                <Input
-                  readOnly
+                <Text
                   color="#ffd648"
-                  value={confKey}
                   onClick={() => {
                     handleCopyLink(confKey);
                   }}
                   h="min"
-                />
+                >
+                  {confKey}
+                </Text>
               </>
             ) : (
               <>
