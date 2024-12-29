@@ -8,6 +8,7 @@ import {
   Input,
   Flex,
   Center,
+  Image,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
@@ -76,6 +77,14 @@ export default function AndroidPage0() {
         <Text>
           由于这逃脱者的联机机制很傻逼，仅此游戏需要这样操作才能联机，不识字就看视频
         </Text>
+        <Text>
+          需要连接WiFi才可以进行多人游戏，否则会出现如图报错。电脑不需要
+        </Text>
+        <Image
+          src="/images/the_escapists_lan_error.jpg"
+          alt="the_escapists_lan_error"
+        />
+
         <Text>
           游戏房主连上喵服后创建多人游戏就行，加入者需要创建搜索任务才能搜索到房间
         </Text>

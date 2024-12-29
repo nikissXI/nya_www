@@ -13,7 +13,6 @@ import {
   ListItem,
   Collapse,
   Image,
-  Input,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState, useEffect } from "react";
