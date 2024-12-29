@@ -79,11 +79,11 @@ export default function AndroidPage0() {
         </Text>
         <Text>
           需要连接WiFi才可以进行多人游戏，否则会出现如图报错。电脑不需要
+          <Image
+            src="/images/the_escapists_lan_error.jpg"
+            alt="the_escapists_lan_error"
+          />
         </Text>
-        <Image
-          src="/images/the_escapists_lan_error.jpg"
-          alt="the_escapists_lan_error"
-        />
 
         <Text>
           游戏房主连上喵服后创建多人游戏就行，加入者需要创建搜索任务才能搜索到房间
