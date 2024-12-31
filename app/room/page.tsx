@@ -56,13 +56,6 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-interface Member {
-  username: string;
-  wgnum: number;
-  ip: string;
-  status: "在线" | "离线";
-}
-
 interface HandleRoomResponse {
   code: number;
   msg: string;
@@ -419,7 +412,7 @@ export default function Page() {
           </Heading>
 
           <Button rounded={5} onClick={getWgnum} bgColor="#007bc0" size="sm">
-          点击获取编号
+            点击获取编号
           </Button>
         </VStack>
       </Center>

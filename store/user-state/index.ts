@@ -332,36 +332,46 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       latency: undefined,
 
       getLatency: async (wgnum: number) => {
+        const controller = new AbortController(); // 创建 AbortController 实例
+        const signal = controller.signal; // 获取信号
+        // 设置超时
+        const timeoutId = setTimeout(() => {
+          controller.abort(); // 超时后中止请求
+        }, 1000);
+
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const resp = await fetch(`${apiUrl}/networkCheck?wgnum=${wgnum}`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${getAuthToken()}`,
-            },
-          });
-          if (!resp.ok) {
-            throw new Error("请求出错");
-          }
-          const data = await resp.json();
-          if (data.ms === 0) {
-            // 未连接
-            get().setLatency(0);
-            openToast({
-              content: "离线无法联机，不懂就看教程",
-              status: "warning",
-            });
-          } else {
-            // 已连接
-            get().setLatency(data.ms);
-          }
+          const startTime = performance.now(); // 记录开始时间
+          await fetch("https://ping.nikiss.top:65533", { signal });
+          get().setLatency(Number((performance.now() - startTime).toFixed(0)));
         } catch (error) {
-          openToast({
-            content: "服务器出错，请稍后刷新再试",
-            status: "error",
-          });
-        } finally {
+          console.error("http请求失败，尝试api", error);
+
+          try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            const resp = await fetch(`${apiUrl}/networkCheck?wgnum=${wgnum}`);
+            if (!resp.ok) {
+              throw new Error("请求出错");
+            }
+            const data = await resp.json();
+            if (data.ms === 0) {
+              // 未连接
+              get().setLatency(0);
+              openToast({
+                content: "离线无法联机，不懂就看教程",
+                status: "warning",
+              });
+            } else {
+              // 已连接
+              get().setLatency(data.ms);
+            }
+          } catch (error) {
+            openToast({
+              content: "服务器出错，请稍后刷新再试",
+              status: "error",
+            });
+          }
         }
+        clearTimeout(timeoutId); // 请求完成后清除超时
       },
 
       setLatency: (latency: number | undefined) => {
