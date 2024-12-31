@@ -4,7 +4,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
-import { error } from "console";
+
 interface CountData {
   viewCount: number | null;
   userCount: number | null;
@@ -37,6 +37,10 @@ interface RoomInfo {
   hoster_ip: string;
   members: Member[];
   room_passwd: string;
+}
+
+interface PingResponse {
+  ip: string;
 }
 
 interface ILoginStateSlice {
@@ -370,7 +374,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             timeout(1000),
           ]);
 
-          const data = await resp.json();
+          // 确保结果是 Response 类型
+          if (!(resp instanceof Response)) {
+            throw new Error("Invalid response type");
+          }
+
+          const data = (await resp.json()) as PingResponse;
           if (data.ip !== get().userInfo?.wg_data?.wg_ip)
             throw new Error("错误wgip");
 
