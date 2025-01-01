@@ -196,7 +196,7 @@ export default function Page() {
 
         <Divider my={5} />
 
-        <Heading size="md" mb={3}>
+        {/* <Heading size="md" mb={3}>
           允许ping协议通过防火墙
         </Heading>
         <List spacing={2}>
@@ -218,7 +218,7 @@ export default function Page() {
           <Image src="/images/run_bat_success.png" alt="run_bat_success" />
         </List>
 
-        <Divider my={5} />
+        <Divider my={5} /> */}
 
         <Heading size="md" mb={3}>
           注意事项
