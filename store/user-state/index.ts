@@ -316,6 +316,13 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           openToast({ content: `房间信息已刷新`, status: "info" });
 
+          if (data.wgInsert) {
+            openToast({
+              content: `隧道重载，等10秒再点检测`,
+              status: "warning",
+            });
+          }
+
           get().setRoomData(data.data);
         } catch (error) {
           openToast({
@@ -337,31 +344,25 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       latency: undefined,
 
       getLatency: async (wgnum: number) => {
-        // const controller = new AbortController(); // 创建 AbortController 实例
-        // const signal = controller.signal; // 获取信号
-        // // 设置超时
-        // const timeoutId = setTimeout(() => {
-        //   controller.abort(); // 超时后中止请求
-        // }, 1000);
-
         try {
-          // const observer = new PerformanceObserver((list) => {
-          //   const lastEntry = list.getEntries().at(-1);
+          // const request = new XMLHttpRequest();
+          // let networkStartTime;
 
-          //   if (
-          //     lastEntry &&
-          //     lastEntry.name === "https://ping.nikiss.top:65533/"
-          //   ) {
-          //     console.log("最新请求完成时间:", lastEntry.duration);
-          //     get().setLatency(Math.floor(lastEntry.duration));
+          // request.onreadystatechange = function () {
+          //   if (request.readyState === 1) {
+          //     // HEADERS_RECEIVED
+          //     networkStartTime = performance.now();
+          //   } else if (request.readyState === 2) {
+          //     // DONE
+          //     const networkTime = performance.now() - networkStartTime;
+          //     console.log("Network time (excluding queue):", networkTime, "ms");
           //   }
-          //   observer.disconnect();
-          // });
+          // };
 
-          // // 开始观察resource类型的性能条目
-          // observer.observe({ entryTypes: ["resource"] });
+          // request.open("GET", "https://ping.nikiss.top:65533/");
+          // request.send();
 
-          // const resp = await fetch("https://ping.nikiss.top:65533", { signal });
+          /////////////////////////////
 
           const timeout = (ms: number) => {
             return new Promise((_, reject) => {
@@ -397,6 +398,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             });
             throw new Error("获取延迟出错");
           }
+          /////////////////////
         } catch (error) {
           get().setLatency(0);
           openToast({

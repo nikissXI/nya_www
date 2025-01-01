@@ -140,6 +140,8 @@ export const GameListModal = () => {
 
             <Box hidden={hideGameList}>
               <Text fontSize="md" textAlign="center">
+                列表以外的游戏请自行尝试联机
+                <br />
                 欢迎找群主投稿其他游戏的教程
               </Text>
 

@@ -58,7 +58,7 @@ const RelateGroupList = () => {
   const groupData = {
     main: [
       {
-        name: "喵服总群",
+        name: "喵服联机总群",
         qq: 1047464328,
       },
     ],
@@ -120,20 +120,24 @@ const RelateGroupList = () => {
         top={0}
         position="sticky"
       >
-        <Center fontWeight="bold" fontSize="xl" color="#a8d1ff" mb={4}>
+        <Center fontWeight="bold" fontSize="xl" color="#a8d1ff">
           <ArrowDownIcon display={{ base: "flex", md: "none" }} />
           喵服关联QQ群
           <ArrowDownIcon display={{ base: "flex", md: "none" }} />
         </Center>
 
         {groupData.main.map((group, index) => (
-          <Center key={index} mb={2}>
+          <Center key={index} my={1}>
             {group.name} - {group.qq}
           </Center>
         ))}
 
+        <Center fontWeight="bold" color="#a8d1ff" my={1}>
+          支持但不限于以下游戏
+        </Center>
+
         {groupData.relate.map((group, index) => (
-          <Center key={index} mb={2}>
+          <Center key={index} my={1}>
             {group.name} - {group.qq}
           </Center>
         ))}
