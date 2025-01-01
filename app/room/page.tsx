@@ -38,6 +38,11 @@ import { useRouter } from "next/navigation";
 
 const announcement = [
   {
+    date: "2025/01/02 - 01:00",
+    content:
+      "优化检测在线逻辑，提高获取延迟精度，电脑(win)不再需要防火墙放通ping协议以检测在线",
+  },
+  {
     date: "2024/12/05 - 22:00",
     content: "更新了连接喵服的视频教程，就是怎么离线变在线",
   },
