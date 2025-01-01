@@ -352,7 +352,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           //   if (request.readyState === 1) {
           //     // HEADERS_RECEIVED
           //     networkStartTime = performance.now();
-          //   } else if (request.readyState === 2) {
+          //   } else if (request.readyState === 4) {
           //     // DONE
           //     const networkTime = performance.now() - networkStartTime;
           //     console.log("Network time (excluding queue):", networkTime, "ms");
