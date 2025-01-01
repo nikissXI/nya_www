@@ -139,17 +139,17 @@ export default function Page() {
 
   useEffect(() => {
     setChecking(true);
-    if (userInfo?.wg_data?.wgnum && latency === undefined) {
-      getLatency(userInfo.wg_data.wgnum);
+    if (latency === undefined) {
+      getLatency();
     }
     setChecking(false);
-  }, [userInfo, getLatency, latency]);
+  }, [getLatency, latency]);
 
   useEffect(() => {
-    if (userInfo?.wg_data && roomData === undefined) {
+    if (roomData === undefined) {
       getRoomData();
     }
-  }, [userInfo, roomData, getRoomData]);
+  }, [roomData, getRoomData]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
@@ -691,9 +691,7 @@ export default function Page() {
                 setDisableGetRoom(false); // 启用按钮
               }, 3000);
 
-              if (userInfo?.wg_data?.wgnum) {
-                getLatency(userInfo.wg_data.wgnum);
-              }
+              getLatency();
               getRoomData();
             }}
           >
@@ -778,9 +776,7 @@ export default function Page() {
               setDisableCheckNet(false);
             }, 2000);
 
-            if (userInfo?.wg_data?.wgnum) {
-              getLatency(userInfo.wg_data.wgnum);
-            }
+            getLatency();
           }}
           isDisabled={checking}
         >

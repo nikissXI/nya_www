@@ -77,7 +77,7 @@ interface ILoginStateSlice {
 
   latency: number | undefined;
 
-  getLatency: (wgnum: number) => Promise<void>;
+  getLatency: () => Promise<void>;
 
   setLatency: (latency: number | undefined) => void;
 }
@@ -285,6 +285,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       roomData: undefined,
 
       getRoomData: async () => {
+        if (!get().userInfo?.wg_data) return;
+
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/getRoom`, {
@@ -343,27 +345,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       latency: undefined,
 
-      getLatency: async (wgnum: number) => {
+      getLatency: async () => {
+        if (!get().userInfo?.wg_data) return;
+
         try {
-          // const request = new XMLHttpRequest();
-          // let networkStartTime;
-
-          // request.onreadystatechange = function () {
-          //   if (request.readyState === 1) {
-          //     // HEADERS_RECEIVED
-          //     networkStartTime = performance.now();
-          //   } else if (request.readyState === 4) {
-          //     // DONE
-          //     const networkTime = performance.now() - networkStartTime;
-          //     console.log("Network time (excluding queue):", networkTime, "ms");
-          //   }
-          // };
-
-          // request.open("GET", "https://ping.nikiss.top:65533/");
-          // request.send();
-
-          /////////////////////////////
-
           const timeout = (ms: number) => {
             return new Promise((_, reject) => {
               setTimeout(() => reject(new Error("Timeout")), ms);
@@ -388,9 +373,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             "https://ping.nikiss.top:65533/"
           );
 
-          const lastEntry = entries.at(-1);
+          const lastEntry = entries.at(-1) as PerformanceResourceTiming;
           if (lastEntry) {
-            get().setLatency(Math.floor(lastEntry.duration));
+            get().setLatency(
+              Math.floor(lastEntry.responseStart - lastEntry.requestStart)
+            );
           } else {
             openToast({
               content: "获取延迟出错",
@@ -433,7 +420,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           //   });
           // }
         }
-        // clearTimeout(timeoutId); // 请求完成后清除超时
       },
 
       setLatency: (latency: number | undefined) => {
