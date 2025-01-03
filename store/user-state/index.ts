@@ -370,7 +370,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             throw new Error("错误wgip");
 
           const entries = performance.getEntriesByName(
-            "https://ping.nikiss.top:65533/"
+            "https://nyacheck.nikiss.top:65533/"
           );
 
           const lastEntry = entries.at(-1) as PerformanceResourceTiming;
