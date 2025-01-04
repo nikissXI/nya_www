@@ -387,38 +387,22 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           /////////////////////
         } catch (error) {
-          get().setLatency(0);
-          openToast({
-            content: "离线无法联机，不懂就看教程",
-            status: "warning",
-          });
-
-          // console.log("http请求失败，尝试api", error);
-
-          // try {
-          //   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          //   const resp = await fetch(`${apiUrl}/networkCheck?wgnum=${wgnum}`);
-          //   if (!resp.ok) {
-          //     throw new Error("请求出错");
-          //   }
-          //   const data = await resp.json();
-          //   if (data.ms === 0) {
-          //     // 未连接
-          //     get().setLatency(0);
-          //     openToast({
-          //       content: "离线无法联机，不懂就看教程",
-          //       status: "warning",
-          //     });
-          //   } else {
-          //     // 已连接
-          //     get().setLatency(data.ms);
-          //   }
-          // } catch (error) {
-          //   openToast({
-          //     content: "服务器出错，请稍后刷新再试",
-          //     status: "error",
-          //   });
-          // }
+          if (
+            error instanceof TypeError &&
+            error.message.includes("Failed to fetch")
+          ) {
+            // 这是一个网络错误，包括域名解析失败
+            openToast({
+              content: "域名解析失败无法检测，请联系服主处理",
+              status: "error",
+            });
+          } else {
+            get().setLatency(0);
+            openToast({
+              content: "离线无法联机，不懂就看教程",
+              status: "warning",
+            });
+          }
         }
       },
 

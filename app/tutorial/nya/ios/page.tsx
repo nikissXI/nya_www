@@ -90,14 +90,14 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          下载并导入conf（配置文件）
+          下载并导入隧道
         </Heading>
 
         <List spacing={2}>
           <ListItem>
-            点击下方按钮下载conf文件，两个通道都能下载，1不行就用2
+            点击下方按钮下载隧道文件conf，两个通道都能下载，1不行就用2
             <br />
-            <Text color="#fff60b">使用内置浏览器Safari浏览器下载！</Text>
+            <Text color="#fff60b">使用内置浏览器Safari访问网站下载！</Text>
           </ListItem>
           <ListItem>
             {logined ? (

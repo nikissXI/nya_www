@@ -104,13 +104,12 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          下载并导入conf（配置文件）
+          下载并导入隧道
         </Heading>
 
         <List spacing={2}>
           <ListItem>
-            点击下方按钮下载conf文件 <br />
-            两个通道都能下载，1不行就用2
+            点击下方按钮下载下载隧道文件conf，两个通道都能下载，1不行就用2
           </ListItem>
           <ListItem>
             {logined ? (

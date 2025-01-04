@@ -116,7 +116,7 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          导入编号并连上喵服
+          导入隧道并连上喵服
         </Heading>
 
         <List spacing={2}>
@@ -127,7 +127,7 @@ export default function Page() {
             步骤 4:{" "}
             {logined && confKey ? (
               <>
-                粘贴这段代码（黄字）完成导入
+                粘贴这段代码（黄字）完成隧道导入
                 <Button
                   color="#7dfffe"
                   fontWeight="normal"
