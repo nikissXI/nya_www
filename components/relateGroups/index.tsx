@@ -140,8 +140,10 @@ const RelateGroupList = () => {
           </Center>
         ))} */}
 
-        <Center fontWeight="bold" color="#a8d1ff" my={1}>
+        <Center fontWeight="bold" color="#a8d1ff" my={1} textAlign="center">
           支持但不限于以下游戏
+          <br />
+          右侧数字是QQ交流群
         </Center>
 
         {groupData.relate.map((group, index) => (
