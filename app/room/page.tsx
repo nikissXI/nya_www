@@ -72,8 +72,6 @@ export default function Page() {
 
   const [tutorialColor, setTutorialColor] = useState(true);
 
-  const [showReInsert, setShowReInsert] = useState(true);
-
   const [loading, setLoading] = useState(false);
 
   const [disableCheckNet, setDisableCheckNet] = useState(false);
@@ -157,7 +155,7 @@ export default function Page() {
   }, [roomData, getRoomData]);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined; // 定义变量以存储定时器ID
+    let intervalId: NodeJS.Timeout | undefined;
 
     if (!latency) {
       intervalId = setInterval(() => {
@@ -171,36 +169,37 @@ export default function Page() {
         clearInterval(intervalId);
       }
     };
-  }, [latency]); // 将 stopChanging 作为依赖项
+  }, [latency]);
 
-  const wgReInsert = async () => {
-    setShowReInsert(false);
-    try {
-      const resp = await fetch(`${apiUrl}/wgReinsert`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      });
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
 
-      if (resp.ok) {
-        openToast({
-          content: "WG重连，还不行请检查编号是否过期",
-          status: "success",
-        });
-      } else {
-        openToast({
-          content: "请求失败，请刷新网页再试",
-          status: "error",
-        });
+    intervalId = setInterval(() => {
+      getLatency();
+    }, 60000);
+
+    // 清理定时器
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
       }
-    } catch (error) {
-      openToast({
-        content: "请求失败，请刷新网页再试",
-        status: "error",
-      });
-    }
-  };
+    };
+  }, [latency]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
+    intervalId = setInterval(() => {
+      getRoomData();
+    }, 3600000);
+
+    // 清理定时器
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [latency]);
 
   // 设置房间密码
   const handleSetRoomPasswd = useCallback(
@@ -793,16 +792,6 @@ export default function Page() {
           </Box>
         </Button>
       </Flex>
-      {/* {!latency && showReInsert && (
-        <>
-          <Flex align="center">
-            <Text>WG连上了还是检测不到？</Text>
-            <Button variant="link" bg="transparent" onClick={wgReInsert}>
-              点我修复
-            </Button>
-          </Flex>
-        </>
-      )} */}
 
       {roomStatus === "none" ? nonePage() : roomPage()}
 
