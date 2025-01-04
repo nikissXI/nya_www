@@ -64,10 +64,6 @@ const RelateGroupList = () => {
     ],
     relate: [
       {
-        name: "战魂铭人",
-        qq: 981280745,
-      },
-      {
         name: "恶果之地",
         qq: 981282876,
       },
@@ -103,6 +99,18 @@ const RelateGroupList = () => {
         name: "求生之路2",
         qq: 138012638,
       },
+      {
+        name: "战魂铭人",
+        qq: 981280745,
+      },
+      {
+        name: "文明6",
+        qq: "未创建",
+      },
+      {
+        name: "饥荒",
+        qq: "未创建",
+      },
     ],
   };
 
@@ -120,7 +128,7 @@ const RelateGroupList = () => {
         top={0}
         position="sticky"
       >
-        <Center fontWeight="bold" fontSize="xl" color="#a8d1ff">
+        {/* <Center fontWeight="bold" fontSize="xl" color="#a8d1ff">
           <ArrowDownIcon display={{ base: "flex", md: "none" }} />
           喵服关联QQ群
           <ArrowDownIcon display={{ base: "flex", md: "none" }} />
@@ -130,7 +138,7 @@ const RelateGroupList = () => {
           <Center key={index} my={1}>
             {group.name} - {group.qq}
           </Center>
-        ))}
+        ))} */}
 
         <Center fontWeight="bold" color="#a8d1ff" my={1}>
           支持但不限于以下游戏

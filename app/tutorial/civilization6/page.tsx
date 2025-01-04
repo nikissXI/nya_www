@@ -22,7 +22,9 @@ export default function Page() {
           <br />
           对方搜的时候房主别把游戏后台
           <br />
-          支持安卓、苹果、Steam一起联机
+          只要版本相同可以跨系统联机
+          <br />
+          详细教程待补充
         </Text>
 
         <Divider my={5} />
