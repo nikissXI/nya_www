@@ -356,7 +356,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           };
 
           const resp = await Promise.race([
-            fetch("https://172.18.255.254:65533/"),
+            fetch("https://ping.nikiss.top:65533/"),
             timeout(1000),
           ]);
 
@@ -370,7 +370,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             throw new Error("错误wgip");
 
           const entries = performance.getEntriesByName(
-            "https://172.18.255.254:65533/"
+            "https://ping.nikiss.top:65533/"
           );
 
           const lastEntry = entries.at(-1) as PerformanceResourceTiming;
