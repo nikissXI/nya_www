@@ -34,7 +34,7 @@ const articles: Article[] = [
   { path: "/tutorial/stardewValley", title: "星露谷物语" },
   { path: "/tutorial/wizardOfLegend", title: "传说法师" },
   { path: "/tutorial/doNotStarve", title: "饥荒" },
-  { path: "/tutorial/civilization6", title: "文明6" },
+  // { path: "/tutorial/civilization6", title: "文明6" },
   { path: "/tutorial/minecraft", title: "我的世界" },
   { path: "/tutorial/terraria", title: "泰拉瑞亚" },
   { path: "/tutorial/l4d2", title: "求生之路2" },
