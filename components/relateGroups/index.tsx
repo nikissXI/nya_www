@@ -84,7 +84,7 @@ const RelateGroupList = () => {
         qq: 966579113,
       },
       {
-        name: "星露谷",
+        name: "星露谷物语",
         qq: 817658554,
       },
       {
