@@ -100,6 +100,9 @@ export default function Page() {
 
         <Text my={3}>WG全称WireGuard，这是安装成功的图</Text>
         <Image src="/images/msi_img.jpg" alt="msi_img" />
+        <Text my={3}>
+          如果电脑不能安装msi文件，请自行使用搜索引擎解决，搜索关键字“电脑无法安装msi文件”
+        </Text>
 
         <Divider my={5} />
 
