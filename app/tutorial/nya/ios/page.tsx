@@ -70,9 +70,9 @@ export default function Page() {
           <ListItem>连接喵服用的软件叫WireGuard（简称WG）</ListItem>
           <ListItem>该软件需要外区ID（就是海外苹果账号）才能下载</ListItem>
           <ListItem>
-            如果没有外区ID或不知道这是什么，可以礼貌地私聊服主（就是群主）找他借
+            如果没有外区ID或不知道这是什么，可以礼貌地找服主借QQ:1299577815
           </ListItem>
-          <ListItem>认真跟着教程操作几分钟就搞完了，耐心点</ListItem>
+          <ListItem>两三分钟就搞完了，懒狗嫌麻烦就别用</ListItem>
         </List>
 
         <Divider my={5} />
