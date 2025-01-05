@@ -107,7 +107,7 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          下载并导入隧道
+          导入隧道
         </Heading>
 
         <List spacing={2}>
@@ -223,7 +223,7 @@ export default function Page() {
         <Divider my={5} /> */}
 
         <Heading size="md" mb={3}>
-          注意事项
+          注意事项请认真阅读
         </Heading>
 
         <WarningText />

@@ -85,38 +85,10 @@ export default function Page() {
           点击下载WG安装包
         </Button>
 
-        {/* <Divider my={5} />
-
-        <Heading size="md" mb={3}>
-          获取conf key
-        </Heading>
-
-        <Text mb={3}>
-          下一步导入用得上，要用这里下载的WG，别的地方下载的无法导入
-        </Text>
-
-        <Flex>
-          <Button
-            size="sm"
-            onClick={getConfKey}
-            isDisabled={getConfKeyText ? true : false || logined ? false : true}
-          >
-            {logined ? "点击获取" : "未登录无法获取"}
-          </Button>
-
-          {!logined && (
-            <Button bgColor="#1d984b" size="sm" onClick={loginToggle} ml={5}>
-              点击进行登陆
-            </Button>
-          )}
-        </Flex>
-
-        <Text>{getConfKeyText}</Text> */}
-
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          导入隧道并连上喵服
+          导入隧道
         </Heading>
 
         <List spacing={2}>
@@ -206,7 +178,7 @@ export default function Page() {
         <Divider my={5} />
 
         <Heading size="md" mb={3}>
-          注意事项
+          注意事项请认真阅读
         </Heading>
 
         <WarningText />
