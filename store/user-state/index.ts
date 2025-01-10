@@ -76,10 +76,11 @@ interface ILoginStateSlice {
   setRoomData: (roomData: RoomInfo | undefined | null) => void;
 
   latency: number | undefined;
-
   getLatency: () => Promise<void>;
-
   setLatency: (latency: number | undefined) => void;
+
+  onlineStatus: "在线" | "离线";
+  setOnlineStatus: (onlineStatus: "在线" | "离线") => void;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
@@ -348,6 +349,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       getLatency: async () => {
         if (!get().userInfo?.wg_data) return;
 
+        const pingUrl = process.env.NEXT_PUBLIC_PING_URL as string;
+
         try {
           const timeout = (ms: number) => {
             return new Promise((_, reject) => {
@@ -355,10 +358,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             });
           };
 
-          const resp = await Promise.race([
-            fetch("https://ping.nikiss.top:65533/"),
-            timeout(1000),
-          ]);
+          const resp = await Promise.race([fetch(pingUrl), timeout(1000)]);
 
           // 确保结果是 Response 类型
           if (!(resp instanceof Response)) {
@@ -369,15 +369,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           if (data.ip !== get().userInfo?.wg_data?.wg_ip)
             throw new Error("错误wgip");
 
-          const entries = performance.getEntriesByName(
-            "https://ping.nikiss.top:65533/"
-          );
+          const entries = performance.getEntriesByName(pingUrl);
 
           const lastEntry = entries.at(-1) as PerformanceResourceTiming;
           if (lastEntry) {
             get().setLatency(
               Math.floor(lastEntry.responseStart - lastEntry.requestStart)
             );
+
+            get().setOnlineStatus("在线");
           } else {
             openToast({
               content: "获取延迟出错",
@@ -391,13 +391,34 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             error instanceof TypeError &&
             error.message.includes("Failed to fetch")
           ) {
+            // 用onlineStatus接口
             get().setLatency(-1);
             // 这是一个网络错误，包括域名解析失败
             openToast({
-              content: "检测延迟异常，但不影响联机，要解决请联系服主处理",
-              status: "error",
+              content: "检测延迟失败，不影响联机",
+              status: "warning",
             });
+
+            try {
+              const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+              const resp = await fetch(
+                `${apiUrl}/onlineStatus?ip=${get().userInfo?.wg_data?.wg_ip}`
+              );
+              if (!resp.ok) {
+                throw new Error("请求出错");
+              }
+              const data = await resp.json();
+
+              get().setOnlineStatus(data.status);
+            } catch (error) {
+              openToast({
+                content: "服务器出错，请稍后刷新再试",
+                status: "error",
+              });
+            } finally {
+            }
           } else {
+            get().setOnlineStatus("离线");
             get().setLatency(0);
             openToast({
               content: "离线无法联机，不懂就看教程",
@@ -411,6 +432,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set((state) => {
           return produce(state, (draft) => {
             draft.latency = latency;
+          });
+        });
+      },
+
+      onlineStatus: "离线",
+
+      setOnlineStatus: (onlineStatus: "在线" | "离线") => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.onlineStatus = onlineStatus;
           });
         });
       },

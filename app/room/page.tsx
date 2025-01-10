@@ -38,6 +38,11 @@ import { useRouter } from "next/navigation";
 
 const announcement = [
   {
+    date: "2025/01/10 - 23:30",
+    content:
+      "发现ipv6网络无法检测延迟导致无法正确判断是否在线，已对该情况做了提示并能正确显示在线状态，只是看不到延迟，以后再看是否有办法解决",
+  },
+  {
     date: "2025/01/02 - 01:00",
     content:
       "优化检测在线逻辑，提高获取延迟精度，电脑(win)不再需要防火墙放通ping协议以检测在线",
@@ -110,6 +115,7 @@ export default function Page() {
     latency,
     getLatency,
     getWgnum,
+    onlineStatus,
   } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
@@ -137,7 +143,9 @@ export default function Page() {
   );
 
   useEffect(() => {
-    if (latency !== -1) updatedRoomInfo(latency ? "在线" : "离线");
+    if (latency !== -1) {
+      updatedRoomInfo(latency ? "在线" : "离线");
+    }
   }, [latency]);
 
   useEffect(() => {
@@ -157,7 +165,7 @@ export default function Page() {
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
 
-    if (!latency) {
+    if (onlineStatus === "离线") {
       intervalId = setInterval(() => {
         setTutorialColor((prev) => !prev);
       }, 300);
@@ -169,7 +177,7 @@ export default function Page() {
         clearInterval(intervalId);
       }
     };
-  }, [latency]);
+  }, [onlineStatus]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
@@ -184,7 +192,7 @@ export default function Page() {
         clearInterval(intervalId);
       }
     };
-  }, [latency]);
+  }, []);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
@@ -199,7 +207,7 @@ export default function Page() {
         clearInterval(intervalId);
       }
     };
-  }, [latency]);
+  }, []);
 
   // 设置房间密码
   const handleSetRoomPasswd = useCallback(
@@ -364,8 +372,8 @@ export default function Page() {
   };
 
   function getColor(latency: number) {
-    if (latency < 80) return "#3fdb1d";
-    else if (latency < 160) return "#ffa524";
+    if (latency > 0) return "#3fdb1d";
+    else if (latency < 0) return "#ffa524";
     else return "#ff3b3b";
   }
 
@@ -608,21 +616,23 @@ export default function Page() {
                   ml="auto"
                   bg="transparent"
                   fontWeight="bold"
-                  color={
-                    item.wgnum === userInfo?.wg_data?.wgnum
-                      ? latency
-                        ? "#3fdb1d"
-                        : "#ff4444"
-                      : item.status === "在线"
-                      ? "#3fdb1d"
-                      : "#ff4444"
-                  }
+                  // color={
+                  //   item.wgnum === userInfo?.wg_data?.wgnum
+                  //     ? latency
+                  //       ? "#3fdb1d"
+                  //       : "#ff4444"
+                  //     : item.status === "在线"
+                  //     ? "#3fdb1d"
+                  //     : "#ff4444"
+                  // }
+                  color={item.status === "在线" ? "#3fdb1d" : "#ff4444"}
                 >
-                  {item.wgnum === userInfo?.wg_data?.wgnum
+                  {/* {item.wgnum === userInfo?.wg_data?.wgnum
                     ? latency
                       ? "在线"
                       : "离线"
-                    : item.status}
+                    : item.status} */}
+                  {item.status}
                 </Tag>
               </Flex>
 
@@ -742,7 +752,13 @@ export default function Page() {
         bg="transparent"
         size="lg"
         onClick={gameListToggle}
-        color={latency ? "#a8d1ff" : tutorialColor ? "#ff0000" : "white"}
+        color={
+          onlineStatus === "在线"
+            ? "#a8d1ff"
+            : tutorialColor
+            ? "#ff0000"
+            : "white"
+        }
       >
         点我查看使用教程
       </Button>
@@ -759,16 +775,16 @@ export default function Page() {
           p={0}
           mr={1}
           fontWeight="bold"
-          color={latency ? "#3fdb1d" : "#ff0000"}
+          color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
         >
-          {latency ? "在线" : "离线"}
+          {onlineStatus}
         </Text>
-        {latency ? (
+        {onlineStatus === "在线" && latency && (
           <Flex align="center">
             <GiNetworkBars size={20} color={getColor(latency)} />
             <Box ml={1}>{latency}ms</Box>
           </Flex>
-        ) : null}
+        )}
         <Button
           bg="transparent"
           h={5}
