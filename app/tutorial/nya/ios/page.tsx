@@ -145,7 +145,7 @@ export default function Page() {
             运行WG，点添加隧道，选导入配置，在最近项目里选刚下载的conf文件，完成导入
           </ListItem>
           <ListItem>
-            打开开关，连上喵服
+            打开开关，连上喵服。如果提示DBS解析失败，请检查是否给了WG访问网络权限
             <Image my={3} src="/images/ios_switch.jpg" alt="ios_switch" />
           </ListItem>
         </List>
