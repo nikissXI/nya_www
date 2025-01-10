@@ -137,7 +137,7 @@ export default function Page() {
   );
 
   useEffect(() => {
-    updatedRoomInfo(latency ? "在线" : "离线");
+    if (latency !== -1) updatedRoomInfo(latency ? "在线" : "离线");
   }, [latency]);
 
   useEffect(() => {

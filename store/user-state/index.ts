@@ -391,9 +391,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             error instanceof TypeError &&
             error.message.includes("Failed to fetch")
           ) {
+            get().setLatency(-1);
             // 这是一个网络错误，包括域名解析失败
             openToast({
-              content: "域名解析失败无法检测，请联系服主处理",
+              content: "检测延迟异常，但不影响联机，要解决请联系服主处理",
               status: "error",
             });
           } else {
