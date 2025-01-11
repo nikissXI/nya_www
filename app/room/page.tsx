@@ -39,8 +39,7 @@ import { useRouter } from "next/navigation";
 const announcement = [
   {
     date: "2025/01/11 - 11:45",
-    content:
-      "解决ipv6网络无法检测延迟的问题",
+    content: "解决ipv6网络无法检测延迟的问题",
   },
   {
     date: "2025/01/02 - 01:00",
@@ -143,8 +142,8 @@ export default function Page() {
   );
 
   useEffect(() => {
-    updatedRoomInfo(latency ? "在线" : "离线");
-  }, [latency]);
+    updatedRoomInfo(onlineStatus);
+  }, [latency, onlineStatus]);
 
   useEffect(() => {
     setChecking(true);
@@ -614,9 +613,19 @@ export default function Page() {
                   ml="auto"
                   bg="transparent"
                   fontWeight="bold"
-                  color={item.status === "在线" ? "#3fdb1d" : "#ff4444"}
+                  color={
+                    item.wgnum === userInfo?.wg_data?.wgnum
+                      ? onlineStatus === "在线"
+                        ? "#3fdb1d"
+                        : "#ff4444"
+                      : item.status === "在线"
+                      ? "#3fdb1d"
+                      : "#ff4444"
+                  }
                 >
-                  {item.status}
+                  {item.wgnum === userInfo?.wg_data?.wgnum
+                    ? onlineStatus
+                    : item.status}
                 </Tag>
               </Flex>
 
@@ -689,8 +698,8 @@ export default function Page() {
                 setDisableGetRoom(false); // 启用按钮
               }, 3000);
 
-              getLatency();
               getRoomData();
+              getLatency();
             }}
           >
             刷新房间
