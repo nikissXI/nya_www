@@ -370,7 +370,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             throw new Error("错误wgip");
 
           const entries = performance.getEntriesByName(pingUrl);
-
           const lastEntry = entries.at(-1) as PerformanceResourceTiming;
           if (lastEntry) {
             get().setLatency(
@@ -380,10 +379,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             get().setOnlineStatus("在线");
           } else {
             openToast({
-              content: "获取延迟出错",
-              status: "warning",
+              content: "获取延迟出错，请联系服主处理",
+              status: "error",
             });
-            throw new Error("获取延迟出错");
           }
           /////////////////////
         } catch (error) {
@@ -391,25 +389,35 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             error instanceof TypeError &&
             error.message.includes("Failed to fetch")
           ) {
-            // 用onlineStatus接口
-            get().setLatency(-1);
-            // 这是一个网络错误，包括域名解析失败
-            openToast({
-              content: "检测延迟失败，不影响联机",
-              status: "warning",
-            });
-
             try {
               const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-              const resp = await fetch(
-                `${apiUrl}/onlineStatus?ip=${get().userInfo?.wg_data?.wg_ip}`
-              );
+              const statusUrl = `${apiUrl}/onlineStatus?ip=${
+                get().userInfo?.wg_data?.wg_ip
+              }`;
+              const resp = await fetch(statusUrl);
               if (!resp.ok) {
                 throw new Error("请求出错");
               }
               const data = await resp.json();
 
               get().setOnlineStatus(data.status);
+
+              if (data.status === "在线") {
+                const entries = performance.getEntriesByName(statusUrl);
+                const lastEntry = entries.at(-1) as PerformanceResourceTiming;
+                if (lastEntry) {
+                  get().setLatency(
+                    Math.floor(lastEntry.responseStart - lastEntry.requestStart)
+                  );
+                } else {
+                  openToast({
+                    content: "获取延迟出错，请联系服主处理",
+                    status: "error",
+                  });
+                }
+              } else {
+                get().setLatency(0);
+              }
             } catch (error) {
               openToast({
                 content: "服务器出错，请稍后刷新再试",

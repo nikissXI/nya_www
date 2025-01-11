@@ -38,9 +38,9 @@ import { useRouter } from "next/navigation";
 
 const announcement = [
   {
-    date: "2025/01/10 - 23:30",
+    date: "2025/01/11 - 11:45",
     content:
-      "发现ipv6网络无法检测延迟导致无法正确判断是否在线，已对该情况做了提示并能正确显示在线状态，只是看不到延迟，以后再看是否有办法解决",
+      "解决ipv6网络无法检测延迟的问题",
   },
   {
     date: "2025/01/02 - 01:00",
@@ -143,9 +143,7 @@ export default function Page() {
   );
 
   useEffect(() => {
-    if (latency !== -1) {
-      updatedRoomInfo(latency ? "在线" : "离线");
-    }
+    updatedRoomInfo(latency ? "在线" : "离线");
   }, [latency]);
 
   useEffect(() => {
@@ -372,8 +370,8 @@ export default function Page() {
   };
 
   function getColor(latency: number) {
-    if (latency > 0) return "#3fdb1d";
-    else if (latency < 0) return "#ffa524";
+    if (latency > 100) return "#ffa524";
+    else if (latency > 0) return "#3fdb1d";
     else return "#ff3b3b";
   }
 
@@ -616,22 +614,8 @@ export default function Page() {
                   ml="auto"
                   bg="transparent"
                   fontWeight="bold"
-                  // color={
-                  //   item.wgnum === userInfo?.wg_data?.wgnum
-                  //     ? latency
-                  //       ? "#3fdb1d"
-                  //       : "#ff4444"
-                  //     : item.status === "在线"
-                  //     ? "#3fdb1d"
-                  //     : "#ff4444"
-                  // }
                   color={item.status === "在线" ? "#3fdb1d" : "#ff4444"}
                 >
-                  {/* {item.wgnum === userInfo?.wg_data?.wgnum
-                    ? latency
-                      ? "在线"
-                      : "离线"
-                    : item.status} */}
                   {item.status}
                 </Tag>
               </Flex>
