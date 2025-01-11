@@ -37,6 +37,7 @@ import {
 import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useRouter } from "next/navigation";
+import { NoticeText } from "@/components/universal/Notice";
 
 const calculateDaysDifference = (
   release_days: number,
@@ -866,7 +867,7 @@ export default function UserProfilePage() {
                       onClick={() => {
                         openToast({
                           content:
-                            "在线会刷新天数，如果到期被回收获取个新的编号就行",
+                            "在线就会刷新天数，如果到期被回收获取个新编号就行，免费",
                           status: "info",
                         });
                       }}
@@ -932,18 +933,7 @@ export default function UserProfilePage() {
               点击登录
             </Button>
 
-            <Heading size="sm" pt={6}>
-              温馨提示
-            </Heading>
-            <Text px={10}>
-              如果遇到网站功能异常，可以换下面这些浏览器试试，仅做推荐
-              <br />
-              苹果：内置浏览器Safari
-              <br />
-              安卓：via、夸克
-              <br />
-              电脑：谷歌、火狐、edge
-            </Text>
+            <NoticeText />
           </VStack>
         )}
       </Box>

@@ -35,6 +35,7 @@ import { IoIosExit } from "react-icons/io";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { PiCoffeeBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
+import { NoticeText } from "@/components/universal/Notice";
 
 const announcement = [
   {
@@ -395,18 +396,7 @@ export default function Page() {
           点击登录
         </Button>
 
-        <Heading size="sm" pt={6}>
-          温馨提示
-        </Heading>
-        <Text px={10}>
-          如果遇到网站功能异常，可以换下面这些浏览器试试，仅做推荐
-          <br />
-          苹果：内置浏览器Safari
-          <br />
-          安卓：via、夸克
-          <br />
-          电脑：谷歌、火狐、edge
-        </Text>
+        <NoticeText />
       </VStack>
     );
   }

@@ -11,6 +11,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { GameListModal } from "@/components/tutorial/GameList";
 import Footer from "../Navbar/Footer";
 import { LoginModal } from "../Navbar/Login";
+import { NoticeText } from "../universal/Notice";
 
 export default function Frame({
   children,
@@ -37,9 +38,13 @@ export default function Frame({
         {/* 主内容区域 */}
         <Box as="main" flex={{ base: "1", md: "4" }} mt={{ base: 20, md: 100 }}>
           {logging ? (
-            <Center>
-              <Spinner size="lg" />
-            </Center>
+            <Box>
+              <NoticeText />
+
+              <Center mt={5}>
+                <Spinner size="lg" />
+              </Center>
+            </Box>
           ) : (
             children
           )}
