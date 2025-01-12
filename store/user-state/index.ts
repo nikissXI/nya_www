@@ -79,6 +79,9 @@ interface ILoginStateSlice {
   getLatency: () => Promise<void>;
   setLatency: (latency: number | undefined) => void;
 
+  rotate: boolean;
+  setRotate: (rotate: boolean) => void;
+
   onlineStatus: "在线" | "离线";
   setOnlineStatus: (onlineStatus: "在线" | "离线") => void;
 }
@@ -348,6 +351,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       getLatency: async () => {
         if (!get().userInfo?.wg_data) return;
+        get().setRotate(true);
 
         const pingUrl = process.env.NEXT_PUBLIC_PING_URL as string;
 
@@ -433,6 +437,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               status: "warning",
             });
           }
+        } finally {
+          get().setRotate(false);
         }
       },
 
@@ -440,6 +446,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set((state) => {
           return produce(state, (draft) => {
             draft.latency = latency;
+          });
+        });
+      },
+
+      rotate: false,
+
+      setRotate: (rotate: boolean) => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.rotate = rotate;
           });
         });
       },

@@ -104,7 +104,6 @@ export default function Page() {
 
   const [inputWgnum, setInputWgnum] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
-  const [checking, setChecking] = useState(true);
   const {
     logined,
     userInfo,
@@ -116,6 +115,7 @@ export default function Page() {
     getLatency,
     getWgnum,
     onlineStatus,
+    rotate,
   } = useUserStateStore();
 
   const { onToggle: gameListToggle } = useDisclosureStore((state) => {
@@ -147,11 +147,9 @@ export default function Page() {
   }, [latency, onlineStatus]);
 
   useEffect(() => {
-    setChecking(true);
     if (latency === undefined) {
       getLatency();
     }
-    setChecking(false);
   }, [getLatency, latency]);
 
   useEffect(() => {
@@ -457,18 +455,9 @@ export default function Page() {
                 onClick={() => {
                   handleJoinRoom(inputWgnum, inputPasswd);
                 }}
-                // mr={5}
               >
                 加入
               </Button>
-              {/* <Button
-                bgColor="#d42424"
-                onClick={() => {
-                  joinOnClose();
-                }}
-              >
-                取消
-              </Button> */}
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -522,14 +511,6 @@ export default function Page() {
               >
                 更新密码
               </Button>
-              {/* <Button
-                bgColor="#d42424"
-                onClick={() => {
-                  setPassOnClose();
-                }}
-              >
-                取消
-              </Button> */}
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -605,7 +586,9 @@ export default function Page() {
                   fontWeight="bold"
                   color={
                     item.wgnum === userInfo?.wg_data?.wgnum
-                      ? onlineStatus === "在线"
+                      ? rotate
+                        ? "#ffa524"
+                        : onlineStatus === "在线"
                         ? "#3fdb1d"
                         : "#ff4444"
                       : item.status === "在线"
@@ -614,7 +597,9 @@ export default function Page() {
                   }
                 >
                   {item.wgnum === userInfo?.wg_data?.wgnum
-                    ? onlineStatus
+                    ? rotate
+                      ? "检测中"
+                      : onlineStatus
                     : item.status}
                 </Tag>
               </Flex>
@@ -652,10 +637,6 @@ export default function Page() {
                     </Tag>
                   )}
               </Flex>
-
-              {/* {index < roomData.members.length - 1 && (
-                <Divider borderWidth={2} mt={1} />
-              )} */}
             </Box>
           ))}
         </VStack>
@@ -781,12 +762,12 @@ export default function Page() {
 
             getLatency();
           }}
-          isDisabled={checking}
+          isDisabled={rotate}
         >
           <Text fontSize={18} fontWeight="normal" color="#3fdb1d" ml={2}>
             检测
           </Text>
-          <Box animation={checking ? `${spin} 1s linear infinite` : "none"}>
+          <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
             <TbReload size={18} />
           </Box>
         </Button>
