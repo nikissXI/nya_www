@@ -73,7 +73,7 @@ export default function Page() {
         </Heading>
 
         <Text mb={3}>
-          请在浏览器中打开网站下载，不要在QQ、微信等其他非浏览器中下载
+          请在浏览器中打开网站再点下载，不要在QQ、微信等其他非浏览器中下载
         </Text>
 
         <Button
