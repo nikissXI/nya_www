@@ -354,6 +354,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         get().setRotate(true);
 
         const pingUrl = process.env.NEXT_PUBLIC_PING_URL as string;
+        performance.clearResourceTimings();
 
         try {
           const timeout = (ms: number) => {

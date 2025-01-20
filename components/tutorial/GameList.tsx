@@ -114,7 +114,7 @@ export const GameListModal = () => {
                 router.push("/tutorial");
               }}
             >
-              点我点我点我
+              点我查看WG部署教程
             </Button>
 
             <Divider my={0} />
@@ -134,7 +134,7 @@ export const GameListModal = () => {
                   setHideGameList(false);
                 }}
               >
-                我已在线，看游戏的联机教程
+                已会部署WG，看游戏的联机教程
               </Button>
             </Box>
 

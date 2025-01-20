@@ -31,6 +31,14 @@ export default function Page() {
 
         <Divider my={5} />
 
+        <Text my={3}>
+          喵服最主要是解决联机稳定性问题，延迟取决于玩家的地理位置（喵服服务器在广东），后续会开发其他城市的联机节点
+          <br />
+          求生之路2的官方直连服务器不是一定卡的，只是不稳定，就跟登陆steam有时候需要加速器有时候不用
+        </Text>
+
+        <Divider my={5} />
+
         <Text my={3}>玩家都处于一个联机房间后，进游戏点“与好友一起玩游戏”</Text>
         <Image src="/images/l4d2_1.jpg" alt="l4d2_1" />
 
