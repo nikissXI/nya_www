@@ -8,13 +8,7 @@ import { useUserStateStore } from "@/store/user-state";
 
 export default function Page() {
   const router = useRouter();
-  const { logined, getCountData, countData } = useUserStateStore();
-
-  useEffect(() => {
-    if (countData === undefined) {
-      getCountData(); // 只在数据为空时请求
-    }
-  }, [countData, getCountData]);
+  const { logined, serverData } = useUserStateStore();
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
@@ -25,10 +19,10 @@ export default function Page() {
         mb={6}
       >
         <Text w="200px" textAlign={{ md: "center" }}>
-          网站访问人次： {countData?.viewCount}
+          网站访问人次： {serverData?.viewCount}
         </Text>
         <Text w="200px" textAlign={{ md: "center" }}>
-          注册用户数量： {countData?.userCount}
+          注册用户数量： {serverData?.userCount}
         </Text>
       </Flex>
 

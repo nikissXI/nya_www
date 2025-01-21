@@ -7,7 +7,6 @@ import {
   Text,
   VStack,
   Heading,
-  Collapse,
   Divider,
   Image,
   Center,
@@ -25,7 +24,6 @@ import { useDisclosureStore } from "@/store/disclosure";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
 import { openToast } from "@/components/universal/toast";
-import { WarningIcon } from "@chakra-ui/icons";
 import {
   isInteger,
   getHash,

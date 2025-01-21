@@ -5,9 +5,14 @@ import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
 
-interface CountData {
+interface GroupItem {
+  name: string;
+  qq: number;
+}
+interface ServerData {
   viewCount: number | null;
   userCount: number | null;
+  relateGroup: GroupItem[] | null;
 }
 interface WGData {
   wgnum: number;
@@ -44,9 +49,9 @@ interface PingResponse {
 }
 
 interface ILoginStateSlice {
-  countData: CountData | undefined;
-  getCountData: () => Promise<void>;
-  setCountData: (countData: CountData) => void;
+  serverData: ServerData | undefined;
+  getServerData: () => Promise<void>;
+  setServerData: (serverData: ServerData) => void;
 
   uuid: string;
 
@@ -89,26 +94,26 @@ interface ILoginStateSlice {
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
     return {
-      countData: undefined,
+      serverData: undefined,
 
-      getCountData: async () => {
+      getServerData: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const resp = await fetch(`${apiUrl}/countInfo`);
+          const resp = await fetch(`${apiUrl}/serverData`);
           if (!resp.ok) {
             throw new Error("请求出错");
           }
           const data = await resp.json();
-          get().setCountData(data);
+          get().setServerData(data);
         } catch (error) {
         } finally {
         }
       },
 
-      setCountData: (countData: CountData) => {
+      setServerData: (serverData: ServerData) => {
         set((state) => {
           return produce(state, (draft) => {
-            draft.countData = countData;
+            draft.serverData = serverData;
           });
         });
       },

@@ -16,6 +16,8 @@ export const NoticeText = () => {
         安卓：via、夸克
         <br />
         电脑：谷歌、火狐、edge
+        <br />
+        仍然无法解决就加服主QQ：1299577815
       </Text>
     </VStack>
   );
