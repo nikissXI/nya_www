@@ -36,6 +36,7 @@ import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
+import { PiCoffeeBold } from "react-icons/pi";
 
 const calculateDaysDifference = (
   release_days: number,
@@ -934,6 +935,22 @@ export default function UserProfilePage() {
             <NoticeText />
           </VStack>
         )}
+      </Box>
+
+      <Box
+        textAlign="center"
+        position="fixed"
+        left="12px"
+        bottom="30vh"
+        onClick={() => {
+          router.push(`/sponsor`);
+        }}
+        zIndex={100}
+      >
+        <Box boxSize={{ base: "8", md: "10" }}>
+          <PiCoffeeBold size="full" />
+        </Box>
+        <Text fontSize="sm">赞助</Text>
       </Box>
     </Center>
   );
