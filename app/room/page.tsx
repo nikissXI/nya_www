@@ -776,6 +776,7 @@ export default function Page() {
       {roomStatus === "none" ? nonePage() : roomPage()}
 
       <Box
+        textAlign="center"
         position="fixed"
         left="12px"
         bottom="30vh"
@@ -784,7 +785,9 @@ export default function Page() {
         }}
         zIndex={100}
       >
-        <PiCoffeeBold size={26} />
+        <Box boxSize={{ base: "8", md: "10" }}>
+          <PiCoffeeBold size="full" />
+        </Box>
         <Text fontSize="sm">赞助</Text>
       </Box>
     </VStack>
