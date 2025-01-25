@@ -23,9 +23,10 @@ import { WarningText } from "@/components/tutorial/PlayWarning";
 export default function Page() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const wg_msi_url = process.env.NEXT_PUBLIC_WG_PC_URL; // 从环境变量获取 API 地址
-  const bat_url = process.env.NEXT_PUBLIC_BAT_URL; // 从环境变量获取 API 地址
-  const bat_fix_url = process.env.NEXT_PUBLIC_BAT_FIX_URL; // 从环境变量获取 API 地址
+  const wg_msi_url = process.env.NEXT_PUBLIC_WG_MSI_URL;
+  const wg_exe_url = process.env.NEXT_PUBLIC_WG_EXE_URL;
+  const bat_url = process.env.NEXT_PUBLIC_BAT_URL;
+  const bat_fix_url = process.env.NEXT_PUBLIC_BAT_FIX_URL;
 
   const { logined, userInfo, getWgnum } = useUserStateStore();
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
@@ -89,19 +90,32 @@ export default function Page() {
           下载并安装WG
         </Heading>
 
-        <Button
-          size="sm"
-          onClick={() => {
-            window.open(wg_msi_url, "_blank");
-          }}
-        >
-          点击下载WG安装包
-        </Button>
+        <Text mb={3}>WG全称WireGuard，有两种客户端可以选，msi和exe格式，</Text>
 
-        <Text my={3}>WG全称WireGuard，这是安装成功的图</Text>
-        <Image src="/images/msi_img.jpg" alt="msi_img" />
+        <Flex>
+          <Button
+            size="sm"
+            onClick={() => {
+              window.open(wg_msi_url, "_blank");
+            }}
+          >
+            点击下载msi安装包
+          </Button>
+
+          <Button
+            ml={5}
+            size="sm"
+            onClick={() => {
+              window.open(wg_exe_url, "_blank");
+            }}
+          >
+            点击下载exe安装包
+          </Button>
+        </Flex>
+
+        {/* <Image src="/images/msi_img.jpg" alt="msi_img" /> */}
         <Text my={3}>
-          如果电脑不能安装msi文件，请自行使用搜索引擎解决，搜索关键字“电脑无法安装msi文件”
+          优先选择msi安装包，因为教程的图片和视频演示都是这个
         </Text>
 
         <Divider my={5} />
