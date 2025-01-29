@@ -23,6 +23,7 @@ export function VerifyWarnModal() {
   const { onToggle: loginToggle } = useDisclosureStore((state) => {
     return state.modifyLoginDisclosure;
   });
+
   useEffect(() => {
     if (!logined) {
       onOpen();

@@ -44,10 +44,6 @@ interface RoomInfo {
   room_passwd: string;
 }
 
-interface PingResponse {
-  ip: string;
-}
-
 interface ILoginStateSlice {
   serverData: ServerData | undefined;
   getServerData: () => Promise<void>;
@@ -89,6 +85,9 @@ interface ILoginStateSlice {
 
   onlineStatus: "在线" | "离线";
   setOnlineStatus: (onlineStatus: "在线" | "离线") => void;
+
+  showRegetModal: boolean;
+  setShowRegetModal: () => void;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
@@ -165,13 +164,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             throw new Error("请求出错");
           }
           const data = await resp.json();
-          // data.reget_wgnum  todo   重新获取编号提示
           if (data.code === 0) {
             openToast({
               content: `编号${data.wgnum}绑定成功`,
               status: "success",
             });
             get().getUserInfo();
+
+            if (data.reget_wgnum) {
+              get().setShowRegetModal();
+            }
           } else {
             openToast({ content: data.msg, status: "warning" });
             window.location.reload();
@@ -353,49 +355,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       getLatency: async () => {
         if (!get().userInfo?.wg_data) return;
+
         get().setRotate(true);
-
         performance.clearResourceTimings();
-
-        //   const timeout = (ms: number) => {
-        //     return new Promise((_, reject) => {
-        //       setTimeout(() => reject(new Error("Timeout")), ms);
-        //     });
-        //   };
-
-        //   const pingUrl = process.env.NEXT_PUBLIC_PING_URL as string;
-        //   const resp = await Promise.race([fetch(pingUrl), timeout(1000)]);
-
-        //   // 确保结果是 Response 类型
-        //   if (!(resp instanceof Response)) {
-        //     throw new Error("Invalid response type");
-        //   }
-
-        //   const data = (await resp.json()) as PingResponse;
-        //   if (data.ip !== get().userInfo?.wg_data?.wg_ip)
-        //     throw new Error("错误wgip");
-
-        //   const entries = performance.getEntriesByName(pingUrl);
-        //   const lastEntry = entries.at(-1) as PerformanceResourceTiming;
-        //   if (lastEntry) {
-        //     get().setLatency(
-        //       Math.floor(lastEntry.responseStart - lastEntry.requestStart)
-        //     );
-
-        //     get().setOnlineStatus("在线");
-        //   } else {
-        //     openToast({
-        //       content: "获取延迟出错，请联系服主处理",
-        //       status: "error",
-        //     });
-        //   }
-        //   /////////////////////
-        // } catch (error) {
-        // if (
-        //   error instanceof TypeError &&
-        //   error.message.includes("Failed to fetch")
-        // ) {
-        // try {
 
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -452,16 +414,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               status: "warning",
             });
         }
-        // } else {
-        //   get().setOnlineStatus("离线");
-        //   get().setLatency(0);
-        //   openToast({
-        //     content: "离线无法联机，不懂就看使用教程",
-        //     status: "warning",
-        //   });
-        //   }
-        // } finally {
-        // }
       },
 
       setLatency: (latency: number | undefined) => {
@@ -488,6 +440,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set((state) => {
           return produce(state, (draft) => {
             draft.onlineStatus = onlineStatus;
+          });
+        });
+      },
+
+      showRegetModal: false,
+
+      setShowRegetModal: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.showRegetModal = !draft.showRegetModal;
           });
         });
       },

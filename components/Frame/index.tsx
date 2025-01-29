@@ -12,6 +12,7 @@ import { GameListModal } from "@/components/tutorial/GameList";
 import Footer from "../Navbar/Footer";
 import { LoginModal } from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
+import TunnelUpdateModal from "../tutorial/ReGetWgnumModal";
 
 export default function Frame({
   children,
@@ -26,6 +27,7 @@ export default function Frame({
       <Toaster />
       <LoginModal />
       <GameListModal />
+      <TunnelUpdateModal />
 
       <Flex
         position="relative"
