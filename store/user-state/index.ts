@@ -165,8 +165,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             throw new Error("请求出错");
           }
           const data = await resp.json();
+          // data.reget_wgnum  todo   重新获取编号提示
           if (data.code === 0) {
-            openToast({ content: "绑定编号成功", status: "success" });
+            openToast({
+              content: `编号${data.wgnum}绑定成功`,
+              status: "success",
+            });
             get().getUserInfo();
           } else {
             openToast({ content: data.msg, status: "warning" });
@@ -327,13 +331,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           openToast({ content: `房间信息已刷新`, status: "info" });
 
-          if (data.wgInsert) {
-            openToast({
-              content: `隧道重载，等10秒再点检测`,
-              status: "warning",
-            });
-          }
-
           get().setRoomData(data.data);
         } catch (error) {
           openToast({
@@ -358,94 +355,107 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         if (!get().userInfo?.wg_data) return;
         get().setRotate(true);
 
-        const pingUrl = process.env.NEXT_PUBLIC_PING_URL as string;
         performance.clearResourceTimings();
 
+        //   const timeout = (ms: number) => {
+        //     return new Promise((_, reject) => {
+        //       setTimeout(() => reject(new Error("Timeout")), ms);
+        //     });
+        //   };
+
+        //   const pingUrl = process.env.NEXT_PUBLIC_PING_URL as string;
+        //   const resp = await Promise.race([fetch(pingUrl), timeout(1000)]);
+
+        //   // 确保结果是 Response 类型
+        //   if (!(resp instanceof Response)) {
+        //     throw new Error("Invalid response type");
+        //   }
+
+        //   const data = (await resp.json()) as PingResponse;
+        //   if (data.ip !== get().userInfo?.wg_data?.wg_ip)
+        //     throw new Error("错误wgip");
+
+        //   const entries = performance.getEntriesByName(pingUrl);
+        //   const lastEntry = entries.at(-1) as PerformanceResourceTiming;
+        //   if (lastEntry) {
+        //     get().setLatency(
+        //       Math.floor(lastEntry.responseStart - lastEntry.requestStart)
+        //     );
+
+        //     get().setOnlineStatus("在线");
+        //   } else {
+        //     openToast({
+        //       content: "获取延迟出错，请联系服主处理",
+        //       status: "error",
+        //     });
+        //   }
+        //   /////////////////////
+        // } catch (error) {
+        // if (
+        //   error instanceof TypeError &&
+        //   error.message.includes("Failed to fetch")
+        // ) {
+        // try {
+
         try {
-          const timeout = (ms: number) => {
-            return new Promise((_, reject) => {
-              setTimeout(() => reject(new Error("Timeout")), ms);
-            });
-          };
-
-          const resp = await Promise.race([fetch(pingUrl), timeout(1000)]);
-
-          // 确保结果是 Response 类型
-          if (!(resp instanceof Response)) {
-            throw new Error("Invalid response type");
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const statusUrl = `${apiUrl}/onlineStatus?wgnum=${
+            get().userInfo?.wg_data?.wgnum
+          }`;
+          const resp = await fetch(statusUrl);
+          if (!resp.ok) {
+            throw new Error("请求出错");
           }
+          const data = await resp.json();
 
-          const data = (await resp.json()) as PingResponse;
-          if (data.ip !== get().userInfo?.wg_data?.wg_ip)
-            throw new Error("错误wgip");
+          get().setOnlineStatus(data.status);
 
-          const entries = performance.getEntriesByName(pingUrl);
-          const lastEntry = entries.at(-1) as PerformanceResourceTiming;
-          if (lastEntry) {
-            get().setLatency(
-              Math.floor(lastEntry.responseStart - lastEntry.requestStart)
-            );
-
-            get().setOnlineStatus("在线");
-          } else {
-            openToast({
-              content: "获取延迟出错，请联系服主处理",
-              status: "error",
-            });
-          }
-          /////////////////////
-        } catch (error) {
-          if (
-            error instanceof TypeError &&
-            error.message.includes("Failed to fetch")
-          ) {
-            try {
-              const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-              const statusUrl = `${apiUrl}/onlineStatus?ip=${
-                get().userInfo?.wg_data?.wg_ip
-              }`;
-              const resp = await fetch(statusUrl);
-              if (!resp.ok) {
-                throw new Error("请求出错");
-              }
-              const data = await resp.json();
-
-              get().setOnlineStatus(data.status);
-
-              if (data.status === "在线") {
-                const entries = performance.getEntriesByName(statusUrl);
-                const lastEntry = entries.at(-1) as PerformanceResourceTiming;
-                if (lastEntry) {
-                  get().setLatency(
-                    Math.floor(lastEntry.responseStart - lastEntry.requestStart)
-                  );
-                } else {
-                  openToast({
-                    content: "获取延迟出错，请联系服主处理",
-                    status: "error",
-                  });
-                }
-              } else {
-                get().setLatency(0);
-              }
-            } catch (error) {
+          if (data.status === "在线") {
+            const entries = performance.getEntriesByName(statusUrl);
+            const lastEntry = entries.at(-1) as PerformanceResourceTiming;
+            if (lastEntry) {
+              get().setLatency(
+                Math.floor(lastEntry.responseStart - lastEntry.requestStart)
+              );
+            } else {
               openToast({
-                content: "服务器出错，请稍后刷新再试",
+                content: "获取延迟出错，请联系服主处理",
                 status: "error",
               });
-            } finally {
             }
           } else {
-            get().setOnlineStatus("离线");
             get().setLatency(0);
-            openToast({
-              content: "离线无法联机，不懂就看教程",
-              status: "warning",
-            });
+
+            if (data.code === 0) {
+              openToast({
+                content: "离线无法联机，不懂就看使用教程",
+                status: "warning",
+              });
+            } else {
+              openToast({
+                content: `隧道重载，等几秒再点检测`,
+                status: "warning",
+              });
+            }
           }
+        } catch (error) {
+          openToast({
+            content: "服务器出错，请稍后刷新再试",
+            status: "error",
+          });
         } finally {
           get().setRotate(false);
         }
+        // } else {
+        //   get().setOnlineStatus("离线");
+        //   get().setLatency(0);
+        //   openToast({
+        //     content: "离线无法联机，不懂就看使用教程",
+        //     status: "warning",
+        //   });
+        //   }
+        // } finally {
+        // }
       },
 
       setLatency: (latency: number | undefined) => {
