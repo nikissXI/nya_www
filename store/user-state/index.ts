@@ -445,6 +445,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           });
         } finally {
           get().setRotate(false);
+
+          if (get().onlineStatus === "在线" && get().latency === 0)
+            openToast({
+              content: "在线且延迟为0，你需要换个浏览器",
+              status: "warning",
+            });
         }
         // } else {
         //   get().setOnlineStatus("离线");
