@@ -948,7 +948,7 @@ export default function UserProfilePage() {
         zIndex={100}
       >
         <Box boxSize={{ base: "8", md: "10" }}>
-          <PiCoffeeBold size="full" />
+          <PiCoffeeBold size="100%" />
         </Box>
         <Text fontSize="sm">赞助</Text>
       </Box>

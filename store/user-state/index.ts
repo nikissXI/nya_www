@@ -451,7 +451,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         });
       },
 
-      showRegetModal: false,
+      showRegetModal: true,
 
       setShowRegetModal: () => {
         set((state) => {

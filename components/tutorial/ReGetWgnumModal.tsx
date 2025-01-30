@@ -60,7 +60,7 @@ const TunnelUpdateModal = () => {
 
           <Button
             my={4}
-            w="full"
+            w="100%"
             onClick={() => {
               router.push("/tutorial");
               setShowRegetModal();

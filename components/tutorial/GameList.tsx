@@ -90,7 +90,7 @@ export const GameListModal = () => {
         <ModalCloseButton />
 
         <ModalBody mx={2} my={3}>
-          <VStack mb={3} w="full">
+          <VStack mb={3} w="100%">
             <Text
               align="center"
               fontSize="md"

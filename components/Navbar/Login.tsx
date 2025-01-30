@@ -269,7 +269,7 @@ export function LoginModal() {
         </ModalBody>
 
         <ModalFooter>
-          <VStack spacing={2} align="start" w="full">
+          <VStack spacing={2} align="start" w="100%">
             <Flex>
               首次使用？
               <Button
