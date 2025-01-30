@@ -13,6 +13,7 @@ import Footer from "../Navbar/Footer";
 import { LoginModal } from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
 import TunnelUpdateModal from "../tutorial/ReGetWgnumModal";
+import NeedSponsorModal from "../tutorial/SponsorModal";
 
 export default function Frame({
   children,
@@ -28,6 +29,7 @@ export default function Frame({
       <LoginModal />
       <GameListModal />
       <TunnelUpdateModal />
+      <NeedSponsorModal />
 
       <Flex
         position="relative"

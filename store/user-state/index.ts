@@ -88,6 +88,9 @@ interface ILoginStateSlice {
 
   showRegetModal: boolean;
   setShowRegetModal: () => void;
+
+  showSponsorModal: boolean;
+  setShowSponsorModal: () => void;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
@@ -379,6 +382,19 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               get().setLatency(
                 Math.floor(lastEntry.responseStart - lastEntry.requestStart)
               );
+
+              const pingCount = localStorage.getItem("pingCount");
+              if (pingCount) {
+                const newPingCount = Number(pingCount) + 1;
+
+                if (newPingCount === 50) {
+                  get().setShowSponsorModal();
+                }
+
+                localStorage.setItem("pingCount", newPingCount.toString());
+              } else {
+                localStorage.setItem("pingCount", "1");
+              }
             } else {
               openToast({
                 content: "获取延迟出错，请联系服主处理",
@@ -451,12 +467,22 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         });
       },
 
-      showRegetModal: true,
+      showRegetModal: false,
 
       setShowRegetModal: () => {
         set((state) => {
           return produce(state, (draft) => {
             draft.showRegetModal = !draft.showRegetModal;
+          });
+        });
+      },
+
+      showSponsorModal: false,
+
+      setShowSponsorModal: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.showSponsorModal = !draft.showSponsorModal;
           });
         });
       },

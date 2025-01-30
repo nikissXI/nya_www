@@ -7,10 +7,7 @@ import {
   ModalBody,
   Button,
   Text,
-  Link,
-  Flex,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { useUserStateStore } from "@/store/user-state";
 import { useRouter } from "next/navigation";
 
