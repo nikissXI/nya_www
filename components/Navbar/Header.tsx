@@ -12,9 +12,9 @@ export function Header({ path }: { path: string }) {
   useEffect(() => {
     const gameTitles: { [key: string]: string } = {
       "/room/": "联机房间",
-      "/nya/android": "喵服安卓教程",
-      "/nya/ios": "喵服苹果教程",
-      "/nya/pc": "喵服电脑教程",
+      "/nya/android": "WG部署教程-安卓",
+      "/nya/ios": "WG部署教程-苹果",
+      "/nya/pc": "WG部署教程-电脑",
       theEscapists: "逃脱者：困境突围",
       juicyRealm: "恶果之地",
       wizardOfLegend: "传说法师",
@@ -33,7 +33,7 @@ export function Header({ path }: { path: string }) {
       "/forgetPass": "忘记密码",
       "/me": "我的信息",
       "/sponsor": "赞助喵服",
-      "/tutorial": "联机教程",
+      "/tutorial": "WG部署教程",
       "/room": "联机房间",
     };
 
