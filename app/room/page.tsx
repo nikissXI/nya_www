@@ -158,6 +158,7 @@ export default function Page() {
     }
   }, [roomData, getRoomData]);
 
+  // 离线的时候闪烁
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
 
@@ -167,7 +168,6 @@ export default function Page() {
       }, 300);
     }
 
-    // 清理定时器
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
@@ -175,6 +175,7 @@ export default function Page() {
     };
   }, [onlineStatus]);
 
+  // 60秒检测一次
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
 
@@ -182,22 +183,6 @@ export default function Page() {
       getLatency();
     }, 60000);
 
-    // 清理定时器
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
-
-    intervalId = setInterval(() => {
-      getRoomData();
-    }, 3600000);
-
-    // 清理定时器
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
