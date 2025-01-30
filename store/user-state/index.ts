@@ -244,16 +244,30 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               throw new Error("登陆凭证失效");
             }
             if (!resp.ok) {
-              throw new Error("请求出错");
+              throw new Error("服务器出错，请稍后再试");
             }
             const data = await resp.json();
             get().setUserInfo(data.data);
             get().changeLoginState(true);
           } catch (error) {
-            openToast({
-              content: "服务器出错，请稍后刷新再试",
-              status: "error",
-            });
+            if (error instanceof Error) {
+              if (error.message === "登陆凭证失效") {
+                openToast({
+                  content: "登陆凭证失效",
+                  status: "warning",
+                });
+              } else {
+                openToast({
+                  content: error.message,
+                  status: "error",
+                });
+              }
+            } else {
+              openToast({
+                content: "服务器出错，请稍后再试",
+                status: "error",
+              });
+            }
           } finally {
           }
         }
