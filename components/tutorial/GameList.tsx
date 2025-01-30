@@ -121,7 +121,7 @@ export const GameListModal = () => {
 
             <Box hidden={!hideGameList} textAlign="center">
               <Text textAlign="left">
-                教程分两部分，上面是连接喵服的教程，下面的具体游戏的联机教程
+                教程分两部分，上面是WG部署教程，下面的具体游戏的联机教程
               </Text>
 
               <Divider my={2} />
@@ -134,7 +134,7 @@ export const GameListModal = () => {
                   setHideGameList(false);
                 }}
               >
-                已会部署WG，看游戏的联机教程
+                已学会部署WG，看游戏联机教程
               </Button>
             </Box>
 
