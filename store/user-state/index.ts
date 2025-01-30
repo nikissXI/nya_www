@@ -366,7 +366,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }`;
           const resp = await fetch(statusUrl);
           if (!resp.ok) {
-            throw new Error("请求出错");
+            throw new Error("服务器出错，稍等再试试？");
           }
           const data = await resp.json();
 
@@ -401,10 +401,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             }
           }
         } catch (error) {
-          openToast({
-            content: "换个浏览器再试试，还不行找服主",
-            status: "error",
-          });
+          if (error instanceof Error) {
+            openToast({
+              content: error.message,
+              status: "error",
+            });
+          } else {
+            openToast({
+              content: "换个浏览器再试试，还不行找服主",
+              status: "error",
+            });
+          }
         } finally {
           get().setRotate(false);
 
