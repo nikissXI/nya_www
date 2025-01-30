@@ -402,7 +402,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
         } catch (error) {
           openToast({
-            content: "服务器出错，请稍后刷新再试",
+            content: "换个浏览器再试试，还不行找服主",
             status: "error",
           });
         } finally {
