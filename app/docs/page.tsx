@@ -76,7 +76,7 @@ const DocumentPage = () => {
     if (logined && userInfo?.wg_data) {
       getConfKey();
     } else {
-      // router.push("/me");
+      router.push("/me");
       openToast({ content: "请登陆后再访问教程", status: "info" });
     }
   }, [logined]);
