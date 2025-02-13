@@ -8,12 +8,11 @@ import { Header } from "../Navbar/Header";
 import RelateGroupList from "../relateGroups";
 import Toaster from "../universal/Toaster";
 import { useUserStateStore } from "@/store/user-state";
-import { GameListModal } from "@/components/tutorial/GameList";
 import Footer from "../Navbar/Footer";
 import { LoginModal } from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
-import TunnelUpdateModal from "../tutorial/ReGetWgnumModal";
-import NeedSponsorModal from "../tutorial/SponsorModal";
+import TunnelUpdateModal from "../docs/ReGetWgnumModal";
+import NeedSponsorModal from "../docs/SponsorModal";
 
 export default function Frame({
   children,
@@ -27,7 +26,6 @@ export default function Frame({
     <>
       <Toaster />
       <LoginModal />
-      <GameListModal />
       <TunnelUpdateModal />
       <NeedSponsorModal />
 
@@ -60,19 +58,6 @@ export default function Frame({
         {/* 群号 */}
         <RelateGroupList />
       </Flex>
-
-      {/* <Inspector
-        keys={["Ctrl", "Shift", "\\"]}
-        onInspectElement={({ codeInfo }) => {
-          console.log(codeInfo);
-          // 拼接工作目录
-          if (codeInfo.absolutePath === undefined) {
-            codeInfo.absolutePath = `${process.env.CWD}/${codeInfo.relativePath}`;
-            delete codeInfo.relativePath;
-          }
-          gotoServerEditor(codeInfo);
-        }}
-      /> */}
     </>
   );
 }

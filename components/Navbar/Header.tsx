@@ -33,7 +33,7 @@ export function Header({ path }: { path: string }) {
       "/forgetPass": "忘记密码",
       "/me": "我的信息",
       "/sponsor": "赞助喵服",
-      "/tutorial": "WG部署教程",
+      "/docs": "喵服使用文档",
       "/room": "联机房间",
     };
 

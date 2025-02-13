@@ -24,7 +24,6 @@ import { useEffect, useState } from "react";
 import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "../universal/toast";
 import { getHash, validateTel, validateEmail } from "@/utils/strings";
-import { useDisclosureStore } from "@/store/disclosure";
 import { setAuthToken } from "@/store/authKey";
 
 interface LoginReqBody {
@@ -39,12 +38,14 @@ export function LoginModal() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  const { isOpen: loginIsOpen, onToggle: loginToggle } = useDisclosureStore(
-    (state) => {
-      return state.modifyLoginDisclosure;
-    }
-  );
-  const { logging, logined, uuid, getUserInfo } = useUserStateStore();
+  const {
+    logging,
+    logined,
+    uuid,
+    getUserInfo,
+    showLoginModal,
+    setShowLoginModal,
+  } = useUserStateStore();
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();
@@ -70,12 +71,12 @@ export function LoginModal() {
 
   useEffect(() => {
     const loadCaptcha = async () => {
-      if (!logging && !logined && loginIsOpen) {
+      if (!logging && !logined && showLoginModal) {
         setCaptchaImage(await fetchCaptcha());
       }
     };
     loadCaptcha();
-  }, [logging, fetchCaptcha, loginIsOpen, logined]);
+  }, [logging, fetchCaptcha, showLoginModal, logined]);
 
   const toggleLoginButton = (
     inputAccount: string,
@@ -128,7 +129,7 @@ export function LoginModal() {
         openToast({ content: "登陆成功", status: "success" });
         setAuthToken(data.token);
         getUserInfo();
-        loginToggle();
+        setShowLoginModal();
       } else {
         openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
@@ -144,7 +145,7 @@ export function LoginModal() {
   };
 
   return (
-    <Modal isOpen={loginIsOpen} onClose={loginToggle}>
+    <Modal isOpen={showLoginModal} onClose={setShowLoginModal}>
       <ModalOverlay />
       <ModalContent bgColor="#274161" maxW="320px" mx={3}>
         <ModalHeader textAlign="center">登录</ModalHeader>
@@ -224,7 +225,7 @@ export function LoginModal() {
                 fontSize="sm"
                 onClick={() => {
                   router.push("/forgetPass");
-                  loginToggle();
+                  setShowLoginModal();
                 }}
               >
                 忘记密码?
@@ -277,7 +278,7 @@ export function LoginModal() {
                 color="#7dfffe"
                 bgColor="transparent"
                 onClick={() => {
-                  loginToggle();
+                  setShowLoginModal();
                   router.push("/register");
                 }}
               >

@@ -20,7 +20,6 @@ import {
   ModalBody,
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
-import { useDisclosureStore } from "@/store/disclosure";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
 import { openToast } from "@/components/universal/toast";
@@ -58,10 +57,8 @@ const calculateDaysDifference = (
 export default function UserProfilePage() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { uuid, getUserInfo, userInfo, logout, getWgnum } = useUserStateStore();
-  const { onToggle: loginToggle } = useDisclosureStore((state) => {
-    return state.modifyLoginDisclosure;
-  });
+  const { uuid, getUserInfo, userInfo, logout, getWgnum, setShowLoginModal } =
+    useUserStateStore();
 
   // 修改用户名
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
@@ -926,7 +923,7 @@ export default function UserProfilePage() {
             <Button
               variant="outline"
               rounded={10}
-              onClick={loginToggle}
+              onClick={setShowLoginModal}
               border={0}
             >
               点击登录

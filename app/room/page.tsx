@@ -28,7 +28,6 @@ import { IoReloadCircle } from "react-icons/io5";
 import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
 import { useUserStateStore } from "@/store/user-state";
-import { useDisclosureStore } from "@/store/disclosure";
 import { getAuthToken } from "@/store/authKey";
 import { copyText, isInteger } from "@/utils/strings";
 import { IoIosExit } from "react-icons/io";
@@ -36,30 +35,7 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 import { PiCoffeeBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
-
-const announcement = [
-  {
-    date: "2025/01/11 - 11:45",
-    content: "解决ipv6网络无法检测延迟的问题",
-  },
-  {
-    date: "2025/01/02 - 01:00",
-    content:
-      "优化检测在线逻辑，提高获取延迟精度，电脑(win)不再需要防火墙放通ping协议以检测在线",
-  },
-  {
-    date: "2024/12/05 - 22:00",
-    content: "更新了连接喵服的视频教程，就是怎么离线变在线",
-  },
-  {
-    date: "2024/11/25 - 21:00",
-    content: "解决联机高峰期喵服网络卡顿问题",
-  },
-  {
-    date: "2024/11/22 - 21:45",
-    content: "如果安卓WG导入conf key报错，请到教程里下载最新的安装包更新",
-  },
-];
+import announcement from "@/components/docs/AnnouncementList";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -116,15 +92,8 @@ export default function Page() {
     getWgnum,
     onlineStatus,
     rotate,
+    setShowLoginModal,
   } = useUserStateStore();
-
-  const { onToggle: gameListToggle } = useDisclosureStore((state) => {
-    return state.modifyGameListDisclosure;
-  });
-
-  const { onToggle: loginToggle } = useDisclosureStore((state) => {
-    return state.modifyLoginDisclosure;
-  });
 
   const updatedRoomInfo = useCallback(
     (onlineStatus: "在线" | "离线") => {
@@ -375,7 +344,12 @@ export default function Page() {
       <VStack spacing={3} align="center">
         <Heading size="md">你还没登陆呢</Heading>
 
-        <Button variant="outline" rounded={10} onClick={loginToggle} border={0}>
+        <Button
+          variant="outline"
+          rounded={10}
+          onClick={setShowLoginModal}
+          border={0}
+        >
           点击登录
         </Button>
 
@@ -700,7 +674,9 @@ export default function Page() {
         variant="link"
         bg="transparent"
         size="lg"
-        onClick={gameListToggle}
+        onClick={() => {
+          router.push(`/docs`);
+        }}
         color={
           onlineStatus === "在线"
             ? "#a8d1ff"
@@ -709,7 +685,7 @@ export default function Page() {
             : "white"
         }
       >
-        点我查看使用教程
+        点我阅读使用文档
       </Button>
 
       <Flex align="center">

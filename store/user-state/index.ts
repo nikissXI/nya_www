@@ -91,6 +91,9 @@ interface ILoginStateSlice {
 
   showSponsorModal: boolean;
   setShowSponsorModal: () => void;
+
+  showLoginModal: boolean;
+  setShowLoginModal: () => void;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
@@ -420,7 +423,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
             if (data.code === 0) {
               openToast({
-                content: "离线无法联机，不懂就看使用教程",
+                content: "离线无法联机，不懂就看使用文档",
                 status: "warning",
               });
             } else {
@@ -432,10 +435,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
         } catch (error) {
           if (error instanceof Error) {
-            openToast({
-              content: error.message,
-              status: "error",
-            });
+            if (error.message === "Failed to fetch") {
+              openToast({
+                content: "换个浏览器再试试，还不行找服主",
+                status: "error",
+              });
+            } else {
+              openToast({
+                content: error.message,
+                status: "error",
+              });
+            }
           } else {
             openToast({
               content: "换个浏览器再试试，还不行找服主",
@@ -497,6 +507,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set((state) => {
           return produce(state, (draft) => {
             draft.showSponsorModal = !draft.showSponsorModal;
+          });
+        });
+      },
+
+      showLoginModal: false,
+
+      setShowLoginModal: () => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.showLoginModal = !draft.showLoginModal;
           });
         });
       },
