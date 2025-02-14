@@ -15,7 +15,6 @@ export default function Page() {
         alignItems="center"
         mb={5}
         mx="5vw"
-        maxW="460px"
       >
         <Text my={3}>
           玩家都处于一个联机房间后，主机建房，客机搜索房间或填主机的喵服IP加入就行，默认端口号7777

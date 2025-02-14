@@ -15,7 +15,6 @@ export default function Page() {
         alignItems="center"
         mb={5}
         mx="5vw"
-        maxW="460px"
       >
         <Text my={3}>
           玩家都处于一个联机房间后，进游戏创建或加入就行

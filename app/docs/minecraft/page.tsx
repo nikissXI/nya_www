@@ -15,7 +15,6 @@ export default function Page() {
         alignItems="center"
         mb={5}
         mx="5vw"
-        maxW="460px"
       >
         <Text my={3}>
           玩家都处于一个联机房间后，主机创建局域网游戏或运行服务端，其他人填主机的喵服IP搜索就行。

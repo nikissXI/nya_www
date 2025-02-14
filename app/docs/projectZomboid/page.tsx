@@ -1,10 +1,18 @@
 "use client";
-
-import { Flex, Center, Divider, Text } from "@chakra-ui/react";
-import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
+import {
+  Heading,
+  VStack,
+  Text,
+  Divider,
+  Input,
+  Flex,
+  Center,
+  Image,
+} from "@chakra-ui/react";
+import { Button } from "@/components/universal/button";
 
-export default function Page() {
+export default function AndroidPage0() {
   const router = useRouter();
 
   return (
@@ -17,10 +25,15 @@ export default function Page() {
         mx="5vw"
       >
         <Text my={3}>
-          玩家都处于一个联机房间后，在局域网联机模式填主机IP加入就行。
+          玩家都处于一个联机房间后，主机建立服务器，客机加入服务器，填写的内容看图。
           <br />
-          由于服主没买饥荒，详细教程待补充，或者自己搜搜网上的教程，把教程里的IP换成喵服的IP就行。
+          Windows联机如果搜不到，检查是不是系统防火墙的问题。
         </Text>
+
+        <Image
+          src="/images/projectZomboid/projectZomboid.jpg"
+          alt="projectZomboid"
+        />
 
         <Divider my={5} />
 

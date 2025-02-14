@@ -15,7 +15,6 @@ export default function Page() {
         alignItems="center"
         mb={5}
         mx="5vw"
-        maxW="460px"
       >
         <Text my={3}>
           玩家都处于同个联机房间后，主机主持农场，客机填主机的喵服IP加入即可。

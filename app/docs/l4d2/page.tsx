@@ -15,7 +15,6 @@ export default function Page() {
         alignItems="center"
         mb={5}
         mx="5vw"
-        maxW="460px"
       >
         <Button
           bgColor="#c1447d"

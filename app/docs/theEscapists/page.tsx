@@ -58,7 +58,7 @@ export default function AndroidPage0() {
 
   return (
     <Center>
-      <VStack spacing={3} maxW={{ base: "90vw", md: "400px" }}>
+      <VStack spacing={3} mx="5vw">
         <Button
           size="sm"
           bgColor="#c1447d"

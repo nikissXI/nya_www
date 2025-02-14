@@ -66,6 +66,7 @@ const articles: Article[] = [
   { path: "/docs/minecraft", title: "我的世界（全平台）" },
   { path: "/docs/terraria", title: "泰拉瑞亚（全平台）" },
   { path: "/docs/l4d2", title: "求生之路2（PC）" },
+  { path: "/docs/projectZomboid", title: "僵尸毁灭工程（PC）" },
 ];
 
 const DocumentPage = () => {
