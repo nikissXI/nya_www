@@ -59,10 +59,6 @@ export default function AndroidPage0() {
   return (
     <Center>
       <VStack spacing={3} maxW={{ base: "90vw", md: "400px" }}>
-        <Text fontSize="lg" color="#fe8d59">
-          2025年初更新的最新版本有联机问题无法联机！目前正在排查原因，不知道勾八开发组又搞了什么
-        </Text>
-
         <Button
           size="sm"
           bgColor="#c1447d"
@@ -70,31 +66,31 @@ export default function AndroidPage0() {
             window.open("https://b23.tv/2dcjPHv", "_blank");
           }}
         >
-          点击查看视频教程
+          点击查看视频演示
         </Button>
 
+        <Text>由于这逃脱者的联机机制很傻逼，想联机就认真看教程的每个字！</Text>
+
         <Text>
-          由于这逃脱者的联机机制很傻逼，仅此游戏需要这样操作才能联机，不识字就看视频
-        </Text>
-        <Text>
-          需要连接WiFi才可以进行多人游戏，否则会出现如图报错。电脑不需要
+          需要连接WiFi才可以进行多人游戏，否则会出现如图报错。
           <Image
+            h="5rem"
             src="/images/theEscapists/theEscapists_lan_error.jpg"
             alt="theEscapists_lan_error"
           />
         </Text>
 
         <Text>
-          游戏房主连上喵服后创建多人游戏就行，加入者需要创建搜索任务才能搜索到房间
+          主机连上喵服后创建多人游戏就行，客机加入需要创建搜索任务才能搜索到房间
         </Text>
         <Text>
           创建搜索任务有两种方法，二选一即可，一种在网页操作，一种在QQ里操作
         </Text>
         <Text>
-          如果出现搜索不到的情况请联系群主处理，因为我只拿了最新版测试。
+          如果出现搜索不到的情况请联系服主处理，最后一次测试时间2025/02/14，这时候版本是1.2.22。
         </Text>
 
-        <Divider my={5} />
+        <Divider my={2} />
 
         <Heading size="md">方法一（网页操作）</Heading>
         <Text>
@@ -131,20 +127,31 @@ export default function AndroidPage0() {
 
         <Text color="#ffd648">{showText}</Text>
 
-        <Divider my={5} />
+        <Divider my={2} />
 
         <Heading size="md">方法二（QQ群操作）</Heading>
         <Text>
           加入QQ群961793250，在群里发命令“搜索”，如要搜索2号创建的多人游戏，就发“搜索2”，机器人会给对应提示
         </Text>
 
-        <Divider my={5} />
+        <Divider my={2} />
+
+        <Text>
+          如果出现以下提示，有两种情况，要么是主机切窗口导致游戏变离线模式，要么是游戏版本号不一致。
+          <Image
+            h="5rem"
+            src="/images/theEscapists/theEscapists_session_error.jpg"
+            alt="theEscapists_session_error"
+          />
+        </Text>
+
+        <Divider my={2} />
 
         <Button
           mb={5}
           bgColor="#b23333"
           onClick={() => {
-            router.push(`/docs`);
+            router.back();
           }}
         >
           返回

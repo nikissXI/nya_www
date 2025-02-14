@@ -20,9 +20,9 @@ export default function Page() {
         <Text my={3}>
           玩家都处于一个联机房间后，进游戏创建或加入就行
           <br />
-          加入者也可以填房主的喵服IP加入，加入的时候房主别把游戏后台
+          客机也可以填主机的喵服IP加入，加入的时候主机别把游戏后台
           <br />
-          支持安卓、苹果一起联机，电脑只能跟电脑联机
+          支持安卓、苹果一起联机，PC只能跟PC联机
           <br />
           要把前面的序章打完才会解锁联机功能
         </Text>
@@ -44,7 +44,7 @@ export default function Page() {
         <Button
           bgColor="#b23333"
           onClick={() => {
-            router.push(`/docs`);
+            router.back();
           }}
         >
           返回

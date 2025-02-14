@@ -20,11 +20,11 @@ export default function Page() {
         <Text my={3}>
           玩家都处于一个联机房间后，进游戏创建或加入就行
           <br />
-          对方搜的时候房主别把游戏后台
+          对方搜的时候主机别把游戏后台
           <br />
-          是用喵服网站的IP去联机，不是游戏里显示的那个！
+          直接搜索就行，不用填IP的
           <br />
-          支持安卓、苹果、Steam一起联机
+          支持安卓、苹果、PC一起联机
         </Text>
 
         <Button
@@ -36,7 +36,7 @@ export default function Page() {
             );
           }}
         >
-          点击查看视频教程
+          点击查看视频演示
         </Button>
 
         <Divider my={5} />
@@ -44,7 +44,7 @@ export default function Page() {
         <Button
           bgColor="#b23333"
           onClick={() => {
-            router.push(`/docs`);
+            router.back();
           }}
         >
           返回

@@ -20,7 +20,7 @@ export default function Page() {
         <Text my={3}>
           玩家都处于一个联机房间后，进游戏创建或加入就行
           <br />
-          加入的时候房主别把游戏后台
+          客机加入的时候主机别把游戏后台
           <br />
           支持安卓、苹果一起联机，不支持电脑（传说法师1电脑版没有联机模式，2才有）
         </Text>
@@ -34,7 +34,7 @@ export default function Page() {
             );
           }}
         >
-          点击查看视频教程
+          点击查看视频演示
         </Button>
 
         <Divider my={5} />
@@ -42,7 +42,7 @@ export default function Page() {
         <Button
           bgColor="#b23333"
           onClick={() => {
-            router.push(`/docs`);
+            router.back();
           }}
         >
           返回

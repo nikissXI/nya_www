@@ -18,11 +18,15 @@ export default function Page() {
         maxW="460px"
       >
         <Text my={3}>
-          玩家都处于一个联机房间后，房主创建局域网游戏，其他人填房主的IP加入就行，如果是Java还要加个端口号
+          玩家都处于一个联机房间后，主机创建局域网游戏或运行服务端，其他人填主机的喵服IP搜索就行。
           <br />
-          对方搜的时候房主别把游戏后台（电脑的话无视）
+          如果端口号不是25565，记得在IP后面加上端口号，IP和端口号之间用的是英文的冒号，比如搜索IP是8.8.8.8，端口号是1234，那么填写的IP地址应该是8.8.8.8:1234
           <br />
-          基岩和Java都可以用，但想互通得靠第三方mod或插件
+          Windows联机如果搜不到，检查是不是系统防火墙的问题。
+          <br />
+          基岩和Java都可以用，但想互通得靠第三方mod或插件，网上自己找教程。
+          <br />
+          如果能搜到但加入失败，那就自己搜报错解决，只要能搜索到就不是喵服的问题了。
         </Text>
 
         <Button
@@ -34,7 +38,7 @@ export default function Page() {
             );
           }}
         >
-          点击查看视频教程
+          点击查看视频演示
         </Button>
 
         <Divider my={5} />
@@ -42,7 +46,7 @@ export default function Page() {
         <Button
           bgColor="#b23333"
           onClick={() => {
-            router.push(`/docs`);
+            router.back();
           }}
         >
           返回
