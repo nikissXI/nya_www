@@ -428,7 +428,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               });
             } else {
               openToast({
-                content: `隧道重载，等几秒再点检测`,
+                content: `隧道重载，等10秒再点检测或重连WG`,
                 status: "warning",
               });
             }
