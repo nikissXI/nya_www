@@ -63,6 +63,8 @@ export default function Page() {
           8.8.8.8”。
           <br />
           下图就是连接失败的报错，这种情况就检查IP是否填对，防火墙是否放通游戏（不会就直接把防火墙关了试试）
+          <br />
+          如果是其他报错就是游戏问题，跟喵服无关，自行解决
         </Text>
         <Image src="/images/l4d2/l4d2_4.jpg" alt="l4d2_4" />
 
