@@ -57,7 +57,7 @@ interface Article {
 }
 
 const articles: Article[] = [
-  { path: "/docs/theEscapists", title: "逃脱者（必须看）（安卓、iOS）" },
+  { path: "/docs/theEscapists", title: "逃脱者（必须看!!）（安卓、iOS）" },
   { path: "/docs/juicyRealm", title: "恶果之地（全平台）" },
   { path: "/docs/aresVirus2", title: "阿瑞斯病毒2（全平台）" },
   { path: "/docs/stardewValley", title: "星露谷物语（全平台）" },
@@ -714,7 +714,6 @@ const DocumentPage = () => {
           <Heading size="md" pb={2} color="#00ff17">
             4. 开始联机
           </Heading>
-
           <Text>联机房间页面功能介绍看图</Text>
           <Image
             src="/images/wg/room_introduction_1.jpg"
@@ -734,19 +733,16 @@ const DocumentPage = () => {
             w="100%"
             maxW="500px"
           />
-
           <Text>
-            &emsp;&emsp;处于同一个联机房间完成构建虚拟局域网，近似于“连上同一个WiFi”。在一个联机房间里，谁都可以在创建多人游戏（作为主机），其他人加入游戏即可（作为客机）。
+            &emsp;&emsp;在一个联机房间里，谁都可以在创建多人游戏（作为主机），其他人加入游戏即可（作为客机）。
           </Text>
-
           <Text>
             &emsp;&emsp;
             <HighLight>
               支持填IP加入的游戏都支持使用喵服联机，局域网搜索加入的就不一定了。
             </HighLight>
-            这有目前已收录的游戏，在列表中的游戏就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台，点击游戏名查看具体的联机操作指导，如果没有就自己尝试或咨询服主。
+            下方有目前已收录的游戏，在列表中的游戏就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台，点击游戏名查看具体的联机操作指导，如果没有就自己尝试或咨询服主。
           </Text>
-
           <Box>
             <Input
               placeholder="搜索游戏教程"
