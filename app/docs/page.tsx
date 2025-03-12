@@ -430,9 +430,18 @@ const DocumentPage = () => {
                     <Flex alignItems="center">
                       <Button
                         size="sm"
-                        onClick={() =>
-                          GetConfUrl(userInfo?.wg_data?.wgnum as number)
-                        }
+                        onClick={() => {
+                          const isSafari =
+                            navigator.userAgent.includes("Safari");
+                          if (isSafari) {
+                            GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                          } else {
+                            openToast({
+                              content: "请在Safari中打开网站下载",
+                              status: "warning",
+                            });
+                          }
+                        }}
                         isDisabled={logined ? false : true}
                       >
                         下载通道1
@@ -441,7 +450,18 @@ const DocumentPage = () => {
                       <Button
                         ml={5}
                         size="sm"
-                        onClick={downloadConf}
+                        onClick={() => {
+                          const isSafari =
+                            navigator.userAgent.includes("Safari");
+                          if (isSafari) {
+                            downloadConf();
+                          } else {
+                            openToast({
+                              content: "请在Safari中打开网站下载",
+                              status: "warning",
+                            });
+                          }
+                        }}
                         isDisabled={logined ? false : true}
                       >
                         下载通道2
@@ -651,18 +671,9 @@ const DocumentPage = () => {
                     <Flex alignItems="center">
                       <Button
                         size="sm"
-                        onClick={() => {
-                          const isSafari =
-                            navigator.userAgent.includes("Safari");
-                          if (isSafari) {
-                            GetConfUrl(userInfo?.wg_data?.wgnum as number);
-                          } else {
-                            openToast({
-                              content: "请在Safari中打开网站下载",
-                              status: "warning",
-                            });
-                          }
-                        }}
+                        onClick={() =>
+                          GetConfUrl(userInfo?.wg_data?.wgnum as number)
+                        }
                         isDisabled={logined ? false : true}
                       >
                         下载通道1
@@ -671,18 +682,7 @@ const DocumentPage = () => {
                       <Button
                         ml={5}
                         size="sm"
-                        onClick={() => {
-                          const isSafari =
-                            navigator.userAgent.includes("Safari");
-                          if (isSafari) {
-                            downloadConf();
-                          } else {
-                            openToast({
-                              content: "请在Safari中打开网站下载",
-                              status: "warning",
-                            });
-                          }
-                        }}
+                        onClick={downloadConf}
                         isDisabled={logined ? false : true}
                       >
                         下载通道2
