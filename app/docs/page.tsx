@@ -160,6 +160,26 @@ const DocumentPage = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+
+    if (hash === "#games") {
+      // 设置一个延迟，确保页面加载完成后再执行滚动
+      const timer = setTimeout(() => {
+        const gamesElement = document.getElementById("games");
+        if (gamesElement) {
+          window.scrollTo({
+            top: gamesElement.offsetTop - 100,
+            behavior: "smooth",
+          });
+        }
+      }, 500);
+
+      // 清理定时器
+      return () => clearTimeout(timer);
+    }
+  }, []);
   //////////////////////
   //////////////////////
 
