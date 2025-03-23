@@ -175,8 +175,9 @@ const DocumentPage = () => {
             <ScrollLinkM to="introduction">1. 喵服的联机原理</ScrollLinkM>
             <ScrollLinkM to="words">2. 联机常用词</ScrollLinkM>
             <ScrollLinkM to="download">3. WG下载和隧道导入</ScrollLinkM>
-            <ScrollLinkM to="play">4. 开始联机</ScrollLinkM>
-            <ScrollLinkM to="issues">5. 常见问题</ScrollLinkM>
+            <ScrollLinkM to="room">4. 联机房间</ScrollLinkM>
+            <ScrollLinkM to="games">5. 具体游戏联机教程</ScrollLinkM>
+            <ScrollLinkM to="issues">6. 常见问题</ScrollLinkM>
           </VStack>
         </Box>
 
@@ -730,9 +731,9 @@ const DocumentPage = () => {
           </Tabs>
         </Box>
 
-        <Box id="play">
+        <Box id="room">
           <Heading size="md" pb={2} color="#00ff17">
-            4. 开始联机
+            4. 联机房间
           </Heading>
           <Text>联机房间页面功能介绍看图</Text>
           <Image
@@ -754,14 +755,20 @@ const DocumentPage = () => {
             maxW="500px"
           />
           <Text>
-            &emsp;&emsp;在一个联机房间里，谁都可以在创建多人游戏（作为主机），其他人加入游戏即可（作为客机）。
+            &emsp;&emsp;在一个联机房间里，谁都可以作为主机创建多人游戏，其他人则作为客机加入游戏，房间内可以有多个主机，一个房间最多8个人。
           </Text>
+        </Box>
+
+        <Box id="games">
+          <Heading size="md" pb={2} color="#00ff17">
+            5. 具体游戏联机教程
+          </Heading>
           <Text>
             &emsp;&emsp;
             <HighLight>
-              支持填IP加入的游戏都支持使用喵服联机，局域网搜索加入的就不一定了。
+              支持填IP加入（P2P）的游戏都支持使用喵服联机，通过局域网搜索的部分支持。
             </HighLight>
-            下方有目前已收录的游戏，在列表中的游戏就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台，点击游戏名查看具体的联机操作指导，如果没有就自己尝试或咨询服主。
+            在下方列表中的游戏就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台，点击游戏名查看具体的联机操作指导，没有的游戏请自行尝试。
           </Text>
           <Box>
             <Input
@@ -792,7 +799,7 @@ const DocumentPage = () => {
 
         <Box id="issues">
           <Heading size="md" pb={2} color="#00ff17">
-            5. 常见问题
+            6. 常见问题
           </Heading>
 
           <VStack spacing={2} align="stretch">
