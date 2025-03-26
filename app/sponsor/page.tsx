@@ -93,51 +93,6 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 206,
   },
   {
-    uid: 6977,
-    username: "zzZZZZ",
-    sponsorship: 200,
-  },
-  {
-    uid: 6948,
-    username: "用户1832",
-    sponsorship: 200,
-  },
-  {
-    uid: 7065,
-    username: "用户1499",
-    sponsorship: 200,
-  },
-  {
-    uid: 1337,
-    username: "水中巴黎",
-    sponsorship: 200,
-  },
-  {
-    uid: 779,
-    username: "云歌",
-    sponsorship: 200,
-  },
-  {
-    uid: 406,
-    username: "落羽之地",
-    sponsorship: 200,
-  },
-  {
-    uid: 113,
-    username: "胡子大叔",
-    sponsorship: 200,
-  },
-  {
-    uid: 6984,
-    username: "瑶某人",
-    sponsorship: 200,
-  },
-  {
-    uid: 175,
-    username: "咕言咕语",
-    sponsorship: 200,
-  },
-  {
     uid: 7026,
     username: "用户9650",
     sponsorship: 200,
@@ -148,8 +103,53 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 200,
   },
   {
+    uid: 175,
+    username: "咕言咕语",
+    sponsorship: 200,
+  },
+  {
+    uid: 6984,
+    username: "瑶某人",
+    sponsorship: 200,
+  },
+  {
+    uid: 406,
+    username: "落羽之地",
+    sponsorship: 200,
+  },
+  {
+    uid: 1337,
+    username: "水中巴黎",
+    sponsorship: 200,
+  },
+  {
+    uid: 6977,
+    username: "zzZZZZ",
+    sponsorship: 200,
+  },
+  {
+    uid: 779,
+    username: "云歌",
+    sponsorship: 200,
+  },
+  {
+    uid: 113,
+    username: "胡子大叔",
+    sponsorship: 200,
+  },
+  {
+    uid: 7065,
+    username: "用户1499",
+    sponsorship: 200,
+  },
+  {
     uid: 1335,
     username: "伊邪那岐小神",
+    sponsorship: 200,
+  },
+  {
+    uid: 6948,
+    username: "用户1832",
     sponsorship: 200,
   },
   {
@@ -158,19 +158,14 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 162,
   },
   {
-    uid: 101,
-    username: "夢想楽土",
-    sponsorship: 150,
-  },
-  {
     uid: 7162,
     username: "用户2789",
     sponsorship: 150,
   },
   {
-    uid: 6943,
-    username: "失约",
-    sponsorship: 130,
+    uid: 101,
+    username: "夢想楽土",
+    sponsorship: 150,
   },
   {
     uid: 62,
@@ -180,6 +175,16 @@ const sponsorList: SponsorItem[] = [
   {
     uid: 38,
     username: "阿宝",
+    sponsorship: 130,
+  },
+  {
+    uid: 7110,
+    username: "用户2124",
+    sponsorship: 130,
+  },
+  {
+    uid: 6943,
+    username: "失约",
     sponsorship: 130,
   },
   {
@@ -546,7 +551,11 @@ const Page = () => {
         </Text>
 
         <SimpleGrid columns={2} spacing={1}>
-          <Image w="200px" src="/images/sponsor/支付宝收款.jpg" alt="支付宝收款" />
+          <Image
+            w="200px"
+            src="/images/sponsor/支付宝收款.jpg"
+            alt="支付宝收款"
+          />
           <Image w="200px" src="/images/sponsor/微信收款.jpg" alt="微信收款" />
         </SimpleGrid>
       </VStack>
