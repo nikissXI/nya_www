@@ -1,11 +1,52 @@
 "use client";
 
-import { Flex, Center, Divider, Text, Image } from "@chakra-ui/react";
+import { Flex, Center, Divider, Text, Image, Input } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useRouter } from "next/navigation";
+import { useUserStateStore } from "@/store/user-state";
+import { useState } from "react";
+import { getAuthToken } from "@/store/authKey";
+import { isInteger } from "@/utils/strings";
+import { openToast } from "@/components/universal/toast";
 
 export default function Page() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
+  const { logined, setShowLoginModal } = useUserStateStore();
+  const [inputNum, setInputNum] = useState("");
+  const [showText, setShowText] = useState("");
+
+  const createTask = async (hosterWgnum: string) => {
+    if (!hosterWgnum) {
+      return;
+    }
+
+    if (!isInteger(hosterWgnum)) {
+      openToast({ content: `请输入正确的编号`, status: "warning" });
+      return;
+    }
+
+    const resp = await fetch(
+      `${apiUrl}/stardewValleyRoomCheck?hosterWgnum=${hosterWgnum}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      }
+    );
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.code === 0) {
+        setShowText(data.msg);
+      } else {
+        setShowText(data.msg);
+      }
+    } else {
+      setShowText("服务异常，若刷新仍旧异常，请联系服主处理");
+    }
+  };
 
   return (
     <Center>
@@ -25,7 +66,7 @@ export default function Page() {
           <br />
           电脑Windows主持农场如果其他人加入不了，检查系统防火墙是否放通了星露谷。
           <br />
-          如果联机失败，先确认喵服是在线状态（WG连上），加入的时候游戏没有放后台，尝试重进游戏或换个人主持农场。加喵服的星露谷群817658554，群里发“查房”可以检测房间能否被搜索，每个人都试试主持能不能被搜索到。
+          如果联机失败，先确认喵服是在线状态（WG连上），加入的时候游戏没有放后台，或尝试大退游戏再主持。
         </Text>
 
         <Button
@@ -39,6 +80,45 @@ export default function Page() {
         >
           点击查看视频演示
         </Button>
+
+        <Divider my={3} />
+
+        <Text>
+          此处可以检测星露谷房间是否能被搜索，在输入框填写主机的联机编号。
+          如要检查12号创建的房间能否被搜索，就填12然后提交。
+          谁的房间搜不到就是谁的问题。
+        </Text>
+
+        <Flex>
+          {logined ? (
+            <Flex>
+              <Input
+                w="200px"
+                type="number"
+                value={inputNum}
+                onChange={(e) => {
+                  setInputNum(e.target.value);
+                }}
+                placeholder="主机的联机编号"
+              />
+
+              <Button
+                onClick={() => {
+                  createTask(inputNum);
+                  setShowText("搜索中请稍后。。。");
+                }}
+              >
+                提交
+              </Button>
+            </Flex>
+          ) : (
+            <Button bgColor="#1d984b" size="sm" onClick={setShowLoginModal}>
+              请登录后再操作，点击登录
+            </Button>
+          )}
+        </Flex>
+
+        <Text color="#ffd648">{showText}</Text>
 
         <Divider my={3} />
 
