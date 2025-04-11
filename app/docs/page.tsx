@@ -332,10 +332,10 @@ const DocumentPage = () => {
 
             <TabPanels>
               <TabPanel px={0} pb={1} pt={2}>
-                <VStack spacing={2} align="stretch">
+                <VStack spacing={3} align="stretch">
                   <Box>
                     <Flex alignItems="center">
-                      <Text>安装WG客户端</Text>
+                      <Text>1. 安装WG客户端</Text>
                       <Button
                         h="1.6rem"
                         ml={3}
@@ -374,7 +374,7 @@ const DocumentPage = () => {
                   </Box>
 
                   <Box>
-                    <Text>复制黄字，这是conf key</Text>
+                    <Text>2. 复制黄字，这是conf key</Text>
                     <Text
                       fontSize="sm"
                       color="#ffd648"
@@ -388,6 +388,7 @@ const DocumentPage = () => {
                   </Box>
 
                   <Text>
+                    3.
                     打开WG，点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入。
                     <br />
                     如果提示key无效，
@@ -403,7 +404,7 @@ const DocumentPage = () => {
                   </Text>
 
                   <Flex alignItems="center">
-                    <Text>打开隧道开关</Text>
+                    <Text>4. 打开隧道开关</Text>
                     <Image
                       mx={1}
                       maxH="1.5rem"
@@ -442,14 +443,16 @@ const DocumentPage = () => {
               </TabPanel>
 
               <TabPanel px={0} pb={1} pt={2}>
-                <VStack spacing={2} align="stretch">
+                <VStack spacing={3} align="stretch">
                   <Box>
-                    下载隧道文件，两个通道下载的东西一样，1不行就2。
+                    1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
                     <HighLight>
                       使用Safari浏览器访问网站再下载，其他浏览器可能无法正常下载。
                     </HighLight>
-                    <Flex alignItems="center">
+                    <br />
+                    <Box>
                       <Button
+                        ml={3}
                         size="sm"
                         onClick={() => {
                           const isSafari =
@@ -465,11 +468,11 @@ const DocumentPage = () => {
                         }}
                         isDisabled={logined ? false : true}
                       >
-                        下载通道1
+                        点击下载隧道文件
                       </Button>
-
                       <Button
-                        ml={5}
+                        mt={2}
+                        ml={3}
                         size="sm"
                         onClick={() => {
                           const isSafari =
@@ -485,13 +488,13 @@ const DocumentPage = () => {
                         }}
                         isDisabled={logined ? false : true}
                       >
-                        下载通道2
+                        点我下载隧道文件（备用）
                       </Button>
-                    </Flex>
+                    </Box>
                   </Box>
 
                   <Box>
-                    安装WG客户端，
+                    2. 安装WG客户端，
                     <HighLight>AppStore要登陆海外账号才能搜到</HighLight>，
                     <Text
                       as="span"
@@ -517,12 +520,13 @@ const DocumentPage = () => {
                   </Box>
 
                   <Text>
+                    3.
                     打开WG，点右上角加号，选“导入配置或压缩包”，在最近项目里选刚下载的隧道文件，完成隧道导入。
                   </Text>
 
                   <Box>
                     <Flex alignItems="center">
-                      <Text>打开隧道开关</Text>
+                      <Text>4. 打开隧道开关</Text>
                       <Image
                         mx={1}
                         maxH="1.5rem"
@@ -538,32 +542,51 @@ const DocumentPage = () => {
 
               <TabPanel px={0} pb={1} pt={2}>
                 <Box>
-                  下载隧道文件，两个通道下载的东西一样，1不行就2。
-                  <Flex alignItems="center">
+                  1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
+                  <Box>
                     <Button
+                      ml={3}
                       size="sm"
-                      onClick={() =>
-                        GetConfUrl(userInfo?.wg_data?.wgnum as number)
-                      }
+                      onClick={() => {
+                        const isSafari = navigator.userAgent.includes("Safari");
+                        if (isSafari) {
+                          GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                        } else {
+                          openToast({
+                            content: "请在Safari中打开网站下载",
+                            status: "warning",
+                          });
+                        }
+                      }}
                       isDisabled={logined ? false : true}
                     >
-                      下载通道1
+                      点击下载隧道文件
                     </Button>
-
                     <Button
-                      ml={5}
+                      mt={2}
+                      ml={3}
                       size="sm"
-                      onClick={downloadConf}
+                      onClick={() => {
+                        const isSafari = navigator.userAgent.includes("Safari");
+                        if (isSafari) {
+                          downloadConf();
+                        } else {
+                          openToast({
+                            content: "请在Safari中打开网站下载",
+                            status: "warning",
+                          });
+                        }
+                      }}
                       isDisabled={logined ? false : true}
                     >
-                      下载通道2
+                      点我下载隧道文件（备用）
                     </Button>
-                  </Flex>
+                  </Box>
                 </Box>
 
                 <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
                   <Text pt={2} fontWeight="bolder" fontSize="sm">
-                    WG客户端有msi和exe两种安装包，二选一，
+                    2. WG客户端有msi和exe两种安装包，二选一，
                     <HighLight>优先选择msi</HighLight>
                     ，除非你电脑无法安装msi或软件无法正常工作。
                   </Text>
@@ -592,7 +615,7 @@ const DocumentPage = () => {
                   <TabPanels>
                     <TabPanel px={0} pb={0} pt={1}>
                       <Flex alignItems="center">
-                        <Text>下载msi安装包</Text>
+                        <Text>3. 下载msi安装包</Text>
                         <Button
                           size="sm"
                           mx={2}
@@ -607,7 +630,7 @@ const DocumentPage = () => {
                         </Button>
                       </Flex>
 
-                      <Text>双击运行安装后，跟着下图操作完成隧道导入</Text>
+                      <Text>4. 双击运行安装后，跟着下图操作完成隧道导入</Text>
                       <Image
                         src="/images/wg/win_msi.jpg"
                         alt="win_msi"
@@ -656,7 +679,7 @@ const DocumentPage = () => {
 
                     <TabPanel px={0} pb={0} pt={1}>
                       <Flex alignItems="center">
-                        <Text>下载exe安装包</Text>
+                        <Text>3. 下载exe安装包</Text>
                         <Button
                           size="sm"
                           mx={2}
@@ -671,7 +694,7 @@ const DocumentPage = () => {
                         </Button>
                       </Flex>
 
-                      <Text>双击运行安装后，跟着下图操作完成隧道导入</Text>
+                      <Text>4. 双击运行安装后，跟着下图操作完成隧道导入</Text>
                       <Image
                         src="/images/wg/win_exe.jpg"
                         alt="win_exe"
@@ -686,33 +709,54 @@ const DocumentPage = () => {
               </TabPanel>
 
               <TabPanel px={0} pb={1} pt={2}>
-                <VStack spacing={2} align="stretch">
+                <VStack spacing={3} align="stretch">
                   <Box>
-                    下载隧道文件，两个通道下载的东西一样，1不行就2。
-                    <Flex alignItems="center">
+                    1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
+                    <Box>
                       <Button
+                        ml={3}
                         size="sm"
-                        onClick={() =>
-                          GetConfUrl(userInfo?.wg_data?.wgnum as number)
-                        }
+                        onClick={() => {
+                          const isSafari =
+                            navigator.userAgent.includes("Safari");
+                          if (isSafari) {
+                            GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                          } else {
+                            openToast({
+                              content: "请在Safari中打开网站下载",
+                              status: "warning",
+                            });
+                          }
+                        }}
                         isDisabled={logined ? false : true}
                       >
-                        下载通道1
+                        点击下载隧道文件
                       </Button>
-
                       <Button
-                        ml={5}
+                        mt={2}
+                        ml={3}
                         size="sm"
-                        onClick={downloadConf}
+                        onClick={() => {
+                          const isSafari =
+                            navigator.userAgent.includes("Safari");
+                          if (isSafari) {
+                            downloadConf();
+                          } else {
+                            openToast({
+                              content: "请在Safari中打开网站下载",
+                              status: "warning",
+                            });
+                          }
+                        }}
                         isDisabled={logined ? false : true}
                       >
-                        下载通道2
+                        点我下载隧道文件（备用）
                       </Button>
-                    </Flex>
+                    </Box>
                   </Box>
 
                   <Box>
-                    安装WG客户端，
+                    2. 安装WG客户端，
                     <HighLight>AppStore要登陆海外账号才能搜到</HighLight>，
                     <Text
                       as="span"
@@ -736,15 +780,16 @@ const DocumentPage = () => {
                       maxW="300px"
                     />
                   </Box>
-
-                  <Text>运行WG，跟着下图操作完成隧道导入</Text>
-                  <Image
-                    src="/images/wg/mac.jpg"
-                    alt="mac"
-                    borderRadius="md"
-                    w="100%"
-                    maxW="500px"
-                  />
+                  <Box>
+                    <Text>3. 运行WG，跟着下图操作完成隧道导入</Text>
+                    <Image
+                      src="/images/wg/mac.jpg"
+                      alt="mac"
+                      borderRadius="md"
+                      w="100%"
+                      maxW="500px"
+                    />
+                  </Box>
                 </VStack>
               </TabPanel>
             </TabPanels>
