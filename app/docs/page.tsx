@@ -450,47 +450,44 @@ const DocumentPage = () => {
                       使用Safari浏览器访问网站再下载，其他浏览器可能无法正常下载。
                     </HighLight>
                     <br />
-                    <Box>
-                      <Button
-                        ml={3}
-                        size="sm"
-                        onClick={() => {
-                          const isSafari =
-                            navigator.userAgent.includes("Safari");
-                          if (isSafari) {
-                            GetConfUrl(userInfo?.wg_data?.wgnum as number);
-                          } else {
-                            openToast({
-                              content: "请在Safari中打开网站下载",
-                              status: "warning",
-                            });
-                          }
-                        }}
-                        isDisabled={logined ? false : true}
-                      >
-                        点击下载隧道文件
-                      </Button>
-                      <Button
-                        mt={2}
-                        ml={3}
-                        size="sm"
-                        onClick={() => {
-                          const isSafari =
-                            navigator.userAgent.includes("Safari");
-                          if (isSafari) {
-                            downloadConf();
-                          } else {
-                            openToast({
-                              content: "请在Safari中打开网站下载",
-                              status: "warning",
-                            });
-                          }
-                        }}
-                        isDisabled={logined ? false : true}
-                      >
-                        点我下载隧道文件（备用）
-                      </Button>
-                    </Box>
+                    <Button
+                      ml={3}
+                      size="sm"
+                      onClick={() => {
+                        const isSafari = navigator.userAgent.includes("Safari");
+                        if (isSafari) {
+                          GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                        } else {
+                          openToast({
+                            content: "请在Safari中打开网站下载",
+                            status: "warning",
+                          });
+                        }
+                      }}
+                      isDisabled={logined ? false : true}
+                    >
+                      点击下载隧道文件
+                    </Button>
+                    <br />
+                    <Button
+                      mt={2}
+                      ml={3}
+                      size="sm"
+                      onClick={() => {
+                        const isSafari = navigator.userAgent.includes("Safari");
+                        if (isSafari) {
+                          downloadConf();
+                        } else {
+                          openToast({
+                            content: "请在Safari中打开网站下载",
+                            status: "warning",
+                          });
+                        }
+                      }}
+                      isDisabled={logined ? false : true}
+                    >
+                      点我下载隧道文件（备用）
+                    </Button>
                   </Box>
 
                   <Box>
@@ -543,45 +540,45 @@ const DocumentPage = () => {
               <TabPanel px={0} pb={1} pt={2}>
                 <Box>
                   1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
-                  <Box>
-                    <Button
-                      ml={3}
-                      size="sm"
-                      onClick={() => {
-                        const isSafari = navigator.userAgent.includes("Safari");
-                        if (isSafari) {
-                          GetConfUrl(userInfo?.wg_data?.wgnum as number);
-                        } else {
-                          openToast({
-                            content: "请在Safari中打开网站下载",
-                            status: "warning",
-                          });
-                        }
-                      }}
-                      isDisabled={logined ? false : true}
-                    >
-                      点击下载隧道文件
-                    </Button>
-                    <Button
-                      mt={2}
-                      ml={3}
-                      size="sm"
-                      onClick={() => {
-                        const isSafari = navigator.userAgent.includes("Safari");
-                        if (isSafari) {
-                          downloadConf();
-                        } else {
-                          openToast({
-                            content: "请在Safari中打开网站下载",
-                            status: "warning",
-                          });
-                        }
-                      }}
-                      isDisabled={logined ? false : true}
-                    >
-                      点我下载隧道文件（备用）
-                    </Button>
-                  </Box>
+                  <br />
+                  <Button
+                    ml={3}
+                    size="sm"
+                    onClick={() => {
+                      const isSafari = navigator.userAgent.includes("Safari");
+                      if (isSafari) {
+                        GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                      } else {
+                        openToast({
+                          content: "请在Safari中打开网站下载",
+                          status: "warning",
+                        });
+                      }
+                    }}
+                    isDisabled={logined ? false : true}
+                  >
+                    点击下载隧道文件
+                  </Button>
+                  <br />
+                  <Button
+                    mt={2}
+                    ml={3}
+                    size="sm"
+                    onClick={() => {
+                      const isSafari = navigator.userAgent.includes("Safari");
+                      if (isSafari) {
+                        downloadConf();
+                      } else {
+                        openToast({
+                          content: "请在Safari中打开网站下载",
+                          status: "warning",
+                        });
+                      }
+                    }}
+                    isDisabled={logined ? false : true}
+                  >
+                    点我下载隧道文件（备用）
+                  </Button>
                 </Box>
 
                 <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
@@ -712,47 +709,45 @@ const DocumentPage = () => {
                 <VStack spacing={3} align="stretch">
                   <Box>
                     1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
-                    <Box>
-                      <Button
-                        ml={3}
-                        size="sm"
-                        onClick={() => {
-                          const isSafari =
-                            navigator.userAgent.includes("Safari");
-                          if (isSafari) {
-                            GetConfUrl(userInfo?.wg_data?.wgnum as number);
-                          } else {
-                            openToast({
-                              content: "请在Safari中打开网站下载",
-                              status: "warning",
-                            });
-                          }
-                        }}
-                        isDisabled={logined ? false : true}
-                      >
-                        点击下载隧道文件
-                      </Button>
-                      <Button
-                        mt={2}
-                        ml={3}
-                        size="sm"
-                        onClick={() => {
-                          const isSafari =
-                            navigator.userAgent.includes("Safari");
-                          if (isSafari) {
-                            downloadConf();
-                          } else {
-                            openToast({
-                              content: "请在Safari中打开网站下载",
-                              status: "warning",
-                            });
-                          }
-                        }}
-                        isDisabled={logined ? false : true}
-                      >
-                        点我下载隧道文件（备用）
-                      </Button>
-                    </Box>
+                    <br />
+                    <Button
+                      ml={3}
+                      size="sm"
+                      onClick={() => {
+                        const isSafari = navigator.userAgent.includes("Safari");
+                        if (isSafari) {
+                          GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                        } else {
+                          openToast({
+                            content: "请在Safari中打开网站下载",
+                            status: "warning",
+                          });
+                        }
+                      }}
+                      isDisabled={logined ? false : true}
+                    >
+                      点击下载隧道文件
+                    </Button>
+                    <br />
+                    <Button
+                      mt={2}
+                      ml={3}
+                      size="sm"
+                      onClick={() => {
+                        const isSafari = navigator.userAgent.includes("Safari");
+                        if (isSafari) {
+                          downloadConf();
+                        } else {
+                          openToast({
+                            content: "请在Safari中打开网站下载",
+                            status: "warning",
+                          });
+                        }
+                      }}
+                      isDisabled={logined ? false : true}
+                    >
+                      点我下载隧道文件（备用）
+                    </Button>
                   </Box>
 
                   <Box>
