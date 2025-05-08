@@ -72,9 +72,6 @@ export function LoginModal() {
 
   useEffect(() => {
     const loadCaptcha = async () => {
-      console.log("logging  " + logging);
-      console.log("logined  " + logined);
-      console.log("showLoginModal  " + showLoginModal);
       if (!logging && !logined && showLoginModal) {
         setCaptchaImage(await fetchCaptcha());
       }
