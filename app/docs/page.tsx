@@ -70,15 +70,23 @@ const articles: Article[] = [
 ];
 
 const DocumentPage = () => {
-  const { logined, confKey, getConfKey, userInfo } = useUserStateStore();
+  const {
+    logined,
+    changeGoToDocState,
+    confKey,
+    getConfKey,
+    userInfo,
+  } = useUserStateStore();
   const router = useRouter();
 
   useEffect(() => {
     if (logined && userInfo?.wg_data) {
       getConfKey();
+      changeGoToDocState(false);
     } else {
-      router.push("/me");
+      changeGoToDocState(true);
       openToast({ content: "请登陆后再访问教程", status: "info" });
+      router.push("/me");
     }
   }, [logined]);
 

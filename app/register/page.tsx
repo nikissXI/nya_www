@@ -40,7 +40,7 @@ export default function Page() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  const { logined, uuid, getUserInfo } = useUserStateStore();
+  const { uuid, getUserInfo } = useUserStateStore();
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();

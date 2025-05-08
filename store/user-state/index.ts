@@ -62,6 +62,9 @@ interface ILoginStateSlice {
   logined: boolean;
   changeLoginState: (state: boolean) => void;
 
+  goToDoc: boolean;
+  changeGoToDocState: (state: boolean) => void;
+
   getUserInfo: () => Promise<void>;
 
   logout: () => void;
@@ -204,6 +207,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set((state) => {
           return produce(state, (draft) => {
             draft.logined = loginState;
+          });
+        });
+      },
+
+      goToDoc: false,
+      changeGoToDocState: (goToDocState: boolean) => {
+        set((state) => {
+          return produce(state, (draft) => {
+            draft.goToDoc = goToDocState;
           });
         });
       },

@@ -41,6 +41,7 @@ export function LoginModal() {
   const {
     logging,
     logined,
+    goToDoc,
     uuid,
     getUserInfo,
     showLoginModal,
@@ -71,6 +72,9 @@ export function LoginModal() {
 
   useEffect(() => {
     const loadCaptcha = async () => {
+      console.log("logging  " + logging);
+      console.log("logined  " + logined);
+      console.log("showLoginModal  " + showLoginModal);
       if (!logging && !logined && showLoginModal) {
         setCaptchaImage(await fetchCaptcha());
       }
@@ -130,6 +134,9 @@ export function LoginModal() {
         setAuthToken(data.token);
         getUserInfo();
         setShowLoginModal();
+        if (goToDoc === true) {
+          router.push("/docs#games");
+        }
       } else {
         openToast({ content: data.msg, status: "warning" });
         setCaptchaImage(await fetchCaptcha());
