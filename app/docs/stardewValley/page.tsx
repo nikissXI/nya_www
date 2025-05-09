@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { useUserStateStore } from "@/store/user-state";
 import { useState } from "react";
 import { getAuthToken } from "@/store/authKey";
-import { isInteger } from "@/utils/strings";
-import { openToast } from "@/components/universal/toast";
 
 export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -18,11 +16,6 @@ export default function Page() {
 
   const createTask = async (hosterWgnum: string) => {
     if (!hosterWgnum) {
-      return;
-    }
-
-    if (!isInteger(hosterWgnum)) {
-      openToast({ content: `请输入正确的编号`, status: "warning" });
       return;
     }
 

@@ -70,13 +70,8 @@ const articles: Article[] = [
 ];
 
 const DocumentPage = () => {
-  const {
-    logined,
-    changeGoToDocState,
-    confKey,
-    getConfKey,
-    userInfo,
-  } = useUserStateStore();
+  const { logined, changeGoToDocState, confKey, getConfKey, userInfo } =
+    useUserStateStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -209,6 +204,8 @@ const DocumentPage = () => {
           </VStack>
         </Box>
 
+        <HighLight>把使用文档7个部分全部看完再去问问题！那些不看完文档就问问题的臭傻逼滚远点！不想看文档就别用，别来恶心我！</HighLight>
+
         <Divider />
 
         <Box id="preface">
@@ -221,7 +218,7 @@ const DocumentPage = () => {
             <HighLight>免费</HighLight>
             提供组网服务的服务器，既然使用别人的东西，那就花点耐心去学习。考虑到很多未曾接触过此类软件的用户，文档会尽量写的详细，字会有点多，
             <HighLight>
-              用过有经验的几分钟学会，纯小白大概15分钟左右，按顺序从上往下阅读，简简单单的。
+              用过有经验的几分钟学会，纯小白大概15分钟左右，认真阅读没难度！
             </HighLight>
           </Text>
           <Text>
