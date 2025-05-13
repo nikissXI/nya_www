@@ -342,6 +342,34 @@ export default function Page() {
   if (!logined) {
     return (
       <VStack spacing={3} align="center">
+        <Button
+          variant="link"
+          bg="transparent"
+          color="#ffca3d"
+          fontWeight="bold"
+          onClick={setWarnOnOpen}
+        >
+          查看公告（{announcement[0]?.date}更新）
+        </Button>
+
+        <Modal isOpen={setWarnIsOpen} onClose={setWarnOnClose}>
+          <ModalOverlay />
+          <ModalContent bgColor="#002f5c">
+            <ModalCloseButton />
+
+            <ModalBody py={6}>
+              {announcement.map((message, index) => (
+                <Box key={index}>
+                  <Text fontWeight="bold" fontSize="lg" color="#ffca3d">
+                    {message.date}
+                  </Text>
+                  <Text pb={3}>{message.content}</Text>
+                </Box>
+              ))}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+
         <Heading size="md">你还没登陆呢</Heading>
 
         <Button
