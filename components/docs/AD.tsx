@@ -75,7 +75,7 @@ const SponsorAd = () => {
       </Box>
 
       <Text color="#ffca3d" fontWeight="bold" textAlign="center" mx={5}>
-        喵服于5月15日上午9时停服维护，看不到该公告的时候就是维护完毕了
+        喵服于5月15日早上6时停服维护，预计中午12点前恢复，看不到该公告的时候就是维护完毕了
       </Text>
     </VStack>
   );
