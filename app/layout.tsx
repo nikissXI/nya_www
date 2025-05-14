@@ -23,24 +23,29 @@ export default function RootLayout({
         <ChakraProvider>
           {/* 全局背景图 */}
           <Box
-            zIndex={-1}
+            as="section"
             position="fixed"
-            width="100vw"
-            height="100vh"
-            backgroundImage="url('/images/bg.png')" // 替换为你的图片路径
-            backgroundRepeat="repeat" // 背景图像可以重复
-          ></Box>
+            inset={0}
+            zIndex={-1}
+            backgroundImage="url('/images/bg.png')"
+            backgroundRepeat="repeat"
+            backgroundSize="auto"
+          />
           {/* 顶部背景图 */}
           <Box
-            zIndex={99}
+            as="header"
             position="fixed"
-            top="-50px"
+            top={-50}
+            left={0}
             width="100%"
-            height="105px" // 设置高度，以便可以看到背景效果
-            backgroundImage="url('/images/head_bg.png')" // 替换为你的图片路径
-            backgroundRepeat="repeat-x" // 仅在水平方向上重复
-            // display={{ md: "block", base: "none" }}
-          ></Box>
+            height="105px"
+            zIndex={99}
+            backgroundImage="url('/images/head_bg.png')"
+            backgroundRepeat="repeat-x"
+            backgroundSize="auto"
+            // 可按需开启响应式显示
+            // display={{ base: "none", md: "block" }}
+          />
           <Frame>{children}</Frame>
         </ChakraProvider>
       </body>

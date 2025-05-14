@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Flex, Image, Center, Text } from "@chakra-ui/react";
+import { Flex, Image, Center, Text, VStack } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
+import SponsorAd from "@/components/docs/AD";
 
 export default function Page() {
   const router = useRouter();
@@ -11,6 +12,8 @@ export default function Page() {
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
+      <SponsorAd />
+
       <Flex
         wrap="wrap"
         direction={{ base: "column", md: "row" }}
@@ -40,10 +43,10 @@ export default function Page() {
       >
         <Flex direction="column" mx={3} mt={6} width="230px">
           <Center color="#fb727e" fontSize="lg" fontWeight="bold">
-            免费组网
+            免费使用
           </Center>
           <Text fontSize="sm">
-            提供异地组网服务解决联机问题，支持广播包转发，最多8个玩家组网
+            提供异地组网服务解决联机问题，支持部分广播包转发，最多8人联机
           </Text>
         </Flex>
 

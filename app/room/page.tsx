@@ -35,7 +35,7 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 import { PiCoffeeBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
-import announcement from "@/components/docs/AnnouncementList";
+import SponsorAd from "@/components/docs/AD";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -49,37 +49,17 @@ interface HandleRoomResponse {
 
 export default function Page() {
   const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
 
+  // 状态管理
   const [tutorialColor, setTutorialColor] = useState(true);
-
   const [loading, setLoading] = useState(false);
-
   const [disableCheckNet, setDisableCheckNet] = useState(false);
   const [disableGetRoom, setDisableGetRoom] = useState(false);
-
-  const {
-    isOpen: joinIsOpen,
-    onOpen: joinOnOpen,
-    onClose: joinOnClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: setPassIsOpen,
-    onOpen: setPassOnOpen,
-    onClose: setPassOnClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: setWarnIsOpen,
-    onOpen: setWarnOnOpen,
-    onClose: setWarnOnClose,
-  } = useDisclosure();
-
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
-
   const [inputWgnum, setInputWgnum] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
+
   const {
     logined,
     userInfo,
@@ -95,165 +75,142 @@ export default function Page() {
     setShowLoginModal,
   } = useUserStateStore();
 
-  const updatedRoomInfo = useCallback(
-    (onlineStatus: "在线" | "离线") => {
-      if (roomData && userInfo?.wg_data)
+  const {
+    isOpen: joinIsOpen,
+    onOpen: joinOnOpen,
+    onClose: joinOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: setPassIsOpen,
+    onOpen: setPassOnOpen,
+    onClose: setPassOnClose,
+  } = useDisclosure();
+
+  // 更新房间成员在线状态
+  const updateRoomMemberStatus = useCallback(
+    (status: "在线" | "离线") => {
+      if (roomData && userInfo?.wg_data) {
         setRoomData({
           ...roomData,
-          members: roomData.members.map((member) => {
-            if (member.wgnum === userInfo?.wg_data?.wgnum) {
-              return { ...member, status: onlineStatus }; // 修改状态为离线
-            }
-            return member; // 保持其他成员不变
-          }),
+          members: roomData.members.map((member) =>
+            member.wgnum === userInfo.wg_data?.wgnum
+              ? { ...member, status }
+              : member
+          ),
         });
+      }
     },
     [roomData, userInfo, setRoomData]
   );
 
+  // 离线时闪烁提醒
   useEffect(() => {
-    updatedRoomInfo(onlineStatus);
-  }, [latency, onlineStatus]);
-
-  useEffect(() => {
-    if (latency === undefined) {
-      getLatency();
-    }
-  }, [getLatency, latency]);
-
-  useEffect(() => {
-    if (roomData === undefined) {
-      getRoomData();
-    }
-  }, [roomData, getRoomData]);
-
-  // 离线的时候闪烁
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
-
     if (onlineStatus === "离线") {
-      intervalId = setInterval(() => {
-        setTutorialColor((prev) => !prev);
-      }, 300);
+      const intervalId = setInterval(
+        () => setTutorialColor((prev) => !prev),
+        300
+      );
+      return () => clearInterval(intervalId);
     }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
+    setTutorialColor(true);
   }, [onlineStatus]);
 
-  // 60秒检测一次
+  // 初始化获取延迟和房间数据
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
+    if (latency === undefined) getLatency();
+  }, [latency, getLatency]);
 
-    intervalId = setInterval(() => {
-      getLatency();
-    }, 60000);
+  useEffect(() => {
+    if (roomData === undefined) getRoomData();
+  }, [roomData, getRoomData]);
 
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
+  // 60秒自动检测延迟
+  useEffect(() => {
+    const intervalId = setInterval(() => getLatency(), 60000);
+    return () => clearInterval(intervalId);
+  }, [getLatency]);
+
+  // 通用请求封装，处理loading状态和错误提示
+  const fetchWithLoading = useCallback(
+    async <T,>(url: string, options?: RequestInit): Promise<T> => {
+      if (loading) throw new Error("请不要点太快");
+      setLoading(true);
+      try {
+        const resp = await fetch(url, options);
+        if (!resp.ok) throw new Error(`访问接口出错: ${resp.status}`);
+        const data = await resp.json();
+        return data as T;
+      } finally {
+        setLoading(false);
       }
-    };
-  }, []);
+    },
+    [loading]
+  );
 
   // 设置房间密码
   const handleSetRoomPasswd = useCallback(
     async (newPasswd: string) => {
       try {
-        if (loading === true) {
-          throw new Error(`请不要点太快`);
-        }
-
-        setLoading(true);
-        const resp = await fetch(
-          `${apiUrl}/setRoomPasswd?roomPasswd=${newPasswd}`,
+        const data = await fetchWithLoading<HandleRoomResponse>(
+          `${apiUrl}/setRoomPasswd?roomPasswd=${encodeURIComponent(newPasswd)}`,
           {
             method: "GET",
-            headers: {
-              Authorization: `Bearer ${getAuthToken()}`,
-            },
+            headers: { Authorization: `Bearer ${getAuthToken()}` },
           }
         );
-        setLoading(false);
-        if (!resp.ok) {
-          throw new Error(`访问接口出错: ${resp.status}`);
-        }
-
-        const data = await resp.json();
         if (data.code === 0) {
-          if (roomData)
-            setRoomData({
-              ...roomData,
-              room_passwd: newPasswd,
-            });
-
+          if (roomData) setRoomData({ ...roomData, room_passwd: newPasswd });
           openToast({ content: data.msg, status: "success" });
+          setPassOnClose();
         } else {
           openToast({ content: data.msg, status: "warning" });
         }
-        if (setPassIsOpen) setPassOnClose();
       } catch (err) {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [apiUrl, loading, roomData, setPassIsOpen, setPassOnClose, setRoomData]
+    [apiUrl, fetchWithLoading, roomData, setRoomData, setPassOnClose]
   );
 
-  // 发送房间操作请求
+  // 房间操作请求
   const handleRoomFetch = useCallback(
     async (
       handleType: string,
       handleWgnum: number,
-      roomPasswd: string = ""
+      roomPasswd = ""
     ): Promise<HandleRoomResponse> => {
-      if (loading === true) {
-        throw new Error(`请不要点太快`);
-      }
-      setLoading(true);
-      const resp = await fetch(
-        `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}&roomPasswd=${roomPasswd}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getAuthToken()}`,
-          },
-        }
-      );
-      setLoading(false);
-      if (!resp.ok) {
-        throw new Error(`访问接口出错: ${resp.status}`);
-      }
-
-      const data: HandleRoomResponse = await resp.json();
+      const url = `${apiUrl}/handleRoom?handleType=${encodeURIComponent(
+        handleType
+      )}&wgnum=${handleWgnum}&roomPasswd=${encodeURIComponent(roomPasswd)}`;
+      const data = await fetchWithLoading<HandleRoomResponse>(url, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${getAuthToken()}` },
+      });
 
       if (data.code === -1) {
-        // 编号失效刷新页面
         window.location.reload();
       }
       return data;
     },
-    [apiUrl, loading]
+    [apiUrl, fetchWithLoading]
   );
 
-  // 创建房间
-  const handleCreateRoom = async () => {
+  // 业务操作封装
+  const handleCreateRoom = useCallback(async () => {
     try {
       const data = await handleRoomFetch("createRoom", 0);
       if (data.code === 0) {
         getRoomData();
       } else {
-        openToast({ content: data.msg, status: "success" });
+        openToast({ content: data.msg, status: "warning" });
       }
     } catch (err) {
       openToast({ content: String(err), status: "error" });
     }
-  };
+  }, [handleRoomFetch, getRoomData]);
 
-  // 关闭房间
-  const handleCloseRoom = async () => {
+  const handleCloseRoom = useCallback(async () => {
     try {
       const data = await handleRoomFetch("closeRoom", 0);
       if (data.code === 0) {
@@ -264,37 +221,37 @@ export default function Page() {
     } catch (err) {
       openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
-  };
+  }, [handleRoomFetch, getRoomData]);
 
-  // 加入房间
-  const handleJoinRoom = async (wgnum: string, passwd: string) => {
-    if (!wgnum) {
-      return;
-    }
+  const handleJoinRoom = useCallback(
+    async (wgnum: string, passwd: string) => {
+      if (!wgnum) return;
 
-    if (!isInteger(wgnum)) {
-      openToast({ content: "房间号是整数，不知道就问房主", status: "warning" });
-      return;
-    }
-
-    try {
-      const data = await handleRoomFetch("joinRoom", Number(wgnum), passwd);
-      if (data.code === 0) {
-        getRoomData();
-        joinOnClose();
-      } else {
-        if (data.msg === "加入该房间需要密码") {
-          setHideJoinPassInput(false);
-        }
-        openToast({ content: data.msg, status: "warning" });
+      if (!isInteger(wgnum)) {
+        openToast({
+          content: "房间号是整数，不知道就问房主",
+          status: "warning",
+        });
+        return;
       }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  };
 
-  // 退出房间
-  const handleExitRoom = async () => {
+      try {
+        const data = await handleRoomFetch("joinRoom", Number(wgnum), passwd);
+        if (data.code === 0) {
+          getRoomData();
+          joinOnClose();
+        } else {
+          if (data.msg === "加入该房间需要密码") setHideJoinPassInput(false);
+          openToast({ content: data.msg, status: "warning" });
+        }
+      } catch (err) {
+        openToast({ content: `请求出错: ${String(err)}`, status: "error" });
+      }
+    },
+    [handleRoomFetch, getRoomData, joinOnClose]
+  );
+
+  const handleExitRoom = useCallback(async () => {
     try {
       const data = await handleRoomFetch("exitRoom", 0);
       if (data.code === 0) {
@@ -305,73 +262,45 @@ export default function Page() {
     } catch (err) {
       openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
-  };
+  }, [handleRoomFetch, getRoomData]);
 
-  // 删除成员
-  const handleDelMember = async (delWgnum: number) => {
-    try {
-      const data = await handleRoomFetch("delMember", delWgnum);
-      if (data.code === 0) {
-        getRoomData();
-      } else {
-        openToast({ content: data.msg, status: "error" });
+  const handleDelMember = useCallback(
+    async (delWgnum: number) => {
+      try {
+        const data = await handleRoomFetch("delMember", delWgnum);
+        if (data.code === 0) {
+          getRoomData();
+        } else {
+          openToast({ content: data.msg, status: "error" });
+        }
+      } catch (err) {
+        openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  };
+    },
+    [handleRoomFetch, getRoomData]
+  );
 
-  function getColor(latency: number) {
+  // 延迟颜色辅助
+  const getColor = (latency: number) => {
     if (latency > 100) return "#ffa524";
-    else if (latency > 0) return "#3fdb1d";
-    else return "#ff3b3b";
-  }
-
-  const handleSetPassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter") {
-      handleSetRoomPasswd(inputPasswd);
-    }
-  };
-  const handleJoinRoomEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter") {
-      handleJoinRoom(inputWgnum, inputPasswd);
-    }
+    if (latency > 0) return "#3fdb1d";
+    return "#ff3b3b";
   };
 
-  // 没登录就让去登录
+  // 回车事件处理简化
+  const handleKeyPress =
+    (handler: () => void) => (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Enter") {
+        handler();
+      }
+    };
+
+  // 未登录提示
   if (!logined) {
     return (
       <VStack spacing={3} align="center">
-        <Button
-          variant="link"
-          bg="transparent"
-          color="#ffca3d"
-          fontWeight="bold"
-          onClick={setWarnOnOpen}
-        >
-          查看公告（{announcement[0]?.date}更新）
-        </Button>
-
-        <Modal isOpen={setWarnIsOpen} onClose={setWarnOnClose}>
-          <ModalOverlay />
-          <ModalContent bgColor="#002f5c">
-            <ModalCloseButton />
-
-            <ModalBody py={6}>
-              {announcement.map((message, index) => (
-                <Box key={index}>
-                  <Text fontWeight="bold" fontSize="lg" color="#ffca3d">
-                    {message.date}
-                  </Text>
-                  <Text pb={3}>{message.content}</Text>
-                </Box>
-              ))}
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-
-        <Heading size="md">你还没登陆呢</Heading>
-
+        <SponsorAd />
+        <Heading size="md">你还没登录呢</Heading>
         <Button
           variant="outline"
           rounded={10}
@@ -380,13 +309,12 @@ export default function Page() {
         >
           点击登录
         </Button>
-
         <NoticeText />
       </VStack>
     );
   }
 
-  // 没编号就去获取
+  // 未获取编号提示
   if (!userInfo?.wg_data) {
     return (
       <Center my={10}>
@@ -394,7 +322,6 @@ export default function Page() {
           <Heading size="md" color="#ffa629">
             你还没联机编号呢
           </Heading>
-
           <Button rounded={5} onClick={getWgnum} bgColor="#007bc0" size="sm">
             点击获取编号
           </Button>
@@ -403,308 +330,256 @@ export default function Page() {
     );
   }
 
-  function nonePage() {
-    return (
-      <Box textAlign="center">
-        <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
-          <ModalOverlay />
-          <ModalContent bgColor="#002f5c">
-            <ModalHeader>加入房间</ModalHeader>
-
-            <ModalCloseButton />
-
-            <ModalBody onKeyDown={handleJoinRoomEnter}>
-              <Input
-                type="text"
-                placeholder="请输入房间号"
-                value={inputWgnum}
-                onChange={(e) => {
-                  setInputWgnum(e.target.value);
-                  setHideJoinPassInput(true);
-                }}
-              />
-
+  // 无房间页面
+  const NonePage = () => (
+    <Box textAlign="center">
+      <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
+        <ModalOverlay />
+        <ModalContent bgColor="#002f5c">
+          <ModalHeader>加入房间</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody
+            onKeyDown={handleKeyPress(() =>
+              handleJoinRoom(inputWgnum, inputPasswd)
+            )}
+          >
+            <Input
+              type="text"
+              placeholder="请输入房间号"
+              value={inputWgnum}
+              onChange={(e) => {
+                setInputWgnum(e.target.value);
+                setHideJoinPassInput(true);
+              }}
+            />
+            {!hideJoinPassInput && (
               <Input
                 mt={3}
                 type="text"
                 placeholder="请输入房间密码"
                 value={inputPasswd}
-                onChange={(e) => {
-                  setInputPasswd(e.target.value);
-                }}
-                hidden={hideJoinPassInput}
-              />
-            </ModalBody>
-
-            <ModalFooter>
-              <Button
-                bgColor="#007bc0"
-                onClick={() => {
-                  handleJoinRoom(inputWgnum, inputPasswd);
-                }}
-              >
-                加入
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
-        <Heading mb={5}>请选择操作</Heading>
-
-        <VStack spacing={6} alignItems="center">
-          <Button h="50px" fontSize="25px" onClick={handleCreateRoom}>
-            创建房间
-          </Button>
-
-          <Button
-            h="50px"
-            fontSize="25px"
-            onClick={() => {
-              joinOnOpen();
-              setHideJoinPassInput(true);
-              setInputWgnum("");
-              setInputPasswd("");
-            }}
-          >
-            加入房间
-          </Button>
-        </VStack>
-      </Box>
-    );
-  }
-
-  function roomPage() {
-    return (
-      <Box textAlign="center">
-        <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
-          <ModalOverlay />
-          <ModalContent bgColor="#002f5c">
-            <ModalHeader>设置房间密码</ModalHeader>
-
-            <ModalCloseButton />
-
-            <ModalBody onKeyDown={handleSetPassEnter}>
-              <Input
-                type="text"
-                placeholder="请输入房间密码"
-                value={inputPasswd}
                 onChange={(e) => setInputPasswd(e.target.value)}
               />
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                bgColor="#007bc0"
-                onClick={() => handleSetRoomPasswd(inputPasswd)}
-              >
-                更新密码
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              bgColor="#007bc0"
+              onClick={() => handleJoinRoom(inputWgnum, inputPasswd)}
+            >
+              加入
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
-        <VStack>
-          {roomStatus === "hoster" && (
-            <HStack justify="center" spacing={0}>
-              <Text fontWeight="bold">允许直接加入</Text>
-              {roomData?.room_passwd ? <FaTimes /> : <FaCheck />}
+      <Heading mb={5}>请选择操作</Heading>
 
-              <Switch
-                px={2}
-                size="md"
-                colorScheme="green"
-                isChecked={roomData?.room_passwd ? false : true}
-                onChange={() => {
-                  // 已设置密码就清空密码
-                  if (roomData?.room_passwd) {
-                    setInputPasswd("");
-                    handleSetRoomPasswd("");
-                  } else {
-                    setInputPasswd(
-                      roomData?.room_passwd ? roomData?.room_passwd : ""
-                    );
-                    setPassOnOpen();
-                  }
-                }}
-              />
+      <VStack spacing={6} alignItems="center">
+        <Button h="50px" fontSize="25px" onClick={handleCreateRoom}>
+          创建房间
+        </Button>
 
+        <Button
+          h="50px"
+          fontSize="25px"
+          onClick={() => {
+            joinOnOpen();
+            setHideJoinPassInput(true);
+            setInputWgnum("");
+            setInputPasswd("");
+          }}
+        >
+          加入房间
+        </Button>
+      </VStack>
+    </Box>
+  );
+
+  // 房间页面
+  const RoomPage = () => (
+    <Box textAlign="center">
+      <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
+        <ModalOverlay />
+        <ModalContent bgColor="#002f5c">
+          <ModalHeader>设置房间密码</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody
+            onKeyDown={handleKeyPress(() => handleSetRoomPasswd(inputPasswd))}
+          >
+            <Input
+              type="text"
+              placeholder="请输入房间密码"
+              value={inputPasswd}
+              onChange={(e) => setInputPasswd(e.target.value)}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              bgColor="#007bc0"
+              onClick={() => handleSetRoomPasswd(inputPasswd)}
+            >
+              更新密码
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <VStack spacing={3}>
+        {roomStatus === "hoster" && (
+          <HStack justify="center" spacing={2}>
+            <Text fontWeight="bold">允许直接加入</Text>
+            {roomData?.room_passwd ? <FaTimes /> : <FaCheck />}
+            <Switch
+              px={2}
+              size="md"
+              colorScheme="green"
+              isChecked={!roomData?.room_passwd}
+              onChange={() => {
+                if (roomData?.room_passwd) {
+                  setInputPasswd("");
+                  handleSetRoomPasswd("");
+                } else {
+                  setInputPasswd(roomData?.room_passwd ?? "");
+                  setPassOnOpen();
+                }
+              }}
+            />
+            {roomData?.room_passwd && (
               <Button
                 variant="link"
                 bg="transparent"
-                hidden={roomData?.room_passwd ? false : true}
-                onClick={() => {
-                  setInputPasswd(
-                    roomData?.room_passwd ? roomData?.room_passwd : ""
-                  );
-                  setPassOnOpen();
-                }}
-                isDisabled={roomData?.room_passwd ? false : true}
+                onClick={() => setPassOnOpen()}
               >
                 <Text>查看房间密码</Text>
               </Button>
-            </HStack>
-          )}
+            )}
+          </HStack>
+        )}
 
-          {roomData?.members.map((item, index) => (
-            <Box
-              w="300px"
-              key={item.ip}
-              bg="rgb(75 127 187 / 38%)"
-              p={2}
-              borderRadius={12}
-            >
-              <Flex>
-                <Text
-                  fontWeight="bold"
-                  fontSize="1.1rem"
-                  ml={2}
-                  color={
-                    item.wgnum === userInfo?.wg_data?.wgnum
-                      ? "#ffd012"
-                      : "white"
-                  }
-                >
-                  {item.username}
-                </Text>
-
-                <Tag
-                  size="md"
-                  ml="auto"
-                  bg="transparent"
-                  fontWeight="bold"
-                  color={
-                    item.wgnum === userInfo?.wg_data?.wgnum
-                      ? rotate
-                        ? "#ffa524"
-                        : onlineStatus === "在线"
-                        ? "#3fdb1d"
-                        : "#ff4444"
-                      : item.status === "在线"
+        {roomData?.members.map((member) => (
+          <Box
+            key={member.ip}
+            w="300px"
+            bg="rgb(75 127 187 / 38%)"
+            p={2}
+            borderRadius={12}
+          >
+            <Flex alignItems="center" gap={2}>
+              <Text
+                fontWeight="bold"
+                fontSize="1.1rem"
+                ml={2}
+                color={
+                  member.wgnum === userInfo?.wg_data?.wgnum
+                    ? "#ffd012"
+                    : "white"
+                }
+              >
+                {member.username}
+              </Text>
+              <Tag
+                size="md"
+                ml="auto"
+                bg="transparent"
+                fontWeight="bold"
+                color={
+                  member.wgnum === userInfo?.wg_data?.wgnum
+                    ? rotate
+                      ? "#ffa524"
+                      : onlineStatus === "在线"
                       ? "#3fdb1d"
                       : "#ff4444"
-                  }
-                >
-                  {item.wgnum === userInfo?.wg_data?.wgnum
-                    ? rotate
-                      ? "检测中"
-                      : onlineStatus
-                    : item.status}
-                </Tag>
-              </Flex>
+                    : member.status === "在线"
+                    ? "#3fdb1d"
+                    : "#ff4444"
+                }
+              >
+                {member.wgnum === userInfo?.wg_data?.wgnum
+                  ? rotate
+                    ? "检测中"
+                    : onlineStatus
+                  : member.status}
+              </Tag>
+            </Flex>
 
-              <Flex mt={1}>
-                <Tag
-                  onClick={() => {
-                    copyText(String(item.wgnum));
-                  }}
-                  color="white"
-                  bg="transparent"
-                >
-                  编号{item.wgnum}
-                </Tag>
-                <Tag
-                  onClick={() => {
-                    copyText(item.ip);
-                  }}
-                  color="white"
-                  bg="transparent"
-                >
-                  ip {item.ip}
-                </Tag>
+            <Flex mt={1} gap={2}>
+              <Tag
+                color="white"
+                bg="transparent"
+                cursor="pointer"
+                onClick={() => copyText(String(member.wgnum))}
+              >
+                编号{member.wgnum}
+              </Tag>
+              <Tag
+                color="white"
+                bg="transparent"
+                cursor="pointer"
+                onClick={() => copyText(member.ip)}
+              >
+                ip {member.ip}
+              </Tag>
+              {roomStatus === "hoster" &&
+                member.wgnum !== roomData.hoster_wgnum && (
+                  <Tag
+                    ml="auto"
+                    color="white"
+                    bg="#be1c1c"
+                    cursor="pointer"
+                    onClick={() => handleDelMember(member.wgnum)}
+                  >
+                    踢出
+                  </Tag>
+                )}
+            </Flex>
+          </Box>
+        ))}
+      </VStack>
 
-                {roomStatus === "hoster" &&
-                  item.wgnum !== roomData.hoster_wgnum && (
-                    <Tag
-                      ml="auto"
-                      color="white"
-                      bg="#be1c1c"
-                      onClick={() => handleDelMember(item.wgnum)}
-                      cursor="pointer"
-                    >
-                      踢出
-                    </Tag>
-                  )}
-              </Flex>
-            </Box>
-          ))}
-        </VStack>
+      <HStack justify="center" spacing={4} mt={2}>
+        <Button
+          px={0}
+          size="lg"
+          bg="transparent"
+          onClick={roomStatus === "hoster" ? handleCloseRoom : handleExitRoom}
+        >
+          {roomStatus === "hoster" ? "关闭房间" : "退出房间"}
+          <IoIosExit size={30} color="#ff4444" />
+        </Button>
 
-        <HStack justify="center">
-          <Button
-            px={0}
-            size="lg"
-            bg="transparent"
-            onClick={roomStatus === "hoster" ? handleCloseRoom : handleExitRoom}
-          >
-            {roomStatus === "hoster" ? "关闭房间" : "退出房间"}
-            <IoIosExit size={30} color="#ff4444" />
-          </Button>
+        <Text fontSize="lg" fontWeight="bold" mr={3}>
+          {roomData?.members.length}/8
+        </Text>
 
-          <Text fontSize="lg" fontWeight="bold" ml={2} mr={3}>
-            {roomData?.members.length}/8
-          </Text>
-
-          <Button
-            px={0}
-            size="lg"
-            bg="transparent"
-            onClick={() => {
-              if (disableGetRoom === true) return;
-
-              setDisableGetRoom(true);
-              // 设置定时器，2秒后重新启用按钮
-              setTimeout(() => {
-                setDisableGetRoom(false); // 启用按钮
-              }, 3000);
-
-              getRoomData();
-              getLatency();
-            }}
-          >
-            刷新房间
-            <IoReloadCircle size={26} color="#35c535" />
-          </Button>
-        </HStack>
-      </Box>
-    );
-  }
+        <Button
+          px={0}
+          size="lg"
+          bg="transparent"
+          onClick={() => {
+            if (disableGetRoom) return;
+            setDisableGetRoom(true);
+            setTimeout(() => setDisableGetRoom(false), 3000);
+            getRoomData();
+            getLatency();
+          }}
+        >
+          刷新房间
+          <IoReloadCircle size={26} color="#35c535" />
+        </Button>
+      </HStack>
+    </Box>
+  );
 
   return (
-    <VStack alignItems="center">
-      <Button
-        variant="link"
-        bg="transparent"
-        color="#ffca3d"
-        fontWeight="bold"
-        onClick={setWarnOnOpen}
-      >
-        查看公告（{announcement[0]?.date}更新）
-      </Button>
-
-      <Modal isOpen={setWarnIsOpen} onClose={setWarnOnClose}>
-        <ModalOverlay />
-        <ModalContent bgColor="#002f5c">
-          <ModalCloseButton />
-
-          <ModalBody py={6}>
-            {announcement.map((message, index) => (
-              <Box key={index}>
-                <Text fontWeight="bold" fontSize="lg" color="#ffca3d">
-                  {message.date}
-                </Text>
-                <Text pb={3}>{message.content}</Text>
-              </Box>
-            ))}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+    <VStack alignItems="center" spacing={2}>
+      <SponsorAd />
 
       <Button
         variant="link"
         bg="transparent"
         size="lg"
-        onClick={() => {
-          router.push(`/docs`);
-        }}
+        onClick={() => router.push(`/docs`)}
         color={
           onlineStatus === "在线"
             ? "#a8d1ff"
@@ -716,63 +591,58 @@ export default function Page() {
         点我阅读使用文档
       </Button>
 
-      <Flex align="center">
+      <Flex align="center" gap={3}>
         {roomStatus !== "none" && (
-          <Text fontSize={18} fontWeight="bold" mr={3}>
+          <Text fontSize={18} fontWeight="bold">
             房间号 {roomData?.hoster_wgnum}
           </Text>
         )}
 
         <Text
           fontSize={18}
-          p={0}
-          mr={1}
           fontWeight="bold"
           color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
         >
           {onlineStatus}
         </Text>
+
         {onlineStatus === "在线" && latency && (
-          <Flex align="center">
+          <Flex align="center" gap={1}>
             <GiNetworkBars size={20} color={getColor(latency)} />
-            <Box ml={1}>{latency}ms</Box>
+            <Box>{latency}ms</Box>
           </Flex>
         )}
+
         <Button
           bg="transparent"
           h={5}
           px={0}
-          disabled={disableCheckNet}
+          disabled={disableCheckNet || rotate}
           onClick={() => {
             setDisableCheckNet(true);
-            setTimeout(() => {
-              setDisableCheckNet(false);
-            }, 2000);
-
+            setTimeout(() => setDisableCheckNet(false), 2000);
             getLatency();
           }}
-          isDisabled={rotate}
         >
           <Text fontSize={18} fontWeight="normal" color="#3fdb1d" ml={2}>
             检测
           </Text>
-          <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
+          <Box animation={rotate ? `${spin} 1s linear infinite` : undefined}>
             <TbReload size={18} />
           </Box>
         </Button>
       </Flex>
 
-      {roomStatus === "none" ? nonePage() : roomPage()}
+      {roomStatus === "none" ? <NonePage /> : <RoomPage />}
 
       <Box
         textAlign="center"
         position="fixed"
         left="12px"
         bottom="30vh"
-        onClick={() => {
-          router.push(`/sponsor`);
-        }}
+        onClick={() => router.push(`/sponsor`)}
         zIndex={100}
+        cursor="pointer"
       >
         <Box boxSize={{ base: "8", md: "10" }}>
           <PiCoffeeBold size="100%" />

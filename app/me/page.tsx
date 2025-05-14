@@ -36,6 +36,7 @@ import useCaptcha from "@/utils/GetCaptcha";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
 import { PiCoffeeBold } from "react-icons/pi";
+import SponsorAd from "@/components/docs/AD";
 
 const calculateDaysDifference = (
   release_days: number,
@@ -406,7 +407,9 @@ export default function UserProfilePage() {
   };
 
   return (
-    <Center>
+    <VStack>
+      <SponsorAd />
+
       <Modal isOpen={bindTELIsOpen} onClose={bindTELOnClose}>
         <ModalOverlay />
         <ModalContent bgColor="#274161" maxW="320px">
@@ -872,6 +875,21 @@ export default function UserProfilePage() {
                     </Button>
                   </Text>
                 </Flex>
+                <Box
+                  textAlign="center"
+                  position="fixed"
+                  left="12px"
+                  bottom="30vh"
+                  onClick={() => {
+                    router.push(`/sponsor`);
+                  }}
+                  zIndex={100}
+                >
+                  <Box boxSize={{ base: "8", md: "10" }}>
+                    <PiCoffeeBold size="100%" />
+                  </Box>
+                  <Text fontSize="sm">赞助</Text>
+                </Box>
               </VStack>
             ) : (
               <VStack spacing={3} mt={5} align="center">
@@ -917,8 +935,8 @@ export default function UserProfilePage() {
             </VStack>
           </VStack>
         ) : (
-          <VStack spacing={3} align="center">
-            <Heading size="md">你还没登陆呢</Heading>
+          <VStack spacing={3} align="center" mt={3}>
+            <Heading size="md">你还没登录呢</Heading>
 
             <Button
               variant="outline"
@@ -933,22 +951,6 @@ export default function UserProfilePage() {
           </VStack>
         )}
       </Box>
-
-      <Box
-        textAlign="center"
-        position="fixed"
-        left="12px"
-        bottom="30vh"
-        onClick={() => {
-          router.push(`/sponsor`);
-        }}
-        zIndex={100}
-      >
-        <Box boxSize={{ base: "8", md: "10" }}>
-          <PiCoffeeBold size="100%" />
-        </Box>
-        <Text fontSize="sm">赞助</Text>
-      </Box>
-    </Center>
+    </VStack>
   );
 }
