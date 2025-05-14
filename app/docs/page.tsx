@@ -198,8 +198,8 @@ const DocumentPage = () => {
             <ScrollLinkM to="introduction">1. 喵服的联机原理</ScrollLinkM>
             <ScrollLinkM to="words">2. 联机常用词</ScrollLinkM>
             <ScrollLinkM to="download">3. WG下载和隧道导入</ScrollLinkM>
-            <ScrollLinkM to="room">4. 联机房间</ScrollLinkM>
-            <ScrollLinkM to="games">5. 具体游戏联机教程</ScrollLinkM>
+            <ScrollLinkM to="room">4. 联机房间说明</ScrollLinkM>
+            <ScrollLinkM to="games">5. 具体游戏联机教程(很重要)</ScrollLinkM>
             <ScrollLinkM to="issues">6. 常见问题</ScrollLinkM>
           </VStack>
         </Box>
@@ -798,7 +798,7 @@ const DocumentPage = () => {
 
         <Box id="room">
           <Heading size="md" pb={2} color="#00ff17">
-            4. 联机房间
+            4. 联机房间说明
           </Heading>
           <Text>联机房间页面功能介绍看图</Text>
           <Image
@@ -826,7 +826,7 @@ const DocumentPage = () => {
 
         <Box id="games">
           <Heading size="md" pb={2} color="#00ff17">
-            5. 具体游戏联机教程
+            5. 具体游戏联机教程(很重要)
           </Heading>
           <Text>
             &emsp;&emsp;
