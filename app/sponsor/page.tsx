@@ -83,58 +83,18 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 210,
   },
   {
-    uid: 1336,
-    username: "柜人多望事",
-    sponsorship: 206,
-  },
-  {
     uid: 174,
     username: "门屠",
     sponsorship: 206,
   },
   {
-    uid: 7026,
-    username: "用户9650",
-    sponsorship: 200,
-  },
-  {
-    uid: 557,
-    username: "Chidori子不语",
-    sponsorship: 200,
-  },
-  {
-    uid: 175,
-    username: "咕言咕语",
-    sponsorship: 200,
+    uid: 1336,
+    username: "柜人多望事",
+    sponsorship: 206,
   },
   {
     uid: 6984,
     username: "瑶某人",
-    sponsorship: 200,
-  },
-  {
-    uid: 406,
-    username: "落羽之地",
-    sponsorship: 200,
-  },
-  {
-    uid: 1337,
-    username: "水中巴黎",
-    sponsorship: 200,
-  },
-  {
-    uid: 6977,
-    username: "zzZZZZ",
-    sponsorship: 200,
-  },
-  {
-    uid: 779,
-    username: "云歌",
-    sponsorship: 200,
-  },
-  {
-    uid: 113,
-    username: "胡子大叔",
     sponsorship: 200,
   },
   {
@@ -143,8 +103,13 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 200,
   },
   {
-    uid: 1335,
-    username: "伊邪那岐小神",
+    uid: 1337,
+    username: "水中巴黎",
+    sponsorship: 200,
+  },
+  {
+    uid: 406,
+    username: "落羽之地",
     sponsorship: 200,
   },
   {
@@ -153,14 +118,44 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 200,
   },
   {
+    uid: 1335,
+    username: "伊邪那岐小神",
+    sponsorship: 200,
+  },
+  {
+    uid: 175,
+    username: "咕言咕语",
+    sponsorship: 200,
+  },
+  {
+    uid: 557,
+    username: "Chidori子不语",
+    sponsorship: 200,
+  },
+  {
+    uid: 779,
+    username: "云歌",
+    sponsorship: 200,
+  },
+  {
+    uid: 7026,
+    username: "用户9650",
+    sponsorship: 200,
+  },
+  {
+    uid: 6977,
+    username: "zzZZZZ",
+    sponsorship: 200,
+  },
+  {
+    uid: 113,
+    username: "胡子大叔",
+    sponsorship: 200,
+  },
+  {
     uid: 164,
     username: "王有胜",
     sponsorship: 162,
-  },
-  {
-    uid: 7162,
-    username: "用户2789",
-    sponsorship: 150,
   },
   {
     uid: 101,
@@ -168,9 +163,9 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 150,
   },
   {
-    uid: 62,
-    username: "Hannibal",
-    sponsorship: 130,
+    uid: 7162,
+    username: "用户2789",
+    sponsorship: 150,
   },
   {
     uid: 38,
@@ -178,13 +173,18 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 130,
   },
   {
-    uid: 7110,
-    username: "用户2124",
+    uid: 62,
+    username: "Hannibal",
     sponsorship: 130,
   },
   {
     uid: 6943,
     username: "失约",
+    sponsorship: 130,
+  },
+  {
+    uid: 7110,
+    username: "2124637990",
     sponsorship: 130,
   },
   {
@@ -208,8 +208,13 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 105,
   },
   {
-    uid: 7115,
-    username: "Mean机器",
+    uid: 2324,
+    username: "忧蓝的月亮",
+    sponsorship: 104,
+  },
+  {
+    uid: 112,
+    username: "ミ隱世く",
     sponsorship: 100,
   },
   {
@@ -338,11 +343,6 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 100,
   },
   {
-    uid: 112,
-    username: "ミ隱世く",
-    sponsorship: 100,
-  },
-  {
     uid: 142,
     username: "蚊子",
     sponsorship: 100,
@@ -370,6 +370,11 @@ const sponsorList: SponsorItem[] = [
   {
     uid: 6994,
     username: "用户6090",
+    sponsorship: 100,
+  },
+  {
+    uid: 7115,
+    username: "Mean机器",
     sponsorship: 100,
   },
   {
@@ -428,38 +433,8 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 60,
   },
   {
-    uid: 15771,
-    username: "wowaka",
-    sponsorship: 50,
-  },
-  {
-    uid: 6962,
-    username: "MuMu",
-    sponsorship: 50,
-  },
-  {
-    uid: 7074,
-    username: "haha",
-    sponsorship: 50,
-  },
-  {
-    uid: 7137,
-    username: "小幽",
-    sponsorship: 50,
-  },
-  {
-    uid: 7181,
-    username: "拓尔米基始",
-    sponsorship: 50,
-  },
-  {
-    uid: 7149,
-    username: "Rainbow",
-    sponsorship: 50,
-  },
-  {
-    uid: 8,
-    username: "忆梦",
+    uid: 122,
+    username: "青空",
     sponsorship: 50,
   },
   {
@@ -468,13 +443,18 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 50,
   },
   {
+    uid: 85,
+    username: "小肥羊",
+    sponsorship: 50,
+  },
+  {
     uid: 7122,
     username: "八嘎呀路",
     sponsorship: 50,
   },
   {
-    uid: 122,
-    username: "青空",
+    uid: 8,
+    username: "忆梦",
     sponsorship: 50,
   },
   {
@@ -483,8 +463,8 @@ const sponsorList: SponsorItem[] = [
     sponsorship: 50,
   },
   {
-    uid: 85,
-    username: "小肥羊",
+    uid: 15771,
+    username: "wowaka",
     sponsorship: 50,
   },
   {
@@ -495,6 +475,31 @@ const sponsorList: SponsorItem[] = [
   {
     uid: 335,
     username: "夜",
+    sponsorship: 50,
+  },
+  {
+    uid: 7149,
+    username: "Rainbow",
+    sponsorship: 50,
+  },
+  {
+    uid: 7137,
+    username: "小幽",
+    sponsorship: 50,
+  },
+  {
+    uid: 6962,
+    username: "MuMu",
+    sponsorship: 50,
+  },
+  {
+    uid: 7181,
+    username: "拓尔米基始",
+    sponsorship: 50,
+  },
+  {
+    uid: 7074,
+    username: "haha",
     sponsorship: 50,
   },
 ];
