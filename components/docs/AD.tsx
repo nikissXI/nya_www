@@ -40,7 +40,6 @@ const SponsorAd = () => {
               rounded="md"
               shadow="sm"
               bg={boxBg}
-              p={2}
             />
           </Box>
           <Stack
