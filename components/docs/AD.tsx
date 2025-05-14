@@ -12,19 +12,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-type SponsorAdProps = {
-  sponsorName?: string;
-  discountText?: string;
-  offerLink?: string;
-  logoSrc?: string;
-};
-
-const SponsorAd: React.FC<SponsorAdProps> = ({
-  sponsorName = "雨云",
-  discountText = "新人注册享首月5折优惠",
-  offerLink = "https://www.rainyun.com/Njg2ODY1_",
-  logoSrc = "https://app.rainyun.com/img/icons/apple-touch-icon-152x152.png",
-}) => {
+const SponsorAd = () => {
   const bg = useColorModeValue("gray.50", "gray.700");
   const boxBg = useColorModeValue("white", "gray.800");
   const accentColor = useColorModeValue("blue.500", "blue.300");
@@ -45,9 +33,9 @@ const SponsorAd: React.FC<SponsorAdProps> = ({
         <Flex align="center" direction="row" gap={4}>
           <Box flexShrink={0}>
             <Image
-              src={logoSrc}
-              alt={`${sponsorName} Logo`}
-              boxSize={{ base: "60px", md: "80px" }}
+              src="/images/yuyun.png"
+              alt="Logo"
+              boxSize="80px"
               objectFit="contain"
               rounded="md"
               shadow="sm"
@@ -58,29 +46,29 @@ const SponsorAd: React.FC<SponsorAdProps> = ({
           <Stack
             flex="1"
             spacing={1}
-            textAlign={{ base: "center", md: "left" }}
+            textAlign="center"
           >
-            <Heading size="md" color={accentColor} letterSpacing="wide">
-              赞助商 · {sponsorName}
+            <Heading size="sm" color={accentColor} letterSpacing="wide">
+              喵服赞助商 · 雨云
             </Heading>
             <Text
               fontSize="sm"
               color={useColorModeValue("gray.700", "gray.300")}
             >
-              {discountText}
+              新人注册享首月5折优惠
             </Text>
             <Link
-              href={offerLink}
+              href="https://www.rainyun.com/Njg2ODY1_"
               isExternal
               _hover={{ textDecoration: "none" }}
             >
               <Button
                 colorScheme="blue"
                 size="sm"
-                w={{ base: "full", md: "auto" }}
-                aria-label={`访问${sponsorName}官网`}
+                w="full"
+                aria-label={`访问雨云官网`}
               >
-                立即注册
+                我要买服务器！
               </Button>
             </Link>
           </Stack>
