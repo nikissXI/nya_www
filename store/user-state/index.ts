@@ -449,7 +449,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           if (error instanceof Error) {
             if (error.message === "Failed to fetch") {
               openToast({
-                content: "换个浏览器再试试，还不行找服主",
+                content: "未知错误A",
                 status: "error",
               });
             } else {
@@ -460,7 +460,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             }
           } else {
             openToast({
-              content: "换个浏览器再试试，还不行找服主",
+              content: "未知错误B",
               status: "error",
             });
           }

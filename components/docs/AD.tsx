@@ -18,7 +18,7 @@ const SponsorAd = () => {
   const accentColor = useColorModeValue("blue.500", "blue.300");
 
   return (
-    <VStack spacing={1} align="center" mb={3}>
+    <VStack spacing={1} align="center">
       <Box
         bg={bg}
         p={2}

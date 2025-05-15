@@ -42,6 +42,7 @@ const RelateGroupList = () => {
               </Center>
             )
         )}
+        <Center my={1}>综合服务群 - 1047464328</Center>
       </Flex>
     </Box>
   );
