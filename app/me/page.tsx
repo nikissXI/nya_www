@@ -37,6 +37,7 @@ import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
 import { PiCoffeeBold } from "react-icons/pi";
 import SponsorAd from "@/components/docs/AD";
+import SponsorTag from "@/components/universal/SponsorTag";
 
 const calculateDaysDifference = (
   release_days: number,
@@ -834,6 +835,7 @@ export default function UserProfilePage() {
                       赞助:
                     </Text>
                     <Text ml={3}>{userInfo.sponsorship}元</Text>
+                    <SponsorTag amount={userInfo.sponsorship} />
                   </Flex>
                 </>
               )}
