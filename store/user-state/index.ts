@@ -34,6 +34,7 @@ interface Member {
   wgnum: number;
   ip: string;
   status: "在线" | "离线";
+  sponsorship: number;
 }
 interface RoomInfo {
   user_wgnum: number;

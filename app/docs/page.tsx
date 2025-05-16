@@ -204,7 +204,9 @@ const DocumentPage = () => {
           </VStack>
         </Box>
 
-        <HighLight>把使用文档7个部分全部看完再去问问题！那些不看完文档就问问题的臭傻逼滚远点！不想看文档就别用，别来恶心我！</HighLight>
+        <HighLight>把使用文档7个部分全部看完再去问问题！</HighLight>
+        <HighLight>把使用文档7个部分全部看完再去问问题！</HighLight>
+        <HighLight>把使用文档7个部分全部看完再去问问题！</HighLight>
 
         <Divider />
 
@@ -298,6 +300,8 @@ const DocumentPage = () => {
           <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
             <Text pt={2} fontWeight="bolder" ml="1rem">
               选择你要安装WG的系统类型
+              <br />
+              按步骤操作，别忽略任何内容
             </Text>
             <TabList
               mt={1}
@@ -523,7 +527,9 @@ const DocumentPage = () => {
 
                   <Text>
                     3.
-                    打开WG，点右上角加号，选“导入配置或压缩包”，在最近项目里选刚下载的隧道文件，完成隧道导入。<br/>系统bug：如果最近项目里没有文件就到下载列表里点隧道文件，然后点左下角发送到WG。
+                    打开WG，点右上角加号，选“导入配置或压缩包”，在最近项目里选刚下载的隧道文件，完成隧道导入。
+                    <br />
+                    系统bug：如果最近项目里没有文件就到下载列表里点隧道文件，然后点左下角发送到WG。
                   </Text>
 
                   <Box>
@@ -587,7 +593,7 @@ const DocumentPage = () => {
                 </Box>
 
                 <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
-                  <Text pt={2} fontWeight="bolder" fontSize="sm">
+                  <Text pt={2} fontWeight="bolder">
                     2. WG客户端有msi和exe两种安装包，二选一，
                     <HighLight>优先选择msi</HighLight>
                     ，除非你电脑无法安装msi或软件无法正常工作。

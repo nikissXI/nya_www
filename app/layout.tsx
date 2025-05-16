@@ -43,8 +43,6 @@ export default function RootLayout({
             backgroundImage="url('/images/head_bg.png')"
             backgroundRepeat="repeat-x"
             backgroundSize="auto"
-            // 可按需开启响应式显示
-            // display={{ base: "none", md: "block" }}
           />
           <Frame>{children}</Frame>
         </ChakraProvider>

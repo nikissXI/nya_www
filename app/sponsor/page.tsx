@@ -504,9 +504,9 @@ const sponsorList: SponsorItem[] = [
   },
 ];
 
-const maskNumber = (number: string): string => {
-  return number.replace(/.(?=.{4})/g, "*");
-};
+// const maskNumber = (number: string): string => {
+//   return number.replace(/.(?=.{4})/g, "*");
+// };
 
 const Page = () => {
   return (
@@ -552,7 +552,9 @@ const Page = () => {
         </TableContainer>
 
         <Text textAlign="left">
-          喵服由服主一人纯公益运营，赞助将帮助喵服持续提供联机服务。付款时可备注您的喵服账号UID（不是编号别搞错了），服主会记录赞助金额，金额将可以在我的信息界面查看。
+          喵服由服主一人纯公益运营，赞助将帮助喵服持续提供联机服务。服主QQ 1299577815
+          <br />
+          如果在付款时备注您的喵服账号UID（不是编号别搞错了，在我的信息页面查看），赞助金额可被系统记录并获得赞助者铭牌。
         </Text>
 
         <SimpleGrid columns={2} spacing={1}>

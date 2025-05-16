@@ -71,7 +71,7 @@ export default function Page() {
           }
         }}
       >
-        &gt;&gt; 开始使用 &lt;&lt;
+        &gt;&gt; 开始使用喵服 &lt;&lt;
       </Button>
     </Flex>
   );

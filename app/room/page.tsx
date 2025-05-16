@@ -36,6 +36,7 @@ import { PiCoffeeBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
 import SponsorAd from "@/components/docs/AD";
+import SponsorTag from "@/components/universal/SponsorTag";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -332,46 +333,7 @@ export default function Page() {
     }
   };
 
-  // 没登录就让去登录
-  if (!logined) {
-    return (
-      <VStack spacing={3} align="center">
-        <SponsorAd />
-
-        <Heading size="md">你还没登录呢</Heading>
-
-        <Button
-          variant="outline"
-          rounded={10}
-          onClick={setShowLoginModal}
-          border={0}
-        >
-          点击登录
-        </Button>
-
-        <NoticeText />
-      </VStack>
-    );
-  }
-
-  // 没编号就去获取
-  if (!userInfo?.wg_data) {
-    return (
-      <Center my={10}>
-        <VStack spacing={3} mt={5} align="center">
-          <Heading size="md" color="#ffa629">
-            你还没联机编号呢
-          </Heading>
-
-          <Button rounded={5} onClick={getWgnum} bgColor="#007bc0" size="sm">
-            点击获取编号
-          </Button>
-        </VStack>
-      </Center>
-    );
-  }
-
-  function nonePage() {
+  function standbyPage() {
     return (
       <Box textAlign="center">
         <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
@@ -441,7 +403,7 @@ export default function Page() {
     );
   }
 
-  function roomPage() {
+  function joinedPage() {
     return (
       <Box textAlign="center">
         <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
@@ -517,21 +479,20 @@ export default function Page() {
               w="300px"
               key={item.ip}
               bg="rgb(75 127 187 / 38%)"
-              p={2}
+              p={1}
               borderRadius={12}
+              borderColor={
+                item.wgnum === userInfo?.wg_data?.wgnum ? "#6db4ff" : "transparent"
+              }
+              borderWidth={3}
             >
               <Flex>
-                <Text
-                  fontWeight="bold"
-                  fontSize="1.1rem"
-                  ml={2}
-                  color={
-                    item.wgnum === userInfo?.wg_data?.wgnum
-                      ? "#ffd012"
-                      : "white"
-                  }
-                >
+                <Text fontWeight="bold" fontSize="1.1rem" ml={2} color="white">
                   {item.username}
+
+                  {item.sponsorship > 0 && (
+                    <SponsorTag amount={item.sponsorship} />
+                  )}
                 </Text>
 
                 <Tag
@@ -637,90 +598,117 @@ export default function Page() {
   }
 
   return (
-    <VStack alignItems="center">
+    <VStack spacing={3} alignItems="center">
       <SponsorAd />
 
-      <Button
-        variant="link"
-        bg="transparent"
-        size="lg"
-        onClick={() => {
-          router.push(`/docs`);
-        }}
-        color={
-          onlineStatus === "在线"
-            ? "#a8d1ff"
-            : tutorialColor
-            ? "#ff0000"
-            : "white"
-        }
-      >
-        点我阅读使用文档
-      </Button>
+      {!logined ? (
+        <>
+          <Heading size="md">你还没登录呢</Heading>
+          <Button
+            variant="outline"
+            rounded={10}
+            onClick={setShowLoginModal}
+            border={0}
+          >
+            点击登录
+          </Button>
+          <NoticeText />
+        </>
+      ) : !userInfo?.wg_data ? (
+        <>
+          <Heading size="md" color="#ffa629">
+            你还没联机编号呢
+          </Heading>
 
-      <Flex align="center">
-        {roomStatus !== "none" && (
-          <Text fontSize={18} fontWeight="bold" mr={3}>
-            房间号 {roomData?.hoster_wgnum}
-          </Text>
-        )}
+          <Button rounded={5} onClick={getWgnum} bgColor="#007bc0" size="sm">
+            点击获取编号
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            variant="link"
+            bg="transparent"
+            size="lg"
+            onClick={() => {
+              router.push(`/docs`);
+            }}
+            color={
+              onlineStatus === "在线"
+                ? "#a8d1ff"
+                : tutorialColor
+                ? "#ff0000"
+                : "white"
+            }
+          >
+            不会用就点我看使用文档
+          </Button>
 
-        <Text
-          fontSize={18}
-          p={0}
-          mr={1}
-          fontWeight="bold"
-          color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
-        >
-          {onlineStatus}
-        </Text>
-        {onlineStatus === "在线" && latency && (
           <Flex align="center">
-            <GiNetworkBars size={20} color={getColor(latency)} />
-            <Box ml={1}>{latency}ms</Box>
+            {roomStatus !== "none" && (
+              <Text fontSize={18} fontWeight="bold" mr={3}>
+                房间号 {roomData?.hoster_wgnum}
+              </Text>
+            )}
+
+            <Text
+              fontSize={18}
+              p={0}
+              mr={1}
+              fontWeight="bold"
+              color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
+            >
+              {onlineStatus}
+            </Text>
+            {onlineStatus === "在线" && latency && (
+              <Flex align="center">
+                <GiNetworkBars size={20} color={getColor(latency)} />
+                <Box ml={1}>{latency}ms</Box>
+              </Flex>
+            )}
+            <Button
+              bg="transparent"
+              h={5}
+              px={0}
+              disabled={disableCheckNet}
+              onClick={() => {
+                setDisableCheckNet(true);
+                setTimeout(() => {
+                  setDisableCheckNet(false);
+                }, 2000);
+
+                getLatency();
+              }}
+              isDisabled={rotate}
+            >
+              <Text fontSize={18} fontWeight="normal" color="#3fdb1d" ml={2}>
+                检测
+              </Text>
+              <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
+                <TbReload size={18} />
+              </Box>
+            </Button>
           </Flex>
-        )}
-        <Button
-          bg="transparent"
-          h={5}
-          px={0}
-          disabled={disableCheckNet}
-          onClick={() => {
-            setDisableCheckNet(true);
-            setTimeout(() => {
-              setDisableCheckNet(false);
-            }, 2000);
 
-            getLatency();
-          }}
-          isDisabled={rotate}
-        >
-          <Text fontSize={18} fontWeight="normal" color="#3fdb1d" ml={2}>
-            检测
-          </Text>
-          <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
-            <TbReload size={18} />
+          {roomStatus === "none" ? standbyPage() : joinedPage()}
+
+          <Box
+            textAlign="center"
+            position="fixed"
+            left="12px"
+            bottom="30vh"
+            onClick={() => {
+              router.push(`/sponsor`);
+            }}
+            zIndex={100}
+          >
+            <Box boxSize={{ base: "8", md: "10" }}>
+              <PiCoffeeBold size="100%" />
+            </Box>
+            <Text fontSize="sm">赞助</Text>
           </Box>
-        </Button>
-      </Flex>
-
-      {roomStatus === "none" ? nonePage() : roomPage()}
-
-      <Box
-        textAlign="center"
-        position="fixed"
-        left="12px"
-        bottom="30vh"
-        onClick={() => {
-          router.push(`/sponsor`);
-        }}
-        zIndex={100}
-      >
-        <Box boxSize={{ base: "8", md: "10" }}>
-          <PiCoffeeBold size="100%" />
-        </Box>
-        <Text fontSize="sm">赞助</Text>
-      </Box>
+        </>
+      )}
     </VStack>
   );
 }

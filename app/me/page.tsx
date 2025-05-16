@@ -661,7 +661,22 @@ export default function UserProfilePage() {
       </Modal>
 
       <Box>
-        {userInfo ? (
+        {!userInfo ? (
+          <VStack spacing={3} align="center">
+            <Heading size="md">你还没登录呢</Heading>
+
+            <Button
+              variant="outline"
+              rounded={10}
+              onClick={setShowLoginModal}
+              border={0}
+            >
+              点击登录
+            </Button>
+
+            <NoticeText />
+          </VStack>
+        ) : (
           <VStack spacing={1} align="center">
             <VStack spacing={1} align="stretch" w="100%">
               <Heading mb={1} size="md" textAlign="center">
@@ -811,7 +826,7 @@ export default function UserProfilePage() {
                 </Flex>
               </Flex>
 
-              {userInfo.sponsorship ? (
+              {userInfo.sponsorship && (
                 <>
                   <Divider />
                   <Flex>
@@ -821,7 +836,7 @@ export default function UserProfilePage() {
                     <Text ml={3}>{userInfo.sponsorship}元</Text>
                   </Flex>
                 </>
-              ) : null}
+              )}
             </VStack>
 
             {userInfo.wg_data ? (
@@ -933,21 +948,6 @@ export default function UserProfilePage() {
                 退出登录
               </Button>
             </VStack>
-          </VStack>
-        ) : (
-          <VStack spacing={3} align="center" mt={3}>
-            <Heading size="md">你还没登录呢</Heading>
-
-            <Button
-              variant="outline"
-              rounded={10}
-              onClick={setShowLoginModal}
-              border={0}
-            >
-              点击登录
-            </Button>
-
-            <NoticeText />
           </VStack>
         )}
       </Box>
