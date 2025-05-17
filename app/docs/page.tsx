@@ -224,7 +224,7 @@ const DocumentPage = () => {
             </HighLight>
           </Text>
           <Text>
-            &emsp;&emsp;如果认真阅读本文档后，仍有使用问题，联系服主QQ：1299577815。
+            &emsp;&emsp;如果认真阅读本文档后，仍不会使用，可加QQ交流群寻求帮助。也可以赞助10元找服主一对一指导，QQ1299577815，免费的联机服务不想免费一个个教，累人。
           </Text>
         </Box>
 
@@ -513,7 +513,7 @@ const DocumentPage = () => {
                     </Text>
                     <Collapse in={showIOSId}>
                       <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ：1299577815
+                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ 1299577815
                       </Text>
                     </Collapse>
                     <Image
@@ -775,7 +775,7 @@ const DocumentPage = () => {
                     </Text>
                     <Collapse in={showIOSId}>
                       <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ：1299577815
+                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ 1299577815
                       </Text>
                     </Collapse>
                     <Image

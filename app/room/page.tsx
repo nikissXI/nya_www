@@ -692,7 +692,7 @@ export default function Page() {
 
           {roomStatus === "none" ? standbyPage() : joinedPage()}
 
-          <Box
+          {/* <Box
             textAlign="center"
             position="fixed"
             left="12px"
@@ -706,7 +706,7 @@ export default function Page() {
               <PiCoffeeBold size="100%" />
             </Box>
             <Text fontSize="sm">赞助</Text>
-          </Box>
+          </Box> */}
         </>
       )}
     </VStack>

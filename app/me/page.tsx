@@ -892,7 +892,7 @@ export default function UserProfilePage() {
                     </Button>
                   </Text>
                 </Flex>
-                <Box
+                {/* <Box
                   textAlign="center"
                   position="fixed"
                   left="12px"
@@ -906,7 +906,7 @@ export default function UserProfilePage() {
                     <PiCoffeeBold size="100%" />
                   </Box>
                   <Text fontSize="sm">赞助</Text>
-                </Box>
+                </Box> */}
               </VStack>
             ) : (
               <VStack spacing={3} mt={5} align="center">
