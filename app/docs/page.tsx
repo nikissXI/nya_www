@@ -646,7 +646,7 @@ const DocumentPage = () => {
                         w="100%"
                         maxW="500px"
                       />
-                      <Text>默认没有桌面快捷方式，要去系统开始菜单里找。</Text>
+                      <Text>默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建。</Text>
                       <Text>
                         <HighLight>点连接出现报错？</HighLight>
 
