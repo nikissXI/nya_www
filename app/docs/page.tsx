@@ -458,6 +458,7 @@ const DocumentPage = () => {
                     <HighLight>
                       使用Safari浏览器访问网站再下载，其他浏览器可能无法正常下载。
                     </HighLight>
+                    下载就行，先不用管文件下哪去。
                     <br />
                     <Button
                       ml={3}
@@ -513,7 +514,8 @@ const DocumentPage = () => {
                     </Text>
                     <Collapse in={showIOSId}>
                       <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ 1299577815
+                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ
+                        1299577815
                       </Text>
                     </Collapse>
                     <Image
@@ -543,7 +545,9 @@ const DocumentPage = () => {
                       />
                       <Text>连上喵服。</Text>
                     </Flex>
-                    <Text>出现DBS解析失败是因为没给WG访问网络的权限。</Text>
+                    <Text>
+                      出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
+                    </Text>
                   </Box>
                 </VStack>
               </TabPanel>
@@ -646,7 +650,9 @@ const DocumentPage = () => {
                         w="100%"
                         maxW="500px"
                       />
-                      <Text>默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建。</Text>
+                      <Text>
+                        默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建。
+                      </Text>
                       <Text>
                         <HighLight>点连接出现报错？</HighLight>
 
@@ -775,7 +781,8 @@ const DocumentPage = () => {
                     </Text>
                     <Collapse in={showIOSId}>
                       <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ 1299577815
+                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ
+                        1299577815
                       </Text>
                     </Collapse>
                     <Image
