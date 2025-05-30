@@ -297,6 +297,10 @@ export default function Page() {
           </RadioGroup>
         </Flex>
 
+        <Text display={verifyType === "email" ? "none" : "flex"}>
+          建议使用电子邮箱，忘记密码无法通过手机号找回
+        </Text>
+
         <Input
           type="text"
           value={inputAccount}

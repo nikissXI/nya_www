@@ -196,7 +196,7 @@ export default function Page() {
   return (
     <Center>
       <VStack spacing={3} align="stretch" maxW="300px" onKeyDown={handleEnter}>
-        <Flex>
+        {/* <Flex>
           重置方式
           <RadioGroup
             ml={3}
@@ -212,7 +212,8 @@ export default function Page() {
               <Radio value="tel">手机</Radio>
             </Stack>
           </RadioGroup>
-        </Flex>
+        </Flex> */}
+        <Text>通过电子邮箱找回密码（不支持手机找回）</Text>
 
         <Input
           type="text"
