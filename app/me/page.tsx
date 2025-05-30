@@ -227,7 +227,7 @@ export default function UserProfilePage() {
   const handleBindTEL = async () => {
     const req_data = {
       tel: inputAccount,
-      verify_code: inputVerifyCode,
+      // verify_code: inputVerifyCode,
       uuid: uuid,
       captcha_code: inputCaptcha,
     };
@@ -429,7 +429,7 @@ export default function UserProfilePage() {
                 placeholder="请输入手机号"
               />
 
-              <Flex>
+              {/* <Flex>
                 <Input
                   type="number"
                   value={inputVerifyCode}
@@ -447,7 +447,7 @@ export default function UserProfilePage() {
                 >
                   {sendVerifyButtonText}
                 </Button>
-              </Flex>
+              </Flex> */}
 
               <Flex>
                 <Input
