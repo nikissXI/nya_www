@@ -514,8 +514,7 @@ const DocumentPage = () => {
                     </Text>
                     <Collapse in={showIOSId}>
                       <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ
-                        1299577815
+                        &emsp;如果没有海外账号自己去淘宝之类的搜“ios游戏美版”自己搞一个
                       </Text>
                     </Collapse>
                     <Image
@@ -783,8 +782,7 @@ const DocumentPage = () => {
                     </Text>
                     <Collapse in={showIOSId}>
                       <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号或不知道这是什么，可以付2元找服主借QQ
-                        1299577815
+                        &emsp;如果没有海外账号自己去淘宝之类的搜“ios游戏美版”自己搞一个
                       </Text>
                     </Collapse>
                     <Image
