@@ -74,7 +74,7 @@ const SponsorAd: React.FC = () => {
               color={accentColor}
               letterSpacing="wide"
             >
-              喵服赞助商 · 雨云
+              喵服合作商 · 雨云
             </Heading>
 
             <Box
@@ -116,7 +116,7 @@ const SponsorAd: React.FC = () => {
         textAlign="center"
         mx={5}
       >
-        运营喵服每个月都需要费用，觉得喵服好用可赞助支持下；如不会用赞助10元加服主一对一包教会
+        运营喵服每个月都需要费用，觉得喵服好用可赞助支持；赞助10元可加服主一对一教学
         <Link
           fontSize="sm"
           ml={1}
