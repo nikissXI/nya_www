@@ -128,7 +128,7 @@ export default function Page() {
     let intervalId: NodeJS.Timeout | undefined;
 
     if (onlineStatus === "离线") {
-      setDocButtonText("点我查看使用文档\n不看文档你用个毛");
+      setDocButtonText("点我查看使用文档\n不看文档当然离线");
 
       intervalId = setInterval(() => {
         setTutorialColor((prev) => !prev);
