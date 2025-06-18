@@ -116,7 +116,7 @@ const SponsorAd: React.FC = () => {
         textAlign="center"
         mx={5}
       >
-        运营喵服每个月都需要费用，觉得喵服好用可赞助支持；赞助10元可加服主一对一教学
+        服务器每个月都需要费用，觉得喵服好用请赞助支持；赞助10元可加服主一对一教学
         <Link
           fontSize="sm"
           ml={1}

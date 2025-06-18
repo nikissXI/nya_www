@@ -73,6 +73,7 @@ export default function Page() {
 
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
 
+  const [docButtonText, setDocButtonText] = useState("点我查看使用文档");
   const [inputRoomId, setInputRoomId] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
   const {
@@ -127,9 +128,13 @@ export default function Page() {
     let intervalId: NodeJS.Timeout | undefined;
 
     if (onlineStatus === "离线") {
+      setDocButtonText("点我查看使用文档\n不看文档你用个毛");
+
       intervalId = setInterval(() => {
         setTutorialColor((prev) => !prev);
       }, 300);
+    } else {
+      setDocButtonText("点我查看使用文档");
     }
 
     return () => {
@@ -620,21 +625,23 @@ export default function Page() {
       ) : (
         <>
           <Button
-            variant="link"
-            bg="transparent"
-            size="lg"
+            whiteSpace="pre-wrap"
+            // variant="link"
+            // bg="transparent"
+            bg="#2976bd"
+            size="md"
             onClick={() => {
               router.push(`/docs`);
             }}
             color={
               onlineStatus === "在线"
-                ? "#a8d1ff"
+                ? "white"
                 : tutorialColor
                 ? "#ff0000"
                 : "white"
             }
           >
-            不会用就点我看使用文档
+            {docButtonText}
           </Button>
 
           <Flex align="center">
@@ -682,9 +689,7 @@ export default function Page() {
               </Box>
             </Button>
           </Flex>
-
           {roomStatus === "none" ? standbyPage() : joinedPage()}
-
           {/* <Box
             textAlign="center"
             position="fixed"

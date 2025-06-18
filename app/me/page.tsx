@@ -731,39 +731,42 @@ export default function UserProfilePage() {
               </Flex>
 
               <Divider />
+              {userInfo.tel && (
+                <>
+                  <Flex>
+                    <Text w="50px" textAlign="right">
+                      手机:
+                    </Text>
+                    <Flex ml={3}>
+                      {userInfo.tel}
 
-              <Flex>
-                <Text w="50px" textAlign="right">
-                  手机:
-                </Text>
-                <Flex ml={3}>
-                  {userInfo.tel}
+                      <Button
+                        ml={1}
+                        color="#7dfffe"
+                        fontWeight="normal"
+                        variant="link"
+                        bgColor="transparent"
+                        onClick={async () => {
+                          // setCaptchaImage(await fetchCaptcha());
+                          // bindTELOnopen();
+                          // setInputAccount("");
+                          // setInputVerifyCode("");
+                          // setInputCaptcha("");
+                          // setSendVerifyButtonText("获取验证码");
+                          openToast({
+                            content: "功能停用，如有特殊需要请联系服主",
+                            status: "warning",
+                          });
+                        }}
+                      >
+                        换绑
+                      </Button>
+                    </Flex>
+                  </Flex>
 
-                  <Button
-                    ml={1}
-                    color="#7dfffe"
-                    fontWeight="normal"
-                    variant="link"
-                    bgColor="transparent"
-                    onClick={async () => {
-                      // setCaptchaImage(await fetchCaptcha());
-                      // bindTELOnopen();
-                      // setInputAccount("");
-                      // setInputVerifyCode("");
-                      // setInputCaptcha("");
-                      // setSendVerifyButtonText("获取验证码");
-                      openToast({
-                        content: "功能停用，如有特殊需要请联系服主",
-                        status: "warning",
-                      });
-                    }}
-                  >
-                    {userInfo.tel ? "换绑" : "点击绑定（非必要）"}
-                  </Button>
-                </Flex>
-              </Flex>
-
-              <Divider />
+                  <Divider />
+                </>
+              )}
 
               <Flex whiteSpace="nowrap">
                 <Text w="50px" textAlign="right">

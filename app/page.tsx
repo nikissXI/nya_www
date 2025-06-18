@@ -55,7 +55,7 @@ export default function Page() {
             多端互联
           </Center>
           <Text fontSize="sm">
-            支持安卓、苹果、Windows、Mac接入，若游戏支持可实现跨系统联机
+            支持所有手机、平板、电脑，若游戏支持可实现跨系统联机
           </Text>
         </Flex>
       </Flex>

@@ -98,7 +98,6 @@ const DocumentPage = () => {
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
-  const [showIOSId, setIOSId] = useState(false);
   const [showWinError, setWinError] = useState(false);
 
   const downloadConf = async () => {
@@ -198,7 +197,6 @@ const DocumentPage = () => {
       // 清理定时器
       return () => clearTimeout(timer);
     }
-
   }, []);
   //////////////////////
   //////////////////////
@@ -206,6 +204,8 @@ const DocumentPage = () => {
   return (
     <Box px={5}>
       <VStack spacing={5} align="stretch">
+        <HighLight fontSize="50px">把本文档全部看完再提问！</HighLight>
+
         <Box>
           <Heading size="md" pb={2} color="#00ff17">
             目录（点击可跳转）
@@ -221,10 +221,6 @@ const DocumentPage = () => {
           </VStack>
         </Box>
 
-        <HighLight>把使用文档7个部分全部看完再去问问题！</HighLight>
-        <HighLight>把使用文档7个部分全部看完再去问问题！</HighLight>
-        <HighLight>把使用文档7个部分全部看完再去问问题！</HighLight>
-
         <Divider />
 
         <Box id="preface">
@@ -234,14 +230,8 @@ const DocumentPage = () => {
 
           <Text>
             &emsp;&emsp;喵服是
-            <HighLight>免费</HighLight>
-            提供组网服务的服务器，既然使用别人的东西，那就花点耐心去学习。考虑到很多未曾接触过此类软件的用户，文档会尽量写的详细，字会有点多，
-            <HighLight>
-              用过有经验的几分钟学会，纯小白大概15分钟左右，认真阅读没难度！
-            </HighLight>
-          </Text>
-          <Text>
-            &emsp;&emsp;如果认真阅读本文档后，仍不会使用，可加QQ交流群寻求帮助。也可以赞助10元找服主一对一指导，QQ1299577815，免费的联机服务不想免费一个个教，累人。
+            <HighLight>免费纯公益</HighLight>
+            提供组网服务的服务器。如果看不懂使用文档或不会用，可尝试加QQ交流群寻求帮助，也可以赞助10元找服主一对一教学，QQ1299577815。
           </Text>
         </Box>
 
@@ -251,14 +241,12 @@ const DocumentPage = () => {
           </Heading>
 
           <Text>
-            &emsp;&emsp;喵服实际是一个WireGuard（简称WG）服务器，WG是个异地组网软件，用于构建虚拟局域网，
-            <HighLight>
-              可以简单理解为“连上同一个WiFi”，实现异地联机。
-            </HighLight>
+            &emsp;&emsp;喵服是个WireGuard（简称WG）服务器，WG是个异地组网软件，通过它
+            <HighLight>可近似实现“连上同一个WiFi”，实现异地联机。</HighLight>
           </Text>
           <Text>
             &emsp;&emsp;<HighLight>联机的玩家都要注册并连上喵服</HighLight>
-            ，安卓、苹果、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
+            ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
           </Text>
         </Box>
 
@@ -267,11 +255,7 @@ const DocumentPage = () => {
             2. 联机常用词
           </Heading>
           <Text>
-            &emsp;&emsp;眼熟一些常用的词，防止请教别人联机问题的时候，看不懂别人在问什么，也便于你学习本文档。如有其他希望补充的请联系服主。
-          </Text>
-          <Text>
-            <HighLight>连上喵服/在线</HighLight>
-            ：WG隧道打开，并且网页显示你是在线的。
+            &emsp;&emsp;眼熟一些常用的词，防止请教别人联机问题的时候，看不懂别人在问什么，也便于你学习本文档。
           </Text>
           <Text>
             <HighLight>主机</HighLight>
@@ -283,15 +267,7 @@ const DocumentPage = () => {
           </Text>
           <Text>
             <HighLight>隧道</HighLight>
-            ：连接喵服的WG配置文件，导入隧道名称正常应显示为当前账号绑定的IP地址。
-          </Text>
-          <Text>
-            <HighLight>IP</HighLight>
-            ：指喵服的联机IP，在我的信息界面可以查看，联机的时候都是使用这个IP。
-          </Text>
-          <Text>
-            <HighLight>联机房间</HighLight>
-            ：默认指喵服的联机房间，不是游戏里的。这里可以看到所有成员的联机IP。
+            ：连接喵服的WG配置文件，每个隧道对应一个联机ip。
           </Text>
           <Text>
             <HighLight>防火墙</HighLight>
@@ -467,11 +443,23 @@ const DocumentPage = () => {
               <TabPanel px={0} pb={1} pt={2}>
                 <VStack spacing={3} align="stretch">
                   <Box>
-                    1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
+                    1. 安装WG客户端，
+                    <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
+                    ，如果没有海外账号自己去淘宝之类的搜“ios游戏美版”搞一个，反正自己想办法
+                    <Image
+                      src="/images/wg/app_store.jpg"
+                      alt="app_store"
+                      borderRadius="md"
+                      w="100%"
+                      maxW="300px"
+                    />
+                  </Box>
+
+                  <Box>
+                    2. 下载隧道文件，两个通道下载的东西一样，二选一即可。
                     <HighLight>
                       使用Safari浏览器访问网站再下载，其他浏览器可能无法正常下载。
                     </HighLight>
-                    下载就行，先不用管文件下哪去。
                     <br />
                     <Button
                       ml={3}
@@ -521,39 +509,9 @@ const DocumentPage = () => {
                     </Button>
                   </Box>
 
-                  <Box>
-                    2. 安装WG客户端，
-                    <HighLight>AppStore要登陆海外账号才能搜到</HighLight>，
-                    <Text
-                      as="span"
-                      color="#7dfffe"
-                      onClick={() => {
-                        setIOSId(!showIOSId);
-                      }}
-                    >
-                      没有海外账号点我
-                    </Text>
-                    <Collapse in={showIOSId}>
-                      <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号自己去淘宝之类的搜“ios游戏美版”自己搞一个
-                      </Text>
-                    </Collapse>
-                    <Image
-                      src="/images/wg/app_store.jpg"
-                      alt="app_store"
-                      borderRadius="md"
-                      w="100%"
-                      maxW="300px"
-                    />
-                  </Box>
-
                   <Text>
-                    3.
-                    打开WG，点右上角加号，选“导入配置或压缩包”，在最近项目里选刚下载的隧道文件，完成隧道导入。
-                    <br />
-                    <HighLight>
-                      低概率事件（iOS的BUG）：如果点下载后，最近项目里没有隧道文件或点了下载没反应，就手动打开Safari下载列表，点隧道文件，然后点左下角发送到WG完成导入。
-                    </HighLight>
+                    3. 打开Safari的下载任务列表，点击文件{userInfo?.wg_data?.ip}
+                    .conf，然后点左下角发送到WG完成导入。
                   </Text>
 
                   <Box>
@@ -576,7 +534,10 @@ const DocumentPage = () => {
 
               <TabPanel px={0} pb={1} pt={2}>
                 <Box>
-                  1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
+                  1.
+                  下载隧道文件，两个通道下载的东西一样，二选一即可。下载的文件名为
+                  {userInfo?.wg_data?.ip}
+                  .conf
                   <br />
                   <Button
                     ml={3}
@@ -746,7 +707,7 @@ const DocumentPage = () => {
                         w="100%"
                         maxW="500px"
                       />
-                      <Text>如果连接还是报错那就找服主看看吧。</Text>
+                      <Text>如果连接还是报错那就找服主看看或别用了。</Text>
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -755,7 +716,23 @@ const DocumentPage = () => {
               <TabPanel px={0} pb={1} pt={2}>
                 <VStack spacing={3} align="stretch">
                   <Box>
-                    1. 下载隧道文件，两个通道下载的东西一样，二选一即可。
+                    1. 安装WG客户端，
+                    <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
+                    ，如果没有海外账号自己去淘宝之类的搜“ios游戏美版”搞一个，反正自己想办法
+                    <Image
+                      src="/images/wg/app_store_mac.jpg"
+                      alt="app_store_mac"
+                      borderRadius="md"
+                      w="100%"
+                      maxW="300px"
+                    />
+                  </Box>
+
+                  <Box>
+                    2.
+                    下载隧道文件，两个通道下载的东西一样，二选一即可。下载的文件名为
+                    {userInfo?.wg_data?.ip}
+                    .conf
                     <br />
                     <Button
                       ml={3}
@@ -806,31 +783,6 @@ const DocumentPage = () => {
                   </Box>
 
                   <Box>
-                    2. 安装WG客户端，
-                    <HighLight>AppStore要登陆海外账号才能搜到</HighLight>，
-                    <Text
-                      as="span"
-                      color="#7dfffe"
-                      onClick={() => {
-                        setIOSId(!showIOSId);
-                      }}
-                    >
-                      没有海外账号点我
-                    </Text>
-                    <Collapse in={showIOSId}>
-                      <Text as="span" fontSize="sm">
-                        &emsp;如果没有海外账号自己去淘宝之类的搜“ios游戏美版”自己搞一个
-                      </Text>
-                    </Collapse>
-                    <Image
-                      src="/images/wg/app_store_mac.jpg"
-                      alt="app_store_mac"
-                      borderRadius="md"
-                      w="100%"
-                      maxW="300px"
-                    />
-                  </Box>
-                  <Box>
                     <Text>3. 运行WG，跟着下图操作完成隧道导入</Text>
                     <Image
                       src="/images/wg/mac.jpg"
@@ -850,7 +802,9 @@ const DocumentPage = () => {
           <Heading size="md" pb={2} color="#00ff17">
             4. 联机房间说明
           </Heading>
-          <Text>联机房间页面功能介绍看图</Text>
+          <Text>
+            联机房间页面功能介绍看图；在一个联机房间里，谁都可以作为主机创建多人游戏，其他人则作为客机加入游戏
+          </Text>
           <Image
             src="/images/wg/room_introduction_1.jpg"
             alt="room_introduction_1"
@@ -869,9 +823,6 @@ const DocumentPage = () => {
             w="100%"
             maxW="500px"
           />
-          <Text>
-            &emsp;&emsp;在一个联机房间里，谁都可以作为主机创建多人游戏，其他人则作为客机加入游戏，房间内可以有多个主机，一个房间最多8个人。
-          </Text>
         </Box>
 
         <Box id="games">
