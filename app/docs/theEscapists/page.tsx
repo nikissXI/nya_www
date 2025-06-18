@@ -21,28 +21,20 @@ export default function AndroidPage0() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const { logined, setShowLoginModal } = useUserStateStore();
-  const [inputNum, setInputNum] = useState("");
+  const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");
 
-  const createHelper = async (hosterWgnum: string) => {
-    if (!hosterWgnum) {
+  const createHelper = async (hosterIp: string) => {
+    if (!hosterIp) {
       return;
     }
 
-    if (!isInteger(hosterWgnum)) {
-      openToast({ content: `请输入正确的编号`, status: "warning" });
-      return;
-    }
-
-    const resp = await fetch(
-      `${apiUrl}/escapistsHelper?hosterWgnum=${hosterWgnum}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      }
-    );
+    const resp = await fetch(`${apiUrl}/escapistsHelper?hosterIp=${hosterIp}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
 
     if (resp.ok) {
       const data = await resp.json();
@@ -94,7 +86,7 @@ export default function AndroidPage0() {
 
         <Heading size="md">方法一（网页操作）</Heading>
         <Text>
-          在下方填写要加入的玩家联机编号，如要搜索2号创建的多人游戏，就填“2”然后点提交
+          在下方填写要搜索加入的主机ip，如要搜索100.64.0.1房间，就填“搜索100.64.0.1”然后点提交
         </Text>
 
         <Flex>
@@ -102,17 +94,17 @@ export default function AndroidPage0() {
             <Flex>
               <Input
                 w="130px"
-                type="number"
-                value={inputNum}
+                type="text"
+                value={inputIp}
                 onChange={(e) => {
-                  setInputNum(e.target.value);
+                  setInputIp(e.target.value);
                 }}
-                placeholder="要加入的编号"
+                placeholder="要加入的ip"
               />
 
               <Button
                 onClick={() => {
-                  createHelper(inputNum);
+                  createHelper(inputIp);
                 }}
               >
                 提交

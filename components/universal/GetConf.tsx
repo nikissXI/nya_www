@@ -3,7 +3,7 @@
 import { openToast } from "./toast";
 import { getAuthToken } from "@/store/authKey";
 
-export const GetConfUrl = (wgnum: number) => {
+export const GetConfUrl = (ip: string) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL; // 从环境变量获取 API 地址
 
   fetch(`${apiUrl}/downloadConf`, {
@@ -16,7 +16,7 @@ export const GetConfUrl = (wgnum: number) => {
       if (!resp.ok) {
         throw new Error("Network resp was not ok");
       }
-      const fileName = `${wgnum}.conf`; // 默认文件名
+      const fileName = `${ip}.conf`; // 默认文件名
       return resp.blob().then((blob) => ({ blob, fileName })); // 返回 blob 和文件名
     })
     .then(({ blob, fileName }) => {

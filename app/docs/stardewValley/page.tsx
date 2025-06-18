@@ -11,16 +11,16 @@ export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const { logined, setShowLoginModal } = useUserStateStore();
-  const [inputNum, setInputNum] = useState("");
+  const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");
 
-  const createTask = async (hosterWgnum: string) => {
-    if (!hosterWgnum) {
+  const createTask = async (hosterIp: string) => {
+    if (!hosterIp) {
       return;
     }
 
     const resp = await fetch(
-      `${apiUrl}/stardewValleyRoomCheck?hosterWgnum=${hosterWgnum}`,
+      `${apiUrl}/stardewValleyRoomCheck?hosterIp=${hosterIp}`,
       {
         method: "GET",
         headers: {
@@ -79,8 +79,8 @@ export default function Page() {
         <Divider my={3} />
 
         <Text>
-          此处可以检测星露谷房间是否能被搜索，在输入框填写主机的联机编号。
-          如要检查12号创建的房间能否被搜索，就填12然后点查房。
+          此处可以检测星露谷房间是否能被搜索，在输入框填写农场主的ip。
+          如要检查100.64.0.1这个ip能否被搜索加入，就填100.64.0.1然后点查房。
           每个人都试试主持农场，谁的房间搜不到就是谁的问题。
         </Text>
 
@@ -89,17 +89,17 @@ export default function Page() {
             <Flex>
               <Input
                 w="200px"
-                type="number"
-                value={inputNum}
+                type="text"
+                value={inputIp}
                 onChange={(e) => {
-                  setInputNum(e.target.value);
+                  setInputIp(e.target.value);
                 }}
-                placeholder="主机的联机编号"
+                placeholder="农场主ip"
               />
 
               <Button
                 onClick={() => {
-                  createTask(inputNum);
+                  createTask(inputIp);
                   setShowText("搜索中请稍后。。。");
                 }}
               >

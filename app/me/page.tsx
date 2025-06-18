@@ -59,7 +59,7 @@ const calculateDaysDifference = (
 export default function UserProfilePage() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { uuid, getUserInfo, userInfo, logout, getWgnum, setShowLoginModal } =
+  const { uuid, getUserInfo, userInfo, logout, getIp, setShowLoginModal } =
     useUserStateStore();
 
   // 修改用户名
@@ -746,12 +746,16 @@ export default function UserProfilePage() {
                     variant="link"
                     bgColor="transparent"
                     onClick={async () => {
-                      setCaptchaImage(await fetchCaptcha());
-                      bindTELOnopen();
-                      setInputAccount("");
-                      setInputVerifyCode("");
-                      setInputCaptcha("");
-                      setSendVerifyButtonText("获取验证码");
+                      // setCaptchaImage(await fetchCaptcha());
+                      // bindTELOnopen();
+                      // setInputAccount("");
+                      // setInputVerifyCode("");
+                      // setInputCaptcha("");
+                      // setSendVerifyButtonText("获取验证码");
+                      openToast({
+                        content: "功能停用，如有特殊需要请联系服主",
+                        status: "warning",
+                      });
                     }}
                   >
                     {userInfo.tel ? "换绑" : "点击绑定（非必要）"}
@@ -844,23 +848,14 @@ export default function UserProfilePage() {
             {userInfo.wg_data ? (
               <VStack spacing={1} mt={5} align="stretch" w="260px">
                 <Heading mb={1} size="md" textAlign="center">
-                  联机信息
+                  隧道信息
                 </Heading>
-
-                <Flex>
-                  <Text w="80px" textAlign="right">
-                    联机编号:
-                  </Text>
-                  <Text ml={3}>{userInfo.wg_data.wgnum}</Text>
-                </Flex>
-
-                <Divider />
 
                 <Flex>
                   <Text w="80px" textAlign="right">
                     IP地址:
                   </Text>
-                  <Text ml={3}>{userInfo.wg_data.wg_ip}</Text>
+                  <Text ml={3}>{userInfo.wg_data.ip}</Text>
                 </Flex>
 
                 <Divider />
@@ -883,7 +878,7 @@ export default function UserProfilePage() {
                       onClick={() => {
                         openToast({
                           content:
-                            "在线就会刷新天数，如果到期被回收获取个新编号就行，免费",
+                            "在线就会刷新天数，如果到期被回收获取个新隧道就行，免费",
                           status: "info",
                         });
                       }}
@@ -892,35 +887,15 @@ export default function UserProfilePage() {
                     </Button>
                   </Text>
                 </Flex>
-                {/* <Box
-                  textAlign="center"
-                  position="fixed"
-                  left="12px"
-                  bottom="30vh"
-                  onClick={() => {
-                    router.push(`/sponsor`);
-                  }}
-                  zIndex={100}
-                >
-                  <Box boxSize={{ base: "8", md: "10" }}>
-                    <PiCoffeeBold size="100%" />
-                  </Box>
-                  <Text fontSize="sm">赞助</Text>
-                </Box> */}
               </VStack>
             ) : (
               <VStack spacing={3} mt={5} align="center">
                 <Heading size="md" color="#ffa629">
-                  你还没联机编号呢
+                  你还没获取隧道呢
                 </Heading>
 
-                <Button
-                  rounded={5}
-                  onClick={getWgnum}
-                  bgColor="#007bc0"
-                  size="sm"
-                >
-                  点击获取编号
+                <Button rounded={5} onClick={getIp} bgColor="#007bc0" size="sm">
+                  点击获取隧道
                 </Button>
               </VStack>
             )}

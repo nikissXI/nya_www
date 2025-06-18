@@ -11,7 +11,7 @@ import { useUserStateStore } from "@/store/user-state";
 import Footer from "../Navbar/Footer";
 import { LoginModal } from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
-import TunnelUpdateModal from "../docs/ReGetWgnumModal";
+import TunnelUpdateModal from "../docs/ReGetIpModal";
 import NeedSponsorModal from "../docs/SponsorModal";
 
 export default function Frame({

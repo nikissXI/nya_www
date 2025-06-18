@@ -173,7 +173,7 @@ const DocumentPage = () => {
         const gamesElement = document.getElementById("games");
         if (gamesElement) {
           window.scrollTo({
-            top: gamesElement.offsetTop - 100,
+            top: gamesElement.offsetTop - 150,
             behavior: "smooth",
           });
         }
@@ -182,6 +182,23 @@ const DocumentPage = () => {
       // 清理定时器
       return () => clearTimeout(timer);
     }
+
+    if (hash === "#download") {
+      // 设置一个延迟，确保页面加载完成后再执行滚动
+      const timer = setTimeout(() => {
+        const gamesElement = document.getElementById("download");
+        if (gamesElement) {
+          window.scrollTo({
+            top: gamesElement.offsetTop - 150,
+            behavior: "smooth",
+          });
+        }
+      }, 500);
+
+      // 清理定时器
+      return () => clearTimeout(timer);
+    }
+
   }, []);
   //////////////////////
   //////////////////////
@@ -265,20 +282,16 @@ const DocumentPage = () => {
             ：联机模式加入游戏的设备。
           </Text>
           <Text>
-            <HighLight>编号</HighLight>
-            ：指喵服的联机编号，在我的信息界面可以查看。
+            <HighLight>隧道</HighLight>
+            ：连接喵服的WG配置文件，导入隧道名称正常应显示为当前账号绑定的IP地址。
           </Text>
           <Text>
             <HighLight>IP</HighLight>
             ：指喵服的联机IP，在我的信息界面可以查看，联机的时候都是使用这个IP。
           </Text>
           <Text>
-            <HighLight>隧道</HighLight>
-            ：连接喵服的WG配置文件，隧道名称一般为联机编号。
-          </Text>
-          <Text>
             <HighLight>联机房间</HighLight>
-            ：默认指喵服的联机房间，不是游戏里的。
+            ：默认指喵服的联机房间，不是游戏里的。这里可以看到所有成员的联机IP。
           </Text>
           <Text>
             <HighLight>防火墙</HighLight>
@@ -292,9 +305,9 @@ const DocumentPage = () => {
           </Heading>
 
           <Text>
-            <HighLight>&emsp;&emsp;每个账号有对应联机编号和隧道</HighLight>
+            <HighLight>&emsp;&emsp;每个账号有对应联机ip和隧道</HighLight>
             ，你要导入的隧道名称为
-            {userInfo?.wg_data?.wgnum}，导入后留意隧道名称是否一致。
+            {userInfo?.wg_data?.ip}，导入后留意隧道名称是否一致。
           </Text>
 
           <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
@@ -466,7 +479,11 @@ const DocumentPage = () => {
                       onClick={() => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
-                          GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                          openToast({
+                            content: "开始下载",
+                            status: "success",
+                          });
+                          GetConfUrl(userInfo?.wg_data?.ip as string);
                         } else {
                           openToast({
                             content: "请在Safari中打开网站下载",
@@ -486,6 +503,10 @@ const DocumentPage = () => {
                       onClick={() => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
+                          openToast({
+                            content: "开始下载",
+                            status: "success",
+                          });
                           downloadConf();
                         } else {
                           openToast({
@@ -496,7 +517,7 @@ const DocumentPage = () => {
                       }}
                       isDisabled={logined ? false : true}
                     >
-                      点我下载隧道文件（备用）
+                      点击下载隧道文件（备用）
                     </Button>
                   </Box>
 
@@ -563,7 +584,11 @@ const DocumentPage = () => {
                     onClick={() => {
                       const isSafari = navigator.userAgent.includes("Safari");
                       if (isSafari) {
-                        GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                        openToast({
+                          content: "开始下载",
+                          status: "success",
+                        });
+                        GetConfUrl(userInfo?.wg_data?.ip as string);
                       } else {
                         openToast({
                           content: "请在Safari中打开网站下载",
@@ -583,6 +608,10 @@ const DocumentPage = () => {
                     onClick={() => {
                       const isSafari = navigator.userAgent.includes("Safari");
                       if (isSafari) {
+                        openToast({
+                          content: "开始下载",
+                          status: "success",
+                        });
                         downloadConf();
                       } else {
                         openToast({
@@ -593,7 +622,7 @@ const DocumentPage = () => {
                     }}
                     isDisabled={logined ? false : true}
                   >
-                    点我下载隧道文件（备用）
+                    点击下载隧道文件（备用）
                   </Button>
                 </Box>
 
@@ -683,7 +712,7 @@ const DocumentPage = () => {
                               );
                             }}
                           >
-                            点我下载bat
+                            点击下载bat
                           </Text>
                           ，然后右键“以管理员身份运行”修复，这通常是因为安装过vm虚拟机导致的。
                           <br />
@@ -734,7 +763,11 @@ const DocumentPage = () => {
                       onClick={() => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
-                          GetConfUrl(userInfo?.wg_data?.wgnum as number);
+                          openToast({
+                            content: "开始下载",
+                            status: "success",
+                          });
+                          GetConfUrl(userInfo?.wg_data?.ip as string);
                         } else {
                           openToast({
                             content: "请在Safari中打开网站下载",
@@ -754,6 +787,10 @@ const DocumentPage = () => {
                       onClick={() => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
+                          openToast({
+                            content: "开始下载",
+                            status: "success",
+                          });
                           downloadConf();
                         } else {
                           openToast({
@@ -764,7 +801,7 @@ const DocumentPage = () => {
                       }}
                       isDisabled={logined ? false : true}
                     >
-                      点我下载隧道文件（备用）
+                      点击下载隧道文件（备用）
                     </Button>
                   </Box>
 
@@ -910,7 +947,7 @@ const DocumentPage = () => {
                 问：我WG隧道打开了还是连不上，显示离线怎么办？
               </HighLight>
               <br />
-              答：首先到喵服网站-我的信息页面，核对你的联机编号和WG里的隧道名称是否一致。如果不一致请导入正确的隧道再试，如果一致就换一个浏览器或网络环境再试。
+              答：首先到喵服网站-我的信息页面，核对隧道信息中联机IP和WG里的隧道名称是否一致。如果不一致请导入正确的隧道再试，如果一致就换一个浏览器或网络环境再试。
             </Text>
           </VStack>
         </Box>

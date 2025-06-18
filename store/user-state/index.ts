@@ -15,8 +15,7 @@ interface ServerData {
   relateGroup: GroupItem[] | null;
 }
 interface WGData {
-  wgnum: number;
-  wg_ip: string;
+  ip: string;
   last_connect_timestamp: number;
   release_days: number;
 }
@@ -31,15 +30,13 @@ interface UserInfo {
 }
 interface Member {
   username: string;
-  wgnum: number;
   ip: string;
   status: "在线" | "离线";
   sponsorship: number;
 }
 interface RoomInfo {
-  user_wgnum: number;
+  room_id: number;
   user_ip: string;
-  hoster_wgnum: number;
   hoster_ip: string;
   members: Member[];
   room_passwd: string;
@@ -55,7 +52,7 @@ interface ILoginStateSlice {
   confKey: string | null;
   getConfKey: () => void;
 
-  getWgnum: () => void;
+  getIp: () => void;
 
   logging: boolean;
   changeloggingState: (state: boolean) => void;
@@ -160,10 +157,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      getWgnum: async () => {
+      getIp: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const resp = await fetch(`${apiUrl}/getWgnum`, {
+          const resp = await fetch(`${apiUrl}/getIp`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${getAuthToken()}`,
@@ -176,12 +173,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const data = await resp.json();
           if (data.code === 0) {
             openToast({
-              content: `编号${data.wgnum}绑定成功`,
+              content: `隧道${data.ip}绑定成功`,
               status: "success",
             });
             get().getUserInfo();
 
-            if (data.reget_wgnum) {
+            if (data.reget_ip) {
               get().setShowRegetModal();
             }
           } else {
@@ -349,14 +346,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const data = await resp.json();
 
           if (data.code === -1) {
-            // 编号失效刷新页面
+            // ip失效刷新页面
             window.location.reload();
           }
 
+          const roomData = data.data as RoomInfo;
+
           // 使用局部变量进行状态判断
-          if (data.data) {
+          if (roomData) {
             // 房主或成员
-            if (data.data.user_wgnum === data.data.hoster_wgnum) {
+            if (roomData.user_ip === roomData.hoster_ip) {
               get().setRoomStatus("hoster");
             } else {
               get().setRoomStatus("member");
@@ -366,7 +365,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           openToast({ content: `房间信息已刷新`, status: "info" });
 
-          get().setRoomData(data.data);
+          get().setRoomData(roomData);
         } catch (error) {
           openToast({
             content: "服务器出错，请稍后刷新再试",
@@ -394,8 +393,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const statusUrl = `${apiUrl}/onlineStatus?wgnum=${
-            get().userInfo?.wg_data?.wgnum
+          const statusUrl = `${apiUrl}/onlineStatus?ip=${
+            get().userInfo?.wg_data?.ip
           }`;
           const resp = await fetch(statusUrl);
           if (!resp.ok) {

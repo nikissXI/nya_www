@@ -73,7 +73,7 @@ export default function Page() {
 
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
 
-  const [inputWgnum, setInputWgnum] = useState("");
+  const [inputRoomId, setInputRoomId] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
   const {
     logined,
@@ -84,7 +84,7 @@ export default function Page() {
     roomStatus,
     latency,
     getLatency,
-    getWgnum,
+    getIp,
     onlineStatus,
     rotate,
     setShowLoginModal,
@@ -96,7 +96,7 @@ export default function Page() {
         setRoomData({
           ...roomData,
           members: roomData.members.map((member) => {
-            if (member.wgnum === userInfo?.wg_data?.wgnum) {
+            if (member.ip === userInfo?.wg_data?.ip) {
               return { ...member, status: onlineStatus }; // 修改状态为离线
             }
             return member; // 保持其他成员不变
@@ -201,7 +201,7 @@ export default function Page() {
   const handleRoomFetch = useCallback(
     async (
       handleType: string,
-      handleWgnum: number,
+      handleValue: string,
       roomPasswd: string = ""
     ): Promise<HandleRoomResponse> => {
       if (loading === true) {
@@ -209,7 +209,7 @@ export default function Page() {
       }
       setLoading(true);
       const resp = await fetch(
-        `${apiUrl}/handleRoom?handleType=${handleType}&wgnum=${handleWgnum}&roomPasswd=${roomPasswd}`,
+        `${apiUrl}/handleRoom?handleType=${handleType}&value=${handleValue}&roomPasswd=${roomPasswd}`,
         {
           method: "GET",
           headers: {
@@ -225,7 +225,7 @@ export default function Page() {
       const data: HandleRoomResponse = await resp.json();
 
       if (data.code === -1) {
-        // 编号失效刷新页面
+        // ip失效刷新页面
         window.location.reload();
       }
       return data;
@@ -236,7 +236,7 @@ export default function Page() {
   // 创建房间
   const handleCreateRoom = async () => {
     try {
-      const data = await handleRoomFetch("createRoom", 0);
+      const data = await handleRoomFetch("createRoom", "");
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -250,7 +250,7 @@ export default function Page() {
   // 关闭房间
   const handleCloseRoom = async () => {
     try {
-      const data = await handleRoomFetch("closeRoom", 0);
+      const data = await handleRoomFetch("closeRoom", "");
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -262,18 +262,21 @@ export default function Page() {
   };
 
   // 加入房间
-  const handleJoinRoom = async (wgnum: string, passwd: string) => {
-    if (!wgnum) {
+  const handleJoinRoom = async (roomId: string, passwd: string) => {
+    if (!roomId) {
       return;
     }
 
-    if (!isInteger(wgnum)) {
-      openToast({ content: "房间号是整数，不知道就问房主", status: "warning" });
+    if (!isInteger(roomId)) {
+      openToast({
+        content: "房间号是串数字，不知道就问房主",
+        status: "warning",
+      });
       return;
     }
 
     try {
-      const data = await handleRoomFetch("joinRoom", Number(wgnum), passwd);
+      const data = await handleRoomFetch("joinRoom", roomId, passwd);
       if (data.code === 0) {
         getRoomData();
         joinOnClose();
@@ -291,7 +294,7 @@ export default function Page() {
   // 退出房间
   const handleExitRoom = async () => {
     try {
-      const data = await handleRoomFetch("exitRoom", 0);
+      const data = await handleRoomFetch("exitRoom", "");
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -303,9 +306,9 @@ export default function Page() {
   };
 
   // 删除成员
-  const handleDelMember = async (delWgnum: number) => {
+  const handleDelMember = async (delIp: string) => {
     try {
-      const data = await handleRoomFetch("delMember", delWgnum);
+      const data = await handleRoomFetch("delMember", delIp);
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -329,7 +332,7 @@ export default function Page() {
   };
   const handleJoinRoomEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
-      handleJoinRoom(inputWgnum, inputPasswd);
+      handleJoinRoom(inputRoomId, inputPasswd);
     }
   };
 
@@ -347,9 +350,9 @@ export default function Page() {
               <Input
                 type="text"
                 placeholder="请输入房间号"
-                value={inputWgnum}
+                value={inputRoomId}
                 onChange={(e) => {
-                  setInputWgnum(e.target.value);
+                  setInputRoomId(e.target.value);
                   setHideJoinPassInput(true);
                 }}
               />
@@ -370,7 +373,7 @@ export default function Page() {
               <Button
                 bgColor="#007bc0"
                 onClick={() => {
-                  handleJoinRoom(inputWgnum, inputPasswd);
+                  handleJoinRoom(inputRoomId, inputPasswd);
                 }}
               >
                 加入
@@ -392,7 +395,7 @@ export default function Page() {
             onClick={() => {
               joinOnOpen();
               setHideJoinPassInput(true);
-              setInputWgnum("");
+              setInputRoomId("");
               setInputPasswd("");
             }}
           >
@@ -482,7 +485,7 @@ export default function Page() {
               p={1}
               borderRadius={12}
               borderColor={
-                item.wgnum === userInfo?.wg_data?.wgnum ? "#6db4ff" : "transparent"
+                item.ip === userInfo?.wg_data?.ip ? "#6db4ff" : "transparent"
               }
               borderWidth={3}
             >
@@ -501,7 +504,7 @@ export default function Page() {
                   bg="transparent"
                   fontWeight="bold"
                   color={
-                    item.wgnum === userInfo?.wg_data?.wgnum
+                    item.ip === userInfo?.wg_data?.ip
                       ? rotate
                         ? "#ffa524"
                         : onlineStatus === "在线"
@@ -512,7 +515,7 @@ export default function Page() {
                       : "#ff4444"
                   }
                 >
-                  {item.wgnum === userInfo?.wg_data?.wgnum
+                  {item.ip === userInfo?.wg_data?.ip
                     ? rotate
                       ? "检测中"
                       : onlineStatus
@@ -523,35 +526,25 @@ export default function Page() {
               <Flex mt={1}>
                 <Tag
                   onClick={() => {
-                    copyText(String(item.wgnum));
-                  }}
-                  color="white"
-                  bg="transparent"
-                >
-                  编号{item.wgnum}
-                </Tag>
-                <Tag
-                  onClick={() => {
                     copyText(item.ip);
                   }}
                   color="white"
                   bg="transparent"
                 >
-                  ip {item.ip}
+                  联机ip {item.ip}
                 </Tag>
 
-                {roomStatus === "hoster" &&
-                  item.wgnum !== roomData.hoster_wgnum && (
-                    <Tag
-                      ml="auto"
-                      color="white"
-                      bg="#be1c1c"
-                      onClick={() => handleDelMember(item.wgnum)}
-                      cursor="pointer"
-                    >
-                      踢出
-                    </Tag>
-                  )}
+                {roomStatus === "hoster" && item.ip !== roomData.hoster_ip && (
+                  <Tag
+                    ml="auto"
+                    color="white"
+                    bg="#be1c1c"
+                    onClick={() => handleDelMember(item.ip)}
+                    cursor="pointer"
+                  >
+                    踢出
+                  </Tag>
+                )}
               </Flex>
             </Box>
           ))}
@@ -617,11 +610,11 @@ export default function Page() {
       ) : !userInfo?.wg_data ? (
         <>
           <Heading size="md" color="#ffa629">
-            你还没联机编号呢
+            你还没获取隧道呢
           </Heading>
 
-          <Button rounded={5} onClick={getWgnum} bgColor="#007bc0" size="sm">
-            点击获取编号
+          <Button rounded={5} onClick={getIp} bgColor="#007bc0" size="sm">
+            点击获取隧道
           </Button>
         </>
       ) : (
@@ -647,7 +640,7 @@ export default function Page() {
           <Flex align="center">
             {roomStatus !== "none" && (
               <Text fontSize={18} fontWeight="bold" mr={3}>
-                房间号 {roomData?.hoster_wgnum}
+                房间号 {roomData?.room_id}
               </Text>
             )}
 

@@ -49,9 +49,6 @@ export default function Page() {
   const [sendVerifyButtonText, setSendVerifyButtonText] =
     useState("获取验证码");
 
-  // const [verifyQQText, setVerifyQQText] = useState("");
-  // const [disableVerifyQQ, setDisableVerifyQQ] = useState(false);
-
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   // 填写的表单数据
@@ -100,7 +97,6 @@ export default function Page() {
     if (
       !(
         inputAccount &&
-        // inputVerifyCode &&
         inputUsername &&
         inputPassword &&
         inputPassword2 &&
@@ -209,63 +205,6 @@ export default function Page() {
       openToast({ content: "服务异常，请联系服主处理", status: "error" });
     }
   };
-
-  // const sendQQVerify = async (qq: string) => {
-  //   if (!isInteger(qq)) {
-  //     openToast({ content: `请正确填写QQ号` });
-  //     return;
-  //   }
-
-  //   const resp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
-  //   if (resp.ok) {
-  //     const data = await resp.json();
-  //     if (data.code === 1) {
-  //       setVerifyQQText("该QQ号已被注册");
-  //     } else {
-  //       const resp = await fetch(`${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}`);
-  //       if (resp.ok) {
-  //         const data = await resp.json();
-  //         if (data.code === 0) {
-  //           setVerifyQQText(data.msg);
-  //           setDisableVerifyQQ(true);
-  //         } else {
-  //           setVerifyQQText(data.msg);
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     setVerifyQQText("服务异常，请联系服主处理");
-  //   }
-  // };
-
-  // if (isQQ) {
-  //   return (
-  //     <VStack spacing={3} align="center">
-  //       <Text color="#ffd648" fontSize="16px">
-  //         在QQ或微信中无法使用该功能
-  //         <br />
-  //         请到浏览器中打开网站再操作
-  //         <br />
-  //         如果误触发请联系群主处理，谢谢
-  //       </Text>
-
-  //       <Button size="sm" onClick={handleCopyLink}>
-  //         {copyButtonText}
-  //       </Button>
-
-  //       {copyButtonText === "点我复制链接到浏览器打开" ? (
-  //         ""
-  //       ) : (
-  //         <Text>
-  //           如果复制失败就手动复制吧
-  //           <br />
-  //           {window.location.href}
-  //         </Text>
-  //       )}
-  //     </VStack>
-  //   );
-  // }
-
   return (
     <Center>
       <VStack
@@ -275,10 +214,6 @@ export default function Page() {
         maxW="300px"
         onKeyDown={handleRegisterEnter}
       >
-        {/* <Text color="#ffd648" fontSize="16px">
-          注册尽量用邮箱，短信贵T.T
-        </Text> */}
-
         <Flex>
           注册方式
           <RadioGroup
