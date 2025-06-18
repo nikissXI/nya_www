@@ -28,9 +28,7 @@ const RelateGroupList = () => {
         position="sticky"
       >
         <Center fontWeight="bold" color="#a8d1ff" my={1} textAlign="center">
-          支持但不限于以下游戏
-          <br />
-          右侧数字是QQ交流群
+          喵服关联QQ群
         </Center>
 
         {serverData?.relateGroup?.map(
