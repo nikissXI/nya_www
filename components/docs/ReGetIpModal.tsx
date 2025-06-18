@@ -21,7 +21,7 @@ const TunnelUpdateModal = () => {
   useEffect(() => {
     if (showRegetModal) {
       setCanClose(false);
-      setCountdown(5);
+      setCountdown(10);
       const timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
@@ -47,8 +47,8 @@ const TunnelUpdateModal = () => {
       <ModalContent bgColor="#002f5c">
         <ModalHeader alignSelf="center">请更新WG隧道文件</ModalHeader>
         <ModalBody>
-          <Text>获取了新隧道后，原隧道即失效废弃</Text>
-          <Text>你需要下载并导入新隧道才能正常连接喵服</Text>
+          <Text>你获取了新隧道后，旧隧道已失效废弃</Text>
+          <Text>需要下载并导入新隧道才能正常连接喵服</Text>
           <Text>到使用文档页面，再操作一次“WG下载和隧道导入”即可</Text>
 
           <Text textAlign="center" mt={4}>

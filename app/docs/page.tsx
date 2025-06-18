@@ -468,7 +468,7 @@ const DocumentPage = () => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
                           openToast({
-                            content: "开始下载",
+                            content: "下载完成，请到下载任务列表查看",
                             status: "success",
                           });
                           GetConfUrl(userInfo?.wg_data?.ip as string);
@@ -492,7 +492,7 @@ const DocumentPage = () => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
                           openToast({
-                            content: "开始下载",
+                            content: "下载完成，请到下载任务列表查看",
                             status: "success",
                           });
                           downloadConf();
@@ -546,7 +546,7 @@ const DocumentPage = () => {
                       const isSafari = navigator.userAgent.includes("Safari");
                       if (isSafari) {
                         openToast({
-                          content: "开始下载",
+                          content: "下载完成，请到下载任务列表查看",
                           status: "success",
                         });
                         GetConfUrl(userInfo?.wg_data?.ip as string);
@@ -570,7 +570,7 @@ const DocumentPage = () => {
                       const isSafari = navigator.userAgent.includes("Safari");
                       if (isSafari) {
                         openToast({
-                          content: "开始下载",
+                          content: "下载完成，请到下载任务列表查看",
                           status: "success",
                         });
                         downloadConf();
@@ -741,7 +741,7 @@ const DocumentPage = () => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
                           openToast({
-                            content: "开始下载",
+                            content: "下载完成，请到下载任务列表查看",
                             status: "success",
                           });
                           GetConfUrl(userInfo?.wg_data?.ip as string);
@@ -765,7 +765,7 @@ const DocumentPage = () => {
                         const isSafari = navigator.userAgent.includes("Safari");
                         if (isSafari) {
                           openToast({
-                            content: "开始下载",
+                            content: "下载完成，请到下载任务列表查看",
                             status: "success",
                           });
                           downloadConf();
