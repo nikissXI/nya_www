@@ -26,9 +26,10 @@ import { Link as ScrollLink } from "react-scroll";
 import { useUserStateStore } from "@/store/user-state";
 import { useRouter } from "next/navigation";
 import { openToast } from "@/components/universal/toast";
-import { GetConfUrl } from "@/components/universal/GetConf";
-import { getAuthToken } from "@/store/authKey";
+// import { GetConfUrl } from "@/components/universal/GetConf";
+// import { getAuthToken } from "@/store/authKey";
 import NextLink from "next/link";
+import { QRCodeSVG } from "qrcode.react";
 
 interface TableOfContentsLinkProps {
   to: string;
@@ -100,33 +101,65 @@ const DocumentPage = () => {
   const [showXM, setShowXM] = useState(false);
   const [showWinError, setWinError] = useState(false);
 
-  const downloadConf = async () => {
-    const resp = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/getDownloadConfkey`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-      }
-    );
+  // 暂时停用
+  // const downloadConf = async () => {
+  //   const resp = await fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/getDownloadConfkey`,
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${getAuthToken()}`,
+  //       },
+  //     }
+  //   );
 
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 0) {
-        // 用拿到的data.key下载conf
-        window.open(
-          `${process.env.NEXT_PUBLIC_API_URL}/downloadConf2?key=${data.key}`,
-          "_blank"
-        );
-      } else {
-        openToast({ content: data.msg, status: "warning" });
-      }
-    } else if (resp.status === 401) {
-      openToast({ content: "登陆凭证无效", status: "warning" });
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+  //   if (resp.ok) {
+  //     const data = await resp.json();
+  //     if (data.code === 0) {
+  //       // 用拿到的data.key下载conf
+  //       window.open(
+  //         `${process.env.NEXT_PUBLIC_API_URL}/downloadConf2?key=${data.key}`,
+  //         "_blank"
+  //       );
+  //     } else {
+  //       openToast({ content: data.msg, status: "warning" });
+  //     }
+  //   } else if (resp.status === 401) {
+  //     openToast({ content: "登陆凭证无效", status: "warning" });
+  //   } else {
+  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
+  //   }
+  // };
+  const GenConfFile = (ip: string, conf_text: string) => {
+    try {
+      // 创建Blob
+      const blob = new Blob([conf_text], { type: "text/plain" });
+      // 创建下载链接
+      const url = window.URL.createObjectURL(blob);
+
+      // 创建临时a标签并触发点击
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${ip}.conf`;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+
+      // 清理
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      openToast({
+        content: "下载完成，请到下载任务列表查看",
+        status: "success",
+      });
+    } catch (error) {
+      openToast({
+        content: "下载失败",
+        status: "error",
+      });
+      console.error(error);
     }
   };
   //////////////////////
@@ -200,6 +233,85 @@ const DocumentPage = () => {
   }, []);
   //////////////////////
   //////////////////////
+
+  const DownloadButton = (isIOS: boolean = false) => {
+    // 两个通道下载的东西一样，二选一即可。
+    return (
+      <Button
+        ml={3}
+        size="sm"
+        onClick={() => {
+          if (!isIOS) {
+            if (userInfo?.wg_data)
+              GenConfFile(userInfo.wg_data.ip, userInfo.wg_data.conf_text);
+            return;
+          }
+
+          const isSafari = navigator.userAgent.includes("Safari");
+          if (isSafari) {
+            if (userInfo?.wg_data)
+              GenConfFile(userInfo.wg_data.ip, userInfo.wg_data.conf_text);
+          } else {
+            openToast({
+              content: "请在Safari中打开网站下载",
+              status: "warning",
+            });
+          }
+        }}
+        isDisabled={logined ? false : true}
+      >
+        点击下载隧道文件
+      </Button>
+      // <VStack textAlign="left">
+      //   <Button
+      //     ml={3}
+      //     size="sm"
+      //     onClick={() => {
+      //       const isSafari = navigator.userAgent.includes("Safari");
+      //       if (isSafari) {
+      //         openToast({
+      //           content: "下载完成，请到下载任务列表查看",
+      //           status: "success",
+      //         });
+      //         GetConfUrl(userInfo?.wg_data?.ip as string);
+      //       } else {
+      //         openToast({
+      //           content: "请在Safari中打开网站下载",
+      //           status: "warning",
+      //         });
+      //       }
+      //     }}
+      //     isDisabled={logined ? false : true}
+      //   >
+      //     点击下载隧道文件
+      //   </Button>
+
+      //   <Button
+      //     mt={2}
+      //     ml={3}
+      //     size="sm"
+      //     onClick={() => {
+      //       const isSafari = navigator.userAgent.includes("Safari");
+      //       if (isSafari) {
+      //         openToast({
+      //           content: "下载完成，请到下载任务列表查看",
+      //           status: "success",
+      //         });
+      //         downloadConf();
+      //       } else {
+      //         openToast({
+      //           content: "请在Safari中打开网站下载",
+      //           status: "warning",
+      //         });
+      //       }
+      //     }}
+      //     isDisabled={logined ? false : true}
+      //   >
+      //     点击下载隧道文件（备用）
+      //   </Button>
+      // </VStack>
+    );
+  };
 
   return (
     <Box px={5}>
@@ -329,6 +441,7 @@ const DocumentPage = () => {
             </TabList>
 
             <TabPanels>
+              {/* 安卓 */}
               <TabPanel px={0} pb={1} pt={2}>
                 <VStack spacing={3} align="stretch">
                   <Box>
@@ -440,151 +553,106 @@ const DocumentPage = () => {
                 </VStack>
               </TabPanel>
 
-              <TabPanel px={0} pb={1} pt={2}>
-                <VStack spacing={3} align="stretch">
-                  <Box>
-                    1. 安装WG客户端，
-                    <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
-                    ，如果没有海外账号自己去淘宝之类的搜“ios游戏美版”搞一个，反正自己想办法
-                    <Image
-                      src="/images/wg/app_store.jpg"
-                      alt="app_store"
-                      borderRadius="md"
-                      w="100%"
-                      maxW="300px"
-                    />
-                  </Box>
-
-                  <Box>
-                    2. 下载隧道文件，两个通道下载的东西一样，二选一即可。
-                    <HighLight>
-                      使用Safari浏览器访问网站再下载，其他浏览器可能无法正常下载。
-                    </HighLight>
-                    <br />
-                    <Button
-                      ml={3}
-                      size="sm"
-                      onClick={() => {
-                        const isSafari = navigator.userAgent.includes("Safari");
-                        if (isSafari) {
-                          openToast({
-                            content: "下载完成，请到下载任务列表查看",
-                            status: "success",
-                          });
-                          GetConfUrl(userInfo?.wg_data?.ip as string);
-                        } else {
-                          openToast({
-                            content: "请在Safari中打开网站下载",
-                            status: "warning",
-                          });
-                        }
-                      }}
-                      isDisabled={logined ? false : true}
-                    >
-                      点击下载隧道文件
-                    </Button>
-                    <br />
-                    <Button
-                      mt={2}
-                      ml={3}
-                      size="sm"
-                      onClick={() => {
-                        const isSafari = navigator.userAgent.includes("Safari");
-                        if (isSafari) {
-                          openToast({
-                            content: "下载完成，请到下载任务列表查看",
-                            status: "success",
-                          });
-                          downloadConf();
-                        } else {
-                          openToast({
-                            content: "请在Safari中打开网站下载",
-                            status: "warning",
-                          });
-                        }
-                      }}
-                      isDisabled={logined ? false : true}
-                    >
-                      点击下载隧道文件（备用）
-                    </Button>
-                  </Box>
-
-                  <Text>
-                    3. 打开Safari的下载任务列表，点击文件{userInfo?.wg_data?.ip}
-                    .conf，然后点左下角发送到WG完成导入。
-                  </Text>
-
-                  <Box>
-                    <Flex alignItems="center">
-                      <Text>4. 打开隧道开关</Text>
-                      <Image
-                        mx={1}
-                        maxH="1.5rem"
-                        src="/images/wg/iOS_switch.jpg"
-                        alt="iOS_switch"
-                      />
-                      <Text>连上喵服。</Text>
-                    </Flex>
-                    <Text>
-                      出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
-                    </Text>
-                  </Box>
-                </VStack>
-              </TabPanel>
-
+              {/* iOS */}
               <TabPanel px={0} pb={1} pt={2}>
                 <Box>
-                  1.
-                  下载隧道文件，两个通道下载的东西一样，二选一即可。下载的文件名为
+                  1. 安装WG客户端，
+                  <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
+                  ，如果没有海外账号自己去淘宝之类的搜“ios游戏美版”搞一个，反正自己想办法
+                  <Image
+                    src="/images/wg/app_store.jpg"
+                    alt="app_store"
+                    borderRadius="md"
+                    w="100%"
+                    maxW="300px"
+                  />
+                </Box>
+
+                <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
+                  <Text pt={2} fontWeight="bolder">
+                    iOS导入隧道有扫码和下载两种方法，看情况选择
+                  </Text>
+
+                  <TabList
+                    my={1}
+                    display="inline-flex"
+                    alignItems="center"
+                    maxW="fit-content"
+                  >
+                    <Tab
+                      py={1}
+                      fontWeight="bolder"
+                      _selected={{ color: "white", bg: "green.600" }}
+                    >
+                      扫二维码
+                    </Tab>
+                    <Tab
+                      py={1}
+                      fontWeight="bolder"
+                      _selected={{ color: "white", bg: "green.600" }}
+                    >
+                      下载隧道
+                    </Tab>
+                  </TabList>
+
+                  <TabPanels>
+                    <TabPanel px={0} pb={0} pt={1}>
+                      <HighLight>
+                        不支持从相册导入二维码，所以自己想办法扫，扫不了就选“下载隧道”的方法
+                      </HighLight>
+
+                      <Text>
+                        2. 打开WG，点右上角+号选，扫描二维码，隧道名称填
+                        {userInfo?.wg_data?.ip}
+                      </Text>
+
+                      <Box borderWidth={5} borderColor="white" w="min">
+                        <QRCodeSVG
+                          size={256}
+                          value={userInfo?.wg_data?.conf_text as string}
+                        />
+                      </Box>
+                    </TabPanel>
+
+                    <TabPanel px={0} pb={0} pt={1}>
+                      <HighLight>使用Safari浏览器访问网站再下载</HighLight>
+
+                      <Text>2. 下载隧道文件</Text>
+                      {DownloadButton(true)}
+
+                      <Text pt={1}>
+                        打开Safari的下载任务列表，点击文件
+                        {userInfo?.wg_data?.ip}
+                        .conf，然后点左下角发送到WG完成导入
+                      </Text>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+
+                <Box pt={3}>
+                  <Flex alignItems="center">
+                    <Text>3. 打开隧道开关</Text>
+                    <Image
+                      mx={1}
+                      maxH="1.5rem"
+                      src="/images/wg/iOS_switch.jpg"
+                      alt="iOS_switch"
+                    />
+                    <Text>连上喵服。</Text>
+                  </Flex>
+                  <Text>
+                    出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
+                  </Text>
+                </Box>
+              </TabPanel>
+
+              {/* windows */}
+              <TabPanel px={0} pb={1} pt={2}>
+                <Box>
+                  1. 下载隧道文件，文件名为
                   {userInfo?.wg_data?.ip}
                   .conf
-                  <br />
-                  <Button
-                    ml={3}
-                    size="sm"
-                    onClick={() => {
-                      const isSafari = navigator.userAgent.includes("Safari");
-                      if (isSafari) {
-                        openToast({
-                          content: "下载完成，请到下载任务列表查看",
-                          status: "success",
-                        });
-                        GetConfUrl(userInfo?.wg_data?.ip as string);
-                      } else {
-                        openToast({
-                          content: "请在Safari中打开网站下载",
-                          status: "warning",
-                        });
-                      }
-                    }}
-                    isDisabled={logined ? false : true}
-                  >
-                    点击下载隧道文件
-                  </Button>
-                  <br />
-                  <Button
-                    mt={2}
-                    ml={3}
-                    size="sm"
-                    onClick={() => {
-                      const isSafari = navigator.userAgent.includes("Safari");
-                      if (isSafari) {
-                        openToast({
-                          content: "下载完成，请到下载任务列表查看",
-                          status: "success",
-                        });
-                        downloadConf();
-                      } else {
-                        openToast({
-                          content: "请在Safari中打开网站下载",
-                          status: "warning",
-                        });
-                      }
-                    }}
-                    isDisabled={logined ? false : true}
-                  >
-                    点击下载隧道文件（备用）
-                  </Button>
+                  {DownloadButton()}
                 </Box>
 
                 <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
@@ -713,6 +781,7 @@ const DocumentPage = () => {
                 </Tabs>
               </TabPanel>
 
+              {/* MAC */}
               <TabPanel px={0} pb={1} pt={2}>
                 <VStack spacing={3} align="stretch">
                   <Box>
@@ -729,57 +798,10 @@ const DocumentPage = () => {
                   </Box>
 
                   <Box>
-                    2.
-                    下载隧道文件，两个通道下载的东西一样，二选一即可。下载的文件名为
+                    2. 下载隧道文件，文件名为
                     {userInfo?.wg_data?.ip}
                     .conf
-                    <br />
-                    <Button
-                      ml={3}
-                      size="sm"
-                      onClick={() => {
-                        const isSafari = navigator.userAgent.includes("Safari");
-                        if (isSafari) {
-                          openToast({
-                            content: "下载完成，请到下载任务列表查看",
-                            status: "success",
-                          });
-                          GetConfUrl(userInfo?.wg_data?.ip as string);
-                        } else {
-                          openToast({
-                            content: "请在Safari中打开网站下载",
-                            status: "warning",
-                          });
-                        }
-                      }}
-                      isDisabled={logined ? false : true}
-                    >
-                      点击下载隧道文件
-                    </Button>
-                    <br />
-                    <Button
-                      mt={2}
-                      ml={3}
-                      size="sm"
-                      onClick={() => {
-                        const isSafari = navigator.userAgent.includes("Safari");
-                        if (isSafari) {
-                          openToast({
-                            content: "下载完成，请到下载任务列表查看",
-                            status: "success",
-                          });
-                          downloadConf();
-                        } else {
-                          openToast({
-                            content: "请在Safari中打开网站下载",
-                            status: "warning",
-                          });
-                        }
-                      }}
-                      isDisabled={logined ? false : true}
-                    >
-                      点击下载隧道文件（备用）
-                    </Button>
+                    {DownloadButton()}
                   </Box>
 
                   <Box>

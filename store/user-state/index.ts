@@ -18,6 +18,7 @@ interface WGData {
   ip: string;
   last_connect_timestamp: number;
   release_days: number;
+  conf_text: string;
 }
 interface UserInfo {
   uid: number;
