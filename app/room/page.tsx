@@ -134,7 +134,7 @@ export default function Page() {
         setTutorialColor((prev) => !prev);
       }, 300);
     } else {
-      setDocButtonText("点我查看使用文档");
+      setDocButtonText("点我查看游戏联机教程");
     }
 
     return () => {
@@ -631,7 +631,9 @@ export default function Page() {
             bg="#2976bd"
             size="md"
             onClick={() => {
-              router.push(`/docs`);
+              onlineStatus === "在线"
+                ? router.push(`/docs#games`)
+                : router.push(`/docs`);
             }}
             color={
               onlineStatus === "在线"
