@@ -1,34 +1,18 @@
-import { launchEditorMiddleware } from "@react-dev-inspector/middleware";
 import { createServer } from "http";
 import next from "next";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "0.0.0.0";
 const port = 3000;
-// when using middleware `hostname` and `port` must be provided below
+
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   createServer(async (req, res) => {
     try {
-      const middlewares = [
-        launchEditorMiddleware,
-        (req, res) => {
-          return handle(req, res);
-        },
-      ];
-
-      const middlewarePipeline = middlewares.reduceRight(
-        (next, middleware) => {
-          return () => {
-            middleware(req, res, next);
-          };
-        },
-        () => {}
-      );
-
-      middlewarePipeline();
+      // 直接调用 Next.js 默认请求处理器
+      await handle(req, res);
     } catch (err) {
       console.error("Error occurred handling", req.url, err);
       res.statusCode = 500;
