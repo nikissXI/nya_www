@@ -14,8 +14,18 @@ import {
   Th,
   Tbody,
   Td,
+  TextProps,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
+import { useUserStateStore } from "@/store/user-state";
+
+const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
+  return (
+    <Text as="span" color="#ff734f" fontWeight="bold" {...props}>
+      {children}
+    </Text>
+  );
+};
 
 interface SponsorItem {
   uid: number;
@@ -25,6 +35,8 @@ interface SponsorItem {
 
 const Page = () => {
   const [sponsorList, setSponsorList] = useState<SponsorItem[]>([]);
+
+  const { userInfo } = useUserStateStore();
 
   useEffect(() => {
     async function fetchSponsors() {
@@ -100,7 +112,11 @@ const Page = () => {
           喵服由服主一人纯公益免费运营，赞助将帮助喵服持续提供联机服务。服主QQ
           1299577815
           <br />
-          付款时请点“添加备注”写上您的喵服UID（在我的信息页面查看），赞助金额可被系统记录并获得赞助者铭牌，不备注UID的话无法记录享受特权哈。
+          <HighLight>
+            付款时请点“添加备注”写上您的喵服UID{" "}
+            {userInfo ? `${userInfo.uid}` : `（在我的信息页面查看）`}
+          </HighLight>
+          ，赞助金额可被系统记录并获得赞助者铭牌，不备注UID的话无法记录享受特权哈。
         </Text>
 
         <SimpleGrid columns={2} spacing={1}>

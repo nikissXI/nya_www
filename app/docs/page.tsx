@@ -329,7 +329,7 @@ const DocumentPage = () => {
             <ScrollLinkM to="download">3. WG下载和隧道导入</ScrollLinkM>
             <ScrollLinkM to="room">4. 联机房间说明</ScrollLinkM>
             <ScrollLinkM to="games">5. 具体游戏联机教程(很重要)</ScrollLinkM>
-            <ScrollLinkM to="issues">6. 常见问题</ScrollLinkM>
+            <ScrollLinkM to="issues">6. 常见问题/联机失败</ScrollLinkM>
           </VStack>
         </Box>
 
@@ -887,40 +887,44 @@ const DocumentPage = () => {
 
         <Box id="issues">
           <Heading size="md" pb={2} color="#00ff17">
-            6. 常见问题
+            6. 常见问题/联机失败
           </Heading>
 
           <VStack spacing={2} align="stretch">
             <Text>
-              <HighLight>问：国外能使用吗？校园网能使用吗</HighLight>
+              <HighLight>问：不会用/看不懂</HighLight>
               <br />
-              答：仅支持国内（不包括港澳台）使用，在国外即使能连上也不能保障连接稳定性，能连只能说算你好运。至于校园网得看学校，有的可以有的不可以，你换流量试试不就知道了。如果需要国外联机服务找服主另外付费搭建。
+              答：不存在看不懂，只有不想看或没看完的。
             </Text>
 
             <Text>
-              <HighLight>问：不同平台的游戏能不能一起联机？</HighLight>
+              <HighLight>问：某游戏能不能联机/不同平台能否联机</HighLight>
               <br />
-              答：前面已经说了，能不能跨平台联机取决于游戏支不支持，具体看上面的游戏教程列表。
+              答：看本页面第5部分。
             </Text>
 
             <Text>
-              <HighLight>问：联机失败怎么办？</HighLight>
+              <HighLight>问：WG连上了但还是离线</HighLight>
               <br />
-              答：检查是否都连上了喵服处于在线状态，以及处在同一个联机房间里。对于手机或平板，客机加入游戏的时候，主机必须要在游戏里，游戏放后台客机就无法加入了。如果认为自己的操作没有任何问题仍然无法联机，那就去问服主。
+              答：（1）检查导入的隧道名称是否与你账号绑定的IP地址一致，否则重新导入。（2）部分企业或校园网络会拦截WG的流量，尝试切换其他网络试试，如使用移动流量。
+            </Text>
+
+            <Text>
+              <HighLight>问：海外能否使用</HighLight>
+              <br />
+              答：本服务器并不面向海外玩家（即没有海外网络优化），所以海外玩家使用喵服联机会不稳定或高延迟，如有需要请找服主购买海外专用线路。
+            </Text>
+
+            <Text>
+              <HighLight>问：联机失败/搜索不到游戏</HighLight>
+              <br />
+              答：（1）玩家需要都在线，并在同一个联机房间里。（2）如果主机是Windows，试试把系统防火墙都关闭。（3）加入游戏的时候，主机要在游戏里，游戏放后台客机将无法加入。（4）试试换个人做主机或重开游戏，有的游戏有BUG得重开游戏。（5）重新认真阅读本文档全部内容，尤其是第5部分。
             </Text>
 
             <Text>
               <HighLight>问：浏览器（喵服网站）可以关闭吗？</HighLight>
               <br />
-              答：可以的。联机通信使用的是WG客户端，不要关闭它就行。喵服网站只是用来管理联机房间的，你甚至可以在其他设备上访问网站来管理房间。
-            </Text>
-
-            <Text>
-              <HighLight>
-                问：我WG隧道打开了还是连不上，显示离线怎么办？
-              </HighLight>
-              <br />
-              答：首先到喵服网站-我的信息页面，核对隧道信息中联机IP和WG里的隧道名称是否一致。如果不一致请导入正确的隧道再试，如果一致就换一个浏览器或网络环境再试。
+              答：可以。联机通信使用的是WG客户端，不要关闭WG就行。喵服网站只是用来管理联机房间的，你甚至可以在其他设备上访问网站来管理房间。
             </Text>
           </VStack>
         </Box>
