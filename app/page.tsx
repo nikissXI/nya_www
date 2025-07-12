@@ -73,16 +73,6 @@ export default function Page() {
       >
         &gt;&gt; 开始使用喵服 &lt;&lt;
       </Button>
-
-      <Button
-        mt={6}
-        fontSize="lg"
-        onClick={() => {
-          throw new Error("错凑错!");
-        }}
-      >
-        &gt;&gt; ERROR &lt;&lt;
-      </Button>
     </Flex>
   );
 }
