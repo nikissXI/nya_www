@@ -393,9 +393,11 @@ const DocumentPage = () => {
           </Heading>
 
           <Text>
-            <HighLight>&emsp;&emsp;每个账号有对应联机ip和隧道</HighLight>
-            ，你要导入的隧道名称为
-            {userInfo?.wg_data?.ip}，导入后留意隧道名称是否一致。
+            <HighLight>
+              &emsp;&emsp;每个账号有对应联机ip和隧道，别把自己账号的隧道给其他人导入！
+            </HighLight>
+            你要导入的隧道名称为
+            {userInfo?.wg_data?.ip}，导入后留意隧道名称是否一致，否则无法正常联机。
           </Text>
 
           <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
