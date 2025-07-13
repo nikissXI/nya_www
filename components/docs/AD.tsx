@@ -46,7 +46,7 @@ const SponsorAd: React.FC = () => {
 
   return (
     <VStack spacing={1} align="center" mb={2}>
-      <Box
+      {/* <Box
         bg={bg}
         p={{ base: 1, md: 2 }}
         rounded="md"
@@ -107,7 +107,7 @@ const SponsorAd: React.FC = () => {
             </Link>
           </Stack>
         </Flex>
-      </Box>
+      </Box> */}
 
       <Text
         color="#ffca3d"
@@ -116,7 +116,9 @@ const SponsorAd: React.FC = () => {
         textAlign="center"
         mx={5}
       >
-        服务器每个月都需要费用，觉得喵服好用请赞助支持；赞助10元可加服主一对一教学
+        临时公告：因被云服务商恶意限速，联机高峰期服务器会被限速可能会导致联机体验不佳。喵服在准备更换云服务商并开发多服务器节点，为玩家提供更好的体验。
+        <br />
+        购买服务器每个月都需要大几百的费用，觉得喵服好用请赞助支持；赞助10元可加服主一对一教学
         <Link
           fontSize="sm"
           ml={1}
