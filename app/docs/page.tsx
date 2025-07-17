@@ -560,7 +560,7 @@ const DocumentPage = () => {
                 <Box>
                   1. 安装WG客户端，
                   <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
-                  ，如果没有海外账号自己去淘宝之类的搜“ios游戏美版”搞一个，反正自己想办法
+                  ，如果没有海外账号自己去闲鱼或pdd之类的搜“苹果游戏”搞一个账号（最好是美区的），或自己想其他办法，海外账号都没有用什么苹果
                   <Image
                     src="/images/wg/app_store.jpg"
                     alt="app_store"
@@ -789,7 +789,7 @@ const DocumentPage = () => {
                   <Box>
                     1. 安装WG客户端，
                     <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
-                    ，如果没有海外账号自己去淘宝之类的搜“ios游戏美版”搞一个，反正自己想办法
+                    ，如果没有海外账号自己去闲鱼或pdd之类的搜“苹果游戏”搞一个账号（最好是美区的），或自己想其他办法，海外账号都没有用什么苹果
                     <Image
                       src="/images/wg/app_store_mac.jpg"
                       alt="app_store_mac"
