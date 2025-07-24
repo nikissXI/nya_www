@@ -514,6 +514,8 @@ const DocumentPage = () => {
                     >
                       点我刷新key
                     </Text>
+                    <br />
+                    <HighLight>必须使用这里下载的WG，否则没有“通过conf_key导入”的选项</HighLight>
                   </Text>
 
                   <Flex alignItems="center">

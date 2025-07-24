@@ -134,7 +134,7 @@ export default function Page() {
         setTutorialColor((prev) => !prev);
       }, 300);
     } else {
-      setDocButtonText("点我查看游戏联机教程");
+      setDocButtonText("联机失败就点我！");
     }
 
     return () => {
