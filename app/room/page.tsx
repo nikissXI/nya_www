@@ -128,13 +128,13 @@ export default function Page() {
     let intervalId: NodeJS.Timeout | undefined;
 
     if (onlineStatus === "离线") {
-      setDocButtonText("点我查看使用文档\n不看文档当然离线");
-
+      setDocButtonText("点我查看使用文档");
+      // \n不看文档当然离线
       intervalId = setInterval(() => {
         setTutorialColor((prev) => !prev);
       }, 300);
     } else {
-      setDocButtonText("联机失败就点我！");
+      setDocButtonText("点我查看使用文档");
     }
 
     return () => {
@@ -645,6 +645,10 @@ export default function Page() {
           >
             {docButtonText}
           </Button>
+
+          <Text>
+            不会用或联机失败就看使用文档，尤其是高亮标注的字，有些人自作聪明看一半就开始玩，联机失败就到处问问问
+          </Text>
 
           <Flex align="center">
             {roomStatus !== "none" && (
