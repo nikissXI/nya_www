@@ -71,8 +71,16 @@ const articles: Article[] = [
 ];
 
 const DocumentPage = () => {
-  const { logined, changeGoToDocState, confKey, getConfKey, userInfo } =
-    useUserStateStore();
+  const {
+    logined,
+    changeGoToDocState,
+    confKey,
+    getConfKey,
+    userInfo,
+    setNodeListModal,
+    tunnelName,
+  } = useUserStateStore();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -119,7 +127,7 @@ const DocumentPage = () => {
   //     if (data.code === 0) {
   //       // 用拿到的data.key下载conf
   //       window.open(
-  //         `${process.env.NEXT_PUBLIC_API_URL}/downloadConf2?key=${data.key}`,
+  //         `${process.env.NEXT_PUBLIC_API_URL}/downloadConf?key=${data.key}`,
   //         "_blank"
   //       );
   //     } else {
@@ -131,7 +139,7 @@ const DocumentPage = () => {
   //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
   //   }
   // };
-  const GenConfFile = (ip: string, conf_text: string) => {
+  const GenConfFile = (conf_text: string) => {
     try {
       // 创建Blob
       const blob = new Blob([conf_text], { type: "text/plain" });
@@ -141,7 +149,7 @@ const DocumentPage = () => {
       // 创建临时a标签并触发点击
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${ip}.conf`;
+      a.download = `${tunnelName}.conf`;
       a.style.display = "none";
       document.body.appendChild(a);
       a.click();
@@ -242,15 +250,13 @@ const DocumentPage = () => {
         size="sm"
         onClick={() => {
           if (!isIOS) {
-            if (userInfo?.wg_data)
-              GenConfFile(userInfo.wg_data.ip, userInfo.wg_data.conf_text);
+            if (userInfo?.wg_data) GenConfFile(userInfo.wg_data.conf_text);
             return;
           }
 
           const isSafari = navigator.userAgent.includes("Safari");
           if (isSafari) {
-            if (userInfo?.wg_data)
-              GenConfFile(userInfo.wg_data.ip, userInfo.wg_data.conf_text);
+            if (userInfo?.wg_data) GenConfFile(userInfo.wg_data.conf_text);
           } else {
             openToast({
               content: "请在Safari中打开网站下载",
@@ -316,15 +322,16 @@ const DocumentPage = () => {
   return (
     <Box px={5}>
       <VStack spacing={5} align="stretch">
-        <HighLight fontSize="50px">把本文档全部看完再提问！</HighLight>
+        <HighLight fontSize="24px">
+          网上的视频教程不一定是最新的，以本网站的图文教程为准，你少看一行都可能无法联机
+        </HighLight>
 
         <Box>
           <Heading size="md" pb={2} color="#00ff17">
             目录（点击可跳转）
           </Heading>
           <VStack spacing={2} align="start" color="#7dfffe">
-            <ScrollLinkM to="preface">0. 前言</ScrollLinkM>
-            <ScrollLinkM to="introduction">1. 喵服的联机原理</ScrollLinkM>
+            <ScrollLinkM to="introduction">1. 喵服简介</ScrollLinkM>
             <ScrollLinkM to="words">2. 联机常用词</ScrollLinkM>
             <ScrollLinkM to="download">3. WG下载和隧道导入</ScrollLinkM>
             <ScrollLinkM to="room">4. 联机房间说明</ScrollLinkM>
@@ -335,29 +342,34 @@ const DocumentPage = () => {
 
         <Divider />
 
-        <Box id="preface">
-          <Heading size="md" pb={2} color="#00ff17">
-            0. 前言
-          </Heading>
-
-          <Text>
-            &emsp;&emsp;喵服是
-            <HighLight>免费纯公益</HighLight>
-            提供组网服务的服务器。如果看不懂使用文档或不会用，可尝试加QQ交流群寻求帮助，也可以赞助10元找服主一对一教学，QQ1299577815。
-          </Text>
-        </Box>
-
         <Box id="introduction">
           <Heading size="md" pb={2} color="#00ff17">
-            1. 喵服的联机原理
+            1. 喵服简介
           </Heading>
-
           <Text>
-            &emsp;&emsp;喵服是个WireGuard（简称WG）服务器，WG是个异地组网软件，通过它
+            &emsp;&emsp;喵服是
+            <HighLight>免费公益</HighLight>
+            提供组网联机服务的服务器，说人话就是整着完的不盈利。如果看不懂使用教程或不会用，可尝试加QQ交流群寻求帮助，也可以赞助10元找服主一对一教学
+            <Link
+              ml={1}
+              color="#7dfffe"
+              fontWeight="bold"
+              as={NextLink}
+              href="/sponsor"
+              _hover={{ textDecoration: "none" }}
+            >
+              点我赞助
+            </Link>
+          </Text>
+          <Text>
+            &emsp;&emsp;喵服是个WireGuard（简称WG）服务器，WG是个组网软件，俗称VPN，通过它
             <HighLight>可近似实现“连上同一个WiFi”，实现异地联机。</HighLight>
           </Text>
           <Text>
-            &emsp;&emsp;<HighLight>联机的玩家都要注册并连上喵服</HighLight>
+            &emsp;&emsp;
+            <HighLight>
+              使用喵服联机的玩家都要注册并连上喵服，导入自己的WG隧道文件
+            </HighLight>
             ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
           </Text>
         </Box>
@@ -367,7 +379,7 @@ const DocumentPage = () => {
             2. 联机常用词
           </Heading>
           <Text>
-            &emsp;&emsp;眼熟一些常用的词，防止请教别人联机问题的时候，看不懂别人在问什么，也便于你学习本文档。
+            &emsp;眼熟一些常用的词，防止请教别人联机问题的时候，看不懂别人在问什么，也便于你学习本文档。
           </Text>
           <Text>
             <HighLight>主机</HighLight>
@@ -379,11 +391,11 @@ const DocumentPage = () => {
           </Text>
           <Text>
             <HighLight>隧道</HighLight>
-            ：连接喵服的WG配置文件，每个隧道对应一个联机ip。
+            ：连接喵服的WG配置文件，每个账号有自己的隧道文件，不能使用其他账号的。
           </Text>
           <Text>
             <HighLight>防火墙</HighLight>
-            ：Windows系统才有的东西，电脑联机失败可以试试把它关了。
+            ：Windows系统才有的东西，如果电脑做主机，其他玩家无法加入试试把它关了。
           </Text>
         </Box>
 
@@ -394,18 +406,32 @@ const DocumentPage = () => {
 
           <Text>
             <HighLight>
-              &emsp;&emsp;每个账号有对应联机ip和隧道，别把自己账号的隧道给其他人导入！
+              别把自己账号的隧道给其他人导入！
+              <br />
+              别把自己账号的隧道给其他人导入！
+              <br />
+              别把自己账号的隧道给其他人导入！
             </HighLight>
-            你要导入的隧道名称为
-            {userInfo?.wg_data?.ip}，导入后留意隧道名称是否一致，否则无法正常联机。
           </Text>
 
-          <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
+          <Tabs variant="line" colorScheme="orange">
             <Text pt={2} fontWeight="bolder" ml="1rem">
               选择你要安装WG的系统类型
               <br />
-              按步骤操作，别忽略任何内容
+              <HighLight>每个节点的隧道都要单独导入</HighLight>
             </Text>
+            <Flex align="center" borderRadius="md" boxShadow="sm" ml="1rem">
+              <Text fontWeight="medium" fontSize="md" mr={2}>
+                当前选择联机的节点：
+                <Text as="span" fontWeight="bold">
+                  {userInfo?.wg_data?.node_alias}
+                </Text>
+              </Text>
+              <Button rounded="md" onClick={setNodeListModal} size="sm">
+                切换
+              </Button>
+            </Flex>
+
             <TabList
               mt={1}
               display="inline-flex" // 改为 inline-flex
@@ -465,19 +491,15 @@ const DocumentPage = () => {
                       </Button>
                     </Flex>
 
-                    <Flex alignItems="center">
-                      <HighLight>下载不了？</HighLight>
-
-                      <Text
-                        as="span"
-                        color="#7dfffe"
-                        onClick={() => {
-                          setAndroidDLWarning(!showAndroidDLWarning);
-                        }}
-                      >
-                        点我查看原因
-                      </Text>
-                    </Flex>
+                    <Text
+                      as="span"
+                      color="#7dfffe"
+                      onClick={() => {
+                        setAndroidDLWarning(!showAndroidDLWarning);
+                      }}
+                    >
+                      &emsp;如果下载不了，点我
+                    </Text>
 
                     <Collapse in={showAndroidDLWarning}>
                       <Text fontSize="sm">
@@ -486,15 +508,25 @@ const DocumentPage = () => {
                     </Collapse>
                   </Box>
 
-                  <Box>
-                    <Text>2. 复制黄字，这是conf key</Text>
+                  <Box pb={1}>
+                    2. 复制黄字，这是conf key
                     <Text
+                      ml={1}
+                      as="span"
+                      color="#7dfffe"
+                      onClick={() => {
+                        getConfKey();
+                      }}
+                    >
+                      如果失效，点我刷新
+                    </Text>
+                    <Text
+                      ml={1}
                       fontSize="sm"
                       color="#ffd648"
                       onClick={() => {
                         if (confKey) handleCopyLink(confKey);
                       }}
-                      pb={1}
                     >
                       {confKey}
                     </Text>
@@ -504,33 +536,28 @@ const DocumentPage = () => {
                     3.
                     打开WG，点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入。
                     <br />
-                    如果提示key无效，
-                    <Text
-                      as="span"
-                      color="#7dfffe"
-                      onClick={() => {
-                        getConfKey();
-                      }}
-                    >
-                      点我刷新key
-                    </Text>
+                    &emsp;导入的隧道名称应是 “{tunnelName}”
                     <br />
-                    <HighLight>必须使用这里下载的WG，否则没有“通过conf_key导入”的选项</HighLight>
+                    <HighLight>
+                      &emsp;必须使用这里下载的WG，否则没有“通过conf_key导入”的选项
+                    </HighLight>
                   </Text>
 
-                  <Flex alignItems="center">
-                    <Text>4. 打开隧道开关</Text>
-                    <Image
-                      mx={1}
-                      maxH="1.5rem"
-                      src="/images/wg/android_switch.jpg"
-                      alt="android_switch"
-                    />
-                    <Text>连上喵服</Text>
-                  </Flex>
+                  <Box>
+                    4. 打开隧道开关，就连上喵服了
+                    <Flex ml={4}>
+                      开关长这样=&gt;
+                      <Image
+                        mx={1}
+                        maxH="1.5rem"
+                        src="/images/wg/android_switch.jpg"
+                        alt="android_switch"
+                      />
+                    </Flex>
+                  </Box>
 
                   <Flex alignItems="center">
-                    <HighLight>小米/红米设备注意事项</HighLight>
+                    <HighLight>小米/红米设备要改个设置</HighLight>
                     <Button
                       h="1.6rem"
                       ml={3}
@@ -572,7 +599,7 @@ const DocumentPage = () => {
                   />
                 </Box>
 
-                <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
+                <Tabs variant="line" colorScheme="orange">
                   <Text pt={2} fontWeight="bolder">
                     iOS导入隧道有扫码和下载两种方法，看情况选择
                   </Text>
@@ -602,12 +629,12 @@ const DocumentPage = () => {
                   <TabPanels>
                     <TabPanel px={0} pb={0} pt={1}>
                       <HighLight>
-                        不支持从相册导入二维码，所以自己想办法扫，扫不了就选“下载隧道”的方法
+                        不支持从相册导入二维码，所以自己想办法扫（比如借个设备拍下来再扫），扫不了就选“下载隧道”的方法
                       </HighLight>
 
                       <Text>
-                        2. 打开WG，点右上角+号选，扫描二维码，隧道名称填
-                        {userInfo?.wg_data?.ip}
+                        2.
+                        打开WG，点右上角+号，扫描二维码，隧道名称随意，你自己知道这是哪个节点就行
                       </Text>
 
                       <Box borderWidth={5} borderColor="white" w="min">
@@ -619,51 +646,48 @@ const DocumentPage = () => {
                     </TabPanel>
 
                     <TabPanel px={0} pb={0} pt={1}>
-                      <HighLight>使用Safari浏览器访问网站再下载</HighLight>
+                      <HighLight>建议使用Safari浏览器访问网站再下载</HighLight>
 
                       <Text>2. 下载隧道文件</Text>
                       {DownloadButton(true)}
 
                       <Text pt={1}>
-                        打开Safari的下载任务列表，点击文件
-                        {userInfo?.wg_data?.ip}
-                        .conf，然后点左下角发送到WG完成导入
+                        打开浏览器的下载任务列表，点击文件“
+                        {tunnelName}
+                        .conf”，然后点左下角发送到WG完成导入
                       </Text>
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
 
                 <Box pt={3}>
-                  <Flex alignItems="center">
-                    <Text>3. 打开隧道开关</Text>
+                  3. 打开隧道开关，就连上喵服了
+                  <Flex ml={4}>
+                    开关长这样=&gt;
                     <Image
                       mx={1}
                       maxH="1.5rem"
                       src="/images/wg/iOS_switch.jpg"
                       alt="iOS_switch"
                     />
-                    <Text>连上喵服。</Text>
                   </Flex>
-                  <Text>
-                    出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
-                  </Text>
+                  出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
                 </Box>
               </TabPanel>
 
               {/* windows */}
               <TabPanel px={0} pb={1} pt={2}>
                 <Box>
-                  1. 下载隧道文件，文件名为
-                  {userInfo?.wg_data?.ip}
-                  .conf
+                  1. 下载隧道文件，文件名为“{tunnelName}.conf”
+                  <br />
                   {DownloadButton()}
                 </Box>
 
-                <Tabs variant="line" colorScheme="orange" bg="#2f855a2b">
+                <Tabs variant="line" colorScheme="orange">
                   <Text pt={2} fontWeight="bolder">
-                    2. WG客户端有msi和exe两种安装包，二选一，
+                    2. 客户端有msi和exe两种安装包，二选一，
                     <HighLight>优先选择msi</HighLight>
-                    ，除非你电脑无法安装msi或软件无法正常工作。
+                    ，如果msi不能正常使用就换exe。
                   </Text>
                   <TabList
                     mt={1}
@@ -705,7 +729,10 @@ const DocumentPage = () => {
                         </Button>
                       </Flex>
 
-                      <Text>4. 双击运行安装后，跟着下图操作完成隧道导入</Text>
+                      <Text>
+                        4.
+                        双击运行安装后，跟着下图操作完成隧道导入，看红字就行，其他内容不用管
+                      </Text>
                       <Image
                         src="/images/wg/win_msi.jpg"
                         alt="win_msi"
@@ -715,8 +742,10 @@ const DocumentPage = () => {
                       />
                       <Text>
                         默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建。
+                        <br />
+                        如果提示“隧道名称无效”就检测是否有中文字符或括号，改个名字再导入。
                       </Text>
-                      <Text>
+                      {/* <Text>
                         <HighLight>点连接出现报错？</HighLight>
 
                         <Text
@@ -751,7 +780,7 @@ const DocumentPage = () => {
                           <br />
                           &emsp;如果是其他错误或运行bat后仍然连接报错，就尝试安装exe。
                         </Text>
-                      </Collapse>
+                      </Collapse> */}
                     </TabPanel>
 
                     <TabPanel px={0} pb={0} pt={1}>
@@ -771,7 +800,10 @@ const DocumentPage = () => {
                         </Button>
                       </Flex>
 
-                      <Text>4. 双击运行安装后，跟着下图操作完成隧道导入</Text>
+                      <Text>
+                        4.
+                        双击运行安装后，跟着下图操作完成隧道导入，看红字就行，其他内容不用管
+                      </Text>
                       <Image
                         src="/images/wg/win_exe.jpg"
                         alt="win_exe"
@@ -802,14 +834,16 @@ const DocumentPage = () => {
                   </Box>
 
                   <Box>
-                    2. 下载隧道文件，文件名为
-                    {userInfo?.wg_data?.ip}
-                    .conf
+                    2. 下载隧道文件，文件名为“{tunnelName}.conf”
+                    <br />
                     {DownloadButton()}
                   </Box>
 
                   <Box>
-                    <Text>3. 运行WG，跟着下图操作完成隧道导入</Text>
+                    <Text>
+                      3.
+                      运行WG，跟着下图操作完成隧道导入，看红字就行，其他内容不用管
+                    </Text>
                     <Image
                       src="/images/wg/mac.jpg"
                       alt="mac"
@@ -898,7 +932,7 @@ const DocumentPage = () => {
             <Text>
               <HighLight>问：不会用/看不懂</HighLight>
               <br />
-              答：不存在看不懂，只有不想看或没看完的。
+              答：我是做公益，不是做慈善，教程已经很详细，自己认真看，也可以自己进群找人问。有钱的可以付10元找服主一对一教。
             </Text>
 
             <Text>
@@ -910,13 +944,13 @@ const DocumentPage = () => {
             <Text>
               <HighLight>问：WG连上了但还是离线</HighLight>
               <br />
-              答：（1）检查导入的隧道名称是否与你账号绑定的IP地址一致，否则重新导入。（2）部分企业或校园网络会拦截WG的流量，尝试切换其他网络试试，如使用移动流量。
+              答：（1）检查导入的是不是自己账号的隧道，每个隧道对应一个账号，不能共用。（2）部分企业或校园网络会拦截WG的流量，尝试切换其他网络试试，如使用移动流量。
             </Text>
 
             <Text>
               <HighLight>问：海外能否使用</HighLight>
               <br />
-              答：本服务器并不面向海外玩家（即没有海外网络优化），所以海外玩家使用喵服联机会不稳定或高延迟，如有需要请找服主购买海外专用线路。
+              答：本服务器并不面向海外玩家（即没有海外网络优化），所以海外玩家使用喵服联机会不稳定或高延迟，如有需要请找服主购买海外专用服务器，价格一个月50元左右，具体看地理位置。
             </Text>
 
             <Text>

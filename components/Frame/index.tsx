@@ -5,7 +5,7 @@ import { Center, Spinner } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import { Box, Flex } from "@chakra-ui/react";
 import { Header } from "../Navbar/Header";
-import RelateGroupList from "../relateGroups";
+import RelateGroups from "../serverInfo/relateGroups";
 import Toaster from "../universal/Toaster";
 import { useUserStateStore } from "@/store/user-state";
 import Footer from "../Navbar/Footer";
@@ -13,6 +13,7 @@ import { LoginModal } from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
 import TunnelUpdateModal from "../docs/ReGetIpModal";
 import NeedSponsorModal from "../docs/SponsorModal";
+import { ServerNodeListModal } from "../serverInfo/nodeList";
 
 export default function Frame({
   children,
@@ -28,6 +29,7 @@ export default function Frame({
       <LoginModal />
       <TunnelUpdateModal />
       <NeedSponsorModal />
+      <ServerNodeListModal />
 
       <Flex
         position="relative"
@@ -56,7 +58,7 @@ export default function Frame({
         <Footer path={pathname} />
 
         {/* 群号 */}
-        <RelateGroupList />
+        <RelateGroups />
       </Flex>
     </>
   );

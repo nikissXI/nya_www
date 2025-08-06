@@ -20,6 +20,7 @@ import {
   Flex,
   Switch,
   Tag,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -56,9 +57,6 @@ export default function Page() {
 
   const [loading, setLoading] = useState(false);
 
-  const [disableCheckNet, setDisableCheckNet] = useState(false);
-  const [disableGetRoom, setDisableGetRoom] = useState(false);
-
   const {
     isOpen: joinIsOpen,
     onOpen: joinOnOpen,
@@ -73,7 +71,7 @@ export default function Page() {
 
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
 
-  const [docButtonText, setDocButtonText] = useState("点我查看使用文档");
+  const [docButtonText, setDocButtonText] = useState("点我查看使用教程");
   const [inputRoomId, setInputRoomId] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
   const {
@@ -84,57 +82,32 @@ export default function Page() {
     setRoomData,
     roomStatus,
     latency,
-    getLatency,
     getIp,
     onlineStatus,
     rotate,
+    disableFlush,
     setShowLoginModal,
+    setNodeListModal,
   } = useUserStateStore();
 
-  const updatedRoomInfo = useCallback(
-    (onlineStatus: "在线" | "离线") => {
-      if (roomData && userInfo?.wg_data)
-        setRoomData({
-          ...roomData,
-          members: roomData.members.map((member) => {
-            if (member.ip === userInfo?.wg_data?.ip) {
-              return { ...member, status: onlineStatus }; // 修改状态为离线
-            }
-            return member; // 保持其他成员不变
-          }),
-        });
-    },
-    [roomData, userInfo, setRoomData]
-  );
-
   useEffect(() => {
-    updatedRoomInfo(onlineStatus);
-  }, [latency, onlineStatus]);
-
-  useEffect(() => {
-    if (latency === undefined) {
-      getLatency();
-    }
-  }, [getLatency, latency]);
-
-  useEffect(() => {
-    if (roomData === undefined) {
+    if (logined && userInfo?.wg_data?.node_alias) {
       getRoomData();
     }
-  }, [roomData, getRoomData]);
+  }, [logined, userInfo?.wg_data?.node_alias, getRoomData]);
 
   // 离线的时候闪烁
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
 
     if (onlineStatus === "离线") {
-      setDocButtonText("点我查看使用文档");
+      setDocButtonText("点我查看使用教程");
       // \n不看文档当然离线
       intervalId = setInterval(() => {
         setTutorialColor((prev) => !prev);
       }, 300);
     } else {
-      setDocButtonText("点我查看使用文档");
+      setDocButtonText("点我查看使用教程");
     }
 
     return () => {
@@ -145,19 +118,19 @@ export default function Page() {
   }, [onlineStatus]);
 
   // 60秒检测一次
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
+  // useEffect(() => {
+  //   let intervalId: NodeJS.Timeout | undefined;
 
-    intervalId = setInterval(() => {
-      getLatency();
-    }, 60000);
+  //   intervalId = setInterval(() => {
+  //     getLatency();
+  //   }, 60000);
 
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (intervalId) {
+  //       clearInterval(intervalId);
+  //     }
+  //   };
+  // }, []);
 
   // 设置房间密码
   const handleSetRoomPasswd = useCallback(
@@ -508,23 +481,9 @@ export default function Page() {
                   ml="auto"
                   bg="transparent"
                   fontWeight="bold"
-                  color={
-                    item.ip === userInfo?.wg_data?.ip
-                      ? rotate
-                        ? "#ffa524"
-                        : onlineStatus === "在线"
-                        ? "#3fdb1d"
-                        : "#ff4444"
-                      : item.status === "在线"
-                      ? "#3fdb1d"
-                      : "#ff4444"
-                  }
+                  color={item.status === "在线" ? "#3fdb1d" : "#ff4444"}
                 >
-                  {item.ip === userInfo?.wg_data?.ip
-                    ? rotate
-                      ? "检测中"
-                      : onlineStatus
-                    : item.status}
+                  {item.status}
                 </Tag>
               </Flex>
 
@@ -574,17 +533,10 @@ export default function Page() {
             px={0}
             size="lg"
             bg="transparent"
+            // isDisabled={disableFlush}
+            disabled={disableFlush}
             onClick={() => {
-              if (disableGetRoom === true) return;
-
-              setDisableGetRoom(true);
-              // 设置定时器，2秒后重新启用按钮
-              setTimeout(() => {
-                setDisableGetRoom(false); // 启用按钮
-              }, 3000);
-
-              getRoomData();
-              getLatency();
+              getRoomData(false);
             }}
           >
             刷新房间
@@ -624,6 +576,29 @@ export default function Page() {
         </>
       ) : (
         <>
+          {userInfo?.wg_data?.node_alias ? (
+            <Flex
+              align="center"
+              justify="space-between"
+              borderRadius="md"
+              boxShadow="sm"
+            >
+              <Text fontWeight="medium" fontSize="md" mr={2}>
+                当前联机节点：
+                <Text as="span" fontWeight="bold">
+                  {userInfo?.wg_data?.node_alias}
+                </Text>
+              </Text>
+              <Button rounded="md" onClick={setNodeListModal} size="sm">
+                切换
+              </Button>
+            </Flex>
+          ) : (
+            <Button rounded="md" onClick={setNodeListModal}>
+              选择联机节点
+            </Button>
+          )}
+
           <Button
             whiteSpace="pre-wrap"
             // variant="link"
@@ -645,10 +620,6 @@ export default function Page() {
           >
             {docButtonText}
           </Button>
-
-          <Text>
-            不会用或联机失败就看使用文档，尤其是高亮标注的字，有些人自作聪明看一半就开始玩，联机失败就到处问问问
-          </Text>
 
           <Flex align="center">
             {roomStatus !== "none" && (
@@ -676,19 +647,13 @@ export default function Page() {
               bg="transparent"
               h={5}
               px={0}
-              disabled={disableCheckNet}
+              disabled={disableFlush}
               onClick={() => {
-                setDisableCheckNet(true);
-                setTimeout(() => {
-                  setDisableCheckNet(false);
-                }, 2000);
-
-                getLatency();
+                getRoomData(false);
               }}
-              isDisabled={rotate}
             >
               <Text fontSize={18} fontWeight="normal" color="#3fdb1d" ml={2}>
-                检测
+                刷新
               </Text>
               <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
                 <TbReload size={18} />

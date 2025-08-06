@@ -4,7 +4,7 @@ import { Center, Box, Flex } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
 import { useEffect } from "react";
 
-const RelateGroupList = () => {
+const RelateGroups = () => {
   const { getServerData, serverData } = useUserStateStore();
 
   useEffect(() => {
@@ -46,4 +46,4 @@ const RelateGroupList = () => {
   );
 };
 
-export default RelateGroupList;
+export default RelateGroups;
