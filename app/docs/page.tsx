@@ -207,10 +207,10 @@ const DocumentPage = () => {
   useEffect(() => {
     const hash = window.location.hash;
 
-    if (hash === "#games") {
+    if (hash) {
       // 设置一个延迟，确保页面加载完成后再执行滚动
       const timer = setTimeout(() => {
-        const gamesElement = document.getElementById("games");
+        const gamesElement = document.getElementById(hash.replace("#", ""));
         if (gamesElement) {
           window.scrollTo({
             top: gamesElement.offsetTop - 150,
