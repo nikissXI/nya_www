@@ -107,7 +107,7 @@ const DocumentPage = () => {
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
-  const [showWinError, setWinError] = useState(false);
+  // const [showWinError, setWinError] = useState(false);
 
   // 暂时停用
   // const downloadConf = async () => {
