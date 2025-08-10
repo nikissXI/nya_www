@@ -46,7 +46,7 @@ interface RoomInfo {
 
 interface NodeInfo {
   alias: string;
-  endpoint: string;
+  ping_host: string;
   sponsor: boolean;
   net: number | null;
   delay: number;
@@ -102,12 +102,12 @@ interface ILoginStateSlice {
   setSelectNodeLock: (lock: boolean) => void;
 
   tunnelName: string | undefined;
-  selectedEndpoint: string | undefined;
+  selectedPingHost: string | undefined;
 
   latency: number | undefined;
   getLatency: (
     node_alias: string,
-    endpoint: string,
+    ping_host: string,
     first?: boolean
   ) => Promise<void>;
   setLatency: (latency: number | undefined) => void;
@@ -130,20 +130,20 @@ interface ILoginStateSlice {
 
 async function getNodeLatency(
   node_alias: string,
-  endpoint: string,
+  ping_host: string,
   sponsor: boolean,
   net: number | null
 ): Promise<NodeInfo> {
   if (net === null)
     return {
       alias: node_alias,
-      endpoint: endpoint,
+      ping_host: ping_host,
       sponsor: sponsor,
       net: net,
       delay: 0,
     };
 
-  const statusUrl = `https://${endpoint}/ping`;
+  const statusUrl = `https://${ping_host}/ping`;
 
   try {
     const resp = await fetch(statusUrl);
@@ -162,7 +162,7 @@ async function getNodeLatency(
       );
       return {
         alias: node_alias,
-        endpoint: endpoint,
+        ping_host: ping_host,
         sponsor: sponsor,
         net: net,
         delay: delay,
@@ -174,7 +174,7 @@ async function getNodeLatency(
       });
       return {
         alias: node_alias,
-        endpoint: endpoint,
+        ping_host: ping_host,
         sponsor: sponsor,
         net: net,
         delay: 0,
@@ -201,7 +201,7 @@ async function getNodeLatency(
     }
     return {
       alias: node_alias,
-      endpoint: endpoint,
+      ping_host: ping_host,
       sponsor: sponsor,
       net: net,
       delay: 0,
@@ -551,8 +551,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           if (is_online) {
             const node_alias = get().userInfo?.wg_data?.node_alias;
-            const endpoint = get().selectedEndpoint;
-            if (node_alias && endpoint) get().getLatency(node_alias, endpoint);
+            const ping_host = get().selectedPingHost;
+            if (node_alias && ping_host) get().getLatency(node_alias, ping_host);
           } else {
             get().setLatency(0);
             openToast({
@@ -615,7 +615,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           // 并行请求所有节点的延迟
           const latencyPromises = data.map((node) =>
-            getNodeLatency(node.alias, node.endpoint, node.sponsor, node.net)
+            getNodeLatency(node.alias, node.ping_host, node.sponsor, node.net)
           );
           // 等待所有请求完成，返回结果数组
           const nodesWithDelay = await Promise.all(latencyPromises);
@@ -698,31 +698,20 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           const data = await resp.json();
           if (data.code === 0) {
-            // set((state) => {
-            //   return produce(state, (draft) => {
-            //     if (draft?.userInfo?.wg_data) {
-            //       // 更新用户选择的节点
-            //       draft.userInfo.wg_data.node_alias = node_alias;
-            //       draft.tunnelName = data.tunnel_name;
-            //       draft.selectedEndpoint = data.endpoint;
-            //       draft.userInfo.wg_data.conf_text = data.conf_text;
-            //     }
-            //   });
-            // });
             set(
               produce((draft) => {
                 if (draft?.userInfo?.wg_data) {
                   // 更新用户选择的节点
                   draft.userInfo.wg_data.node_alias = node_alias;
                   draft.tunnelName = data.tunnel_name;
-                  draft.selectedEndpoint = data.endpoint;
+                  draft.selectedPingHost = data.ping_host;
                   draft.userInfo.wg_data.conf_text = data.conf_text;
                 }
               })
             );
 
             if (firstLoad)
-              get().getLatency(node_alias, data.endpoint, firstLoad);
+              get().getLatency(node_alias, data.ping_host, firstLoad);
 
             openToast({ content: data.msg, status: "success" });
           } else {
@@ -736,18 +725,18 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       tunnelName: undefined,
-      selectedEndpoint: undefined,
+      selectedPingHost: undefined,
 
       latency: undefined,
 
       getLatency: async (
         node_alias: string,
-        endpoint: string,
+        ping_host: string,
         first: boolean = false
       ) => {
         const nodeWithDelay = await getNodeLatency(
           node_alias,
-          endpoint,
+          ping_host,
           false,
           0
         );

@@ -20,7 +20,7 @@ import { openToast } from "../universal/toast";
 
 interface NodeInfo {
   alias: string;
-  endpoint: string;
+  ping_host: string;
   sponsor: boolean;
   net: number | null;
   delay: number;
@@ -198,7 +198,7 @@ export const ServerNodeListModal: React.FC = () => {
         </ModalBody>
 
         <ModalFooter>
-          根据节点负载和网络延迟选择合适的服务器；ms是延迟，越低越好
+          根据节点负载和延迟选择合适的服务器；MS是延迟，越低越好；大陆联机节点不支持海外用户；
         </ModalFooter>
       </ModalContent>
     </Modal>
