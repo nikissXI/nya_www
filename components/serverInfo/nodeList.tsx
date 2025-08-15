@@ -158,19 +158,13 @@ export const ServerNodeListModal: React.FC = () => {
 
             <Stack spacing={3} mx="auto" my={3} px={4} w="100%">
               {nodeMap &&
-                nodeMap
-                  .values()
-                  .map((node) => (
-                    <ServerNodeItem
-                      key={node.alias}
-                      node={node}
-                      selected={
-                        userInfo?.wg_data?.node_alias === node.alias
-                          ? true
-                          : false
-                      }
-                    />
-                  ))}
+                Array.from(nodeMap.values()).map((node) => (
+                  <ServerNodeItem
+                    key={node.alias}
+                    node={node}
+                    selected={userInfo?.wg_data?.node_alias === node.alias}
+                  />
+                ))}
             </Stack>
           </VStack>
         </ModalBody>

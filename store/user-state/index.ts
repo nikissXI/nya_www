@@ -90,7 +90,6 @@ interface ILoginStateSlice {
   ) => Promise<number>;
   // 节点列表
   nodeMap: Map<string, NodeInfo>;
-  nodeList: NodeInfo[] | undefined;
   getNodeList: () => Promise<void>;
 
   // 节点选择
@@ -403,7 +402,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       // 节点列表
       nodeMap: new Map<string, any>(),
-      nodeList: undefined,
       getNodeList: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
