@@ -4,15 +4,15 @@ import { useRouter } from "next/navigation";
 import { Flex, Image, Center, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
-import SponsorAd from "@/components/docs/AD";
+import AnnouncementsModal from "@/components/docs/Announcement";
 
 export default function Page() {
   const router = useRouter();
-  const { logined, serverData } = useUserStateStore();
+  const { userInfo, serverData } = useUserStateStore();
 
   return (
     <Flex direction="column" justifyContent="space-between" alignItems="center">
-      <SponsorAd />
+      <AnnouncementsModal />
 
       <Flex
         wrap="wrap"
@@ -64,7 +64,7 @@ export default function Page() {
         mt={6}
         fontSize="lg"
         onClick={() => {
-          if (logined) {
+          if (userInfo) {
             router.push("/room");
           } else {
             router.push("/me");

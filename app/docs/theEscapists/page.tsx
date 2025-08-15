@@ -20,7 +20,7 @@ import { isInteger } from "@/utils/strings";
 export default function AndroidPage0() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
-  const { logined, setShowLoginModal } = useUserStateStore();
+  const { userInfo, setShowLoginModal } = useUserStateStore();
   const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");
 
@@ -90,7 +90,7 @@ export default function AndroidPage0() {
         </Text>
 
         <Flex>
-          {logined ? (
+          {userInfo ? (
             <Flex>
               <Input
                 w="130px"

@@ -44,7 +44,7 @@ export default function Page() {
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();
-  const [captchaImage, setCaptchaImage] = useState("");
+  const [captchaImageUrl, setCaptchaImageUrl] = useState("");
 
   const [sendVerifyButtonText, setSendVerifyButtonText] =
     useState("获取验证码");
@@ -62,7 +62,7 @@ export default function Page() {
 
   useEffect(() => {
     const loadCaptcha = async () => {
-      setCaptchaImage(await fetchCaptcha());
+      setCaptchaImageUrl(await fetchCaptcha());
     };
     loadCaptcha();
   }, [fetchCaptcha]);
@@ -142,7 +142,7 @@ export default function Page() {
         router.push("/me");
       } else {
         openToast({ content: data.msg, status: "warning" });
-        setCaptchaImage(await fetchCaptcha());
+        setCaptchaImageUrl(await fetchCaptcha());
         setInputCaptcha("");
       }
     } else {
@@ -315,10 +315,10 @@ export default function Page() {
             rounded={5}
             ml={1}
             onClick={async () => {
-              setCaptchaImage(await fetchCaptcha());
+              setCaptchaImageUrl(await fetchCaptcha());
               setInputCaptcha("");
             }}
-            src={captchaImage ? captchaImage : undefined}
+            src={captchaImageUrl ? captchaImageUrl : undefined}
             alt="验证码"
             cursor="pointer"
           />

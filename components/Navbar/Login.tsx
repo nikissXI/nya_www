@@ -39,9 +39,8 @@ export function LoginModal() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const {
-    logging,
-    logined,
-    goToDoc,
+    userInfo,
+    goToIssues,
     uuid,
     getUserInfo,
     showLoginModal,
@@ -50,7 +49,7 @@ export function LoginModal() {
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();
-  const [captchaImage, setCaptchaImage] = useState("");
+  const [captchaImageUrl, setCaptchaImageUrl] = useState("");
 
   // 填写的表单数据
   const [verifyType, setVerifyType] = useState("email");
@@ -72,12 +71,12 @@ export function LoginModal() {
 
   useEffect(() => {
     const loadCaptcha = async () => {
-      if (!logging && !logined && showLoginModal) {
-        setCaptchaImage(await fetchCaptcha());
+      if (!userInfo && showLoginModal) {
+        setCaptchaImageUrl(await fetchCaptcha());
       }
     };
     loadCaptcha();
-  }, [logging, fetchCaptcha, showLoginModal, logined]);
+  }, [fetchCaptcha, showLoginModal, userInfo]);
 
   const toggleLoginButton = (
     inputAccount: string,
@@ -131,17 +130,17 @@ export function LoginModal() {
         setAuthToken(data.token);
         getUserInfo();
         setShowLoginModal();
-        if (goToDoc === true) {
-          router.push("/docs#games");
+        if (goToIssues === true) {
+          router.push("/docs#issues");
         }
       } else {
         openToast({ content: data.msg, status: "warning" });
-        setCaptchaImage(await fetchCaptcha());
+        setCaptchaImageUrl(await fetchCaptcha());
         setInputCaptcha("");
       }
     } else if (resp.status === 401) {
       openToast({ content: "账号或密码错误", status: "warning" });
-      setCaptchaImage(await fetchCaptcha());
+      setCaptchaImageUrl(await fetchCaptcha());
       setInputCaptcha("");
     } else {
       openToast({ content: "服务异常，请联系服主处理", status: "error" });
@@ -258,10 +257,10 @@ export function LoginModal() {
                 rounded="lg"
                 ml={1}
                 onClick={async () => {
-                  setCaptchaImage(await fetchCaptcha());
+                  setCaptchaImageUrl(await fetchCaptcha());
                   setInputCaptcha("");
                 }}
-                src={captchaImage ? captchaImage : undefined}
+                src={captchaImageUrl ? captchaImageUrl : undefined}
                 alt="验证码"
                 cursor="pointer"
               />

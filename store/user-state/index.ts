@@ -4,6 +4,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
+import { User } from "@sentry/react";
 
 interface GroupItem {
   name: string;
@@ -14,6 +15,7 @@ interface ServerData {
   userCount: number | null;
   relateGroup: GroupItem[] | null;
 }
+// 登录后的用户数据及wireguard信息
 interface WGData {
   node_alias: string;
   ip: string;
@@ -30,6 +32,7 @@ interface UserInfo {
   sponsorship: number;
   wg_data: WGData | null;
 }
+// 登录后，用户访问房间列表拉取的房间信息
 interface Member {
   username: string;
   ip: string;
@@ -43,7 +46,7 @@ interface RoomInfo {
   members: Member[];
   room_passwd: string;
 }
-
+// 登录后，拉取的节点信息
 interface NodeInfo {
   alias: string;
   ping_host: string;
@@ -53,167 +56,79 @@ interface NodeInfo {
 }
 
 interface ILoginStateSlice {
-  serverData: ServerData | undefined;
-  getServerData: () => Promise<void>;
-  setServerData: (serverData: ServerData) => void;
-
+  // 访问唯一标识
   uuid: string;
 
+  // 网站访问数据和关联群
+  serverData: ServerData | undefined;
+  getServerData: () => Promise<void>;
+
+  // 用于导入隧道的key
   confKey: string | null;
   getConfKey: () => void;
 
-  getIp: () => void;
+  // 获取隧道
+  getTunnel: () => void;
 
-  logging: boolean;
-  changeloggingState: (state: boolean) => void;
+  // 是否下次登录跳转到教程问答区
+  goToIssues: boolean;
+  setGoToIssues: (state: boolean) => void;
 
-  logined: boolean;
-  changeLoginState: (state: boolean) => void;
-
-  goToDoc: boolean;
-  changeGoToDocState: (state: boolean) => void;
-
+  // 登录加载状态
+  loginLoading: boolean;
+  // 获取用户信息
+  userInfo: UserInfo | undefined;
   getUserInfo: () => Promise<void>;
-
+  // 退出登录
   logout: () => void;
 
-  userInfo: UserInfo | undefined;
-  setUserInfo: (profile: UserInfo | undefined) => void;
-
-  roomStatus: "none" | "member" | "hoster";
-  setRoomStatus: (roomStatus: "none" | "member" | "hoster") => void;
-
-  disableFlush: boolean;
-  setDisableFlush: (disable: boolean) => void;
-
-  roomData: RoomInfo | undefined;
-  getRoomData: (manual?: boolean) => Promise<void>;
-  setRoomData: (roomData: RoomInfo | undefined) => void;
-
+  // 获取节点延迟
+  getNodeLatency: (
+    node_alias: string,
+    ping_host: string,
+    net?: number | null
+  ) => Promise<number>;
+  // 节点列表
+  nodeMap: Map<string, NodeInfo>;
   nodeList: NodeInfo[] | undefined;
   getNodeList: () => Promise<void>;
 
+  // 节点选择
   showNodeListModal: boolean;
   setNodeListModal: () => void;
-
-  firstLoad: boolean;
-  selectNode: (node_alias: string, manual?: boolean) => void;
+  selectNode: (node_alias: string, manual: boolean) => void;
   selectNodeLock: boolean;
-  setSelectNodeLock: (lock: boolean) => void;
 
   tunnelName: string | undefined;
-  selectedPingHost: string | undefined;
-
   latency: number | undefined;
-  getLatency: (
-    node_alias: string,
-    ping_host: string,
-    first?: boolean
-  ) => Promise<void>;
-  setLatency: (latency: number | undefined) => void;
-
-  rotate: boolean;
-  setRotate: (rotate: boolean) => void;
-
   onlineStatus: "在线" | "离线";
-  setOnlineStatus: (onlineStatus: "在线" | "离线") => void;
+
+  // 刷新房间信息冷却
+  disableFlush: boolean;
+  // 房间角色
+  roomRole: "none" | "member" | "hoster";
+  // 加载动画
+  rotate: boolean;
+  // 房间数据
+  roomData: RoomInfo | undefined;
+  setRoomData: (roomData: RoomInfo | undefined) => void;
+  getRoomData: (manual?: boolean) => Promise<void>;
 
   showRegetModal: boolean;
   setShowRegetModal: () => void;
-
-  showSponsorModal: boolean;
-  setShowSponsorModal: () => void;
 
   showLoginModal: boolean;
   setShowLoginModal: () => void;
 }
 
-async function getNodeLatency(
-  node_alias: string,
-  ping_host: string,
-  sponsor: boolean,
-  net: number | null
-): Promise<NodeInfo> {
-  if (net === null)
-    return {
-      alias: node_alias,
-      ping_host: ping_host,
-      sponsor: sponsor,
-      net: net,
-      delay: 0,
-    };
-
-  const statusUrl = `https://${ping_host}/ping`;
-
-  try {
-    const resp = await fetch(statusUrl);
-    if (!resp.ok) {
-      throw new Error(`${node_alias}节点获取延迟出错`);
-    }
-    // 等待一小段时间确保 performance 记录了请求
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    const entries = performance.getEntriesByName(statusUrl);
-    const lastEntry = entries.at(-1) as PerformanceResourceTiming | undefined;
-
-    if (lastEntry) {
-      const delay = Math.floor(
-        lastEntry.responseStart - lastEntry.requestStart
-      );
-      return {
-        alias: node_alias,
-        ping_host: ping_host,
-        sponsor: sponsor,
-        net: net,
-        delay: delay,
-      };
-    } else {
-      openToast({
-        content: `${node_alias}节点获取延迟出错，联系服主处理`,
-        status: "error",
-      });
-      return {
-        alias: node_alias,
-        ping_host: ping_host,
-        sponsor: sponsor,
-        net: net,
-        delay: 0,
-      };
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === "Failed to fetch") {
-        openToast({
-          content: "未知错误A",
-          status: "error",
-        });
-      } else {
-        openToast({
-          content: error.message,
-          status: "error",
-        });
-      }
-    } else {
-      openToast({
-        content: "未知错误B",
-        status: "error",
-      });
-    }
-    return {
-      alias: node_alias,
-      ping_host: ping_host,
-      sponsor: sponsor,
-      net: net,
-      delay: 0,
-    };
-  }
-}
-
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
     return {
-      serverData: undefined,
+      // 访问唯一标识
+      uuid: "",
 
+      // 网站访问数据和关联群
+      serverData: undefined,
       getServerData: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -222,32 +137,18 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             throw new Error("请求出错");
           }
           const data = await resp.json();
-          get().setServerData(data);
+          set(
+            produce((draft) => {
+              draft.serverData = data;
+            })
+          );
         } catch (error) {
         } finally {
         }
       },
 
-      // setServerData: (serverData: ServerData) => {
-      //   set((state) => {
-      //     return produce(state, (draft) => {
-      //       draft.serverData = serverData;
-      //     });
-      //   });
-      // },
-
-      // 更优写法（推荐）
-      setServerData: (serverData: ServerData) =>
-        set(
-          produce((draft) => {
-            draft.serverData = serverData;
-          })
-        ),
-
-      uuid: "",
-
+      // 用于导入隧道的key
       confKey: null,
-
       getConfKey: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -263,11 +164,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           const data = await resp.json();
           if (data.code === 0) {
-            // set((state) => {
-            //   return produce(state, (draft) => {
-            //     draft.confKey = data.key;
-            //   });
-            // });
             set(
               produce((draft) => {
                 draft.confKey = data.key;
@@ -282,7 +178,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      getIp: async () => {
+      // 获取隧道
+      getTunnel: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/getIp`, {
@@ -297,12 +194,23 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           const data = await resp.json();
           if (data.code === 0) {
+            // 更新用户信息
+            set(
+              produce((draft) => {
+                draft.userInfo.wg_data = data.wg_data;
+              })
+            );
+
             openToast({
               content: `隧道${data.ip}绑定成功`,
               status: "success",
             });
-            get().getUserInfo();
 
+            // 获取隧道后弹出节点选择框
+            if (data.data.wg_data) {
+              get().setNodeListModal();
+              get().getNodeList();
+            }
             if (data.reget_ip) {
               get().setShowRegetModal();
             }
@@ -316,80 +224,36 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      logging: true,
-      changeloggingState: (loggingState: boolean) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.logging = loggingState;
-        //   });
-        // });
+      // 是否下次登录跳转到教程问答区
+      goToIssues: false,
+      setGoToIssues: (goToIssues: boolean) => {
         set(
           produce((draft) => {
-            draft.logging = loggingState;
+            draft.goToIssues = goToIssues;
           })
         );
       },
 
-      logined: false,
-      changeLoginState: (loginState: boolean) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.logined = loginState;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.logined = loginState;
-          })
-        );
-      },
-
-      goToDoc: false,
-      changeGoToDocState: (goToDocState: boolean) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.goToDoc = goToDocState;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.goToDoc = goToDocState;
-          })
-        );
-      },
-
+      // 登录加载状态
+      loginLoading: true,
+      // 获取用户信息
+      userInfo: undefined,
       getUserInfo: async () => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.logging = true;
-        //   });
-        // });
-
         set(
           produce((draft) => {
-            draft.logging = true;
+            draft.loginLoading = true;
           })
         );
 
+        // 生成，记录uuid
         const _uuid = localStorage.getItem("uuid");
         if (_uuid) {
-          // set((state) => {
-          //   return produce(state, (draft) => {
-          //     draft.uuid = _uuid;
-          //   });
-          // });
           set(
             produce((draft) => {
               draft.uuid = _uuid;
             })
           );
         } else {
-          // set((state) => {
-          //   return produce(state, (draft) => {
-          //     draft.uuid = uuidv4();
-          //     localStorage.setItem("uuid", draft.uuid);
-          //   });
-          // });
           set(
             produce((draft) => {
               draft.uuid = uuidv4();
@@ -398,9 +262,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           );
         }
 
-        const token = getAuthToken();
-
-        if (token) {
+        if (getAuthToken()) {
           try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL;
             const resp = await fetch(`${apiUrl}/userInfo`, {
@@ -417,8 +279,19 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               throw new Error("服务器出错，请稍后再试");
             }
             const data = await resp.json();
-            get().setUserInfo(data.data);
-            get().changeLoginState(true);
+            const userInfo: UserInfo = data.data;
+            set(
+              produce((draft) => {
+                draft.userInfo = userInfo;
+              })
+            );
+            // 如果有隧道信息就拉节点列表
+            if (userInfo.wg_data) {
+              get().getNodeList();
+              // 如果没选节点就弹出节点列表
+              if (!userInfo.wg_data.node_alias) get().setNodeListModal();
+              else get().selectNode(userInfo.wg_data.node_alias, false);
+            }
           } catch (error) {
             if (error instanceof Error) {
               if (error.message === "登陆凭证失效") {
@@ -442,167 +315,95 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
         }
 
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.logging = false;
-        //   });
-        // });
         set(
           produce((draft) => {
-            draft.logging = false;
+            draft.loginLoading = false;
           })
         );
       },
 
+      // 退出登录
       logout: () => {
         clearAuthToken();
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.uuid = uuidv4();
-        //     localStorage.setItem("uuid", draft.uuid);
-        //   });
-        // });
+
         set(
           produce((draft) => {
             draft.uuid = uuidv4();
             localStorage.setItem("uuid", draft.uuid);
-          })
-        );
-        get().setUserInfo(undefined);
-        get().changeLoginState(false);
-        get().setRoomStatus("none");
-        get().setRoomData(undefined);
-        get().setLatency(undefined);
-      },
-
-      userInfo: undefined,
-
-      setUserInfo: (profile: UserInfo | undefined) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.userInfo = profile;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.userInfo = profile;
+            draft.userInfo = undefined;
+            draft.roomRole = "none";
+            draft.roomData = undefined;
+            draft.latency = undefined;
           })
         );
       },
 
-      roomStatus: "none",
+      // 获取节点延迟
+      getNodeLatency: async (
+        node_alias: string,
+        ping_host: string,
+        net: number | null = 0
+      ) => {
+        if (net === null) return 0;
 
-      setRoomStatus: (roomStatus: "none" | "member" | "hoster") => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.roomStatus = roomStatus;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.roomStatus = roomStatus;
-          })
-        );
-      },
+        const statusUrl = `https://${ping_host}/ping`;
+        const node = get().nodeMap.get(node_alias);
 
-      disableFlush: false,
-      setDisableFlush: (disable: boolean) => {
-        set(
-          produce((draft) => {
-            draft.disableFlush = disable;
-          })
-        );
-      },
-
-      roomData: undefined,
-
-      getRoomData: async (passLock: boolean = true) => {
         try {
-          if (!passLock) {
-            if (get().disableFlush === true) return;
-            get().setDisableFlush(true);
-            // 设置定时器，3秒后重新启用按钮
-            setTimeout(() => {
-              get().setDisableFlush(false); // 启用按钮
-            }, 3000);
-          }
-
-          //转起来
-          get().setRotate(true);
-
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const resp = await fetch(`${apiUrl}/getRoom`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${getAuthToken()}`,
-            },
-          });
+          const resp = await fetch(statusUrl);
           if (!resp.ok) {
-            throw new Error("请求出错");
+            throw new Error(`${node_alias}节点获取延迟出错`);
           }
-          const data = await resp.json();
+          // 等待一小段时间确保 performance 记录了请求
+          await new Promise((resolve) => setTimeout(resolve, 100));
 
-          // ip失效刷新页面
-          if (data.code === -1) window.location.reload();
+          const entries = performance.getEntriesByName(statusUrl);
+          const lastEntry = entries.at(-1) as
+            | PerformanceResourceTiming
+            | undefined;
 
-          const is_online = data.is_online as boolean;
-          // 在线状态处理
-          get().setOnlineStatus(is_online ? "在线" : "离线");
-
-          if (is_online) {
-            const node_alias = get().userInfo?.wg_data?.node_alias;
-            const ping_host = get().selectedPingHost;
-            if (node_alias && ping_host) get().getLatency(node_alias, ping_host);
+          if (lastEntry) {
+            const delay = Math.floor(
+              lastEntry.responseStart - lastEntry.requestStart
+            );
+            if (node) node.delay = delay;
+            return delay;
           } else {
-            get().setLatency(0);
             openToast({
-              content: "离线无法联机，不会用就看使用教程",
-              status: "warning",
+              content: `${node_alias}节点获取延迟出错，联系服主处理`,
+              status: "error",
+            });
+            if (node) node.delay = 0;
+            return 0;
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            if (error.message === "Failed to fetch") {
+              openToast({
+                content: "未知错误A",
+                status: "error",
+              });
+            } else {
+              openToast({
+                content: error.message,
+                status: "error",
+              });
+            }
+          } else {
+            openToast({
+              content: "未知错误B",
+              status: "error",
             });
           }
 
-          const roomData = data.data as RoomInfo;
-
-          // 使用局部变量进行状态判断
-          if (roomData) {
-            // 房主或成员
-            if (roomData.user_ip === roomData.hoster_ip) {
-              get().setRoomStatus("hoster");
-            } else {
-              get().setRoomStatus("member");
-            }
-          } else {
-            get().setRoomStatus("none");
-          }
-
-          get().setRoomData(roomData);
-
-          openToast({ content: `刷新成功`, status: "success" });
-        } catch (error) {
-          openToast({
-            content: "服务器出错，请稍后刷新再试",
-            status: "error",
-          });
-        } finally {
-          get().setRotate(false);
+          if (node) node.delay = 0;
+          return 0;
         }
       },
 
-      setRoomData: (roomData: RoomInfo | undefined) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.roomData = roomData;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.roomData = roomData;
-          })
-        );
-      },
-
+      // 节点列表
+      nodeMap: new Map<string, any>(),
       nodeList: undefined,
-
       getNodeList: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -611,20 +412,23 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             throw new Error("请求出错");
           }
           // 返回的没有 delay
-          const data: NodeInfo[] = await resp.json();
+          const nodes: NodeInfo[] = await resp.json();
+
+          get().nodeMap = new Map<string, NodeInfo>(
+            nodes.map((n) => [n.alias, n])
+          );
+
+          // get().nodeMap.forEach((node, key) => {
+          //   console.log(key, node);
+          // });
 
           // 并行请求所有节点的延迟
-          const latencyPromises = data.map((node) =>
-            getNodeLatency(node.alias, node.ping_host, node.sponsor, node.net)
+          const latencyPromises = nodes.map((node) =>
+            get().getNodeLatency(node.alias, node.ping_host, node.net)
           );
           // 等待所有请求完成，返回结果数组
           const nodesWithDelay = await Promise.all(latencyPromises);
 
-          // set((state) => {
-          //   return produce(state, (draft) => {
-          //     draft.nodeList = nodesWithDelay;
-          //   });
-          // });
           set(
             produce((draft) => {
               draft.nodeList = nodesWithDelay;
@@ -639,53 +443,25 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
+      // 节点选择
       showNodeListModal: false,
-
       setNodeListModal: () => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.showNodeListModal = !draft.showNodeListModal;
-        //   });
-        // });
         set(
           produce((draft) => {
             draft.showNodeListModal = !draft.showNodeListModal;
           })
         );
       },
-
       selectNodeLock: false,
-
-      setSelectNodeLock: (lock: boolean) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.selectNodeLock = lock;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.selectNodeLock = lock;
-          })
-        );
-      },
-
-      firstLoad: true,
-
-      selectNode: async (node_alias: string, manual: boolean = false) => {
+      selectNode: async (node_alias: string, manual: boolean) => {
         try {
-          const firstLoad = get().firstLoad;
-          if (firstLoad) {
-            set(
-              produce((draft) => {
-                draft.firstLoad = false;
-              })
-            );
-          }
-
-          get().setSelectNodeLock(true);
+          set(
+            produce((draft) => {
+              draft.selectNodeLock = true;
+            })
+          );
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const params =
-            firstLoad && manual === false ? `` : `?node_alias=${node_alias}`;
+          const params = manual ? `?node_alias=${node_alias}` : ``;
           const resp = await fetch(`${apiUrl}/selectNode` + params, {
             method: "GET",
             headers: {
@@ -704,14 +480,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
                   // 更新用户选择的节点
                   draft.userInfo.wg_data.node_alias = node_alias;
                   draft.tunnelName = data.tunnel_name;
-                  draft.selectedPingHost = data.ping_host;
                   draft.userInfo.wg_data.conf_text = data.conf_text;
                 }
               })
             );
-
-            if (firstLoad)
-              get().getLatency(node_alias, data.ping_host, firstLoad);
 
             openToast({ content: data.msg, status: "success" });
           } else {
@@ -720,105 +492,155 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         } catch (error) {
           openToast({ content: "服务异常，请联系服主处理", status: "error" });
         } finally {
-          get().setSelectNodeLock(false);
+          set(
+            produce((draft) => {
+              draft.selectNodeLock = false;
+            })
+          );
         }
       },
 
       tunnelName: undefined,
-      selectedPingHost: undefined,
-
       latency: undefined,
+      onlineStatus: "离线",
 
-      getLatency: async (
-        node_alias: string,
-        ping_host: string,
-        first: boolean = false
-      ) => {
-        const nodeWithDelay = await getNodeLatency(
-          node_alias,
-          ping_host,
-          false,
-          0
+      // 刷新房间信息冷却
+      disableFlush: false,
+      // 房间角色
+      roomRole: "none",
+      // 加载动画
+      rotate: false,
+      // 房间数据
+      roomData: undefined,
+      setRoomData: (roomData: RoomInfo | undefined) => {
+        set(
+          produce((draft) => {
+            draft.roomData = roomData;
+          })
         );
+      },
+      getRoomData: async (passLock: boolean = true) => {
+        try {
+          if (!passLock) {
+            if (get().disableFlush === true) return;
 
-        if (get().onlineStatus === "在线" && nodeWithDelay.delay === 0)
-          openToast({
-            content: "检测延迟故障，请联系服主处理",
-            status: "error",
+            // 设置定时器，3秒后重新启用按钮
+            set(
+              produce((draft) => {
+                draft.disableFlush = true;
+              })
+            );
+
+            setTimeout(() => {
+              // 启用按钮
+              set(
+                produce((draft) => {
+                  draft.disableFlush = false;
+                })
+              );
+            }, 3000);
+          }
+
+          //转起来
+          set(
+            produce((draft) => {
+              draft.rotate = true;
+            })
+          );
+
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const resp = await fetch(`${apiUrl}/getRoom`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
           });
+          if (!resp.ok) {
+            throw new Error("请求出错");
+          }
+          const data = await resp.json();
 
-        get().setLatency(nodeWithDelay.delay);
+          // ip失效刷新页面
+          if (data.code === -1) window.location.reload();
 
-        if (first === false) performance.clearResourceTimings();
+          const is_online = data.is_online as boolean;
+          // 在线状态
+          set(
+            produce((draft) => {
+              draft.onlineStatus = is_online ? "在线" : "离线";
+            })
+          );
+          const node_alias = get().userInfo?.wg_data?.node_alias;
 
-        // 赞助提示
-        if (get().userInfo?.sponsorship === 0) {
-          const pingCount = localStorage.getItem("pingCount");
-          if (pingCount) {
-            const newPingCount = Number(pingCount) + 1;
+          if (is_online && node_alias) {
+            const node = get().nodeMap.get(node_alias);
 
-            if (newPingCount === 88) {
-              get().setShowSponsorModal();
+            if (get().latency === undefined) {
+              performance.clearResourceTimings();
             }
 
-            localStorage.setItem("pingCount", newPingCount.toString());
+            if (node?.ping_host) {
+              const delay = await get().getNodeLatency(
+                node_alias,
+                node.ping_host
+              );
+
+              if (get().onlineStatus === "在线" && delay === 0)
+                openToast({
+                  content: "检测延迟故障，请联系服主处理",
+                  status: "error",
+                });
+
+              set(
+                produce((draft) => {
+                  draft.latency = delay;
+                })
+              );
+            }
           } else {
-            localStorage.setItem("pingCount", "1");
+            set(
+              produce((draft) => {
+                draft.latency = 0;
+              })
+            );
+            openToast({
+              content: "离线无法联机，不会用就看使用教程",
+              status: "warning",
+            });
           }
+
+          const roomData = data.data as RoomInfo;
+
+          let roomRole: string = "none";
+          if (roomData) {
+            roomRole =
+              roomData.user_ip === roomData.hoster_ip ? "hoster" : "member";
+          }
+          set(
+            produce((draft) => {
+              draft.roomRole = roomRole;
+            })
+          );
+
+          get().setRoomData(roomData);
+
+          openToast({ content: `刷新成功`, status: "success" });
+        } catch (error) {
+          openToast({
+            content: "服务器出错，请稍后刷新再试",
+            status: "error",
+          });
+        } finally {
+          set(
+            produce((draft) => {
+              draft.rotate = false;
+            })
+          );
         }
       },
 
-      setLatency: (latency: number | undefined) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.latency = latency;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.latency = latency;
-          })
-        );
-      },
-
-      rotate: false,
-
-      setRotate: (rotate: boolean) => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.rotate = rotate;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.rotate = rotate;
-          })
-        );
-      },
-
-      onlineStatus: "离线",
-
-      setOnlineStatus: (onlineStatus: "在线" | "离线") => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.onlineStatus = onlineStatus;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.onlineStatus = onlineStatus;
-          })
-        );
-      },
-
       showRegetModal: false,
-
       setShowRegetModal: () => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.showRegetModal = !draft.showRegetModal;
-        //   });
-        // });
         set(
           produce((draft) => {
             draft.showRegetModal = !draft.showRegetModal;
@@ -826,29 +648,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         );
       },
 
-      showSponsorModal: false,
-
-      setShowSponsorModal: () => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.showSponsorModal = !draft.showSponsorModal;
-        //   });
-        // });
-        set(
-          produce((draft) => {
-            draft.showSponsorModal = !draft.showSponsorModal;
-          })
-        );
-      },
-
       showLoginModal: false,
 
       setShowLoginModal: () => {
-        // set((state) => {
-        //   return produce(state, (draft) => {
-        //     draft.showLoginModal = !draft.showLoginModal;
-        //   });
-        // });
         set(
           produce((draft) => {
             draft.showLoginModal = !draft.showLoginModal;

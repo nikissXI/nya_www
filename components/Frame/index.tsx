@@ -12,7 +12,6 @@ import Footer from "../Navbar/Footer";
 import { LoginModal } from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
 import TunnelUpdateModal from "../docs/ReGetIpModal";
-import NeedSponsorModal from "../docs/SponsorModal";
 import { ServerNodeListModal } from "../serverInfo/nodeList";
 
 export default function Frame({
@@ -21,14 +20,13 @@ export default function Frame({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname(); // 获取当前路径名
-  const { logging } = useUserStateStore();
+  const { loginLoading } = useUserStateStore();
 
   return (
     <>
       <Toaster />
       <LoginModal />
       <TunnelUpdateModal />
-      <NeedSponsorModal />
       <ServerNodeListModal />
 
       <Flex
@@ -41,7 +39,7 @@ export default function Frame({
 
         {/* 主内容区域 */}
         <Box as="main" flex={{ base: "1", md: "4" }} mt={{ base: 20, md: 100 }}>
-          {logging ? (
+          {loginLoading ? (
             <Box>
               <NoticeText />
 

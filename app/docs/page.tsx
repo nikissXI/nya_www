@@ -26,8 +26,6 @@ import { Link as ScrollLink } from "react-scroll";
 import { useUserStateStore } from "@/store/user-state";
 import { useRouter } from "next/navigation";
 import { openToast } from "@/components/universal/toast";
-// import { GetConfUrl } from "@/components/universal/GetConf";
-// import { getAuthToken } from "@/store/authKey";
 import NextLink from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 
@@ -72,8 +70,7 @@ const articles: Article[] = [
 
 const DocumentPage = () => {
   const {
-    logined,
-    changeGoToDocState,
+    setGoToIssues,
     confKey,
     getConfKey,
     userInfo,
@@ -84,15 +81,15 @@ const DocumentPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (logined && userInfo?.wg_data) {
+    if (userInfo?.wg_data) {
       getConfKey();
-      changeGoToDocState(false);
+      setGoToIssues(false);
     } else {
-      changeGoToDocState(true);
+      setGoToIssues(true);
       openToast({ content: "请登陆后再访问教程", status: "info" });
       router.push("/me");
     }
-  }, [logined]);
+  }, [userInfo]);
 
   const handleCopyLink = async (confKey: string) => {
     try {
@@ -107,38 +104,7 @@ const DocumentPage = () => {
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
-  // const [showWinError, setWinError] = useState(false);
 
-  // 暂时停用
-  // const downloadConf = async () => {
-  //   const resp = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/getDownloadConfkey`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${getAuthToken()}`,
-  //       },
-  //     }
-  //   );
-
-  //   if (resp.ok) {
-  //     const data = await resp.json();
-  //     if (data.code === 0) {
-  //       // 用拿到的data.key下载conf
-  //       window.open(
-  //         `${process.env.NEXT_PUBLIC_API_URL}/downloadConf?key=${data.key}`,
-  //         "_blank"
-  //       );
-  //     } else {
-  //       openToast({ content: data.msg, status: "warning" });
-  //     }
-  //   } else if (resp.status === 401) {
-  //     openToast({ content: "登陆凭证无效", status: "warning" });
-  //   } else {
-  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
-  //   }
-  // };
   const GenConfFile = (conf_text: string) => {
     try {
       // 创建Blob
@@ -243,7 +209,6 @@ const DocumentPage = () => {
   //////////////////////
 
   const DownloadButton = (isIOS: boolean = false) => {
-    // 两个通道下载的东西一样，二选一即可。
     return (
       <Button
         ml={3}
@@ -264,58 +229,10 @@ const DocumentPage = () => {
             });
           }
         }}
-        isDisabled={logined ? false : true}
+        isDisabled={userInfo ? false : true}
       >
         点击下载隧道文件
       </Button>
-      // <VStack textAlign="left">
-      //   <Button
-      //     ml={3}
-      //     size="sm"
-      //     onClick={() => {
-      //       const isSafari = navigator.userAgent.includes("Safari");
-      //       if (isSafari) {
-      //         openToast({
-      //           content: "下载完成，请到下载任务列表查看",
-      //           status: "success",
-      //         });
-      //         GetConfUrl(userInfo?.wg_data?.ip as string);
-      //       } else {
-      //         openToast({
-      //           content: "请在Safari中打开网站下载",
-      //           status: "warning",
-      //         });
-      //       }
-      //     }}
-      //     isDisabled={logined ? false : true}
-      //   >
-      //     点击下载隧道文件
-      //   </Button>
-
-      //   <Button
-      //     mt={2}
-      //     ml={3}
-      //     size="sm"
-      //     onClick={() => {
-      //       const isSafari = navigator.userAgent.includes("Safari");
-      //       if (isSafari) {
-      //         openToast({
-      //           content: "下载完成，请到下载任务列表查看",
-      //           status: "success",
-      //         });
-      //         downloadConf();
-      //       } else {
-      //         openToast({
-      //           content: "请在Safari中打开网站下载",
-      //           status: "warning",
-      //         });
-      //       }
-      //     }}
-      //     isDisabled={logined ? false : true}
-      //   >
-      //     点击下载隧道文件（备用）
-      //   </Button>
-      // </VStack>
     );
   };
 
@@ -404,27 +321,23 @@ const DocumentPage = () => {
             3. WG下载和隧道导入
           </Heading>
 
-          <Text>
-            <HighLight>
-              别把自己账号的隧道给其他人导入！
-              <br />
-              别把自己账号的隧道给其他人导入！
-              <br />
-              别把自己账号的隧道给其他人导入！
-            </HighLight>
-          </Text>
+          <HighLight>
+            别把自己账号的隧道给其他人导入！
+            <br />
+            每个节点的隧道都要单独导入！
+            <br />
+            别把自己账号的隧道给其他人导入！
+            <br />
+            每个节点的隧道都要单独导入！
+            <br />
+            别把自己账号的隧道给其他人导入！
+            <br />
+            每个节点的隧道都要单独导入！
+          </HighLight>
 
           <Tabs variant="line" colorScheme="orange">
             <Text pt={2} fontWeight="bolder" ml="1rem">
               选择你要安装WG的系统类型
-              <br />
-              <HighLight>
-                每个节点的隧道都要单独导入
-                <br />
-                每个节点的隧道都要单独导入
-                <br />
-                每个节点的隧道都要单独导入
-              </HighLight>
             </Text>
             <Flex align="center" borderRadius="md" boxShadow="sm" ml="1rem">
               <Text fontWeight="medium" fontSize="md" mr={2}>

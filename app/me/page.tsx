@@ -36,7 +36,7 @@ import useCaptcha from "@/utils/GetCaptcha";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
 import { PiCoffeeBold } from "react-icons/pi";
-import SponsorAd from "@/components/docs/AD";
+import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
 
 const calculateDaysDifference = (
@@ -59,7 +59,7 @@ const calculateDaysDifference = (
 export default function UserProfilePage() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { uuid, getUserInfo, userInfo, logout, getIp, setShowLoginModal } =
+  const { uuid, getUserInfo, userInfo, logout, getTunnel, setShowLoginModal } =
     useUserStateStore();
 
   // 修改用户名
@@ -104,7 +104,7 @@ export default function UserProfilePage() {
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();
-  const [captchaImage, setCaptchaImage] = useState("");
+  const [captchaImageUrl, setCaptchaImageUrl] = useState("");
 
   // 填写的表单数据
   const [inputAccount, setInputAccount] = useState("");
@@ -176,7 +176,7 @@ export default function UserProfilePage() {
         bindQQOnClose();
       } else {
         openToast({ content: data.msg, status: "warning" });
-        setCaptchaImage(await fetchCaptcha());
+        setCaptchaImageUrl(await fetchCaptcha());
       }
     } else {
       openToast({ content: "服务异常，请联系服主处理", status: "error" });
@@ -248,7 +248,7 @@ export default function UserProfilePage() {
         bindTELOnClose();
       } else {
         openToast({ content: data.msg, status: "warning" });
-        setCaptchaImage(await fetchCaptcha());
+        setCaptchaImageUrl(await fetchCaptcha());
       }
     } else {
       openToast({ content: "服务异常，请联系服主处理", status: "error" });
@@ -320,7 +320,7 @@ export default function UserProfilePage() {
         bindTELOnClose();
       } else {
         openToast({ content: data.msg, status: "warning" });
-        setCaptchaImage(await fetchCaptcha());
+        setCaptchaImageUrl(await fetchCaptcha());
       }
     } else {
       openToast({ content: "服务异常，请联系服主处理", status: "error" });
@@ -409,7 +409,7 @@ export default function UserProfilePage() {
 
   return (
     <VStack>
-      <SponsorAd />
+      <AnnouncementsModal />
 
       <Modal isOpen={bindTELIsOpen} onClose={bindTELOnClose}>
         <ModalOverlay />
@@ -460,10 +460,10 @@ export default function UserProfilePage() {
                   rounded={5}
                   ml={1}
                   onClick={async () => {
-                    setCaptchaImage(await fetchCaptcha());
+                    setCaptchaImageUrl(await fetchCaptcha());
                     setInputCaptcha("");
                   }}
-                  src={captchaImage}
+                  src={captchaImageUrl}
                   alt="验证码"
                   cursor="pointer"
                 />
@@ -521,10 +521,10 @@ export default function UserProfilePage() {
                   rounded={5}
                   ml={1}
                   onClick={async () => {
-                    setCaptchaImage(await fetchCaptcha());
+                    setCaptchaImageUrl(await fetchCaptcha());
                     setInputCaptcha("");
                   }}
-                  src={captchaImage}
+                  src={captchaImageUrl}
                   alt="验证码"
                   cursor="pointer"
                 />
@@ -586,10 +586,10 @@ export default function UserProfilePage() {
                   rounded={5}
                   ml={1}
                   onClick={async () => {
-                    setCaptchaImage(await fetchCaptcha());
+                    setCaptchaImageUrl(await fetchCaptcha());
                     setInputCaptcha("");
                   }}
-                  src={captchaImage}
+                  src={captchaImageUrl}
                   alt="验证码"
                   cursor="pointer"
                 />
@@ -747,7 +747,7 @@ export default function UserProfilePage() {
                         variant="link"
                         bgColor="transparent"
                         onClick={async () => {
-                          // setCaptchaImage(await fetchCaptcha());
+                          // setCaptchaImageUrl(await fetchCaptcha());
                           // bindTELOnopen();
                           // setInputAccount("");
                           // setInputVerifyCode("");
@@ -792,7 +792,7 @@ export default function UserProfilePage() {
                     variant="link"
                     bgColor="transparent"
                     onClick={async () => {
-                      setCaptchaImage(await fetchCaptcha());
+                      setCaptchaImageUrl(await fetchCaptcha());
                       bindEmailOnopen();
                       setInputAccount("");
                       setInputVerifyCode("");
@@ -821,7 +821,7 @@ export default function UserProfilePage() {
                     variant="link"
                     bgColor="transparent"
                     onClick={async () => {
-                      setCaptchaImage(await fetchCaptcha());
+                      setCaptchaImageUrl(await fetchCaptcha());
                       bindQQOnOpen();
                       setInputAccount("");
                       setVerifyQQText("");
@@ -897,7 +897,7 @@ export default function UserProfilePage() {
                   你还没获取隧道呢
                 </Heading>
 
-                <Button rounded={5} onClick={getIp} bgColor="#007bc0" size="sm">
+                <Button rounded={5} onClick={getTunnel} bgColor="#007bc0" size="sm">
                   点击获取隧道
                 </Button>
               </VStack>

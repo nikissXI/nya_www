@@ -20,7 +20,6 @@ import {
   Flex,
   Switch,
   Tag,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -33,10 +32,9 @@ import { getAuthToken } from "@/store/authKey";
 import { copyText, isInteger } from "@/utils/strings";
 import { IoIosExit } from "react-icons/io";
 import { FaCheck, FaTimes } from "react-icons/fa";
-import { PiCoffeeBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
-import SponsorAd from "@/components/docs/AD";
+import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
 
 const spin = keyframes`
@@ -47,11 +45,11 @@ const spin = keyframes`
 interface HandleRoomResponse {
   code: number;
   msg: string;
+  [key: string]: any;
 }
 
 export default function Page() {
   const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const [tutorialColor, setTutorialColor] = useState(true);
 
@@ -75,14 +73,13 @@ export default function Page() {
   const [inputRoomId, setInputRoomId] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
   const {
-    logined,
     userInfo,
     roomData,
     getRoomData,
     setRoomData,
-    roomStatus,
+    roomRole,
     latency,
-    getIp,
+    getTunnel,
     onlineStatus,
     rotate,
     disableFlush,
@@ -91,10 +88,10 @@ export default function Page() {
   } = useUserStateStore();
 
   useEffect(() => {
-    if (logined && userInfo?.wg_data?.node_alias) {
+    if (userInfo?.wg_data?.node_alias) {
       getRoomData();
     }
-  }, [logined, userInfo?.wg_data?.node_alias, getRoomData]);
+  }, [userInfo?.wg_data?.node_alias, getRoomData]);
 
   // 离线的时候闪烁
   useEffect(() => {
@@ -102,7 +99,7 @@ export default function Page() {
 
     if (onlineStatus === "离线") {
       setDocButtonText("点我查看使用教程");
-      // \n不看文档当然离线
+
       intervalId = setInterval(() => {
         setTutorialColor((prev) => !prev);
       }, 300);
@@ -117,118 +114,106 @@ export default function Page() {
     };
   }, [onlineStatus]);
 
-  // 60秒检测一次
-  // useEffect(() => {
-  //   let intervalId: NodeJS.Timeout | undefined;
+  // 通用请求函数，自动管理 loading 和错误处理
+  const requestRoomApi = useCallback(
+    async (
+      endpoint: string,
+      params: Record<string, string> = {}
+    ): Promise<HandleRoomResponse> => {
+      if (loading) {
+        throw new Error("请不要点太快");
+      }
+      setLoading(true);
 
-  //   intervalId = setInterval(() => {
-  //     getLatency();
-  //   }, 60000);
+      try {
+        const urlParams = new URLSearchParams(params);
+        const url = `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/${endpoint}?${urlParams.toString()}`;
 
-  //   return () => {
-  //     if (intervalId) {
-  //       clearInterval(intervalId);
-  //     }
-  //   };
-  // }, []);
+        const resp = await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+        });
+
+        if (!resp.ok) {
+          throw new Error(`访问接口出错: ${resp.status}`);
+        }
+
+        const data: HandleRoomResponse = await resp.json();
+
+        if (data.code === -1) {
+          window.location.reload();
+        }
+
+        return data;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [getAuthToken, loading]
+  );
 
   // 设置房间密码
   const handleSetRoomPasswd = useCallback(
     async (newPasswd: string) => {
       try {
-        if (loading === true) {
-          throw new Error(`请不要点太快`);
-        }
+        const data = await requestRoomApi("setRoomPasswd", {
+          roomPasswd: newPasswd,
+        });
 
-        setLoading(true);
-        const resp = await fetch(
-          `${apiUrl}/setRoomPasswd?roomPasswd=${newPasswd}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${getAuthToken()}`,
-            },
-          }
-        );
-        setLoading(false);
-        if (!resp.ok) {
-          throw new Error(`访问接口出错: ${resp.status}`);
-        }
-
-        const data = await resp.json();
         if (data.code === 0) {
-          if (roomData)
+          if (roomData) {
             setRoomData({
               ...roomData,
               room_passwd: newPasswd,
             });
-
+          }
           openToast({ content: data.msg, status: "success" });
+          if (setPassIsOpen) setPassOnClose();
         } else {
           openToast({ content: data.msg, status: "warning" });
         }
-        if (setPassIsOpen) setPassOnClose();
       } catch (err) {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [apiUrl, loading, roomData, setPassIsOpen, setPassOnClose, setRoomData]
-  );
-
-  // 发送房间操作请求
-  const handleRoomFetch = useCallback(
-    async (
-      handleType: string,
-      handleValue: string,
-      roomPasswd: string = ""
-    ): Promise<HandleRoomResponse> => {
-      if (loading === true) {
-        throw new Error(`请不要点太快`);
-      }
-      setLoading(true);
-      const resp = await fetch(
-        `${apiUrl}/handleRoom?handleType=${handleType}&value=${handleValue}&roomPasswd=${roomPasswd}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getAuthToken()}`,
-          },
-        }
-      );
-      setLoading(false);
-      if (!resp.ok) {
-        throw new Error(`访问接口出错: ${resp.status}`);
-      }
-
-      const data: HandleRoomResponse = await resp.json();
-
-      if (data.code === -1) {
-        // ip失效刷新页面
-        window.location.reload();
-      }
-      return data;
-    },
-    [apiUrl, loading]
+    [
+      requestRoomApi,
+      roomData,
+      setRoomData,
+      openToast,
+      setPassIsOpen,
+      setPassOnClose,
+    ]
   );
 
   // 创建房间
-  const handleCreateRoom = async () => {
+  const handleCreateRoom = useCallback(async () => {
     try {
-      const data = await handleRoomFetch("createRoom", "");
+      const data = await requestRoomApi("handleRoom", {
+        handleType: "createRoom",
+        value: "",
+      });
       if (data.code === 0) {
         getRoomData();
       } else {
-        openToast({ content: data.msg, status: "success" });
+        openToast({ content: data.msg, status: "warning" });
       }
     } catch (err) {
       openToast({ content: String(err), status: "error" });
     }
-  };
+  }, [requestRoomApi, getRoomData, openToast]);
 
   // 关闭房间
-  const handleCloseRoom = async () => {
+  const handleCloseRoom = useCallback(async () => {
     try {
-      const data = await handleRoomFetch("closeRoom", "");
+      const data = await requestRoomApi("handleRoom", {
+        handleType: "closeRoom",
+        value: "",
+      });
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -237,42 +222,58 @@ export default function Page() {
     } catch (err) {
       openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
-  };
+  }, [requestRoomApi, getRoomData, openToast]);
 
   // 加入房间
-  const handleJoinRoom = async (roomId: string, passwd: string) => {
-    if (!roomId) {
-      return;
-    }
+  const handleJoinRoom = useCallback(
+    async (roomId: string, passwd: string) => {
+      if (!roomId) return;
 
-    if (!isInteger(roomId)) {
-      openToast({
-        content: "房间号是串数字，不知道就问房主",
-        status: "warning",
-      });
-      return;
-    }
-
-    try {
-      const data = await handleRoomFetch("joinRoom", roomId, passwd);
-      if (data.code === 0) {
-        getRoomData();
-        joinOnClose();
-      } else {
-        if (data.msg === "加入该房间需要密码") {
-          setHideJoinPassInput(false);
-        }
-        openToast({ content: data.msg, status: "warning" });
+      if (!isInteger(roomId)) {
+        openToast({
+          content: "房间号是串数字，不知道就问房主",
+          status: "warning",
+        });
+        return;
       }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  };
+
+      try {
+        const data = await requestRoomApi("handleRoom", {
+          handleType: "joinRoom",
+          value: roomId,
+          roomPasswd: passwd,
+        });
+
+        if (data.code === 0) {
+          getRoomData();
+          joinOnClose();
+        } else {
+          if (data.msg === "加入该房间需要密码") {
+            setHideJoinPassInput(false);
+          }
+          openToast({ content: data.msg, status: "warning" });
+        }
+      } catch (err) {
+        openToast({ content: `请求出错: ${String(err)}`, status: "error" });
+      }
+    },
+    [
+      requestRoomApi,
+      isInteger,
+      openToast,
+      getRoomData,
+      joinOnClose,
+      setHideJoinPassInput,
+    ]
+  );
 
   // 退出房间
-  const handleExitRoom = async () => {
+  const handleExitRoom = useCallback(async () => {
     try {
-      const data = await handleRoomFetch("exitRoom", "");
+      const data = await requestRoomApi("handleRoom", {
+        handleType: "exitRoom",
+        value: "",
+      });
       if (data.code === 0) {
         getRoomData();
       } else {
@@ -281,21 +282,27 @@ export default function Page() {
     } catch (err) {
       openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
-  };
+  }, [requestRoomApi, getRoomData, openToast]);
 
   // 删除成员
-  const handleDelMember = async (delIp: string) => {
-    try {
-      const data = await handleRoomFetch("delMember", delIp);
-      if (data.code === 0) {
-        getRoomData();
-      } else {
-        openToast({ content: data.msg, status: "error" });
+  const handleDelMember = useCallback(
+    async (delIp: string) => {
+      try {
+        const data = await requestRoomApi("handleRoom", {
+          handleType: "delMember",
+          value: delIp,
+        });
+        if (data.code === 0) {
+          getRoomData();
+        } else {
+          openToast({ content: data.msg, status: "error" });
+        }
+      } catch (err) {
+        openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  };
+    },
+    [requestRoomApi, getRoomData, openToast]
+  );
 
   function getColor(latency: number) {
     if (latency > 100) return "#ffa524";
@@ -414,7 +421,7 @@ export default function Page() {
         </Modal>
 
         <VStack>
-          {roomStatus === "hoster" && (
+          {roomRole === "hoster" && (
             <HStack justify="center" spacing={0}>
               <Text fontWeight="bold">允许直接加入</Text>
               {roomData?.room_passwd ? <FaTimes /> : <FaCheck />}
@@ -498,7 +505,7 @@ export default function Page() {
                   联机ip {item.ip}
                 </Tag>
 
-                {roomStatus === "hoster" && item.ip !== roomData.hoster_ip && (
+                {roomRole === "hoster" && item.ip !== roomData.hoster_ip && (
                   <Tag
                     ml="auto"
                     color="white"
@@ -519,9 +526,9 @@ export default function Page() {
             px={0}
             size="lg"
             bg="transparent"
-            onClick={roomStatus === "hoster" ? handleCloseRoom : handleExitRoom}
+            onClick={roomRole === "hoster" ? handleCloseRoom : handleExitRoom}
           >
-            {roomStatus === "hoster" ? "关闭房间" : "退出房间"}
+            {roomRole === "hoster" ? "关闭房间" : "退出房间"}
             <IoIosExit size={30} color="#ff4444" />
           </Button>
 
@@ -533,7 +540,6 @@ export default function Page() {
             px={0}
             size="lg"
             bg="transparent"
-            // isDisabled={disableFlush}
             disabled={disableFlush}
             onClick={() => {
               getRoomData(false);
@@ -549,9 +555,9 @@ export default function Page() {
 
   return (
     <VStack spacing={3} alignItems="center">
-      <SponsorAd />
+      <AnnouncementsModal />
 
-      {!logined ? (
+      {!userInfo ? (
         <>
           <Heading size="md">你还没登录呢</Heading>
           <Button
@@ -570,7 +576,7 @@ export default function Page() {
             你还没获取隧道呢
           </Heading>
 
-          <Button rounded={5} onClick={getIp} bgColor="#007bc0" size="sm">
+          <Button rounded={5} onClick={getTunnel} bgColor="#007bc0" size="sm">
             点击获取隧道
           </Button>
         </>
@@ -622,7 +628,7 @@ export default function Page() {
           </Button>
 
           <Flex align="center">
-            {roomStatus !== "none" && (
+            {roomRole !== "none" && (
               <Text fontSize={18} fontWeight="bold" mr={3}>
                 房间号 {roomData?.room_id}
               </Text>
@@ -660,22 +666,16 @@ export default function Page() {
               </Box>
             </Button>
           </Flex>
-          {roomStatus === "none" ? standbyPage() : joinedPage()}
-          {/* <Box
-            textAlign="center"
-            position="fixed"
-            left="12px"
-            bottom="30vh"
-            onClick={() => {
-              router.push(`/sponsor`);
-            }}
-            zIndex={100}
-          >
-            <Box boxSize={{ base: "8", md: "10" }}>
-              <PiCoffeeBold size="100%" />
-            </Box>
-            <Text fontSize="sm">赞助</Text>
-          </Box> */}
+
+          {onlineStatus === "离线" && (
+            <Text color="#ffca3d" textAlign="center" size="sm">
+              请检查是否正确导入WG隧道
+              <br />
+              每个节点都要单独导入隧道
+            </Text>
+          )}
+
+          {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
       )}
     </VStack>

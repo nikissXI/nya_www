@@ -10,7 +10,7 @@ import { getAuthToken } from "@/store/authKey";
 export default function Page() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
-  const { logined, setShowLoginModal } = useUserStateStore();
+  const { userInfo, setShowLoginModal } = useUserStateStore();
   const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");
 
@@ -85,7 +85,7 @@ export default function Page() {
         </Text>
 
         <Flex>
-          {logined ? (
+          {userInfo ? (
             <Flex>
               <Input
                 w="200px"

@@ -91,36 +91,12 @@ const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
 
 export const ServerNodeListModal: React.FC = () => {
   const {
-    logined,
     getNodeList,
-    nodeList,
+    nodeMap,
     showNodeListModal,
     setNodeListModal,
-    selectNode,
     userInfo,
   } = useUserStateStore();
-
-  useEffect(() => {
-    async function fetchAndHandle() {
-      if (logined && userInfo?.wg_data && nodeList === undefined) {
-        await getNodeList(); // 等待 getNodeList 执行完
-        if (!userInfo?.wg_data?.node_alias) {
-          setNodeListModal();
-        } else {
-          selectNode(userInfo.wg_data.node_alias);
-        }
-      }
-    }
-    fetchAndHandle();
-  }, [
-    logined,
-    nodeList,
-    selectNode,
-    setNodeListModal,
-    getNodeList,
-    userInfo?.wg_data,
-    userInfo?.wg_data?.node_alias,
-  ]);
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
 
@@ -181,24 +157,26 @@ export const ServerNodeListModal: React.FC = () => {
             </Flex>
 
             <Stack spacing={3} mx="auto" my={3} px={4} w="100%">
-              {nodeList &&
-                nodeList.map((node) => (
-                  <ServerNodeItem
-                    key={node.alias}
-                    node={node}
-                    selected={
-                      userInfo?.wg_data?.node_alias === node.alias
-                        ? true
-                        : false
-                    }
-                  />
-                ))}
+              {nodeMap &&
+                nodeMap
+                  .values()
+                  .map((node) => (
+                    <ServerNodeItem
+                      key={node.alias}
+                      node={node}
+                      selected={
+                        userInfo?.wg_data?.node_alias === node.alias
+                          ? true
+                          : false
+                      }
+                    />
+                  ))}
             </Stack>
           </VStack>
         </ModalBody>
 
         <ModalFooter>
-          根据节点负载和延迟选择合适的服务器；MS是延迟，越低越好；大陆联机节点不支持海外用户
+          根据节点负载和延迟选择合适的服务器；MS是延迟，越低越好；大陆联机节点不支持海外用户；多线todo；负载超100%可能会卡顿；每个节点都要单独导入WG隧道
         </ModalFooter>
       </ModalContent>
     </Modal>
