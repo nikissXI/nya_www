@@ -666,9 +666,9 @@ export default function Page() {
 
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" textAlign="center" size="sm">
-              请检查是否导入该节点的WG隧道
+              换了节点要重新导入对应的隧道
               <br />
-              每个节点都要单独导入隧道配置
+              每个节点都要单独导入一次隧道
             </Text>
           )}
 

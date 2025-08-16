@@ -881,7 +881,7 @@ export default function UserProfilePage() {
                       onClick={() => {
                         openToast({
                           content:
-                            "在线就会刷新天数，如果到期被回收获取个新隧道就行，免费",
+                            "在线就会刷新天数，如果被回收可免费获取新隧道",
                           status: "info",
                         });
                       }}
@@ -897,7 +897,12 @@ export default function UserProfilePage() {
                   你还没获取隧道呢
                 </Heading>
 
-                <Button rounded={5} onClick={getTunnel} bgColor="#007bc0" size="sm">
+                <Button
+                  rounded={5}
+                  onClick={getTunnel}
+                  bgColor="#007bc0"
+                  size="sm"
+                >
                   点击获取隧道
                 </Button>
               </VStack>

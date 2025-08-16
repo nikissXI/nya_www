@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Flex,
@@ -17,8 +16,9 @@ import {
   List,
   ListItem,
   ListIcon,
+  Grid,
 } from "@chakra-ui/react";
-import { useUserStateStore } from "@/store/user-state";
+import { useUserStateStore, NodeInfo } from "@/store/user-state";
 import { useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
@@ -26,27 +26,26 @@ import { MdTipsAndUpdates } from "react-icons/md";
 import { keyframes } from "@emotion/react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-interface NodeInfo {
-  alias: string;
-  ping_host: string;
-  sponsor: boolean;
-  net: number | null;
-  delay: number;
-}
-
 // 负载等级判断函数
 function getNetBadgeProps(net: number | null) {
   if (net === null) return { colorScheme: "gray" };
   if (net < 50) return { colorScheme: "green" };
-  if (net < 90) return { colorScheme: "yellow" };
+  if (net < 85) return { colorScheme: "yellow" };
   return { colorScheme: "red" };
 }
 
 function getDelayBadgeProps(delay: number) {
-  if (delay > 100) return { colorScheme: "orange" };
-  else if (delay > 0) return { colorScheme: "green" };
+  if (delay < 60) return { colorScheme: "green" };
+  else if (delay < 120) return { colorScheme: "yellow" };
   else return { colorScheme: "red" };
 }
+
+function getNetTypeBadgeProps(netType: string) {
+  if (netType === "多线") return { colorScheme: "orange" };
+  else if (netType === "电信") return { colorScheme: "blue" };
+  else return { colorScheme: "pink" };
+}
+
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -59,7 +58,7 @@ const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
 
   return (
     <Box
-      py={2}
+      py={1}
       px={4}
       borderRadius="md"
       borderWidth={selected ? 3 : 0}
@@ -77,28 +76,75 @@ const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
         selectNode(node.alias, true);
       }}
     >
-      <Flex justify="space-between" align="center">
-        <Text
-          fontWeight="bold"
-          fontSize="lg"
-          color={node.sponsor ? "#ffd200" : "white"}
-        >
-          {node.alias}
-        </Text>
+      <Flex width="100%" justify="space-between" align="center">
+        <Box flex="1" textAlign="left">
+          <Text
+            fontWeight="bold"
+            fontSize="lg"
+            color={node.sponsor ? "#ffd200" : "white"}
+          >
+            {node.alias}
+          </Text>
+        </Box>
 
-        {node.net !== null && node.delay ? (
-          <Badge colorScheme={getDelayBadgeProps(node.delay).colorScheme}>
-            {node.delay}ms
-          </Badge>
-        ) : (
-          <Box animation={`${spin} 1s linear infinite`}>
-            <AiOutlineLoading3Quarters size={18} />
-          </Box>
-        )}
+        <Box flex="1" textAlign="left">
+          {node.net !== null && (
+            <>
+              <Badge
+                display="flex"
+                w="min"
+                colorScheme={getNetTypeBadgeProps(node.net_type).colorScheme}
+              >
+                {node.net_type}
+              </Badge>
 
-        <Badge colorScheme={getNetBadgeProps(node.net).colorScheme}>
-          {node.net === null ? `离线` : `负载${node.net}%`}
-        </Badge>
+              <Badge w="min" colorScheme="teal">
+                {node.bandwidth}Mbps
+              </Badge>
+            </>
+          )}
+        </Box>
+
+        <Box flex="1" textAlign="left">
+          {node.net === null ? (
+            <Badge
+              display="flex"
+              w="min"
+              colorScheme={getNetBadgeProps(node.net).colorScheme}
+            >
+              离线
+            </Badge>
+          ) : (
+            <>
+              <Box textAlign="left">
+                {node.net !== null && node.delay ? (
+                  <Badge
+                    display="flex"
+                    w="min"
+                    colorScheme={getDelayBadgeProps(node.delay).colorScheme}
+                  >
+                    {node.delay}ms
+                  </Badge>
+                ) : (
+                  <Box
+                    display="flex"
+                    w="min"
+                    animation={`${spin} 1s linear infinite`}
+                    transformOrigin="center center"
+                  >
+                    <AiOutlineLoading3Quarters size={18} />
+                  </Box>
+                )}
+              </Box>
+
+              <Box textAlign="left">
+                <Badge colorScheme={getNetBadgeProps(node.net).colorScheme}>
+                  负载{node.net}%
+                </Badge>
+              </Box>
+            </>
+          )}
+        </Box>
       </Flex>
     </Box>
   );
@@ -117,6 +163,13 @@ export const ServerNodeListModal: React.FC = () => {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
+
+  const Suggestions = [
+    "线路目前有：多线、海外、电信；只有海外线路支持大陆外的用户连接",
+    "Mbps是指每个用户可使用的最高网络带宽",
+    "负载越低越好，高负载的节点联机易卡顿",
+    "MS是网络延迟，越低越好，实际游戏联机延迟是双方的延迟相加",
+  ];
 
   return (
     <Modal
@@ -199,20 +252,12 @@ export const ServerNodeListModal: React.FC = () => {
 
           <Collapse in={isExpanded} animateOpacity style={{ width: "100%" }}>
             <List spacing={2}>
-              <ListItem textAlign="left">
-                <ListIcon as={MdTipsAndUpdates} />
-                节点负载越低越好，高负载的节点联机易卡顿
-              </ListItem>
-
-              <ListItem textAlign="left">
-                <ListIcon as={MdTipsAndUpdates} />
-                MS是网络延迟，越低越好，实际游戏联机延迟是双方的延迟相加
-              </ListItem>
-
-              <ListItem textAlign="left">
-                <ListIcon as={MdTipsAndUpdates} />
-                目前只有香港节点支持大陆和海外联机，其他节点海外连不上
-              </ListItem>
+              {Suggestions.map((suggestion, index) => (
+                <ListItem key={index} textAlign="left">
+                  <ListIcon as={MdTipsAndUpdates} />
+                  {suggestion}
+                </ListItem>
+              ))}
             </List>
           </Collapse>
         </ModalFooter>

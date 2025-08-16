@@ -52,11 +52,13 @@ interface RoomInfo {
   room_passwd: string;
 }
 // 登录后，拉取的节点信息
-interface NodeInfo {
+export interface NodeInfo {
   alias: string;
+  bandwidth: number;
+  net: number | null;
+  net_type: string;
   ping_host: string;
   sponsor: boolean;
-  net: number | null;
   delay: number;
 }
 
