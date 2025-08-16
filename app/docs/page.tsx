@@ -208,12 +208,6 @@ const DocumentPage = () => {
   //////////////////////
   //////////////////////
 
-  useEffect(() => {
-    if (!tunnelName) {
-      window.location.reload();
-    }
-  }, [tunnelName]);
-
   const DownloadButton = (isIOS: boolean = false) => {
     return (
       <Button
@@ -322,7 +316,10 @@ const DocumentPage = () => {
           </Text>
         </Box>
 
-        <Box id="download">
+        <Box
+          id="download"
+          display={tunnelName === undefined ? "hidden" : "block"}
+        >
           <Heading size="md" pb={2} color="#00ff17">
             3. WG下载和隧道导入
           </Heading>

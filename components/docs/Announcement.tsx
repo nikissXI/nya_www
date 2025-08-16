@@ -1,6 +1,4 @@
 import NextLink from "next/link";
-
-import React, { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Button,
@@ -18,25 +16,9 @@ import {
   Spinner,
   VStack,
   HStack,
-  Alert,
-  AlertIcon,
   Divider,
-  Badge,
 } from "@chakra-ui/react";
-
-export type Announcement = {
-  // 时间戳（毫秒或秒均可，组件内部会自动处理）
-  timestamp: number;
-  // 纯文本内容，可能包含换行
-  content: string;
-};
-
-type Props = {
-  // API 地址，默认 /api/announcements
-  apiUrl?: string;
-  // 可选：外部传入 fetcher（方便测试或替换实现）
-  fetcher?: (url: string) => Promise<Announcement[]>;
-};
+import { useUserStateStore } from "@/store/user-state";
 
 const formatDate = (rawTs: number, short: boolean = false): string => {
   // 支持秒或毫秒
@@ -53,87 +35,43 @@ const formatDate = (rawTs: number, short: boolean = false): string => {
   else return `${year}年${month}月${date}日 ${hours}:${minutes}`;
 };
 
-const defaultFetcher = async (url: string): Promise<Announcement[]> => {
-  // const res = await fetch(url);
-  // if (!res.ok) {
-  //   throw new Error(`请求失败：${res.status}`);
-  // }
-  // // 假设返回 JSON 数组：[{ timestamp: number, content: string }, ...]
-  // return (await res.json()) as Announcement[];
-  return [
-    {
-      timestamp: 1755319200000,
-      content: "修复节点列表、隧道下载、获取隧道的一些bug；增加节点选择建议",
-    },
-    {
-      timestamp: 1755243000000,
-      content:
-        "根据运行情况对免费和赞助节点进行了调整，因运营成本问题，赞助节点的最低赞助改为10元（国内BGP网络太贵了）。北京新增一个节点",
-    },
-  ];
-};
-
-export const AnnouncementsModal: React.FC<Props> = ({
-  apiUrl = "/api/announcements",
-  fetcher = defaultFetcher,
-}) => {
+export const AnnouncementsModal = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [items, setItems] = useState<Announcement[] | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetcher(apiUrl);
-      // 做一个简单的守护：确保按时间从新到旧排序（如果后端已保证，可省）
-      const normalized = [...data].sort((a, b) => b.timestamp - a.timestamp);
-      setItems(normalized);
-    } catch (err: any) {
-      setError(err?.message ?? "加载失败");
-      setItems(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [apiUrl, fetcher]);
-
-  useEffect(() => {
-    // 组件挂载时预加载最新公告（可以改为点击时再加载）
-    load();
-  }, [load]);
-
-  const newestDateLabel =
-    items && items.length > 0 ? formatDate(items[0].timestamp, true) : null;
+  const { serverData } = useUserStateStore();
 
   return (
     <Box>
-      <Box mx={5} color="#ffca3d" fontSize="sm" fontWeight="bold">
+      <Box mx={5} color="#ffca3d" fontWeight="bold">
         <Flex align="center" wrap="wrap">
-          {loading ? (
+          {serverData === undefined ? (
             <HStack spacing={2}>
               <Spinner size="xs" />
-              <Text>正在加载最新公告...</Text>
+              <Text>正在加载公告...</Text>
             </HStack>
-          ) : error ? (
-            <Text color="red.500">加载公告失败</Text>
-          ) : items && items.length > 0 ? (
-            <Text noOfLines={1}>公告更新时间 {newestDateLabel}</Text>
+          ) : serverData.announcements &&
+            serverData.announcements.length > 0 ? (
+            <Text noOfLines={1}>
+              公告更新时间{" "}
+              {formatDate(serverData.announcements[0].timestamp, true)}
+            </Text>
           ) : (
             <Text>暂无公告</Text>
           )}
 
-          <Button
-            ml={1}
-            color="#7dd4ff"
-            onClick={onOpen}
-            colorScheme="transparent"
-            size="sm"
-            variant="link"
-            _hover={{ textDecoration: "none" }}
-          >
-            点击查看
-          </Button>
+          {serverData?.announcements &&
+            serverData?.announcements.length > 0 && (
+              <Button
+                ml={1}
+                color="#7dd4ff"
+                onClick={onOpen}
+                colorScheme="transparent"
+                variant="link"
+                _hover={{ textDecoration: "none" }}
+              >
+                点击查看
+              </Button>
+            )}
         </Flex>
 
         <Text>
@@ -156,40 +94,16 @@ export const AnnouncementsModal: React.FC<Props> = ({
           <ModalHeader>公告</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {loading ? (
-              <Flex justify="center" py={6}>
-                <Spinner />
-              </Flex>
-            ) : error ? (
-              <Alert status="error" borderRadius="md">
-                <AlertIcon />
-                <Box>
-                  <Text>加载公告失败：{error}</Text>
-                  <Text fontSize="sm">请稍后重试或联系管理员。</Text>
-                </Box>
-              </Alert>
-            ) : !items || items.length === 0 ? (
-              <Box textAlign="center" py={8}>
-                <Text>当前暂无公告。</Text>
-              </Box>
-            ) : (
-              <VStack spacing={4} align="stretch">
-                {items.map((it, idx) => (
-                  <Box key={`${it.timestamp}-${idx}`} p={3} borderRadius="md">
-                    <HStack justify="space-between" mb={2}>
-                      <Text fontSize="sm">{formatDate(it.timestamp)}</Text>
-                      <Badge colorScheme="green" fontSize="0.7em">
-                        #{items.length - idx}
-                      </Badge>
-                    </HStack>
+            <VStack spacing={2} align="stretch">
+              {serverData?.announcements &&
+                serverData.announcements.map((item, index) => (
+                  <Box key={item.timestamp} p={1}>
+                    <Text mb={1}>{formatDate(item.timestamp)}</Text>
                     <Divider mb={2} />
-                    <Text whiteSpace="pre-wrap" fontSize="sm">
-                      {it.content}
-                    </Text>
+                    <Text whiteSpace="pre-wrap">{item.content}</Text>
                   </Box>
                 ))}
-              </VStack>
-            )}
+            </VStack>
           </ModalBody>
 
           <ModalFooter>

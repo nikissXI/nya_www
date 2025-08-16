@@ -9,10 +9,16 @@ interface GroupItem {
   name: string;
   qq: number;
 }
+
+interface AnnouncementItem {
+  timestamp: number;
+  content: string;
+}
 interface ServerData {
   viewCount: number | null;
   userCount: number | null;
   relateGroup: GroupItem[] | null;
+  announcements: AnnouncementItem[] | null;
 }
 // 登录后的用户数据及wireguard信息
 interface WGData {
