@@ -15,10 +15,14 @@ import {
   Tbody,
   Td,
   TextProps,
+  List,
+  ListItem,
+  ListIcon,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
 import { useUserStateStore } from "@/store/user-state";
-
+import { FaCode } from "react-icons/fa";
+import { RiVipCrownFill, RiMoneyCnyBoxLine } from "react-icons/ri";
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
     <Text as="span" color="#ff734f" fontWeight="bold" {...props}>
@@ -108,19 +112,28 @@ const Page = () => {
           </Table>
         </TableContainer>
 
-        <Text textAlign="left">
-          喵服由服主一人纯公益免费运营，赞助将帮助喵服持续提供联机服务。服主QQ
-          1299577815
-          <br />
-          <HighLight>
-            付款时请点“添加备注”写上您的喵服UID{" "}
-            {userInfo ? `${userInfo.uid}` : `（在我的信息页面查看）`}
-            ，不备注的话无法记录赞助信息。
-          </HighLight>
-          因赞助信息由服主手动录入，所以更新会不及时，看到就会录入。
-          <br />
-          赞助金额可被系统累计记录并获得赞助者铭牌，并有专用服务器使用，累计赞助金额不低于10元可随意找服主咨询使用喵服联机中产生的问题。
-        </Text>
+        <List spacing={2}>
+          <ListItem textAlign="left">
+            <ListIcon as={FaCode} />
+            喵服由服主一人运营，赞助将帮助喵服持续开发新功能、购买联机节点，持续提供联机服务。如有建议请联系服主QQ
+            1299577815
+          </ListItem>
+
+          <ListItem textAlign="left">
+            <ListIcon as={RiVipCrownFill} />
+            赞助金额可被系统累计记录并获得赞助者铭牌，并有专用服务器使用，累计赞助金额不低于10元可找服主解答使用喵服联机中产生的问题
+          </ListItem>
+
+          <ListItem textAlign="left">
+            <ListIcon as={RiMoneyCnyBoxLine} />
+            <HighLight>
+              付款时请点“添加备注”写上您的喵服UID{" "}
+              {userInfo ? `${userInfo.uid}` : `（在我的信息页面查看）`}
+              ，不备注的话无法记录赞助信息。
+            </HighLight>
+            赞助信息由服主手动录入，因此更新有延迟
+          </ListItem>
+        </List>
 
         <SimpleGrid columns={2} spacing={1}>
           <Image

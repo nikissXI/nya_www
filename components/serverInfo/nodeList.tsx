@@ -12,12 +12,17 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
+  Collapse,
+  Center,
+  List,
+  ListItem,
+  ListIcon,
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
-
+import { MdTipsAndUpdates } from "react-icons/md";
 interface NodeInfo {
   alias: string;
   ping_host: string;
@@ -100,6 +105,9 @@ export const ServerNodeListModal: React.FC = () => {
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  const toggleExpanded = () => setIsExpanded((prev) => !prev);
+
   return (
     <Modal
       isOpen={showNodeListModal}
@@ -127,10 +135,6 @@ export const ServerNodeListModal: React.FC = () => {
                   }, 3000);
 
                   await getNodeList();
-                  openToast({
-                    content: "刷新节点列表成功",
-                    status: "success",
-                  });
                 }}
               >
                 刷新列表
@@ -169,8 +173,38 @@ export const ServerNodeListModal: React.FC = () => {
           </VStack>
         </ModalBody>
 
-        <ModalFooter>
-          根据节点负载和延迟选择合适的服务器；MS是延迟，越低越好；大陆联机节点不支持海外用户；多线todo；负载超100%可能会卡顿；每个节点都要单独导入WG隧道
+        <ModalFooter pt={0} flexDirection="column">
+          <Center>
+            <Text ml="auto">不知道怎么选择？</Text>
+
+            <Button
+              color="#7dd4ff"
+              bgColor="transparent"
+              onClick={toggleExpanded}
+              variant="link"
+            >
+              {isExpanded ? "点我关闭" : "点我查看"}
+            </Button>
+          </Center>
+
+          <Collapse in={isExpanded} animateOpacity style={{ width: "100%" }}>
+            <List spacing={2}>
+              <ListItem textAlign="left">
+                <ListIcon as={MdTipsAndUpdates} />
+                节点负载越低越好，高负载的节点联机易卡顿
+              </ListItem>
+
+              <ListItem textAlign="left">
+                <ListIcon as={MdTipsAndUpdates} />
+                MS是网络延迟，越低越好，实际游戏联机延迟是双方的延迟相加
+              </ListItem>
+
+              <ListItem textAlign="left">
+                <ListIcon as={MdTipsAndUpdates} />
+                目前只有香港节点支持大陆和海外联机，其他节点海外连不上
+              </ListItem>
+            </List>
+          </Collapse>
         </ModalFooter>
       </ModalContent>
     </Modal>

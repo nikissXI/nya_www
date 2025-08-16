@@ -4,7 +4,6 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
-import { User } from "@sentry/react";
 
 interface GroupItem {
   name: string;
@@ -416,28 +415,23 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             nodes.map((n) => [n.alias, n])
           );
 
-          // get().nodeMap.forEach((node, key) => {
-          //   console.log(key, node);
-          // });
-
           // 并行请求所有节点的延迟
           const latencyPromises = nodes.map((node) =>
             get().getNodeLatency(node.alias, node.ping_host, node.net)
           );
-          // 等待所有请求完成，返回结果数组
-          const nodesWithDelay = await Promise.all(latencyPromises);
 
-          set(
-            produce((draft) => {
-              draft.nodeList = nodesWithDelay;
-            })
-          );
+          // 等待所有请求完成，返回结果数组
+          await Promise.all(latencyPromises);
         } catch (error) {
           openToast({
-            content: "拉取节点列表出错",
+            content: "节点列表刷新失败",
             status: "error",
           });
         } finally {
+          openToast({
+            content: "节点列表已刷新",
+            status: "success",
+          });
         }
       },
 
