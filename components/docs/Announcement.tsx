@@ -91,14 +91,16 @@ export const AnnouncementsModal = ({}) => {
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
         <ModalContent bg="#202e4fe0" color="white">
-          <ModalHeader>公告</ModalHeader>
+          <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={2} align="stretch">
               {serverData?.announcements &&
                 serverData.announcements.map((item, index) => (
-                  <Box key={item.timestamp} p={1}>
-                    <Text mb={1}>{formatDate(item.timestamp)}</Text>
+                  <Box key={index} p={1}>
+                    <Text mb={1} fontWeight="bold" color="#f4d106">
+                      {formatDate(item.timestamp)}
+                    </Text>
                     <Divider mb={2} />
                     <Text whiteSpace="pre-wrap">{item.content}</Text>
                   </Box>
