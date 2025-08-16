@@ -59,7 +59,7 @@ const TunnelUpdateModal = () => {
             my={4}
             w="100%"
             onClick={() => {
-              router.push("/docs");
+              router.push("/docs#download");
               setShowRegetModal();
             }}
             isDisabled={!canClose}

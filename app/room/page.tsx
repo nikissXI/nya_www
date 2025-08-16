@@ -153,7 +153,7 @@ export default function Page() {
         setLoading(false);
       }
     },
-    [getAuthToken, loading]
+    [loading]
   );
 
   // 设置房间密码
@@ -184,7 +184,6 @@ export default function Page() {
       requestRoomApi,
       roomData,
       setRoomData,
-      openToast,
       setPassIsOpen,
       setPassOnClose,
     ]
@@ -205,7 +204,7 @@ export default function Page() {
     } catch (err) {
       openToast({ content: String(err), status: "error" });
     }
-  }, [requestRoomApi, getRoomData, openToast]);
+  }, [requestRoomApi, getRoomData]);
 
   // 关闭房间
   const handleCloseRoom = useCallback(async () => {
@@ -222,7 +221,7 @@ export default function Page() {
     } catch (err) {
       openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
-  }, [requestRoomApi, getRoomData, openToast]);
+  }, [requestRoomApi, getRoomData]);
 
   // 加入房间
   const handleJoinRoom = useCallback(
@@ -259,8 +258,6 @@ export default function Page() {
     },
     [
       requestRoomApi,
-      isInteger,
-      openToast,
       getRoomData,
       joinOnClose,
       setHideJoinPassInput,
@@ -282,7 +279,7 @@ export default function Page() {
     } catch (err) {
       openToast({ content: `请求出错: ${String(err)}`, status: "error" });
     }
-  }, [requestRoomApi, getRoomData, openToast]);
+  }, [requestRoomApi, getRoomData]);
 
   // 删除成员
   const handleDelMember = useCallback(
@@ -301,7 +298,7 @@ export default function Page() {
         openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
     },
-    [requestRoomApi, getRoomData, openToast]
+    [requestRoomApi, getRoomData]
   );
 
   function getColor(latency: number) {

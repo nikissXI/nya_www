@@ -89,7 +89,7 @@ const DocumentPage = () => {
       openToast({ content: "请登陆后再访问教程", status: "info" });
       router.push("/me");
     }
-  }, [userInfo]);
+  }, [userInfo, getConfKey, router, setGoToIssues]);
 
   const handleCopyLink = async (confKey: string) => {
     try {
@@ -207,6 +207,12 @@ const DocumentPage = () => {
   }, []);
   //////////////////////
   //////////////////////
+
+  useEffect(() => {
+    if (!tunnelName) {
+      window.location.reload();
+    }
+  }, [tunnelName]);
 
   const DownloadButton = (isIOS: boolean = false) => {
     return (

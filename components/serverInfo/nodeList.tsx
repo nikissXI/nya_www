@@ -23,6 +23,9 @@ import { useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
 import { MdTipsAndUpdates } from "react-icons/md";
+import { keyframes } from "@emotion/react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
 interface NodeInfo {
   alias: string;
   ping_host: string;
@@ -44,7 +47,10 @@ function getDelayBadgeProps(delay: number) {
   else if (delay > 0) return { colorScheme: "green" };
   else return { colorScheme: "red" };
 }
-
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
 const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
   node,
   selected,
@@ -80,10 +86,14 @@ const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
           {node.alias}
         </Text>
 
-        {node.net !== null && (
+        {node.net !== null && node.delay ? (
           <Badge colorScheme={getDelayBadgeProps(node.delay).colorScheme}>
             {node.delay}ms
           </Badge>
+        ) : (
+          <Box animation={`${spin} 1s linear infinite`}>
+            <AiOutlineLoading3Quarters size={18} />
+          </Box>
         )}
 
         <Badge colorScheme={getNetBadgeProps(node.net).colorScheme}>

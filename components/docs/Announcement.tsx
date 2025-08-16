@@ -62,9 +62,13 @@ const defaultFetcher = async (url: string): Promise<Announcement[]> => {
   // return (await res.json()) as Announcement[];
   return [
     {
+      timestamp: 1755319200000,
+      content: "修复节点列表、隧道下载、获取隧道的一些bug；增加节点选择建议",
+    },
+    {
       timestamp: 1755243000000,
       content:
-        "根据运行情况对免费和赞助节点进行了调整，因运营成本问题，赞助节点的最低赞助改为10元（国内BGP网络太贵了）。还有两个新增节点，晚些会增加进去",
+        "根据运行情况对免费和赞助节点进行了调整，因运营成本问题，赞助节点的最低赞助改为10元（国内BGP网络太贵了）。北京新增一个节点",
     },
   ];
 };

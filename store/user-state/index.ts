@@ -200,12 +200,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             );
 
             openToast({
-              content: `隧道${data.ip}绑定成功`,
+              content: `隧道${data.wg_data.ip}绑定成功`,
               status: "success",
             });
 
             // 获取隧道后弹出节点选择框
-            if (data.data.wg_data) {
+            if (data.wg_data) {
               get().setNodeListModal();
               get().getNodeList();
             }
@@ -364,14 +364,30 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             const delay = Math.floor(
               lastEntry.responseStart - lastEntry.requestStart
             );
-            if (node) node.delay = delay;
+            if (node) {
+              set(
+                produce((draft) => {
+                  node.delay = delay;
+                  const newMap = new Map(get().nodeMap);
+                  // 合并旧数据和新数据
+                  newMap.set(node_alias, node);
+                  draft.nodeMap = newMap;
+                })
+              );
+            }
             return delay;
           } else {
             openToast({
               content: `${node_alias}节点获取延迟出错，联系服主处理`,
               status: "error",
             });
-            if (node) node.delay = 0;
+            if (node) {
+              set(
+                produce((draft) => {
+                  node.delay = 0;
+                })
+              );
+            }
             return 0;
           }
         } catch (error) {
@@ -394,13 +410,20 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             });
           }
 
-          if (node) node.delay = 0;
+          if (node) {
+            set(
+              produce((draft) => {
+                node.delay = 0;
+              })
+            );
+          }
           return 0;
         }
       },
 
       // 节点列表
       nodeMap: new Map<string, any>(),
+
       getNodeList: async () => {
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -411,8 +434,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // 返回的没有 delay
           const nodes: NodeInfo[] = await resp.json();
 
-          get().nodeMap = new Map<string, NodeInfo>(
-            nodes.map((n) => [n.alias, n])
+          set(
+            produce((draft) => {
+              draft.nodeMap = new Map<string, NodeInfo>(
+                nodes.map((n) => [n.alias, n])
+              );
+            })
           );
 
           // 并行请求所有节点的延迟
