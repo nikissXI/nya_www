@@ -117,7 +117,7 @@ const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
           ) : (
             <>
               <Box textAlign="left">
-                {node.net !== null && node.delay ? (
+                {node.net !== null && node.delay !== undefined ? (
                   <Badge
                     display="flex"
                     w="min"
