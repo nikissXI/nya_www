@@ -241,7 +241,7 @@ export const ServerNodeListModal: React.FC = () => {
               spacing={2}
               mx="auto"
               mb={3}
-              px={2}
+              p={2}
               w="100%"
               maxH="40vh"
               overflowY="auto"
