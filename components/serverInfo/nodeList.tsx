@@ -57,8 +57,7 @@ const ServerNodeItem: React.FC<{
   return (
     <Box
       py={1}
-      px={2}
-      mx={2}
+      pl={2}
       borderRadius="md"
       border={selected ? "3px solid" : "0"}
       bgColor={selected ? "rgba(255, 137, 0, 0.2)" : ""}
@@ -96,11 +95,12 @@ const ServerNodeItem: React.FC<{
           <Flex justify="space-between" align="center">
             <Badge
               colorScheme={getNetTypeBadgeProps(node.net_type).colorScheme}
+              ml={1}
             >
               {node.net_type}
             </Badge>
 
-            <Badge colorScheme="teal" px={1.5}>
+            <Badge colorScheme="teal" mr={1} px={1.5}>
               {node.bandwidth}M
             </Badge>
           </Flex>
