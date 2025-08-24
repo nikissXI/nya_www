@@ -59,12 +59,12 @@ const ServerNodeItem: React.FC<{
       py={1}
       pl={2}
       borderRadius="md"
-      border={selected ? "3px solid" : "0"}
+      border={selected ? "2px solid" : "0"}
       bgColor={selected ? "rgba(255, 137, 0, 0.2)" : ""}
       borderColor="rgba(255, 117, 12, 0.6)"
       boxShadow={
         selected
-          ? "0 0 10px 2px rgba(255, 174, 0, 0.6), 0 0 20px 4px rgba(255, 243, 20, 0.4)"
+          ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"
           : ""
       }
       // bg={node.net === null ? "#404e5d82" : "#28c9ff82"}
