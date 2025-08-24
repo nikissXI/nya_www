@@ -325,23 +325,14 @@ const DocumentPage = () => {
           </Heading>
 
           <HighLight>
-            别把自己账号的隧道给其他人导入！
+            每个人都要注册自己的喵服账号！！
             <br />
-            每个节点的隧道都要单独导入！
+            别把自己账号的隧道给其他人导入！!
             <br />
-            别把自己账号的隧道给其他人导入！
-            <br />
-            每个节点的隧道都要单独导入！
-            <br />
-            别把自己账号的隧道给其他人导入！
-            <br />
-            每个节点的隧道都要单独导入！
+            切换节点后，需要重新导入隧道！!
           </HighLight>
 
           <Tabs variant="line" colorScheme="orange">
-            <Text pt={2} fontWeight="bolder" ml="1rem">
-              选择你要安装WG的系统类型
-            </Text>
             <Flex align="center" borderRadius="md" boxShadow="sm" ml="1rem">
               <Text fontWeight="medium" fontSize="md" mr={2}>
                 当前选择联机的节点：
@@ -353,6 +344,10 @@ const DocumentPage = () => {
                 切换
               </Button>
             </Flex>
+
+            <Text pt={2} fontWeight="bolder" ml="1rem">
+              选择你要安装WG的系统类型
+            </Text>
 
             <TabList
               mt={1}

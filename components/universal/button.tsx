@@ -10,7 +10,7 @@ interface CustomButtonProps extends ButtonProps {
 }
 export const Button: React.FC<CustomButtonProps> = ({
   children,
-  bgColor = "#3e71bd",
+  bgColor = "#2976bd",
   colorScheme = "transparent",
   color = "white",
   ...props

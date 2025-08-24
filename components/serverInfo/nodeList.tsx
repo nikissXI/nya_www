@@ -16,7 +16,6 @@ import {
   List,
   ListItem,
   ListIcon,
-  Grid,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
 import { useState } from "react";
@@ -27,8 +26,7 @@ import { keyframes } from "@emotion/react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 // 负载等级判断函数
-function getNetBadgeProps(net: number | null) {
-  if (net === null) return { colorScheme: "gray" };
+function getNetBadgeProps(net: number) {
   if (net < 50) return { colorScheme: "green" };
   if (net < 85) return { colorScheme: "yellow" };
   return { colorScheme: "red" };
@@ -50,19 +48,27 @@ const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
-const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
-  node,
-  selected,
-}) => {
+const ServerNodeItem: React.FC<{
+  node: NodeInfo;
+  selected: boolean;
+}> = ({ node, selected }) => {
   const { selectNode, userInfo, selectNodeLock } = useUserStateStore();
 
   return (
     <Box
       py={1}
-      px={4}
+      px={2}
+      mx={2}
       borderRadius="md"
-      borderWidth={selected ? 3 : 0}
-      bg={node.net === null ? "#404e5d82" : "#28c9ff82"}
+      border={selected ? "3px solid" : "0"}
+      bgColor={selected ? "rgba(255, 137, 0, 0.2)" : ""}
+      borderColor="rgba(255, 117, 12, 0.6)"
+      boxShadow={
+        selected
+          ? "0 0 10px 2px rgba(255, 174, 0, 0.6), 0 0 20px 4px rgba(255, 243, 20, 0.4)"
+          : ""
+      }
+      // bg={node.net === null ? "#404e5d82" : "#28c9ff82"}
       onClick={async () => {
         if (node.net === null || selectNodeLock === true) return;
         if (node.alias === userInfo?.wg_data?.node_alias) {
@@ -76,73 +82,81 @@ const ServerNodeItem: React.FC<{ node: NodeInfo; selected: boolean }> = ({
         selectNode(node.alias, true);
       }}
     >
-      <Flex width="100%" justify="space-between" align="center">
-        <Box flex="1" textAlign="left">
+      <Flex width="100%">
+        <Box flex="1 1 0" minWidth={0}>
           <Text
+            textAlign="center"
             fontWeight="bold"
             fontSize="lg"
             color={node.sponsor ? "#ffd200" : "white"}
           >
             {node.alias}
           </Text>
-        </Box>
 
-        <Box flex="1" textAlign="left">
-          {node.net !== null && (
-            <>
-              <Badge
-                display="flex"
-                w="min"
-                colorScheme={getNetTypeBadgeProps(node.net_type).colorScheme}
-              >
-                {node.net_type}
-              </Badge>
-
-              <Badge w="min" colorScheme="teal">
-                {node.bandwidth}Mbps
-              </Badge>
-            </>
-          )}
-        </Box>
-
-        <Box flex="1" textAlign="left">
-          {node.net === null ? (
+          <Flex justify="space-between" align="center">
             <Badge
-              display="flex"
-              w="min"
+              colorScheme={getNetTypeBadgeProps(node.net_type).colorScheme}
+            >
+              {node.net_type}
+            </Badge>
+
+            <Badge colorScheme="teal" px={1.5}>
+              {node.bandwidth}M
+            </Badge>
+          </Flex>
+        </Box>
+
+        <Box flex="1 1 0" minWidth={0}>
+          {node.net !== null &&
+            (node.delay !== undefined ? (
+              <Badge
+                width="80%"
+                borderRadius="md"
+                fontSize="md"
+                colorScheme={getDelayBadgeProps(node.delay).colorScheme}
+                lineHeight="1.1"
+                py={1}
+                textTransform="none"
+              >
+                延迟
+                <br />
+                {node.delay}ms
+              </Badge>
+            ) : (
+              <Box
+                display="flex"
+                justifyContent="center"
+                animation={`${spin} 1s linear infinite`}
+                transformOrigin="center center"
+              >
+                <AiOutlineLoading3Quarters size={18} />
+              </Box>
+            ))}
+        </Box>
+
+        <Box flex="1 1 0" minWidth={0}>
+          {node.net !== null ? (
+            <Badge
+              width="80%"
+              borderRadius="md"
+              fontSize="md"
               colorScheme={getNetBadgeProps(node.net).colorScheme}
+              lineHeight="1.1"
+              py={1}
+            >
+              负载
+              <br />
+              {node.net}%
+            </Badge>
+          ) : (
+            <Badge
+              width="80%"
+              borderRadius="md"
+              fontSize="lg"
+              colorScheme="gray"
             >
               离线
             </Badge>
-          ) : (
-            <>
-              <Box textAlign="left">
-                {node.net !== null && node.delay !== undefined ? (
-                  <Badge
-                    display="flex"
-                    w="min"
-                    colorScheme={getDelayBadgeProps(node.delay).colorScheme}
-                  >
-                    {node.delay}ms
-                  </Badge>
-                ) : (
-                  <Box
-                    display="flex"
-                    w="min"
-                    animation={`${spin} 1s linear infinite`}
-                    transformOrigin="center center"
-                  >
-                    <AiOutlineLoading3Quarters size={18} />
-                  </Box>
-                )}
-              </Box>
-
-              <Box textAlign="left">
-                <Badge colorScheme={getNetBadgeProps(node.net).colorScheme}>
-                  负载{node.net}%
-                </Badge>
-              </Box>
-            </>
           )}
         </Box>
       </Flex>
@@ -165,10 +179,10 @@ export const ServerNodeListModal: React.FC = () => {
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
 
   const Suggestions = [
-    "线路目前有：多线、海外、电信；只有海外线路支持大陆外的用户连接",
-    "Mbps是指每个用户可使用的最高网络带宽",
-    "负载越低越好，高负载的节点联机易卡顿",
-    "MS是网络延迟，越低越好，实际游戏联机延迟是双方的延迟相加",
+    "线路区别：大陆外的用户只能使用海外（目前只有香港A节点），其他根据网络情况选择",
+    "M是指Mbps，即每个用户可使用的最高网络带宽，大多数游戏1Mbps够用",
+    "负载越低越好，高负载的节点联机易卡顿，每30秒更新一次",
+    "网络延迟越低越好，ms是毫秒，实际游戏联机延迟是主机+客机的延迟总和",
   ];
 
   return (
@@ -179,7 +193,7 @@ export const ServerNodeListModal: React.FC = () => {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent bgColor="#274161" maxW="320px" mx={3}>
+      <ModalContent bgColor="#3b4960e3" maxW="320px" mx={3}>
         <ModalHeader textAlign="center">点击选择联机节点</ModalHeader>
 
         <ModalBody py={0} textAlign="center">
@@ -223,7 +237,15 @@ export const ServerNodeListModal: React.FC = () => {
               </Button>
             </Flex>
 
-            <Stack spacing={3} mx="auto" my={3} px={4} w="100%">
+            <Stack
+              spacing={2}
+              mx="auto"
+              mb={3}
+              px={2}
+              w="100%"
+              maxH="40vh"
+              overflowY="auto"
+            >
               {nodeMap &&
                 Array.from(nodeMap.values()).map((node) => (
                   <ServerNodeItem
@@ -238,15 +260,13 @@ export const ServerNodeListModal: React.FC = () => {
 
         <ModalFooter pt={0} flexDirection="column">
           <Center>
-            <Text ml="auto">不知道怎么选择？</Text>
-
             <Button
               color="#7dd4ff"
               bgColor="transparent"
               onClick={toggleExpanded}
               variant="link"
             >
-              {isExpanded ? "点我关闭" : "点我查看"}
+              {isExpanded ? "点我关闭" : "点我查看选择建议"}
             </Button>
           </Center>
 

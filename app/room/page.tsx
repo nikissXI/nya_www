@@ -94,25 +94,25 @@ export default function Page() {
   }, [userInfo?.wg_data?.node_alias, getRoomData]);
 
   // 离线的时候闪烁
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
+  // useEffect(() => {
+  //   let intervalId: NodeJS.Timeout | undefined;
 
-    if (onlineStatus === "离线") {
-      setDocButtonText("点我查看使用教程");
+  //   if (onlineStatus === "离线") {
+  //     setDocButtonText("点我查看使用教程");
 
-      intervalId = setInterval(() => {
-        setTutorialColor((prev) => !prev);
-      }, 300);
-    } else {
-      setDocButtonText("点我查看使用教程");
-    }
+  //     intervalId = setInterval(() => {
+  //       setTutorialColor((prev) => !prev);
+  //     }, 300);
+  //   } else {
+  //     setDocButtonText("点我查看使用教程");
+  //   }
 
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [onlineStatus]);
+  //   return () => {
+  //     if (intervalId) {
+  //       clearInterval(intervalId);
+  //     }
+  //   };
+  // }, [onlineStatus]);
 
   // 通用请求函数，自动管理 loading 和错误处理
   const requestRoomApi = useCallback(
@@ -180,13 +180,7 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [
-      requestRoomApi,
-      roomData,
-      setRoomData,
-      setPassIsOpen,
-      setPassOnClose,
-    ]
+    [requestRoomApi, roomData, setRoomData, setPassIsOpen, setPassOnClose]
   );
 
   // 创建房间
@@ -256,12 +250,7 @@ export default function Page() {
         openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
     },
-    [
-      requestRoomApi,
-      getRoomData,
-      joinOnClose,
-      setHideJoinPassInput,
-    ]
+    [requestRoomApi, getRoomData, joinOnClose, setHideJoinPassInput]
   );
 
   // 退出房间
@@ -613,16 +602,24 @@ export default function Page() {
                 ? router.push(`/docs#games`)
                 : router.push(`/docs`);
             }}
-            color={
-              onlineStatus === "在线"
-                ? "white"
-                : tutorialColor
-                ? "#ff0000"
-                : "white"
-            }
+            // color={
+            //   onlineStatus === "在线"
+            //     ? "white"
+            //     : tutorialColor
+            //     ? "#ff0000"
+            //     : "white"
+            // }
           >
             {docButtonText}
           </Button>
+
+          {onlineStatus === "离线" && (
+            <Text color="#ffca3d" textAlign="center" size="sm">
+              离线无法联机，不懂就看使用教程
+              <br />
+              切换节点后，需要重新导入隧道
+            </Text>
+          )}
 
           <Flex align="center">
             {roomRole !== "none" && (
@@ -663,14 +660,6 @@ export default function Page() {
               </Box>
             </Button>
           </Flex>
-
-          {onlineStatus === "离线" && (
-            <Text color="#ffca3d" textAlign="center" size="sm">
-              换了节点要重新导入对应的隧道
-              <br />
-              每个节点都要单独导入一次隧道
-            </Text>
-          )}
 
           {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
