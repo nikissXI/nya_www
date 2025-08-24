@@ -18,7 +18,7 @@ import {
   ListIcon,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -171,10 +171,20 @@ export const ServerNodeListModal: React.FC = () => {
     showNodeListModal,
     setNodeListModal,
     userInfo,
+    selectNode,
   } = useUserStateStore();
 
-  const [disableGetNodeList, setDisableGetNodeList] = useState(false);
+  useEffect(() => {
+    // 设置每分钟执行一次
+    const intervalId = setInterval(() => {
+      if (userInfo?.wg_data?.node_alias)
+        selectNode(userInfo.wg_data.node_alias, false);
+    }, 1800 * 1000);
+    // 组件卸载时清除定时器
+    return () => clearInterval(intervalId);
+  }, [userInfo, selectNode]);
 
+  const [disableGetNodeList, setDisableGetNodeList] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
 

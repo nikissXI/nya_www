@@ -511,8 +511,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
                 }
               })
             );
-
-            openToast({ content: data.msg, status: "success" });
+            //手动选择的才弹窗
+            if (manual) openToast({ content: data.msg, status: "success" });
           } else {
             openToast({ content: data.msg, status: "warning" });
           }
