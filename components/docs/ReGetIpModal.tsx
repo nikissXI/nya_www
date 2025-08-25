@@ -49,7 +49,7 @@ const TunnelUpdateModal = () => {
         <ModalBody>
           <Text>你获取了新ip，旧ip及其隧道已失效</Text>
           <Text>需要下载并导入新隧道才能正常连接喵服</Text>
-          <Text>到使用教程页面，再操作一次“WG下载和隧道导入”即可</Text>
+          <Text>到联机教程页面，再操作一次“WG下载和隧道导入”即可</Text>
 
           <Text textAlign="center" mt={4}>
             {!canClose && `还有 ${countdown} 秒可以跳转`}
@@ -64,7 +64,7 @@ const TunnelUpdateModal = () => {
             }}
             isDisabled={!canClose}
           >
-            点击跳转使用教程页面
+            点击跳转联机教程页面
           </Button>
         </ModalBody>
       </ModalContent>

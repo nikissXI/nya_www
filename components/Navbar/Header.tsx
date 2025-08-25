@@ -33,7 +33,7 @@ export function Header({ path }: { path: string }) {
       "/forgetPass": "忘记密码",
       "/me": "我的信息",
       "/sponsor": "赞助喵服",
-      "/docs": "喵服使用教程",
+      "/docs": "喵服联机教程",
       "/room": "联机房间",
     };
 

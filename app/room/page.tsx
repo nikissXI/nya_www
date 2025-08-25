@@ -8,7 +8,6 @@ import {
   Modal,
   ModalOverlay,
   Heading,
-  Center,
   HStack,
   VStack,
   ModalContent,
@@ -20,6 +19,7 @@ import {
   Flex,
   Switch,
   Tag,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -69,7 +69,6 @@ export default function Page() {
 
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
 
-  const [docButtonText, setDocButtonText] = useState("点我查看使用教程");
   const [inputRoomId, setInputRoomId] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
   const {
@@ -92,27 +91,6 @@ export default function Page() {
       getRoomData();
     }
   }, [userInfo?.wg_data?.node_alias, getRoomData]);
-
-  // 离线的时候闪烁
-  // useEffect(() => {
-  //   let intervalId: NodeJS.Timeout | undefined;
-
-  //   if (onlineStatus === "离线") {
-  //     setDocButtonText("点我查看使用教程");
-
-  //     intervalId = setInterval(() => {
-  //       setTutorialColor((prev) => !prev);
-  //     }, 300);
-  //   } else {
-  //     setDocButtonText("点我查看使用教程");
-  //   }
-
-  //   return () => {
-  //     if (intervalId) {
-  //       clearInterval(intervalId);
-  //     }
-  //   };
-  // }, [onlineStatus]);
 
   // 通用请求函数，自动管理 loading 和错误处理
   const requestRoomApi = useCallback(
@@ -592,30 +570,22 @@ export default function Page() {
           )}
 
           <Button
-            whiteSpace="pre-wrap"
-            // variant="link"
-            // bg="transparent"
-            bg="#2976bd"
-            size="md"
+            bgColor="orange.500"
+            rounded="xl"
+            px={3}
+            size="lg"
             onClick={() => {
               onlineStatus === "在线"
                 ? router.push(`/docs#games`)
                 : router.push(`/docs`);
             }}
-            // color={
-            //   onlineStatus === "在线"
-            //     ? "white"
-            //     : tutorialColor
-            //     ? "#ff0000"
-            //     : "white"
-            // }
           >
-            {docButtonText}
+            联机教程
           </Button>
 
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
-              离线无法联机，不会用就看使用教程
+              离线无法联机，不会用就看联机教程
               <br />
               切换节点后，到教程里导入所选节点隧道
             </Text>

@@ -631,7 +631,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               })
             );
             openToast({
-              content: "离线无法联机，不会用就看使用教程",
+              content: "离线无法联机，不会用就看联机教程",
               status: "warning",
             });
           }
