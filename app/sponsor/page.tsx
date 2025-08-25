@@ -127,9 +127,9 @@ const Page = () => {
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
-              付款时请点“添加备注”写上您的喵服UID{" "}
+              付款时请务必备注您的喵服UID{" "}
               {userInfo ? `${userInfo.uid}` : `（在我的信息页面查看）`}
-              ，不备注的话无法记录赞助信息，赞助记录永久有效。
+              ，不写的话无法记录赞助信息，赞助记录永久有效。
             </HighLight>
             赞助信息由服主手动录入，因此更新有延迟，除非睡觉否则十分钟左右就行
           </ListItem>

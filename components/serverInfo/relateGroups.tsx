@@ -36,11 +36,11 @@ const RelateGroups = () => {
             group.qq !== 1047464328 &&
             group.qq !== 924644467 && (
               <Center key={index} my={1}>
-                {group.name} - {group.qq}
+                {group.name}&ensp;{group.qq}
               </Center>
             )
         )}
-        <Center my={1}>综合服务群 - 1047464328</Center>
+        <Center my={1}>综合服务群&ensp;1047464328</Center>
       </Flex>
     </Box>
   );

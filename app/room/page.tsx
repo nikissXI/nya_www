@@ -614,10 +614,10 @@ export default function Page() {
           </Button>
 
           {onlineStatus === "离线" && (
-            <Text color="#ffca3d" textAlign="center" size="sm">
-              离线无法联机，不懂就看使用教程
+            <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
+              离线无法联机，不会用就看使用教程
               <br />
-              切换节点后，需要重新导入隧道
+              切换节点后，到教程里导入所选节点隧道
             </Text>
           )}
 

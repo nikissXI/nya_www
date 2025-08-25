@@ -65,6 +65,7 @@ const articles: Article[] = [
   { path: "/docs/minecraft", title: "我的世界（全平台）" },
   { path: "/docs/terraria", title: "泰拉瑞亚（全平台）" },
   { path: "/docs/l4d2", title: "求生之路2（PC）" },
+  { path: "/docs/machinesAtWar3", title: "机械战争3（全平台）" },
   { path: "/docs/projectZomboid", title: "僵尸毁灭工程（PC）" },
 ];
 
@@ -252,7 +253,7 @@ const DocumentPage = () => {
             <ScrollLinkM to="words">2. 联机常用词</ScrollLinkM>
             <ScrollLinkM to="download">3. WG下载和隧道导入</ScrollLinkM>
             <ScrollLinkM to="room">4. 联机房间说明</ScrollLinkM>
-            <ScrollLinkM to="games">5. 具体游戏联机教程(很重要)</ScrollLinkM>
+            <ScrollLinkM to="games">5. 具体游戏联机教程(必看)</ScrollLinkM>
             <ScrollLinkM to="issues">6. 常见问题/联机失败</ScrollLinkM>
           </VStack>
         </Box>
@@ -804,7 +805,7 @@ const DocumentPage = () => {
 
         <Box id="games">
           <Heading size="md" pb={2} color="#00ff17">
-            5. 具体游戏联机教程(很重要)
+            5. 具体游戏联机教程(必看)
           </Heading>
           <Text>
             &emsp;&emsp;
