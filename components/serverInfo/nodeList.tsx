@@ -189,7 +189,7 @@ export const ServerNodeListModal: React.FC = () => {
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
 
   const Suggestions = [
-    "线路区别：大陆外的用户只能使用海外（目前只有香港A节点），其他根据网络情况选择",
+    "线路区别：大陆外的用户只能使用海外线路的节点（如果跨境联机建议香港A节点，该节点跨境联机稳定）；大陆内用户根据网络情况选择",
     "M是指Mbps，即每个用户可使用的最高网络带宽，大多数游戏1Mbps够用",
     "负载越低越好，高负载的节点联机易卡顿，每30秒更新一次",
     "网络延迟越低越好，ms是毫秒，实际游戏联机延迟是主机+客机的延迟总和",
