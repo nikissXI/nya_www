@@ -20,6 +20,9 @@ import {
   Switch,
   Tag,
   useColorModeValue,
+  List,
+  ListItem,
+  ListIcon,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -36,6 +39,7 @@ import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
 import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
+import { MdTipsAndUpdates } from "react-icons/md";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -51,8 +55,6 @@ interface HandleRoomResponse {
 export default function Page() {
   const router = useRouter();
 
-  const [tutorialColor, setTutorialColor] = useState(true);
-
   const [loading, setLoading] = useState(false);
 
   const {
@@ -65,6 +67,12 @@ export default function Page() {
     isOpen: setPassIsOpen,
     onOpen: setPassOnOpen,
     onClose: setPassOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: setNoticeIsOpen,
+    onOpen: setNoticeOnOpen,
+    onClose: setNoticeOnClose,
   } = useDisclosure();
 
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
@@ -284,6 +292,13 @@ export default function Page() {
       handleJoinRoom(inputRoomId, inputPasswd);
     }
   };
+
+  const OfflineReasons = [
+    "导入的是不是自己账号的隧道，每个隧道对应一个账号，不能共用或使用他人提供的隧道",
+    "每个节点都有单独的隧道，并不能通用。如选择了广州A节点，就要去联机教程里再执行一次《3. WG下载和隧道导入》中隧道导入的步骤；如果选择了上海A节点，也要去导入一次；你用3个节点，就要导入3次",
+    "某些公共网络（如学校、公司网络）会拦截WG的流量，尝试切换其他网络试试，如使用移动流量",
+    "国内用户只能使用国内节点，海外用户只能用海外线路节点，国内与海外联机只有香港A节点支持",
+  ];
 
   function standbyPage() {
     return (
@@ -583,11 +598,46 @@ export default function Page() {
             联机教程
           </Button>
 
+          {/* 连接失败原因Modal */}
+          <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
+            <ModalOverlay />
+            <ModalContent maxW="md" bgColor="#002f5c">
+              <ModalHeader>
+                <Heading size="lg">自行逐项检查</Heading>
+              </ModalHeader>
+              <ModalCloseButton />
+
+              <ModalBody>
+                <VStack align="start" spacing={3}>
+                  <List spacing={5}>
+                    {OfflineReasons.map((reason, index) => (
+                      <ListItem key={index} textAlign="left">
+                        <ListIcon as={MdTipsAndUpdates} />
+                        {reason}
+                      </ListItem>
+                    ))}
+                  </List>
+                </VStack>
+              </ModalBody>
+              <ModalFooter>
+                <Button onClick={setNoticeOnClose}>关闭</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
               离线无法联机，不会用就看联机教程
               <br />
-              切换节点后，到教程里导入所选节点隧道
+              隧道已连接仍旧离线？
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={setNoticeOnOpen}
+              >
+                点我查看原因
+              </Button>
             </Text>
           )}
 
