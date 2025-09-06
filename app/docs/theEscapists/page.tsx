@@ -58,7 +58,7 @@ export default function AndroidPage0() {
             window.open("https://b23.tv/2dcjPHv", "_blank");
           }}
         >
-          点击查看视频演示
+          点击查看视频演示<br/>仅作辅助，图文还是得看
         </Button>
 
         <Text>由于这逃脱者的联机机制很傻逼，想联机就认真看教程的每个字！</Text>

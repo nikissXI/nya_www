@@ -35,7 +35,7 @@ export default function Page() {
             );
           }}
         >
-          点击查看视频演示
+          点击查看视频演示<br/>仅作辅助，图文还是得看
         </Button>
 
         <Divider my={5} />
