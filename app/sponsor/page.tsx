@@ -115,13 +115,13 @@ const Page = () => {
         <List spacing={2}>
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            喵服由服主一人运营，赞助将帮助喵服持续开发新功能、购买联机节点，持续提供联机服务。如有建议请联系服主QQ
+            喵服由服主一人运营，赞助将帮助喵服持续提供联机服务。服主QQ
             1299577815
           </ListItem>
 
           <ListItem textAlign="left">
             <ListIcon as={RiVipCrownFill} />
-            赞助金额可被系统累计记录并获得赞助者铭牌，并有专用服务器使用，累计赞助金额不低于10元可找服主解答使用喵服联机中产生的问题
+            赞助金额可被系统累计记录并获得赞助者铭牌，并有专用服务器使用，累计赞助金额不低于10元可加服主QQ解答使用喵服联机中产生的问题
           </ListItem>
 
           <ListItem textAlign="left">
@@ -131,7 +131,7 @@ const Page = () => {
               {userInfo ? `${userInfo.uid}` : `（在我的信息页面查看）`}
               ，不写的话无法记录赞助信息，赞助记录永久有效。
             </HighLight>
-            赞助信息由服主手动录入，因此更新有延迟，除非睡觉否则十分钟左右就行
+            赞助信息由服主手动录入，因此更新有延迟，如果忘了备注或催录入可以加服主QQ（如果是睡着了那没办法）
           </ListItem>
         </List>
 
