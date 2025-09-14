@@ -189,7 +189,7 @@ export const ServerNodeListModal: React.FC = () => {
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
 
   const Suggestions = [
-    "线路区别：海外的用户只能使用海外线路的节点（国内与海外联机只能用香港A节点，其他海外节点国内无法连接）；国内用户根据网络情况选择，电信线路用非电信运营商连接会卡",
+    "线路区别：海外的用户只能使用海外线路的节点（国内与海外联机只能用香港A节点，其他海外节点国内无法连接）；国内用户根据网络情况选择",
     "M是指Mbps，即每个用户可使用的最高网络带宽，大多数游戏1Mbps够用",
     "负载越低越好，高负载的节点联机易卡顿，每30秒更新一次",
     "网络延迟越低越好，ms是毫秒，实际游戏联机延迟是主机+客机的延迟总和",
@@ -269,6 +269,17 @@ export const ServerNodeListModal: React.FC = () => {
         </ModalBody>
 
         <ModalFooter pt={0} flexDirection="column">
+          <List spacing={0}>
+            <ListItem textAlign="left">
+              <ListIcon as={MdTipsAndUpdates} />
+              跨国联机只能用香港A节点
+            </ListItem>
+            <ListItem textAlign="left">
+              <ListIcon as={MdTipsAndUpdates} />
+              广州C节点非电信网络会卡
+            </ListItem>
+          </List>
+
           <Center>
             <Button
               color="#7dd4ff"
@@ -276,7 +287,7 @@ export const ServerNodeListModal: React.FC = () => {
               onClick={toggleExpanded}
               variant="link"
             >
-              {isExpanded ? "点我关闭" : "点我查看选择建议"}
+              {isExpanded ? "点我关闭" : "点我查看更多"}
             </Button>
           </Center>
 
