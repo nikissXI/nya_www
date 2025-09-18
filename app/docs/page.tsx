@@ -506,8 +506,7 @@ const DocumentPage = () => {
               <TabPanel px={0} pb={1} pt={2}>
                 <Box>
                   1. 安装WG客户端，
-                  <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
-                  ，如果没有海外账号自己去闲鱼或pdd之类的搜“苹果游戏”搞一个账号（最好是美区的），或自己想其他办法，海外账号都没有用什么苹果
+                  <HighLight>AppStore要登陆海外账号才能搜到</HighLight>，没有海外账号的有几个建议：（1）共享账号网站 <Link href="https://id.ali-door.top/share/damaiye" color="#7dfffe">https://id.ali-door.top/share/damaiye</Link> （2）去闲鱼或pdd啥的搜“苹果游戏”搞一个，最好是美区的（3）网上找教程学着注册或其他办法
                   <Image
                     src="/images/wg/app_store.jpg"
                     alt="app_store"
