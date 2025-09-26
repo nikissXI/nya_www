@@ -121,7 +121,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={RiVipCrownFill} />
-            赞助金额可被系统累计记录并获得赞助者铭牌，并有专用服务器使用，累计赞助金额不低于10元可加服主QQ解答使用喵服联机中产生的问题
+            赞助金额可被系统累计记录并获得赞助者铭牌，并有专用联机节点，累计赞助金额不低于10元可加服主QQ解答使用喵服联机中产生的问题
           </ListItem>
 
           <ListItem textAlign="left">

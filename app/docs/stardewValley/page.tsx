@@ -100,6 +100,10 @@ export default function Page() {
             <ListIcon as={MdTipsAndUpdates} />
             如果都在线仍然加入失败，检查这些点：1、客机加入的时候，主机游戏没有放后台；2、苹果设备需要给星露谷本地网络的权限，如果弹窗的时候没允许，到设置里找到星露谷给权限；3、主机大退游戏重新主持农场（大退的意思：退出关闭游戏，再开游戏），这是游戏的bug，主机有概率卡bug其他无法加入；4、可以使用下方的查房功能，测试房间是否能加入
           </ListItem>
+          <ListItem>
+            <ListIcon as={MdTipsAndUpdates} />
+            如果使用1M带宽的节点，超过3个人联机可能会卡
+          </ListItem>
         </List>
 
         <Divider my={3} />
