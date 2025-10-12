@@ -241,7 +241,7 @@ const DocumentPage = () => {
     <Box px={5}>
       <VStack spacing={5} align="stretch">
         <HighLight fontSize="24px">
-          网上的视频教程不一定是最新的，以本网站的图文教程为准，你少看一行都可能无法联机
+          认真阅读本页面教程，共6个部分，不要漏看任意内容！
         </HighLight>
 
         <Box>

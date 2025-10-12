@@ -588,14 +588,15 @@ export default function Page() {
             bgColor="orange.500"
             rounded="xl"
             px={3}
-            size="lg"
+            fontSize={18}
+            size="md"
             onClick={() => {
               onlineStatus === "在线"
                 ? router.push(`/docs#games`)
                 : router.push(`/docs`);
             }}
           >
-            联机教程
+            点我查看联机教程
           </Button>
 
           {/* 连接失败原因Modal */}
@@ -627,9 +628,9 @@ export default function Page() {
 
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
-              离线无法联机，不会用就看联机教程
+              离线无法联机！不会用就看联机教程
               <br />
-              隧道已连接仍旧离线？
+              隧道已连接仍然离线？
               <Button
                 variant="link"
                 bg="transparent"
