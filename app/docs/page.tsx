@@ -212,6 +212,7 @@ const DocumentPage = () => {
   const DownloadButton = (isIOS: boolean = false) => {
     return (
       <Button
+        bgColor="orange.500"
         ml={3}
         size="sm"
         onClick={() => {
@@ -341,8 +342,13 @@ const DocumentPage = () => {
                   {userInfo?.wg_data?.node_alias}
                 </Text>
               </Text>
-              <Button rounded="md" onClick={setNodeListModal} size="sm">
-                切换
+              <Button
+                bgColor="orange.500"
+                rounded="md"
+                onClick={setNodeListModal}
+                size="sm"
+              >
+                切换节点
               </Button>
             </Flex>
 
@@ -359,28 +365,28 @@ const DocumentPage = () => {
               <Tab
                 py={1}
                 fontWeight="bolder"
-                _selected={{ color: "white", bg: "green.600" }}
+                _selected={{ color: "white", bg: "blue.600" }}
               >
                 安卓
               </Tab>
               <Tab
                 py={1}
                 fontWeight="bolder"
-                _selected={{ color: "white", bg: "green.600" }}
+                _selected={{ color: "white", bg: "blue.600" }}
               >
                 iOS
               </Tab>
               <Tab
                 py={1}
                 fontWeight="bolder"
-                _selected={{ color: "white", bg: "green.600" }}
+                _selected={{ color: "white", bg: "blue.600" }}
               >
                 Win
               </Tab>
               <Tab
                 py={1}
                 fontWeight="bolder"
-                _selected={{ color: "white", bg: "green.600" }}
+                _selected={{ color: "white", bg: "blue.600" }}
               >
                 Mac
               </Tab>
@@ -394,6 +400,7 @@ const DocumentPage = () => {
                     <Flex alignItems="center">
                       <Text>1. 安装WG客户端</Text>
                       <Button
+                        bgColor="orange.500"
                         h="1.6rem"
                         ml={3}
                         px={2}
@@ -477,6 +484,7 @@ const DocumentPage = () => {
                   <Flex alignItems="center">
                     <HighLight>小米/红米设备要改个设置</HighLight>
                     <Button
+                      bgColor="orange.500"
                       h="1.6rem"
                       ml={3}
                       px={2}
@@ -538,14 +546,14 @@ const DocumentPage = () => {
                     <Tab
                       py={1}
                       fontWeight="bolder"
-                      _selected={{ color: "white", bg: "green.600" }}
+                      _selected={{ color: "white", bg: "blue.600" }}
                     >
                       扫二维码
                     </Tab>
                     <Tab
                       py={1}
                       fontWeight="bolder"
-                      _selected={{ color: "white", bg: "green.600" }}
+                      _selected={{ color: "white", bg: "blue.600" }}
                     >
                       下载隧道
                     </Tab>
@@ -623,14 +631,14 @@ const DocumentPage = () => {
                     <Tab
                       py={1}
                       fontWeight="bolder"
-                      _selected={{ color: "white", bg: "green.600" }}
+                      _selected={{ color: "white", bg: "blue.600" }}
                     >
                       msi
                     </Tab>
                     <Tab
                       py={1}
                       fontWeight="bolder"
-                      _selected={{ color: "white", bg: "green.600" }}
+                      _selected={{ color: "white", bg: "blue.600" }}
                     >
                       exe
                     </Tab>
@@ -641,6 +649,7 @@ const DocumentPage = () => {
                       <Flex alignItems="center">
                         <Text>3. 下载msi安装包</Text>
                         <Button
+                          bgColor="orange.500"
                           size="sm"
                           mx={2}
                           onClick={() => {
@@ -712,6 +721,7 @@ const DocumentPage = () => {
                       <Flex alignItems="center">
                         <Text>3. 下载exe安装包</Text>
                         <Button
+                          bgColor="orange.500"
                           size="sm"
                           mx={2}
                           onClick={() => {
