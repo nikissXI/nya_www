@@ -628,7 +628,7 @@ export default function Page() {
 
           {onlineStatus === "离线" && (
             <Text textAlign="center" size="sm" mx={5}>
-              <Text color="#ffca3d">离线无法联机！不会用就看联机教程</Text>
+              <Text color="#ffca3d">离线无法联机！第一次用看联机教程</Text>
               隧道已连接仍然离线？
               <Button
                 variant="link"
