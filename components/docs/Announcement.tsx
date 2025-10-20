@@ -42,7 +42,7 @@ export const AnnouncementsModal = ({}) => {
 
   return (
     <Box>
-      <Box mx={5} color="#ffca3d" fontWeight="bold">
+      <Box mx={5} fontWeight="bold">
         <Flex align="center" wrap="wrap">
           {serverData === undefined ? (
             <HStack spacing={2}>
