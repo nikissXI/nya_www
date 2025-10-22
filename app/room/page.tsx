@@ -627,17 +627,8 @@ export default function Page() {
           </Modal>
 
           {onlineStatus === "离线" && (
-            <Text textAlign="center" size="sm" mx={5}>
-              <Text color="#ffca3d">离线无法联机！第一次用看联机教程</Text>
-              隧道已连接仍然离线？
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dd4ff"
-                onClick={setNoticeOnOpen}
-              >
-                点我查看原因
-              </Button>
+            <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
+              离线无法联机！第一次用看联机教程
             </Text>
           )}
 
@@ -680,6 +671,18 @@ export default function Page() {
               </Box>
             </Button>
           </Flex>
+
+          <Text>
+            隧道已连接仍然离线？
+            <Button
+              variant="link"
+              bg="transparent"
+              color="#7dd4ff"
+              onClick={setNoticeOnOpen}
+            >
+              点我排查原因
+            </Button>
+          </Text>
 
           {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
