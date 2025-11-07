@@ -535,6 +535,8 @@ const DocumentPage = () => {
                 <Tabs variant="line" colorScheme="orange">
                   <Text pt={2} fontWeight="bolder">
                     iOS导入隧道有扫码和下载两种方法，看情况选择
+                    <br />
+                    注意不要在远程控制的状态下导入
                   </Text>
 
                   <TabList
