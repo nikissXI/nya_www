@@ -18,10 +18,14 @@ import {
   List,
   ListItem,
   ListIcon,
+  Icon,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
+import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
 import { FaCode } from "react-icons/fa";
+import { FaQuestion } from "react-icons/fa";
+import { FaWeixin } from "react-icons/fa";
 import { RiVipCrownFill, RiMoneyCnyBoxLine } from "react-icons/ri";
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
@@ -115,8 +119,7 @@ const Page = () => {
         <List spacing={2}>
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            喵服由服主一人运营，赞助将帮助喵服持续提供联机服务。服主QQ
-            1299577815
+            喵服由服主一人运营，赞助将帮助喵服持续提供联机服务
           </ListItem>
 
           <ListItem textAlign="left">
@@ -131,7 +134,17 @@ const Page = () => {
               {userInfo ? `${userInfo.uid}` : `（在我的信息页面查看）`}
               ，不写的话无法记录赞助信息，赞助记录永久有效。
             </HighLight>
-            赞助信息由服主手动录入，因此更新有延迟（如果睡了那没办法），如果忘了备注或催录入可以加服主QQ
+            赞助信息由服主手动录入，因此更新有延迟（如果睡了那没办法）
+          </ListItem>
+
+          <ListItem textAlign="left">
+            <ListIcon as={FaQuestion} />
+            如果忘了备注、催录入、无法付款或其他疑问，可联系服主
+            <br />
+            <Icon as={FaWeixin} />
+            ：nikissxi&emsp;
+            <Icon as={FaQq} />
+            ：1299577815
           </ListItem>
         </List>
 
