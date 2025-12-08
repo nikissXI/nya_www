@@ -87,7 +87,7 @@ const Page = () => {
           感谢赞助者们的支持！
         </Text>
 
-        <Text fontSize="sm">仅列出赞助不低于50元赞助者，敬请谅解！</Text>
+        {/* <Text fontSize="sm">仅列出赞助不低于50元赞助者，敬请谅解！</Text>
 
         <TableContainer maxH="240px" overflowY="auto" overflowX="hidden">
           <Table variant="striped" colorScheme="transparent" w="300px">
@@ -114,7 +114,7 @@ const Page = () => {
               ))}
             </Tbody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
 
         <List spacing={2}>
           <ListItem textAlign="left">
