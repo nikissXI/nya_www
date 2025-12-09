@@ -139,7 +139,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={FaQuestion} />
-            如果忘了备注、催录入、无法付款或其他疑问，可联系服主
+            如果无法备注、漏了备注、催录入、无法付款等等疑问，请联系服主
             <br />
             <Icon as={FaWeixin} />
             ：nikissxi&emsp;
