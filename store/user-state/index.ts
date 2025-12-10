@@ -654,7 +654,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           openToast({ content: `刷新成功`, status: "success" });
         } catch (error) {
           openToast({
-            content: "服务器出错，请稍后刷新再试",
+            content: "出错！不要使用百度浏览器",
             status: "error",
           });
         } finally {
