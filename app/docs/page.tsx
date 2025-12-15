@@ -286,9 +286,7 @@ const DocumentPage = () => {
           </Text>
           <Text>
             &emsp;&emsp;
-            <HighLight>
-              使用喵服联机的玩家都要注册并连上喵服，导入自己的WG隧道文件
-            </HighLight>
+            <HighLight>使用喵服联机的玩家都要各自注册账号</HighLight>
             ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
           </Text>
         </Box>
@@ -326,32 +324,25 @@ const DocumentPage = () => {
             3. WG下载和隧道导入
           </Heading>
 
-          <HighLight>
-            每个人都要注册自己的喵服账号！！
-            <br />
-            别把自己账号的隧道给其他人导入！!
-            <br />
-            切换节点后，需要重新导入隧道！!
-          </HighLight>
+          <Flex align="center" borderRadius="md" boxShadow="sm">
+            <Text fontWeight="medium" fontSize="md" mr={2}>
+              隧道文件不能共享使用!!!
+              <br />
+              当前下载的是
+              <HighLight>{userInfo?.wg_data?.node_alias}节点</HighLight>
+              隧道文件
+            </Text>
+            <Button
+              bgColor="orange.500"
+              rounded="md"
+              onClick={setNodeListModal}
+              size="sm"
+            >
+              切换节点
+            </Button>
+          </Flex>
 
           <Tabs variant="line" colorScheme="orange">
-            <Flex align="center" borderRadius="md" boxShadow="sm" ml="1rem">
-              <Text fontWeight="medium" fontSize="md" mr={2}>
-                当前选择联机的节点：
-                <Text as="span" fontWeight="bold">
-                  {userInfo?.wg_data?.node_alias}
-                </Text>
-              </Text>
-              <Button
-                bgColor="orange.500"
-                rounded="md"
-                onClick={setNodeListModal}
-                size="sm"
-              >
-                切换节点
-              </Button>
-            </Flex>
-
             <Text pt={2} fontWeight="bolder" ml="1rem">
               选择你要安装WG的系统类型
             </Text>
