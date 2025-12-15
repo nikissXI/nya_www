@@ -90,7 +90,7 @@ export const AnnouncementsModal = ({}) => {
 
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
-        <ModalContent bg="#202e4fe0" color="white">
+        <ModalContent bg="#202e4fe0" color="white" maxH="70%" overflowY="auto">
           <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>

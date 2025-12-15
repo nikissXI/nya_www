@@ -32,6 +32,13 @@ function getNetBadgeProps(net: number) {
   return { colorScheme: "red" };
 }
 
+function getNetStatusText(net: number) {
+  if (net < 30) return "空闲";
+  if (net < 70) return "通畅";
+  if (net < 90) return "拥挤";
+  return "爆满";
+}
+
 function getDelayBadgeProps(delay: number) {
   if (delay < 60) return { colorScheme: "green" };
   else if (delay < 120) return { colorScheme: "yellow" };
@@ -147,6 +154,7 @@ const ServerNodeItem: React.FC<{
               负载
               <br />
               {node.net}%
+              {/* {getNetStatusText(node.net)} */}
             </Badge>
           ) : (
             <Badge
