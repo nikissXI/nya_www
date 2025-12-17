@@ -308,7 +308,7 @@ const DocumentPage = () => {
           </Text>
           <Text>
             <HighLight>隧道</HighLight>
-            ：连接喵服的WG配置文件，每个账号有自己的隧道文件，不能使用其他账号的。
+            ：连接喵服的WG配置文件，各账号、各节点有对应的隧道文件，<HighLight>不要把自己账号的隧道提供给其他玩家使用。</HighLight>
           </Text>
           <Text>
             <HighLight>防火墙</HighLight>
@@ -324,23 +324,21 @@ const DocumentPage = () => {
             3. WG下载和隧道导入
           </Heading>
 
-          <Flex align="center" borderRadius="md" boxShadow="sm">
-            <Text fontWeight="medium" fontSize="md" mr={2}>
-              隧道文件不能共享使用!!!
-              <br />
-              当前下载的是
-              <HighLight>{userInfo?.wg_data?.node_alias}节点</HighLight>
-              隧道文件
-            </Text>
-            <Button
-              bgColor="orange.500"
-              rounded="md"
-              onClick={setNodeListModal}
-              size="sm"
-            >
-              切换节点
-            </Button>
-          </Flex>
+          <Text fontWeight="medium" fontSize="md" mr={2}>
+            当前下载的是
+            <HighLight>{userInfo?.wg_data?.node_alias}节点</HighLight>
+            隧道文件
+            <br />
+            <HighLight>切换新节点后需要重新导入对应节点的隧道文件</HighLight>
+          </Text>
+          <Button
+            bgColor="orange.500"
+            rounded="md"
+            onClick={setNodeListModal}
+            size="sm"
+          >
+            切换节点
+          </Button>
 
           <Tabs variant="line" colorScheme="orange">
             <Text pt={2} fontWeight="bolder" ml="1rem">
