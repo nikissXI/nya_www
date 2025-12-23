@@ -57,16 +57,16 @@ interface Article {
 
 const articles: Article[] = [
   { path: "/docs/theEscapists", title: "逃脱者（必须看!!）（安卓、iOS）" },
-  { path: "/docs/juicyRealm", title: "恶果之地（全平台）" },
-  { path: "/docs/aresVirus2", title: "阿瑞斯病毒2（全平台）" },
   { path: "/docs/stardewValley", title: "星露谷物语（全平台）" },
-  { path: "/docs/wizardOfLegend", title: "传说法师1（安卓、iOS）" },
-  { path: "/docs/doNotStarve", title: "饥荒（PC）" },
-  { path: "/docs/minecraft", title: "我的世界（全平台）" },
   { path: "/docs/terraria", title: "泰拉瑞亚（全平台）" },
   { path: "/docs/l4d2", title: "求生之路2（PC）" },
+  { path: "/docs/minecraft", title: "我的世界（全平台）" },
+  { path: "/docs/wizardOfLegend", title: "传说法师1（安卓、iOS）" },
+  { path: "/docs/doNotStarve", title: "饥荒（PC）" },
   { path: "/docs/machinesAtWar3", title: "机械战争3（全平台）" },
   { path: "/docs/projectZomboid", title: "僵尸毁灭工程（PC）" },
+  { path: "/docs/juicyRealm", title: "恶果之地（全平台）" },
+  { path: "/docs/aresVirus2", title: "阿瑞斯病毒2（全平台）" },
 ];
 
 const DocumentPage = () => {

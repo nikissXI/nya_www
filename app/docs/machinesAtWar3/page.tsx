@@ -25,6 +25,8 @@ export default function AndroidPage0() {
         mx="5vw"
       >
         <Text my={3}>
+          注意：电脑端不支持与移动端联机
+          <br />
           玩家都处于一个联机房间后
           <br />
           1、玩家进入游戏，在开始菜单，点击“多人游戏”
