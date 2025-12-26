@@ -153,8 +153,7 @@ const ServerNodeItem: React.FC<{
             >
               负载
               <br />
-              {node.net}%
-              {/* {getNetStatusText(node.net)} */}
+              {node.net}%{/* {getNetStatusText(node.net)} */}
             </Badge>
           ) : (
             <Badge
@@ -181,16 +180,6 @@ export const ServerNodeListModal: React.FC = () => {
     userInfo,
     selectNode,
   } = useUserStateStore();
-
-  useEffect(() => {
-    // 设置每分钟执行一次
-    const intervalId = setInterval(() => {
-      if (userInfo?.wg_data?.node_alias)
-        selectNode(userInfo.wg_data.node_alias, false);
-    }, 1800 * 1000);
-    // 组件卸载时清除定时器
-    return () => clearInterval(intervalId);
-  }, [userInfo, selectNode]);
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
