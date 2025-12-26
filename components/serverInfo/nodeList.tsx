@@ -178,7 +178,6 @@ export const ServerNodeListModal: React.FC = () => {
     showNodeListModal,
     setNodeListModal,
     userInfo,
-    selectNode,
   } = useUserStateStore();
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
