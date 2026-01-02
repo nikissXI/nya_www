@@ -62,6 +62,7 @@ const articles: Article[] = [
   { path: "/docs/l4d2", title: "求生之路2（PC）" },
   { path: "/docs/minecraft", title: "我的世界（全平台）" },
   { path: "/docs/wizardOfLegend", title: "传说法师1（安卓、iOS）" },
+  { path: "/docs/isaac", title: "以撒的结合（PC）" },
   { path: "/docs/doNotStarve", title: "饥荒（PC）" },
   { path: "/docs/machinesAtWar3", title: "机械战争3（全平台）" },
   { path: "/docs/projectZomboid", title: "僵尸毁灭工程（PC）" },
@@ -796,7 +797,7 @@ const DocumentPage = () => {
             4. 联机房间说明
           </Heading>
           <Text>
-            联机房间页面功能介绍看图；在一个联机房间里，谁都可以作为主机创建多人游戏，其他人则作为客机加入游戏
+            需要在同一个节点方可联机；联机房间页面功能介绍看图；在一个联机房间里，谁都可以作为主机创建多人游戏，其他人则作为客机加入游戏
           </Text>
           <Image
             src="/images/wg/room_introduction_1.jpg"
