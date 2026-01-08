@@ -912,7 +912,7 @@ const DocumentPage = () => {
           size="sm"
           fontSize="md"
           px={2}
-          zIndex={999}
+          zIndex={200}
         >
           目录
         </Button>

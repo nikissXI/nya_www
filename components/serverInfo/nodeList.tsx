@@ -200,7 +200,7 @@ export const ServerNodeListModal: React.FC = () => {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent bgColor="#3b4960e3" maxW="320px" mx={3}>
+      <ModalContent bgColor="#3b4960e3" maxW="320px" mx={3} zIndex={999}>
         <ModalHeader textAlign="center">点击选择联机节点</ModalHeader>
 
         <ModalBody py={0} textAlign="center">

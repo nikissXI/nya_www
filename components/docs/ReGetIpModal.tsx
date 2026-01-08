@@ -44,7 +44,7 @@ const TunnelUpdateModal = () => {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent bgColor="#002f5c">
+      <ModalContent bgColor="#002f5c" zIndex={300}>
         <ModalHeader alignSelf="center">请更新WG隧道文件</ModalHeader>
         <ModalBody>
           <Text>你获取了新ip，旧ip及其隧道已失效</Text>
