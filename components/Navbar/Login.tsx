@@ -72,6 +72,7 @@ export function LoginModal() {
   useEffect(() => {
     const loadCaptcha = async () => {
       if (!userInfo && showLoginModal) {
+        setInputCaptcha("");
         setCaptchaImageUrl(await fetchCaptcha());
       }
     };

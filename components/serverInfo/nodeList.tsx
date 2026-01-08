@@ -200,7 +200,7 @@ export const ServerNodeListModal: React.FC = () => {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent bgColor="#3b4960e3" maxW="320px" mx={3} zIndex={999}>
+      <ModalContent bgColor="#3b4960e3" maxW="320px" mx={3}>
         <ModalHeader textAlign="center">点击选择联机节点</ModalHeader>
 
         <ModalBody py={0} textAlign="center">
@@ -252,6 +252,7 @@ export const ServerNodeListModal: React.FC = () => {
               w="100%"
               maxH="40vh"
               overflowY="auto"
+              zIndex={999}
             >
               {nodeMap &&
                 Array.from(nodeMap.values()).map((node) => (
