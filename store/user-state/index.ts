@@ -99,6 +99,9 @@ interface ILoginStateSlice {
   nodeMap: Map<string, NodeInfo>;
   getNodeList: () => Promise<void>;
 
+  needShowReget: boolean;
+  setNeedShowReget: () => void;
+
   // 节点选择
   showNodeListModal: boolean;
   setNodeListModal: () => void;
@@ -218,7 +221,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               get().getNodeList();
             }
             if (data.reget_ip) {
-              get().setShowRegetModal();
+              get().setNeedShowReget();
             }
           } else {
             openToast({ content: data.msg, status: "warning" });
@@ -470,11 +473,25 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
+      // 是否需要显示重新导入弹窗
+      needShowReget: false,
+      setNeedShowReget: () => {
+        set(
+          produce((draft) => {
+            draft.needShowReget = !draft.needShowReget;
+          })
+        );
+      },
+
       // 节点选择
       showNodeListModal: false,
       setNodeListModal: () => {
         set(
           produce((draft) => {
+            if (draft.needShowReget) {
+              draft.setShowRegetModal();
+              draft.needShowReget = false;
+            }
             draft.showNodeListModal = !draft.showNodeListModal;
           })
         );

@@ -198,8 +198,6 @@ export const ServerNodeListModal: React.FC = () => {
       onClose={setNodeListModal}
       closeOnOverlayClick={userInfo?.wg_data?.node_alias ? true : false}
       isCentered
-      scrollBehavior="inside"
-      allowPinchZoom
     >
       <ModalOverlay />
       <ModalContent bgColor="#3b4960e3" maxW="320px" mx={3}>
@@ -254,9 +252,6 @@ export const ServerNodeListModal: React.FC = () => {
               w="100%"
               maxH="40vh"
               overflowY="auto"
-              position="relative"
-              zIndex="1"
-              onWheel={(e) => e.stopPropagation()}
             >
               {nodeMap &&
                 Array.from(nodeMap.values()).map((node) => (
