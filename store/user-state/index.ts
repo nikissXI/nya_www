@@ -488,8 +488,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       setNodeListModal: () => {
         set(
           produce((draft) => {
-            if (draft.needShowReget) {
-              draft.setShowRegetModal();
+            if (draft.showNodeListModal && draft.needShowReget) {
+              draft.showRegetModal = true;
               draft.needShowReget = false;
             }
             draft.showNodeListModal = !draft.showNodeListModal;
