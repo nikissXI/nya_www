@@ -269,6 +269,10 @@ export const ServerNodeListModal: React.FC = () => {
           <List spacing={0}>
             <ListItem textAlign="left">
               <ListIcon as={MdTipsAndUpdates} />
+              延迟有时会飘,刷新多几次
+            </ListItem>
+            <ListItem textAlign="left">
+              <ListIcon as={MdTipsAndUpdates} />
               中国大陆跨境联机用香港A
             </ListItem>
             <ListItem textAlign="left">
