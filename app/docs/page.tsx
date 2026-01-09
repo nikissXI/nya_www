@@ -309,7 +309,8 @@ const DocumentPage = () => {
           </Text>
           <Text>
             <HighLight>隧道</HighLight>
-            ：连接喵服的WG配置文件，各账号、各节点有对应的隧道文件，<HighLight>不要把自己账号的隧道提供给其他玩家使用。</HighLight>
+            ：连接喵服的WG配置文件，各账号、各节点有对应的隧道文件，
+            <HighLight>不要把自己账号的隧道提供给其他玩家使用。</HighLight>
           </Text>
           <Text>
             <HighLight>防火墙</HighLight>
@@ -328,9 +329,15 @@ const DocumentPage = () => {
           <Text fontWeight="medium" fontSize="md" mr={2}>
             当前下载的是
             <HighLight>{userInfo?.wg_data?.node_alias}节点</HighLight>
-            隧道文件
+            隧道文件，换了节点要回这导入新隧道
             <br />
-            <HighLight>切换新节点后需要重新导入对应节点的隧道文件</HighLight>
+            重要的话说三遍！很多人在这一步踩坑
+            <br />
+            先切换到你需要的节点再导入隧道
+            <br />
+            先切换到你需要的节点再导入隧道
+            <br />
+            先切换到你需要的节点再导入隧道
           </Text>
           <Button
             bgColor="orange.500"
