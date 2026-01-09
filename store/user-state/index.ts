@@ -218,7 +218,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             // 获取隧道后弹出节点选择框
             if (data.wg_data) {
               get().setNodeListModal();
-              get().getNodeList();
             }
             if (data.reget_ip) {
               get().setNeedShowReget();
@@ -296,7 +295,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             );
             // 如果有隧道信息就拉节点列表
             if (userInfo.wg_data) {
-              get().getNodeList();
               // 如果没选节点就弹出节点列表
               if (!userInfo.wg_data.node_alias) get().setNodeListModal();
               else get().selectNode(userInfo.wg_data.node_alias, false);
@@ -437,6 +435,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       getNodeList: async () => {
         try {
+          // 延迟 0.5 秒后发起请求
+          // await new Promise(resolve => setTimeout(resolve, 200));
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/nodeList`);
           if (!resp.ok) {
@@ -488,9 +488,14 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       setNodeListModal: () => {
         set(
           produce((draft) => {
+            // 如果窗口就是打开并获取了新隧道就弹出提示
             if (draft.showNodeListModal && draft.needShowReget) {
               draft.showRegetModal = true;
               draft.needShowReget = false;
+            }
+            // 如果窗口打开了就刷新节点列表
+            if (!draft.showNodeListModal) {
+              get().getNodeList();
             }
             draft.showNodeListModal = !draft.showNodeListModal;
           })
