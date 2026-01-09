@@ -328,8 +328,8 @@ const DocumentPage = () => {
 
           <Text fontWeight="medium" fontSize="md" mr={2}>
             当前下载的是
-            <HighLight>{userInfo?.wg_data?.node_alias}节点</HighLight>
-            隧道文件，换了节点要回这导入新隧道
+            <HighLight>{userInfo?.wg_data?.node_alias}</HighLight>
+            节点隧道文件，换了节点要回这导入新隧道
             <br />
             重要的话说三遍！很多人在这一步踩坑
             <br />
@@ -345,7 +345,7 @@ const DocumentPage = () => {
             onClick={setNodeListModal}
             size="sm"
           >
-            切换节点
+            点击切换节点
           </Button>
 
           <Tabs variant="line" colorScheme="orange">
@@ -409,7 +409,7 @@ const DocumentPage = () => {
                           );
                         }}
                       >
-                        下载安装包
+                        点击下载安装包
                       </Button>
                     </Flex>
 
