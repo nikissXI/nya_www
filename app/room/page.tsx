@@ -584,11 +584,9 @@ export default function Page() {
             </Button>
           )}
 
-          {onlineStatus === "离线" && (
-            <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
-              新增上海X和宿迁A节点；高负载节点易卡顿，可选择相对低负载的节点
-            </Text>
-          )}
+          <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
+            新增上海X和宿迁A节点；高负载节点易卡顿，可选择相对低负载的节点
+          </Text>
 
           <Button
             bgColor="orange.500"
