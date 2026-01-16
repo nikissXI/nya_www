@@ -185,10 +185,10 @@ export const ServerNodeListModal: React.FC = () => {
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
 
   const Suggestions = [
+    "负载越低越好，负载越高联机越卡，100%的时候说明卡爆了，每30秒更新一次",
     "注意！因政策原因，中国大陆与境外联机只能用香港A节点，只有香港A节点是全球任意地区均可连接",
     "线路区别：多线 - 中国大陆任意网络使用；电信 - 中国大陆电信网络使用；海外 - 非中国大陆均可使用",
     "M是指Mbps，即每个用户可使用的最高网络带宽，如果联机人数多起来后开始卡，试试换更大带宽的节点",
-    "负载越低越好，高负载的节点联机易卡顿，每30秒更新一次",
     "网络延迟越低越好，ms是毫秒，实际游戏联机延迟是主机+客机的延迟总和",
   ];
 
@@ -288,7 +288,7 @@ export const ServerNodeListModal: React.FC = () => {
               onClick={toggleExpanded}
               variant="link"
             >
-              {isExpanded ? "点我关闭" : "点我查看更多"}
+              {isExpanded ? "点我关闭" : "点我查看详细讲解"}
             </Button>
           </Center>
 

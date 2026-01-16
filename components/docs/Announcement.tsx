@@ -41,9 +41,13 @@ export const AnnouncementsModal = ({}) => {
   const { serverData } = useUserStateStore();
 
   return (
-    <Box>
+    <Box textAlign="center">
       <Box mx={5} fontWeight="bold">
-        <Flex align="center" wrap="wrap">
+        <Text color="#ffca3d" size="sm" mx={5}>
+          近期新增节点：上海X,宿迁A,北京C,广州D
+        </Text>
+
+        <Flex justify="center" align="center" wrap="wrap">
           {serverData === undefined ? (
             <HStack spacing={2}>
               <Spinner size="xs" />
@@ -93,11 +97,11 @@ export const AnnouncementsModal = ({}) => {
         <ModalContent bg="#202e4fe0" color="white" maxH="70%" overflowY="auto">
           <ModalHeader></ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <VStack spacing={2} align="stretch">
+          <ModalBody textAlign="center">
+            <VStack spacing={2} align="center">
               {serverData?.announcements &&
                 serverData.announcements.map((item, index) => (
-                  <Box key={index} p={1}>
+                  <Box key={index} p={1} maxW="80%">
                     <Text mb={1} fontWeight="bold" color="#f4d106">
                       {formatDate(item.timestamp)}
                     </Text>
