@@ -93,7 +93,7 @@ interface ILoginStateSlice {
   getNodeLatency: (
     node_alias: string,
     ping_host: string,
-    net?: number | null
+    net?: number | null,
   ) => Promise<number>;
   // 节点列表
   nodeMap: Map<string, NodeInfo>;
@@ -149,7 +149,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.serverData = data;
-            })
+            }),
           );
         } catch (error) {
         } finally {
@@ -176,7 +176,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set(
               produce((draft) => {
                 draft.confKey = data.key;
-              })
+              }),
             );
           } else {
             openToast({ content: data.msg, status: "warning" });
@@ -207,7 +207,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set(
               produce((draft) => {
                 draft.userInfo.wg_data = data.wg_data;
-              })
+              }),
             );
 
             openToast({
@@ -238,7 +238,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set(
           produce((draft) => {
             draft.goToIssues = goToIssues;
-          })
+          }),
         );
       },
 
@@ -250,7 +250,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set(
           produce((draft) => {
             draft.loginLoading = true;
-          })
+          }),
         );
 
         // 生成，记录uuid
@@ -259,14 +259,14 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.uuid = _uuid;
-            })
+            }),
           );
         } else {
           set(
             produce((draft) => {
               draft.uuid = uuidv4();
               localStorage.setItem("uuid", draft.uuid);
-            })
+            }),
           );
         }
 
@@ -291,7 +291,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set(
               produce((draft) => {
                 draft.userInfo = userInfo;
-              })
+              }),
             );
             // 如果有隧道信息就拉节点列表
             if (userInfo.wg_data) {
@@ -325,7 +325,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set(
           produce((draft) => {
             draft.loginLoading = false;
-          })
+          }),
         );
       },
 
@@ -341,7 +341,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             draft.roomRole = "none";
             draft.roomData = undefined;
             draft.latency = undefined;
-          })
+          }),
         );
       },
 
@@ -349,56 +349,59 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       getNodeLatency: async (
         node_alias: string,
         ping_host: string,
-        net: number | null = 0
+        net: number | null = 0,
       ) => {
         if (net === null) return 0;
 
         const statusUrl = `https://${ping_host}/ping`;
         const node = get().nodeMap.get(node_alias);
 
+        // 单次ping请求的辅助函数
+        const singlePing = async (): Promise<number> => {
+          try {
+            const resp = await fetch(statusUrl);
+            if (!resp.ok) {
+              throw new Error(`${node_alias}节点获取延迟出错`);
+            }
+            // 等待一小段时间确保 performance 记录了请求
+            await new Promise((resolve) => setTimeout(resolve, 100));
+
+            const entries = performance.getEntriesByName(statusUrl);
+            const lastEntry = entries.at(-1) as
+              | PerformanceResourceTiming
+              | undefined;
+
+            if (lastEntry) {
+              return Math.floor(
+                lastEntry.responseStart - lastEntry.requestStart,
+              );
+            } else {
+              throw new Error(`${node_alias}节点获取延迟性能记录出错`);
+            }
+          } catch (error) {
+            throw error;
+          }
+        };
+
         try {
-          const resp = await fetch(statusUrl);
-          if (!resp.ok) {
-            throw new Error(`${node_alias}节点获取延迟出错`);
-          }
-          // 等待一小段时间确保 performance 记录了请求
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          // 连续串行请求两次
+          const delay1 = await singlePing();
+          const delay2 = await singlePing();
+          // 选择最低延迟
+          const minDelay = Math.min(delay1, delay2);
 
-          const entries = performance.getEntriesByName(statusUrl);
-          const lastEntry = entries.at(-1) as
-            | PerformanceResourceTiming
-            | undefined;
-
-          if (lastEntry) {
-            const delay = Math.floor(
-              lastEntry.responseStart - lastEntry.requestStart
+          if (node) {
+            set(
+              produce((draft) => {
+                node.delay = minDelay;
+                const newMap = new Map(get().nodeMap);
+                // 合并旧数据和新数据
+                newMap.set(node_alias, node);
+                draft.nodeMap = newMap;
+              }),
             );
-            if (node) {
-              set(
-                produce((draft) => {
-                  node.delay = delay;
-                  const newMap = new Map(get().nodeMap);
-                  // 合并旧数据和新数据
-                  newMap.set(node_alias, node);
-                  draft.nodeMap = newMap;
-                })
-              );
-            }
-            return delay;
-          } else {
-            openToast({
-              content: `${node_alias}节点获取延迟出错，联系服主处理`,
-              status: "error",
-            });
-            if (node) {
-              set(
-                produce((draft) => {
-                  node.delay = 0;
-                })
-              );
-            }
-            return 0;
           }
+          return minDelay;
         } catch (error) {
           if (error instanceof Error) {
             if (error.message === "Failed to fetch") {
@@ -423,7 +426,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set(
               produce((draft) => {
                 node.delay = 0;
-              })
+              }),
             );
           }
           return 0;
@@ -448,14 +451,14 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.nodeMap = new Map<string, NodeInfo>(
-                nodes.map((n) => [n.alias, n])
+                nodes.map((n) => [n.alias, n]),
               );
-            })
+            }),
           );
 
           // 并行请求所有节点的延迟
           const latencyPromises = nodes.map((node) =>
-            get().getNodeLatency(node.alias, node.ping_host, node.net)
+            get().getNodeLatency(node.alias, node.ping_host, node.net),
           );
 
           // 等待所有请求完成，返回结果数组
@@ -479,7 +482,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set(
           produce((draft) => {
             draft.needShowReget = !draft.needShowReget;
-          })
+          }),
         );
       },
 
@@ -498,7 +501,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               get().getNodeList();
             }
             draft.showNodeListModal = !draft.showNodeListModal;
-          })
+          }),
         );
       },
       selectNodeLock: false,
@@ -507,7 +510,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.selectNodeLock = true;
-            })
+            }),
           );
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const params = manual ? `?node_alias=${node_alias}` : ``;
@@ -531,7 +534,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
                   draft.tunnelName = data.tunnel_name;
                   draft.userInfo.wg_data.conf_text = data.conf_text;
                 }
-              })
+              }),
             );
             //手动选择的才弹窗
             if (manual) openToast({ content: data.msg, status: "success" });
@@ -544,7 +547,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.selectNodeLock = false;
-            })
+            }),
           );
         }
       },
@@ -565,7 +568,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set(
           produce((draft) => {
             draft.roomData = roomData;
-          })
+          }),
         );
       },
       getRoomData: async (passLock: boolean = true) => {
@@ -577,7 +580,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set(
               produce((draft) => {
                 draft.disableFlush = true;
-              })
+              }),
             );
 
             setTimeout(() => {
@@ -585,7 +588,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               set(
                 produce((draft) => {
                   draft.disableFlush = false;
-                })
+                }),
               );
             }, 3000);
           }
@@ -594,7 +597,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.rotate = true;
-            })
+            }),
           );
 
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -617,7 +620,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.onlineStatus = is_online ? "在线" : "离线";
-            })
+            }),
           );
           const node_alias = get().userInfo?.wg_data?.node_alias;
 
@@ -631,7 +634,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             if (node?.ping_host) {
               const delay = await get().getNodeLatency(
                 node_alias,
-                node.ping_host
+                node.ping_host,
               );
 
               if (get().onlineStatus === "在线" && delay === 0)
@@ -643,14 +646,14 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               set(
                 produce((draft) => {
                   draft.latency = delay;
-                })
+                }),
               );
             }
           } else {
             set(
               produce((draft) => {
                 draft.latency = 0;
-              })
+              }),
             );
             openToast({
               content: "离线无法联机，不会用就看联机教程",
@@ -668,7 +671,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.roomRole = roomRole;
-            })
+            }),
           );
 
           get().setRoomData(roomData);
@@ -683,7 +686,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.rotate = false;
-            })
+            }),
           );
         }
       },
@@ -693,7 +696,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set(
           produce((draft) => {
             draft.showRegetModal = !draft.showRegetModal;
-          })
+          }),
         );
       },
 
@@ -703,10 +706,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         set(
           produce((draft) => {
             draft.showLoginModal = !draft.showLoginModal;
-          })
+          }),
         );
       },
     };
   },
-  shallow
+  shallow,
 );
