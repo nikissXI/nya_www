@@ -269,7 +269,7 @@ export const ServerNodeListModal: React.FC = () => {
         <ModalFooter pt={0} flexDirection="column">
           <Text>
             <Icon as={MdTipsAndUpdates} />
-            不知道怎么选节点详细讲解
+            不知道怎么选节点看详细讲解
           </Text>
 
           <Center>
