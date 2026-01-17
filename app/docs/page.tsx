@@ -287,7 +287,7 @@ const DocumentPage = () => {
           </Text>
           <Text>
             &emsp;&emsp;
-            <HighLight>使用喵服联机的玩家都要各自注册账号</HighLight>
+            <HighLight>使用喵服联机的玩家都要各自注册账号，跟着教程安装WG客户端并导入正确的隧道</HighLight>
             ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
           </Text>
         </Box>
