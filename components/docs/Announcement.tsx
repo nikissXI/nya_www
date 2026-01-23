@@ -44,7 +44,7 @@ export const AnnouncementsModal = ({}) => {
     <Box textAlign="center">
       <Box mx={5} fontWeight="bold">
         <Text color="#ffca3d" size="sm" mx={5}>
-          近期新增节点多个节点，具体看公告
+          近期新增多个联机节点，具体看公告
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
