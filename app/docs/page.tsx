@@ -327,15 +327,9 @@ const DocumentPage = () => {
           </Heading>
 
           <Text fontWeight="medium" fontSize="md" mr={2}>
-            当前下载的是
+            当前选择的是
             <HighLight>{userInfo?.wg_data?.node_alias}</HighLight>
-            节点隧道文件，换了节点要回这导入新隧道
-            <br />
-            重要的话说三遍！很多人在这一步踩坑
-            <br />
-            先切换到你需要的节点再导入隧道
-            <br />
-            先切换到你需要的节点再导入隧道
+            节点，隧道对于各节点并不通用
             <br />
             先切换到你需要的节点再导入隧道
           </Text>
@@ -566,7 +560,7 @@ const DocumentPage = () => {
 
                       <Text>
                         2.
-                        打开WG，点右上角+号，扫描二维码，隧道名称随意，你自己知道这是哪个节点就行
+                        打开WG，点右上角+号，扫描二维码，隧道名称写{tunnelName}
                       </Text>
 
                       <Box borderWidth={5} borderColor="white" w="min">

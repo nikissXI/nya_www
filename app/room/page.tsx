@@ -92,6 +92,7 @@ export default function Page() {
     disableFlush,
     setShowLoginModal,
     setNodeListModal,
+    tunnelName,
   } = useUserStateStore();
 
   useEffect(() => {
@@ -294,10 +295,9 @@ export default function Page() {
   };
 
   const OfflineReasons = [
-    "导入的是不是自己账号的隧道，每个隧道对应一个账号，不能共用或使用他人提供的隧道",
-    "WG隧道文件各节点不通用，如果切换新节点，去联机教程里《3. WG下载和隧道导入》下载新节点的隧道文件并导入；每个节点导入一次就行",
+    `导入的WG隧道是否为自己账号的隧道，并检查当前连接的隧道名称是否为${tunnelName}，如果不是，到联机教程下载并导入`,
     "某些公共网络（如学校、公司网络）会拦截WG的流量，尝试切换其他网络试试，如使用移动流量",
-    "国内用户只能使用国内节点，海外用户只能用海外线路节点，国内与海外联机只有香港A节点支持",
+    "国内用户只能使用国内节点，海外用户只能用海外线路节点，跨境联机只有香港A节点支持",
   ];
 
   function standbyPage() {
