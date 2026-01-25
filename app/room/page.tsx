@@ -104,7 +104,7 @@ export default function Page() {
   const requestRoomApi = useCallback(
     async (
       endpoint: string,
-      params: Record<string, string> = {}
+      params: Record<string, string> = {},
     ): Promise<HandleRoomResponse> => {
       if (loading) {
         throw new Error("请不要点太快");
@@ -139,7 +139,7 @@ export default function Page() {
         setLoading(false);
       }
     },
-    [loading]
+    [loading],
   );
 
   // 设置房间密码
@@ -166,7 +166,7 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [requestRoomApi, roomData, setRoomData, setPassIsOpen, setPassOnClose]
+    [requestRoomApi, roomData, setRoomData, setPassIsOpen, setPassOnClose],
   );
 
   // 创建房间
@@ -236,7 +236,7 @@ export default function Page() {
         openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
     },
-    [requestRoomApi, getRoomData, joinOnClose, setHideJoinPassInput]
+    [requestRoomApi, getRoomData, joinOnClose, setHideJoinPassInput],
   );
 
   // 退出房间
@@ -273,7 +273,7 @@ export default function Page() {
         openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
     },
-    [requestRoomApi, getRoomData]
+    [requestRoomApi, getRoomData],
   );
 
   function getColor(latency: number) {
@@ -417,7 +417,7 @@ export default function Page() {
                     handleSetRoomPasswd("");
                   } else {
                     setInputPasswd(
-                      roomData?.room_passwd ? roomData?.room_passwd : ""
+                      roomData?.room_passwd ? roomData?.room_passwd : "",
                     );
                     setPassOnOpen();
                   }
@@ -430,7 +430,7 @@ export default function Page() {
                 hidden={roomData?.room_passwd ? false : true}
                 onClick={() => {
                   setInputPasswd(
-                    roomData?.room_passwd ? roomData?.room_passwd : ""
+                    roomData?.room_passwd ? roomData?.room_passwd : "",
                   );
                   setPassOnOpen();
                 }}
@@ -596,7 +596,7 @@ export default function Page() {
                 : router.push(`/docs`);
             }}
           >
-            点我查看联机教程
+            联机教程/客户端下载
           </Button>
 
           {/* 连接失败原因Modal */}
@@ -628,7 +628,17 @@ export default function Page() {
 
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
-              离线无法联机！第一次用看联机教程
+              离线无法联机！需要下载WG客户端
+              <br />
+              WG已连接仍然离线？
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={setNoticeOnOpen}
+              >
+                点我排查原因
+              </Button>
             </Text>
           )}
 
@@ -671,18 +681,6 @@ export default function Page() {
               </Box>
             </Button>
           </Flex>
-
-          <Text>
-            隧道已连接仍然离线？
-            <Button
-              variant="link"
-              bg="transparent"
-              color="#7dd4ff"
-              onClick={setNoticeOnOpen}
-            >
-              点我排查原因
-            </Button>
-          </Text>
 
           {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
