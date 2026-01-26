@@ -584,20 +584,47 @@ export default function Page() {
             </Button>
           )}
 
-          <Button
-            bgColor="orange.500"
-            rounded="xl"
-            px={3}
-            fontSize={18}
-            size="md"
-            onClick={() => {
-              onlineStatus === "在线"
-                ? router.push(`/docs#games`)
-                : router.push(`/docs`);
-            }}
-          >
-            联机教程/客户端下载
-          </Button>
+          {onlineStatus === "离线" ? (
+            <Text color="#ffca3d" size="sm">
+              离线无法联机！需要下载WG客户端
+              <br />
+              WG客户端下载和教程👉
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={() => {
+                  router.push(`/docs`);
+                }}
+              >
+                点我点我
+              </Button>
+              <br />
+              WG已连接仍然离线？
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={setNoticeOnOpen}
+              >
+                点我排查原因
+              </Button>
+            </Text>
+          ) : (
+            <Text color="#ffca3d" size="sm">
+              已在线但游戏联机失败
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={() => {
+                  router.push(`/docs#games`);
+                }}
+              >
+                👉点我点我
+              </Button>
+            </Text>
+          )}
 
           {/* 连接失败原因Modal */}
           <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
@@ -625,22 +652,6 @@ export default function Page() {
               </ModalFooter>
             </ModalContent>
           </Modal>
-
-          {onlineStatus === "离线" && (
-            <Text color="#ffca3d" textAlign="center" size="sm" mx={5}>
-              离线无法联机！需要下载WG客户端
-              <br />
-              WG已连接仍然离线？
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dd4ff"
-                onClick={setNoticeOnOpen}
-              >
-                点我排查原因
-              </Button>
-            </Text>
-          )}
 
           <Flex align="center">
             {roomRole !== "none" && (

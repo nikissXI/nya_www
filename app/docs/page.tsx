@@ -143,7 +143,7 @@ const DocumentPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const filteredArticles = articles.filter((article) =>
-    article.title.toLowerCase().includes(searchTerm.toLowerCase())
+    article.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   //////////////////////
@@ -287,7 +287,9 @@ const DocumentPage = () => {
           </Text>
           <Text>
             &emsp;&emsp;
-            <HighLight>使用喵服联机的玩家都要各自注册账号，跟着教程安装WG客户端并导入正确的隧道</HighLight>
+            <HighLight>
+              使用喵服联机的玩家都要各自注册账号，跟着教程安装WG客户端并导入正确的隧道
+            </HighLight>
             ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
           </Text>
         </Box>
@@ -329,8 +331,9 @@ const DocumentPage = () => {
           <Text fontWeight="medium" fontSize="md" mr={2}>
             当前选择的是
             <HighLight>{userInfo?.wg_data?.node_alias}</HighLight>
-            节点，隧道对于各节点并不通用
-            <br />
+            节点，隧道对于各节点并不通用 <br />
+            先切换到你需要的节点再导入隧道 <br />
+            先切换到你需要的节点再导入隧道 <br />
             先切换到你需要的节点再导入隧道
           </Text>
           <Button
@@ -399,7 +402,7 @@ const DocumentPage = () => {
                         onClick={() => {
                           window.open(
                             process.env.NEXT_PUBLIC_WG_APK_URL,
-                            "_blank"
+                            "_blank",
                           );
                         }}
                       >
@@ -559,8 +562,8 @@ const DocumentPage = () => {
                       </HighLight>
 
                       <Text>
-                        2.
-                        打开WG，点右上角+号，扫描二维码，隧道名称写{tunnelName}
+                        2. 打开WG，点右上角+号，扫描二维码，隧道名称写
+                        {tunnelName}
                       </Text>
 
                       <Box borderWidth={5} borderColor="white" w="min">
@@ -597,6 +600,8 @@ const DocumentPage = () => {
                       alt="iOS_switch"
                     />
                   </Flex>
+                  如果仍然离线，在隧道关闭的状态，检查对端的地址是否为nya-
+                  {tunnelName}开头，如果不是，就删掉重新导入 <br />
                   出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
                 </Box>
               </TabPanel>
@@ -648,7 +653,7 @@ const DocumentPage = () => {
                           onClick={() => {
                             window.open(
                               process.env.NEXT_PUBLIC_WG_MSI_URL,
-                              "_blank"
+                              "_blank",
                             );
                           }}
                         >
@@ -720,7 +725,7 @@ const DocumentPage = () => {
                           onClick={() => {
                             window.open(
                               process.env.NEXT_PUBLIC_WG_EXE_URL,
-                              "_blank"
+                              "_blank",
                             );
                           }}
                         >
