@@ -648,7 +648,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           } else {
             set(
               produce((draft) => {
-                draft.latency = 0;
+                draft.latency = undefined;
               }),
             );
             openToast({
