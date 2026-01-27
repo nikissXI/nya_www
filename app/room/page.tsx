@@ -586,7 +586,7 @@ export default function Page() {
 
           {onlineStatus === "离线" ? (
             <Text color="#ffca3d" size="sm">
-              离线无法联机！需要下载WG客户端
+              离线无法联机！需要安装WG客户端
               <br />
               WG客户端下载和教程👉
               <Button
@@ -600,7 +600,7 @@ export default function Page() {
                 点我点我
               </Button>
               <br />
-              WG已连接仍然离线？
+              隧道已连接仍然离线？
               <Button
                 variant="link"
                 bg="transparent"
@@ -667,7 +667,7 @@ export default function Page() {
               fontWeight="bold"
               color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
             >
-              {onlineStatus}
+              WG{onlineStatus}
             </Text>
             {onlineStatus === "在线" && latency && (
               <Flex align="center">
