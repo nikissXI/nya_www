@@ -329,7 +329,7 @@ export const ServerNodeListModal: React.FC = () => {
 
                     await getNodeList();
                   }}
-                  isLoading={disableGetNodeList}
+                  disabled={disableGetNodeList}
                   flex="1"
                 >
                   刷新列表
