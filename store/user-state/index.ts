@@ -499,6 +499,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             content: "节点列表已刷新",
             status: "success",
           });
+          performance.clearResourceTimings();
         }
       },
       nodeReady: false,
@@ -635,7 +636,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               draft.rotate = true;
             }),
           );
-          performance.clearResourceTimings();
 
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/getRoom`, {
