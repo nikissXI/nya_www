@@ -667,7 +667,7 @@ export default function Page() {
               fontWeight="bold"
               color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
             >
-              WG{onlineStatus}
+              {onlineStatus === "离线" ? "WG离线" : "在线"}
             </Text>
             {onlineStatus === "在线" && latency && (
               <Flex align="center">

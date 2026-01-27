@@ -256,6 +256,7 @@ export const ServerNodeListModal: React.FC = () => {
     showNodeListModal,
     setNodeListModal,
     userInfo,
+    setNodeReady,
   } = useUserStateStore();
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
@@ -287,6 +288,7 @@ export const ServerNodeListModal: React.FC = () => {
         const nodeElement = document.getElementById(selectedNodeId);
         if (nodeElement) {
           nodeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          setNodeReady(false);
         }
       }, 100); // 延迟执行，确保DOM已经渲染完成
     }

@@ -99,6 +99,7 @@ interface ILoginStateSlice {
   nodeMap: Map<string, NodeInfo>;
   getNodeList: () => Promise<void>;
   nodeReady: boolean;
+  setNodeReady: (ready: boolean) => void;
 
   needShowReget: boolean;
   setNeedShowReget: () => void;
@@ -443,11 +444,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       nodeMap: new Map<string, any>(),
 
       getNodeList: async () => {
-        set(
-          produce((draft) => {
-            draft.nodeReady = false;
-          }),
-        );
         try {
           // 延迟 0.5 秒后发起请求
           // await new Promise(resolve => setTimeout(resolve, 200));
@@ -480,11 +476,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             status: "error",
           });
         } finally {
-          set(
-            produce((draft) => {
-              draft.nodeReady = true;
-            }),
-          );
+          get().setNodeReady(true);
           openToast({
             content: "节点列表已刷新",
             status: "success",
@@ -492,6 +484,13 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
       nodeReady: false,
+      setNodeReady: (ready: boolean) => {
+        set(
+          produce((draft) => {
+            draft.nodeReady = ready;
+          }),
+        );
+      },
 
       // 是否需要显示重新导入弹窗
       needShowReget: false,
