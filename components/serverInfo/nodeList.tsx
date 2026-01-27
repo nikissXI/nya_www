@@ -250,6 +250,7 @@ const ServerNodeItem: React.FC<{
 
 export const ServerNodeListModal: React.FC = () => {
   const {
+    nodeReady,
     getNodeList,
     nodeMap,
     showNodeListModal,
@@ -261,9 +262,9 @@ export const ServerNodeListModal: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
   const [sortBy, setSortBy] = useState("delay");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">('asc');
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterBy, setFilterBy] = useState("all");
-  const nodeListRef = useRef<HTMLDivElement>(null);
+  // const nodeListRef = useRef<HTMLDivElement>(null);
 
   const Suggestions = [
     "注意！因政策原因，中国大陆与境外联机只能用香港A节点，只有香港A节点是全球任意地区均可连接",
@@ -280,16 +281,16 @@ export const ServerNodeListModal: React.FC = () => {
 
   // 自动滚动到选中节点
   useEffect(() => {
-    if (showNodeListModal && userInfo?.wg_data?.node_alias) {
+    if (showNodeListModal && nodeReady && userInfo?.wg_data?.node_alias) {
       const selectedNodeId = userInfo.wg_data.node_alias;
       setTimeout(() => {
         const nodeElement = document.getElementById(selectedNodeId);
         if (nodeElement) {
-          nodeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          nodeElement.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }, 100); // 延迟执行，确保DOM已经渲染完成
     }
-  }, [showNodeListModal, userInfo?.wg_data?.node_alias, nodeMap]);
+  }, [showNodeListModal, nodeReady, userInfo?.wg_data?.node_alias]);
 
   // 获取所有网络类型
   const netTypes = [
