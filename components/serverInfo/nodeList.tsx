@@ -17,16 +17,13 @@ import {
   ListIcon,
   Icon,
   Select,
-  InputGroup,
-  InputLeftElement,
-  Input,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
 import { useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
-import { MdTipsAndUpdates, MdSearch } from "react-icons/md";
+import { MdTipsAndUpdates } from "react-icons/md";
 import { keyframes } from "@emotion/react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { MdOutlineSignalCellularAlt } from "react-icons/md";
@@ -83,14 +80,10 @@ function sortNodes(
 }
 
 // 筛选函数
-function filterNodes(nodes: NodeInfo[], filterBy: string, searchTerm: string) {
+function filterNodes(nodes: NodeInfo[], filterBy: string) {
   return nodes.filter((node) => {
     const matchesFilter = filterBy === "all" || node.net_type === filterBy;
-    const matchesSearch =
-      searchTerm === "" ||
-      node.alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      node.net_type.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
+    return matchesFilter;
   });
 }
 
@@ -269,7 +262,6 @@ export const ServerNodeListModal: React.FC = () => {
   const [sortBy, setSortBy] = useState("delay");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterBy, setFilterBy] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
 
   const Suggestions = [
     "注意！因政策原因，中国大陆与境外联机只能用香港A节点，只有香港A节点是全球任意地区均可连接",
@@ -281,7 +273,7 @@ export const ServerNodeListModal: React.FC = () => {
 
   // 处理节点数据
   const nodes = nodeMap ? Array.from(nodeMap.values()) : [];
-  const filteredNodes = filterNodes(nodes, filterBy, searchTerm);
+  const filteredNodes = filterNodes(nodes, filterBy);
   const sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
 
   // 获取所有网络类型
@@ -300,153 +292,142 @@ export const ServerNodeListModal: React.FC = () => {
       <ModalOverlay />
       <ModalContent
         bgColor="#3b4960e3"
-        maxW={{ base: "90vw", md: "400px" }}
+        maxW={{ base: "90vw", md: "360px" }}
         py={4}
       >
         <ModalBody>
           <VStack spacing={2} align="stretch">
-            <Flex flexWrap="wrap" gap={2} align="center">
-              <Flex flex="1">
-                <InputGroup size="sm">
-                  <InputLeftElement pointerEvents="none">
-                    <MdSearch color="gray.400" />
-                  </InputLeftElement>
-                  <Input
-                    placeholder={`搜索节点 共${sortedNodes.length}个`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+            <Flex flexDirection="column" gap={3} width="100%">
+              <Flex justify="center" gap={4} width="100%">
+                <Button
+                  size="sm"
+                  onClick={async () => {
+                    if (disableGetNodeList === true) return;
+
+                    setDisableGetNodeList(true);
+                    setTimeout(() => {
+                      setDisableGetNodeList(false);
+                    }, 3000);
+
+                    await getNodeList();
+                  }}
+                  isLoading={disableGetNodeList}
+                  flex="1"
+                >
+                  刷新列表
+                </Button>
+
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    if (!userInfo?.wg_data?.node_alias) {
+                      openToast({
+                        content: "选择节点后才能关闭",
+                        status: "warning",
+                      });
+                      return;
+                    }
+
+                    setNodeListModal();
+                  }}
+                  bgColor="#be2b2b"
+                  flex="1"
+                >
+                  关闭窗口
+                </Button>
+              </Flex>
+
+              <Flex justify="center" gap={4} width="100%">
+                <Flex align="center" flex="1">
+                  {/* <Button
+                    size="sm"
+                    variant="ghost"
+                    colorScheme="blue"
+                    mr={1}
+                    onClick={() =>
+                      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                    }
+                  >
+                    {sortOrder === "asc" ? "升序↑" : "降序↓"}
+                  </Button> */}
+
+                  <Select
+                    size="sm"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    bgColor="rgba(255, 255, 255, 0.05)"
+                    borderColor="rgba(255, 255, 255, 0.1)"
+                    borderRadius="lg"
+                    color="white"
+                    width="100%"
+                    _focus={{
+                      borderColor: "#7dd4ff",
+                      boxShadow: "0 0 0 1px #7dd4ff",
+                    }}
+                    _hover={{
+                      borderColor: "rgba(255, 255, 255, 0.3)",
+                    }}
+                  >
+                    <option
+                      value="delay"
+                      style={{ backgroundColor: "#3b4960", color: "white" }}
+                    >
+                      延迟优先
+                    </option>
+                    <option
+                      value="net"
+                      style={{ backgroundColor: "#3b4960", color: "white" }}
+                    >
+                      负载优先
+                    </option>
+                    <option
+                      value="bandwidth"
+                      style={{ backgroundColor: "#3b4960", color: "white" }}
+                    >
+                      带宽优先
+                    </option>
+                  </Select>
+                </Flex>
+
+                <Flex align="center" flex="1">
+                  <Select
+                    size="sm"
+                    value={filterBy}
+                    onChange={(e) => setFilterBy(e.target.value)}
+                    borderRadius="lg"
                     bgColor="rgba(255, 255, 255, 0.05)"
                     borderColor="rgba(255, 255, 255, 0.1)"
                     color="white"
-                  />
-                </InputGroup>
-              </Flex>
-
-              <Button
-                size="sm"
-                onClick={async () => {
-                  if (disableGetNodeList === true) return;
-
-                  setDisableGetNodeList(true);
-                  setTimeout(() => {
-                    setDisableGetNodeList(false);
-                  }, 3000);
-
-                  await getNodeList();
-                }}
-                isLoading={disableGetNodeList}
-              >
-                刷新
-              </Button>
-
-              <Button
-                size="sm"
-                onClick={() => {
-                  if (!userInfo?.wg_data?.node_alias) {
-                    openToast({
-                      content: "选择节点后才能关闭",
-                      status: "warning",
-                    });
-                    return;
-                  }
-
-                  setNodeListModal();
-                }}
-                bgColor="#be2b2b"
-              >
-                关闭
-              </Button>
-            </Flex>
-
-            <Flex flexWrap="wrap" gap={2} align="center">
-              <Flex align="center">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  colorScheme="blue"
-                  mr={1}
-                  onClick={() =>
-                    setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-                  }
-                >
-                  {sortOrder === "asc" ? "升序↑" : "降序↓"}
-                </Button>
-
-                <Select
-                  size="sm"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  bgColor="rgba(255, 255, 255, 0.05)"
-                  borderColor="rgba(255, 255, 255, 0.1)"
-                  color="white"
-                  width="60%"
-                  _focus={{
-                    borderColor: "#7dd4ff",
-                    boxShadow: "0 0 0 1px #7dd4ff",
-                  }}
-                  _hover={{
-                    borderColor: "rgba(255, 255, 255, 0.3)",
-                  }}
-                >
-                  <option
-                    value="delay"
-                    style={{ backgroundColor: "#3b4960", color: "white" }}
+                    width="100%"
+                    _focus={{
+                      borderColor: "#7dd4ff",
+                      boxShadow: "0 0 0 1px #7dd4ff",
+                    }}
+                    _hover={{
+                      borderColor: "rgba(255, 255, 255, 0.3)",
+                    }}
                   >
-                    延迟
-                  </option>
-                  <option
-                    value="net"
-                    style={{ backgroundColor: "#3b4960", color: "white" }}
-                  >
-                    负载
-                  </option>
-                  <option
-                    value="bandwidth"
-                    style={{ backgroundColor: "#3b4960", color: "white" }}
-                  >
-                    带宽
-                  </option>
-                </Select>
-              </Flex>
-
-              <Flex align="center">
-                <Select
-                  size="sm"
-                  value={filterBy}
-                  onChange={(e) => setFilterBy(e.target.value)}
-                  bgColor="rgba(255, 255, 255, 0.05)"
-                  borderColor="rgba(255, 255, 255, 0.1)"
-                  color="white"
-                  _focus={{
-                    borderColor: "#7dd4ff",
-                    boxShadow: "0 0 0 1px #7dd4ff",
-                  }}
-                  _hover={{
-                    borderColor: "rgba(255, 255, 255, 0.3)",
-                  }}
-                >
-                  {netTypes.map((type) => (
-                    <option
-                      key={type}
-                      value={type}
-                      style={{ backgroundColor: "#3b4960", color: "white" }}
-                    >
-                      {type === "all" ? "全部类型" : type}
-                    </option>
-                  ))}
-                </Select>
+                    {netTypes.map((type) => (
+                      <option
+                        key={type}
+                        value={type}
+                        style={{ backgroundColor: "#3b4960", color: "white" }}
+                      >
+                        {type === "all" ? "全部类型" : type}
+                      </option>
+                    ))}
+                  </Select>
+                </Flex>
               </Flex>
             </Flex>
 
             <Stack
               spacing={3}
               mx="auto"
-              mb={2}
-              p={3}
+              p={2}
               w="100%"
               maxH={isExpanded ? "30vh" : "60vh"}
               overflowY="auto"
-              bgColor="rgba(255, 255, 255, 0.02)"
               borderRadius="lg"
             >
               {sortedNodes.length > 0 ? (
@@ -484,13 +465,7 @@ export const ServerNodeListModal: React.FC = () => {
           </Center>
 
           <Collapse in={isExpanded} animateOpacity style={{ width: "100%" }}>
-            <List
-              spacing={2}
-              mt={2}
-              p={3}
-              bgColor="rgba(255, 255, 255, 0.02)"
-              borderRadius="md"
-            >
+            <List spacing={2} mt={2} p={3} borderRadius="lg">
               {Suggestions.map((suggestion, index) => (
                 <ListItem key={index} textAlign="left">
                   <ListIcon as={MdTipsAndUpdates} />
