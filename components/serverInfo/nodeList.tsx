@@ -376,6 +376,8 @@ export const ServerNodeListModal: React.FC = () => {
                       // 当选择带宽优先时，自动设置为降序，确保带宽大的排在前面
                       if (newSortBy === "bandwidth") {
                         setSortOrder("desc");
+                      } else {
+                        setSortOrder("asc");
                       }
                     }}
                     bgColor="rgba(255, 255, 255, 0.05)"
