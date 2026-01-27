@@ -8,7 +8,6 @@ import {
   ModalOverlay,
   ModalContent,
   VStack,
-  ModalHeader,
   ModalFooter,
   ModalBody,
   Collapse,
@@ -17,27 +16,28 @@ import {
   ListItem,
   ListIcon,
   Icon,
+  Select,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
-import { MdTipsAndUpdates } from "react-icons/md";
+import { MdTipsAndUpdates, MdSearch } from "react-icons/md";
 import { keyframes } from "@emotion/react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { MdOutlineSignalCellularAlt } from "react-icons/md";
+import { FaServer } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 // 负载等级判断函数
 function getNetBadgeProps(net: number) {
   if (net < 50) return { colorScheme: "green" };
   if (net < 85) return { colorScheme: "yellow" };
   return { colorScheme: "red" };
-}
-
-function getNetStatusText(net: number) {
-  if (net < 30) return "空闲";
-  if (net < 70) return "通畅";
-  if (net < 90) return "拥挤";
-  return "爆满";
 }
 
 function getDelayBadgeProps(delay: number) {
@@ -49,6 +49,7 @@ function getDelayBadgeProps(delay: number) {
 function getNetTypeBadgeProps(netType: string) {
   if (netType === "多线") return { colorScheme: "orange" };
   else if (netType === "电信") return { colorScheme: "blue" };
+  else if (netType === "跨境") return { colorScheme: "yellow" };
   else return { colorScheme: "pink" };
 }
 
@@ -56,6 +57,43 @@ const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
+
+// 排序函数
+function sortNodes(
+  nodes: NodeInfo[],
+  sortBy: string,
+  sortOrder: "asc" | "desc",
+) {
+  return [...nodes].sort((a, b) => {
+    if (sortBy === "delay") {
+      if (a.delay === undefined) return 1;
+      if (b.delay === undefined) return -1;
+      return sortOrder === "asc" ? a.delay - b.delay : b.delay - a.delay;
+    } else if (sortBy === "net") {
+      if (a.net === null) return 1;
+      if (b.net === null) return -1;
+      return sortOrder === "asc" ? a.net - b.net : b.net - a.net;
+    } else if (sortBy === "bandwidth") {
+      const bwA = a.bandwidth || 0;
+      const bwB = b.bandwidth || 0;
+      return sortOrder === "asc" ? bwA - bwB : bwB - bwA;
+    }
+    return 0;
+  });
+}
+
+// 筛选函数
+function filterNodes(nodes: NodeInfo[], filterBy: string, searchTerm: string) {
+  return nodes.filter((node) => {
+    const matchesFilter = filterBy === "all" || node.net_type === filterBy;
+    const matchesSearch =
+      searchTerm === "" ||
+      node.alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      node.net_type.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+}
+
 const ServerNodeItem: React.FC<{
   node: NodeInfo;
   selected: boolean;
@@ -63,112 +101,156 @@ const ServerNodeItem: React.FC<{
   const { selectNode, userInfo, selectNodeLock } = useUserStateStore();
 
   return (
-    <Box
-      py={1}
-      pl={2}
-      borderRadius="md"
-      border={selected ? "2px solid" : "0"}
-      bgColor={selected ? "rgba(255, 137, 0, 0.2)" : ""}
-      borderColor="rgba(255, 117, 12, 0.6)"
-      boxShadow={
-        selected
-          ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"
-          : ""
-      }
-      // bg={node.net === null ? "#404e5d82" : "#28c9ff82"}
-      onClick={async () => {
-        if (node.net === null || selectNodeLock === true) return;
-        if (node.alias === userInfo?.wg_data?.node_alias) {
-          openToast({
-            content: "已经在使用该节点",
-            status: "info",
-          });
-          return;
-        }
-
-        selectNode(node.alias, true);
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
-      <Flex width="100%">
-        <Box flex="1 1 0" minWidth={0}>
-          <Text
-            textAlign="center"
-            fontWeight="bold"
-            fontSize="lg"
-            color={node.sponsor ? "#ffd200" : "white"}
-          >
-            {node.alias}
-          </Text>
+      <Box
+        py={1}
+        px={3}
+        borderRadius="lg"
+        border={selected ? "2px solid" : "1px solid rgba(255, 255, 255, 0.1)"}
+        bgColor={
+          selected ? "rgba(255, 137, 0, 0.2)" : "rgba(255, 255, 255, 0.05)"
+        }
+        borderColor={
+          selected ? "rgba(255, 117, 12, 0.6)" : "rgba(255, 255, 255, 0.1)"
+        }
+        boxShadow={
+          selected
+            ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"
+            : "0 2px 4px rgba(0, 0, 0, 0.1)"
+        }
+        onClick={async () => {
+          if (node.net === null || selectNodeLock === true) return;
+          if (node.alias === userInfo?.wg_data?.node_alias) {
+            openToast({
+              content: "已经在使用该节点",
+              status: "info",
+            });
+            return;
+          }
 
-          <Flex justify="space-between" align="center">
-            <Badge
-              colorScheme={getNetTypeBadgeProps(node.net_type).colorScheme}
-              ml={1}
-            >
-              {node.net_type}
-            </Badge>
-
-            <Badge colorScheme="teal" mr={1} px={1.5}>
-              {node.bandwidth}M
-            </Badge>
-          </Flex>
-        </Box>
-
-        <Box flex="1 1 0" minWidth={0}>
-          {node.net !== null &&
-            (node.delay !== undefined ? (
-              <Badge
-                width="80%"
-                borderRadius="md"
-                fontSize="md"
-                colorScheme={getDelayBadgeProps(node.delay).colorScheme}
-                lineHeight="1.1"
-                py={1}
-                textTransform="none"
+          selectNode(node.alias, true);
+        }}
+        _hover={{
+          bgColor: selected
+            ? "rgba(255, 137, 0, 0.2)"
+            : "rgba(255, 255, 255, 0.1)",
+          boxShadow: selected
+            ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"
+            : "0 4px 8px rgba(0, 0, 0, 0.2)",
+        }}
+        cursor="pointer"
+      >
+        <Flex justify="space-between" align="flex-start">
+          <Box>
+            <Flex align="center">
+              <Text
+                fontWeight="bold"
+                fontSize="lg"
+                color={node.sponsor ? "#ffd200" : "white"}
+                mr={2}
               >
+                {node.alias}
+              </Text>
+              {node.net !== null ? (
+                <>
+                  <Badge
+                    colorScheme={
+                      getNetTypeBadgeProps(node.net_type).colorScheme
+                    }
+                    fontSize="xs"
+                  >
+                    {node.net_type}
+                  </Badge>
+                  <Badge colorScheme="teal" fontSize="xs" mx={1}>
+                    {node.bandwidth}M
+                  </Badge>
+                </>
+              ) : (
+                <Badge colorScheme="gray" fontSize="xs">
+                  离线
+                </Badge>
+              )}
+            </Flex>
+          </Box>
+        </Flex>
+
+        <SimpleGrid
+          columns={2}
+          spacing={4}
+          display={node.net !== null ? "grid" : "none"}
+          mt={1}
+        >
+          <Box textAlign="center">
+            <Flex align="center" justify="center">
+              <MdOutlineSignalCellularAlt size={16} color="#7dd4ff" />
+              <Text ml={1} fontSize="sm" color="gray.300">
                 延迟
-                <br />
-                {node.delay}ms
-              </Badge>
-            ) : (
-              <Box
-                display="flex"
-                justifyContent="center"
-                animation={`${spin} 1s linear infinite`}
-                transformOrigin="center center"
-              >
-                <AiOutlineLoading3Quarters size={18} />
-              </Box>
-            ))}
-        </Box>
+              </Text>
+            </Flex>
+            {node.net !== null &&
+              (node.delay !== undefined ? (
+                <Box>
+                  <Text
+                    fontSize="lg"
+                    fontWeight="bold"
+                    color={
+                      getDelayBadgeProps(node.delay).colorScheme === "green"
+                        ? "green.400"
+                        : getDelayBadgeProps(node.delay).colorScheme ===
+                            "yellow"
+                          ? "yellow.400"
+                          : "red.400"
+                    }
+                  >
+                    {node.delay}ms
+                  </Text>
+                </Box>
+              ) : (
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    animation={`${spin} 1s linear infinite`}
+                    transformOrigin="center center"
+                  >
+                    <AiOutlineLoading3Quarters size={12} />
+                  </Box>
+                </Box>
+              ))}
+          </Box>
 
-        <Box flex="1 1 0" minWidth={0}>
-          {node.net !== null ? (
-            <Badge
-              width="80%"
-              borderRadius="md"
-              fontSize="md"
-              colorScheme={getNetBadgeProps(node.net).colorScheme}
-              lineHeight="1.1"
-              py={1}
-            >
-              负载
-              <br />
-              {node.net}%{/* {getNetStatusText(node.net)} */}
-            </Badge>
-          ) : (
-            <Badge
-              width="80%"
-              borderRadius="md"
-              fontSize="lg"
-              colorScheme="gray"
-            >
-              离线
-            </Badge>
-          )}
-        </Box>
-      </Flex>
-    </Box>
+          <Box textAlign="center">
+            <Flex align="center" justify="center">
+              <FaServer size={16} color="#7dd4ff" />
+              <Text ml={1} fontSize="sm" color="gray.300">
+                负载
+              </Text>
+            </Flex>
+            {node.net !== null && (
+              <Box>
+                <Text
+                  fontSize="lg"
+                  fontWeight="bold"
+                  color={
+                    getNetBadgeProps(node.net).colorScheme === "green"
+                      ? "green.400"
+                      : getNetBadgeProps(node.net).colorScheme === "yellow"
+                        ? "yellow.400"
+                        : "red.400"
+                  }
+                >
+                  {node.net}%
+                </Text>
+              </Box>
+            )}
+          </Box>
+        </SimpleGrid>
+      </Box>
+    </motion.div>
   );
 };
 
@@ -184,6 +266,10 @@ export const ServerNodeListModal: React.FC = () => {
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
+  const [sortBy, setSortBy] = useState("delay");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [filterBy, setFilterBy] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const Suggestions = [
     "注意！因政策原因，中国大陆与境外联机只能用香港A节点，只有香港A节点是全球任意地区均可连接",
@@ -191,6 +277,17 @@ export const ServerNodeListModal: React.FC = () => {
     "线路区别：多线 - 中国大陆任意网络使用；海外 - 非中国大陆均可使用；电信 - 建议电信宽带或使用流量上网的时候选择",
     "M是指Mbps，即每个用户可使用的最高网络带宽，大部分游戏1M足够，如果联机人数多起来后开始卡，试试换更大带宽的节点",
     "网络延迟越低越好，ms是毫秒，实际游戏联机延迟是主机+客机的延迟总和",
+  ];
+
+  // 处理节点数据
+  const nodes = nodeMap ? Array.from(nodeMap.values()) : [];
+  const filteredNodes = filterNodes(nodes, filterBy, searchTerm);
+  const sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
+
+  // 获取所有网络类型
+  const netTypes = [
+    "all",
+    ...Array.from(new Set(nodes.map((node) => node.net_type))),
   ];
 
   return (
@@ -201,33 +298,49 @@ export const ServerNodeListModal: React.FC = () => {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent bgColor="#3b4960e3" maxW="320px" mx={3}>
-        <ModalHeader textAlign="center">点击选择联机节点</ModalHeader>
-
-        <ModalBody py={0} textAlign="center">
+      <ModalContent
+        bgColor="#3b4960e3"
+        maxW={{ base: "90vw", md: "400px" }}
+        py={4}
+      >
+        <ModalBody>
           <VStack spacing={2} align="stretch">
-            <Flex>
+            <Flex flexWrap="wrap" gap={2} align="center">
+              <Flex flex="1">
+                <InputGroup size="sm">
+                  <InputLeftElement pointerEvents="none">
+                    <MdSearch color="gray.400" />
+                  </InputLeftElement>
+                  <Input
+                    placeholder={`搜索节点 共${sortedNodes.length}个`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    bgColor="rgba(255, 255, 255, 0.05)"
+                    borderColor="rgba(255, 255, 255, 0.1)"
+                    color="white"
+                  />
+                </InputGroup>
+              </Flex>
+
               <Button
                 size="sm"
-                mx="auto"
                 onClick={async () => {
                   if (disableGetNodeList === true) return;
 
                   setDisableGetNodeList(true);
-                  // 设置定时器，3秒后重新启用按钮
                   setTimeout(() => {
-                    setDisableGetNodeList(false); // 启用按钮
+                    setDisableGetNodeList(false);
                   }, 3000);
 
                   await getNodeList();
                 }}
+                isLoading={disableGetNodeList}
               >
-                刷新列表
+                刷新
               </Button>
 
               <Button
                 size="sm"
-                mx="auto"
                 onClick={() => {
                   if (!userInfo?.wg_data?.node_alias) {
                     openToast({
@@ -241,32 +354,119 @@ export const ServerNodeListModal: React.FC = () => {
                 }}
                 bgColor="#be2b2b"
               >
-                关闭窗口
+                关闭
               </Button>
             </Flex>
 
+            <Flex flexWrap="wrap" gap={2} align="center">
+              <Flex align="center">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  colorScheme="blue"
+                  mr={1}
+                  onClick={() =>
+                    setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                  }
+                >
+                  {sortOrder === "asc" ? "升序↑" : "降序↓"}
+                </Button>
+
+                <Select
+                  size="sm"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  bgColor="rgba(255, 255, 255, 0.05)"
+                  borderColor="rgba(255, 255, 255, 0.1)"
+                  color="white"
+                  width="60%"
+                  _focus={{
+                    borderColor: "#7dd4ff",
+                    boxShadow: "0 0 0 1px #7dd4ff",
+                  }}
+                  _hover={{
+                    borderColor: "rgba(255, 255, 255, 0.3)",
+                  }}
+                >
+                  <option
+                    value="delay"
+                    style={{ backgroundColor: "#3b4960", color: "white" }}
+                  >
+                    延迟
+                  </option>
+                  <option
+                    value="net"
+                    style={{ backgroundColor: "#3b4960", color: "white" }}
+                  >
+                    负载
+                  </option>
+                  <option
+                    value="bandwidth"
+                    style={{ backgroundColor: "#3b4960", color: "white" }}
+                  >
+                    带宽
+                  </option>
+                </Select>
+              </Flex>
+
+              <Flex align="center">
+                <Select
+                  size="sm"
+                  value={filterBy}
+                  onChange={(e) => setFilterBy(e.target.value)}
+                  bgColor="rgba(255, 255, 255, 0.05)"
+                  borderColor="rgba(255, 255, 255, 0.1)"
+                  color="white"
+                  _focus={{
+                    borderColor: "#7dd4ff",
+                    boxShadow: "0 0 0 1px #7dd4ff",
+                  }}
+                  _hover={{
+                    borderColor: "rgba(255, 255, 255, 0.3)",
+                  }}
+                >
+                  {netTypes.map((type) => (
+                    <option
+                      key={type}
+                      value={type}
+                      style={{ backgroundColor: "#3b4960", color: "white" }}
+                    >
+                      {type === "all" ? "全部类型" : type}
+                    </option>
+                  ))}
+                </Select>
+              </Flex>
+            </Flex>
+
             <Stack
-              spacing={2}
+              spacing={3}
               mx="auto"
-              mb={3}
-              p={2}
+              mb={2}
+              p={3}
               w="100%"
-              maxH="40vh"
+              maxH={isExpanded ? "30vh" : "60vh"}
               overflowY="auto"
+              bgColor="rgba(255, 255, 255, 0.02)"
+              borderRadius="lg"
             >
-              {nodeMap &&
-                Array.from(nodeMap.values()).map((node) => (
+              {sortedNodes.length > 0 ? (
+                sortedNodes.map((node) => (
                   <ServerNodeItem
                     key={node.alias}
                     node={node}
                     selected={userInfo?.wg_data?.node_alias === node.alias}
                   />
-                ))}
+                ))
+              ) : (
+                <Box textAlign="center" py={10}>
+                  <Text color="gray.400">未找到匹配的节点</Text>
+                </Box>
+              )}
             </Stack>
           </VStack>
         </ModalBody>
 
-        <ModalFooter pt={0} flexDirection="column">
+        <ModalFooter py={0} flexDirection="column">
           <Text>
             <Icon as={MdTipsAndUpdates} />
             不知道怎么选节点看详细讲解
@@ -279,12 +479,18 @@ export const ServerNodeListModal: React.FC = () => {
               onClick={toggleExpanded}
               variant="link"
             >
-              {isExpanded ? "点我关闭" : "点我查看详细讲解"}
+              {isExpanded ? "收起讲解" : "查看详细讲解"}
             </Button>
           </Center>
 
           <Collapse in={isExpanded} animateOpacity style={{ width: "100%" }}>
-            <List spacing={2}>
+            <List
+              spacing={2}
+              mt={2}
+              p={3}
+              bgColor="rgba(255, 255, 255, 0.02)"
+              borderRadius="md"
+            >
               {Suggestions.map((suggestion, index) => (
                 <ListItem key={index} textAlign="left">
                   <ListIcon as={MdTipsAndUpdates} />

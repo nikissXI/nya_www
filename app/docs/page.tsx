@@ -213,7 +213,6 @@ const DocumentPage = () => {
   const DownloadButton = (isIOS: boolean = false) => {
     return (
       <Button
-        bgColor="orange.500"
         ml={3}
         size="sm"
         onClick={() => {
@@ -337,7 +336,6 @@ const DocumentPage = () => {
             先切换到你需要的节点再导入隧道
           </Text>
           <Button
-            bgColor="orange.500"
             rounded="md"
             onClick={setNodeListModal}
             size="sm"
@@ -345,7 +343,7 @@ const DocumentPage = () => {
             点击切换节点
           </Button>
 
-          <Tabs variant="line" colorScheme="orange">
+          <Tabs variant="line">
             <Text pt={2} fontWeight="bolder" ml="1rem">
               选择你要安装WG的系统类型
             </Text>
@@ -394,7 +392,6 @@ const DocumentPage = () => {
                     <Flex alignItems="center">
                       <Text>1. 安装WG客户端</Text>
                       <Button
-                        bgColor="orange.500"
                         h="1.6rem"
                         ml={3}
                         px={2}
@@ -478,7 +475,6 @@ const DocumentPage = () => {
                   <Flex alignItems="center">
                     <HighLight>小米/红米设备要改个设置</HighLight>
                     <Button
-                      bgColor="orange.500"
                       h="1.6rem"
                       ml={3}
                       px={2}
@@ -647,7 +643,6 @@ const DocumentPage = () => {
                       <Flex alignItems="center">
                         <Text>3. 下载msi安装包</Text>
                         <Button
-                          bgColor="orange.500"
                           size="sm"
                           mx={2}
                           onClick={() => {
@@ -719,7 +714,6 @@ const DocumentPage = () => {
                       <Flex alignItems="center">
                         <Text>3. 下载exe安装包</Text>
                         <Button
-                          bgColor="orange.500"
                           size="sm"
                           mx={2}
                           onClick={() => {
