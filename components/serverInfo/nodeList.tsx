@@ -290,7 +290,7 @@ export const ServerNodeListModal: React.FC = () => {
         }
       }, 100); // 延迟执行，确保DOM已经渲染完成
     }
-  }, [showNodeListModal, nodeReady, userInfo?.wg_data?.node_alias]);
+  }, [showNodeListModal, nodeReady, userInfo?.wg_data?.node_alias, sortBy]);
 
   // 获取所有网络类型
   const netTypes = [
