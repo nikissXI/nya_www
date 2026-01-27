@@ -86,7 +86,7 @@ export default function Page() {
           </ListItem>
           <ListItem>
             <ListIcon as={MdTipsAndUpdates} />
-            如果是带mod联机，需要主机和客机装的mod一样，否则容易卡死或闪退
+            如果联机异常，如闪退、黑屏、查房成功但加入失败，检查是否有人使用是带mod的客户端（即SMAPI），如果有，更换为原版星露谷物语再进行尝试
           </ListItem>
           <ListItem>
             <ListIcon as={MdTipsAndUpdates} />

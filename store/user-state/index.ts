@@ -108,6 +108,7 @@ interface ILoginStateSlice {
   selectNode: (node_alias: string, manual: boolean) => void;
   selectNodeLock: boolean;
 
+  pingHost: string | undefined;
   tunnelName: string | undefined;
   latency: number | undefined;
   onlineStatus: "在线" | "离线";
@@ -355,7 +356,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         const statusUrl = `https://${ping_host}/ping`;
         const node = get().nodeMap.get(node_alias);
-
+        console.log(node);
         // 单次ping请求的辅助函数
         const singlePing = async (): Promise<number> => {
           try {
@@ -532,6 +533,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
                   // 更新用户选择的节点
                   draft.userInfo.wg_data.node_alias = node_alias;
                   draft.tunnelName = data.tunnel_name;
+                  draft.pingHost = data.ping_host;
                   draft.userInfo.wg_data.conf_text = data.conf_text;
                 }
               }),
@@ -552,6 +554,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
+      pingHost: undefined,
       tunnelName: undefined,
       latency: undefined,
       onlineStatus: "离线",
@@ -599,6 +602,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               draft.rotate = true;
             }),
           );
+          performance.clearResourceTimings();
 
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/getRoom`, {
@@ -623,19 +627,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             }),
           );
           const node_alias = get().userInfo?.wg_data?.node_alias;
+          const pingHost = get().pingHost;
 
-          if (is_online && node_alias) {
-            const node = get().nodeMap.get(node_alias);
-
-            if (get().latency === undefined) {
-              performance.clearResourceTimings();
-            }
-
-            if (node?.ping_host) {
-              const delay = await get().getNodeLatency(
-                node_alias,
-                node.ping_host,
-              );
+          if (is_online && pingHost && node_alias) {
+            if (pingHost) {
+              const delay = await get().getNodeLatency(node_alias, pingHost);
 
               if (get().onlineStatus === "在线" && delay === 0)
                 openToast({
