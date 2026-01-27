@@ -370,7 +370,14 @@ export const ServerNodeListModal: React.FC = () => {
                   <Select
                     size="sm"
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
+                    onChange={(e) => {
+                      const newSortBy = e.target.value;
+                      setSortBy(newSortBy);
+                      // 当选择带宽优先时，自动设置为降序，确保带宽大的排在前面
+                      if (newSortBy === "bandwidth") {
+                        setSortOrder("desc");
+                      }
+                    }}
                     bgColor="rgba(255, 255, 255, 0.05)"
                     borderColor="rgba(255, 255, 255, 0.1)"
                     borderRadius="lg"
