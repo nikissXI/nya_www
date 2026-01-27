@@ -20,7 +20,7 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -100,6 +100,7 @@ const ServerNodeItem: React.FC<{
       transition={{ duration: 0.3 }}
     >
       <Box
+        id={node.alias}
         py={1}
         px={3}
         borderRadius="lg"
@@ -260,8 +261,9 @@ export const ServerNodeListModal: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
   const [sortBy, setSortBy] = useState("delay");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">('asc');
   const [filterBy, setFilterBy] = useState("all");
+  const nodeListRef = useRef<HTMLDivElement>(null);
 
   const Suggestions = [
     "注意！因政策原因，中国大陆与境外联机只能用香港A节点，只有香港A节点是全球任意地区均可连接",
@@ -275,6 +277,19 @@ export const ServerNodeListModal: React.FC = () => {
   const nodes = nodeMap ? Array.from(nodeMap.values()) : [];
   const filteredNodes = filterNodes(nodes, filterBy);
   const sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
+
+  // 自动滚动到选中节点
+  useEffect(() => {
+    if (showNodeListModal && userInfo?.wg_data?.node_alias) {
+      const selectedNodeId = userInfo.wg_data.node_alias;
+      setTimeout(() => {
+        const nodeElement = document.getElementById(selectedNodeId);
+        if (nodeElement) {
+          nodeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100); // 延迟执行，确保DOM已经渲染完成
+    }
+  }, [showNodeListModal, userInfo?.wg_data?.node_alias, nodeMap]);
 
   // 获取所有网络类型
   const netTypes = [
