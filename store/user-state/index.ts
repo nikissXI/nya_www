@@ -358,38 +358,58 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         const statusUrl = `https://${ping_host}/ping`;
         const node = get().nodeMap.get(node_alias);
-        console.log(node);
+        // console.debug(node);
         // 单次ping请求的辅助函数
         const singlePing = async (): Promise<number> => {
           try {
-            const resp = await fetch(statusUrl);
-            if (!resp.ok) {
-              throw new Error(`${node_alias}节点获取延迟出错`);
-            }
-            // 等待一小段时间确保 performance 记录了请求
-            await new Promise((resolve) => setTimeout(resolve, 100));
+            // 999ms超时处理
+            const timeoutPromise = new Promise<number>((_, reject) => {
+              setTimeout(() => reject(new Error("请求超时")), 999);
+            });
 
-            const entries = performance.getEntriesByName(statusUrl);
-            const lastEntry = entries.at(-1) as
-              | PerformanceResourceTiming
-              | undefined;
+            const pingPromise = (async () => {
+              const resp = await fetch(statusUrl);
+              if (!resp.ok) {
+                throw new Error(`${node_alias}节点获取延迟出错`);
+              }
+              // 等待一小段时间确保 performance 记录了请求
+              await new Promise((resolve) => setTimeout(resolve, 100));
 
-            if (lastEntry) {
-              return Math.floor(
-                lastEntry.responseStart - lastEntry.requestStart,
-              );
-            } else {
-              throw new Error(`${node_alias}节点获取延迟性能记录出错`);
-            }
+              const entries = performance.getEntriesByName(statusUrl);
+              const lastEntry = entries.at(-1) as
+                | PerformanceResourceTiming
+                | undefined;
+
+              if (lastEntry) {
+                const delay = Math.floor(
+                  lastEntry.responseStart - lastEntry.requestStart,
+                );
+                // 确保延迟不超过999ms
+                return Math.min(delay, 999);
+              } else {
+                throw new Error(`${node_alias}节点获取延迟性能记录出错`);
+              }
+            })();
+
+            return await Promise.race([pingPromise, timeoutPromise]);
           } catch (error) {
+            if (error instanceof Error && error.message === "请求超时") {
+              // 超时返回999ms
+              return 999;
+            }
             throw error;
           }
         };
 
         try {
           // 连续串行请求两次
-          const delay1 = await singlePing();
-          const delay2 = await singlePing();
+          // const delay1 = await singlePing();
+          // const delay2 = await singlePing();
+          // 并行请求两次
+          const [delay1, delay2] = await Promise.all([
+            singlePing(),
+            singlePing(),
+          ]);
           // 选择最低延迟
           const minDelay = Math.min(delay1, delay2);
 
@@ -445,8 +465,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       getNodeList: async () => {
         try {
-          // 延迟 0.5 秒后发起请求
-          // await new Promise(resolve => setTimeout(resolve, 200));
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/nodeList`);
           if (!resp.ok) {
