@@ -360,13 +360,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         const node = get().nodeMap.get(node_alias);
         // console.debug(node);
         // 单次ping请求的辅助函数
-        const singlePing = async (wait: boolean = false): Promise<number> => {
+        const singlePing = async (first: boolean = false): Promise<number> => {
           try {
             // 等待100ms再请求
-            if (wait) await new Promise((resolve) => setTimeout(resolve, 100));
+            // if (wait) await new Promise((resolve) => setTimeout(resolve, 100));
             // 666ms超时处理
             const timeoutPromise = new Promise<number>((_, reject) => {
-              setTimeout(() => reject(new Error("请求超时")), 666);
+              setTimeout(
+                () => reject(new Error("请求超时")),
+                first ? 3000 : 1000,
+              );
             });
 
             const pingPromise = (async () => {
@@ -386,8 +389,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
                 const delay = Math.floor(
                   lastEntry.responseStart - lastEntry.requestStart,
                 );
-                // 确保延迟不超过666ms
-                return Math.min(delay, 666);
+                // 确保延迟不超过999ms
+                return Math.min(delay, 999);
               } else {
                 throw new Error(`${node_alias}节点获取延迟性能记录出错`);
               }
@@ -396,8 +399,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             return await Promise.race([pingPromise, timeoutPromise]);
           } catch (error) {
             if (error instanceof Error && error.message === "请求超时") {
-              // 超时返回666ms
-              return 666;
+              // 超时返回999ms
+              return 999;
             }
             throw error;
           }
@@ -405,13 +408,13 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         try {
           // 连续串行请求两次
-          // const delay1 = await singlePing();
-          // const delay2 = await singlePing();
+          const delay1 = await singlePing();
+          const delay2 = await singlePing();
           // 并行请求两次
-          const [delay1, delay2] = await Promise.all([
-            singlePing(),
-            singlePing(true),
-          ]);
+          // const [delay1, delay2] = await Promise.all([
+          //   singlePing(),
+          //   singlePing(true),
+          // ]);
           // 选择最低延迟
           const minDelay = Math.min(delay1, delay2);
 
