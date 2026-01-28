@@ -142,13 +142,13 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
-            <HighLight>赞助记录永久有效！</HighLight>
+            <HighLight>赞助记录永久有效并可累计！</HighLight>
             赞助信息由服主手动录入，因此更新有延迟（如果睡了那没办法）
           </ListItem>
 
           <ListItem textAlign="left">
             <ListIcon as={IoChatboxEllipsesOutline} />
-            联系服主&emsp;
+            有疑问可联系服主&emsp;
             <Icon as={FaWeixin} />
             ：nikissxi&emsp;
             <Icon as={FaQq} />
