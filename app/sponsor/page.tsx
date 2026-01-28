@@ -142,8 +142,9 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
-            <HighLight>赞助记录永久有效并可累计！</HighLight>
-            赞助信息由服主手动录入，因此更新有延迟（如果睡了那没办法）
+            <HighLight>
+              赞助记录永久有效并可累计，解锁的节点不限期不限次使用
+            </HighLight>
           </ListItem>
 
           <ListItem textAlign="left">
@@ -230,7 +231,7 @@ const Page = () => {
                   </Button>
                 </Box>
                 <Text color="#856404">
-                  如果无法备注、漏了备注、催录入、无法付款等等疑问，请联系服主
+                  赞助信息由服主手动录入，因此更新有延迟；如果催录入、漏了备注、无法备注、无法付款等等，请联系服主
                   <br />
                   <Icon as={FaWeixin} />
                   ：nikissxi&emsp;
