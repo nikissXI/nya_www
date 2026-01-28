@@ -408,7 +408,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         try {
           // 连续串行请求两次
-          const delay1 = await singlePing();
+          const delay1 = await singlePing(true);
           const delay2 = await singlePing();
           // 并行请求两次
           // const [delay1, delay2] = await Promise.all([
