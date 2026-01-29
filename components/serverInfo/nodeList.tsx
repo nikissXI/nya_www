@@ -268,11 +268,11 @@ export const ServerNodeListModal: React.FC = () => {
   // const nodeListRef = useRef<HTMLDivElement>(null);
 
   const Suggestions = [
-    "注意！因政策原因，中国大陆与境外联机只能用香港A节点，只有香港A节点是全球任意地区均可连接",
-    "负载越高联机越卡，普通节点高峰期可能会拥挤导致联机卡顿，追求稳定可选择金色的赞助节点，负载值每30秒更新一次",
-    "线路区别：多线 - 中国大陆任意网络使用；海外 - 非中国大陆均可使用；电信 - 建议电信宽带或使用流量上网的时候选择",
-    "M是指Mbps，即每个用户可使用的最高网络带宽，大部分游戏1M足够，如果联机人数多起来后开始卡，试试换更大带宽的节点",
-    "网络延迟越低越好，ms是毫秒，实际游戏联机延迟是主机+客机的延迟总和",
+    "线路选择指南：多线 - 适合中国大陆任意网络；电信 - 适合电信宽带或移动流量；跨境 - 适合跨中国大陆（即国内和国外）联机；海外 - 除中国大陆外都适合",
+    "负载值解读：负载越低节点越流畅，高峰期可能拥挤导致卡顿，追求稳定可选择金色的赞助节点",
+    "带宽选择：M表示Mbps，每个用户可使用的最高网络带宽。大部分游戏1M足够，联机人数多时建议选择更大带宽的节点",
+    "延迟说明：网络延迟越低越好，单位是毫秒(ms)。实际游戏联机延迟是主机与客机延迟的总和",
+    "选择建议：优先选择延迟低、负载小、带宽足够的节点，根据您的网络环境选择合适的线路类型",
   ];
 
   // 处理节点数据
@@ -399,19 +399,19 @@ export const ServerNodeListModal: React.FC = () => {
                       value="delay"
                       style={{ backgroundColor: "#3b4960", color: "white" }}
                     >
-                      延迟优先
+                      低延迟优先
                     </option>
                     <option
                       value="net"
                       style={{ backgroundColor: "#3b4960", color: "white" }}
                     >
-                      负载优先
+                      低负载优先
                     </option>
                     <option
                       value="bandwidth"
                       style={{ backgroundColor: "#3b4960", color: "white" }}
                     >
-                      带宽优先
+                      大带宽优先
                     </option>
                   </Select>
                 </Flex>
@@ -440,7 +440,7 @@ export const ServerNodeListModal: React.FC = () => {
                         value={type}
                         style={{ backgroundColor: "#3b4960", color: "white" }}
                       >
-                        {type === "all" ? "全部类型" : type}
+                        {type === "all" ? "线路类型" : type}
                       </option>
                     ))}
                   </Select>
@@ -476,28 +476,54 @@ export const ServerNodeListModal: React.FC = () => {
 
         <ModalFooter py={0} flexDirection="column">
           <Text>
-            <Icon as={MdTipsAndUpdates} />
-            不知道怎么选节点看详细讲解
+            请看讲解帮助选择合适节点
+            <Button
+              ml={1}
+              color="#7dd4ff"
+              bgColor="transparent"
+              onClick={toggleExpanded}
+              variant="link"
+            >
+              {isExpanded ? "点击收起" : "点击查看"}
+            </Button>
           </Text>
 
-          <Center>
+          {/* <Center>
             <Button
               color="#7dd4ff"
               bgColor="transparent"
               onClick={toggleExpanded}
               variant="link"
             >
-              {isExpanded ? "收起讲解" : "查看详细讲解"}
+              {isExpanded ? "点击收起" : "点击查看"}
             </Button>
-          </Center>
+          </Center> */}
 
-          <Collapse in={isExpanded} animateOpacity style={{ width: "100%" }}>
-            <List spacing={2} mt={2} p={3} borderRadius="lg">
+          <Collapse in={isExpanded} animateOpacity>
+            <List
+              maxH="30vh"
+              overflowY="auto"
+              spacing={3}
+              mt={2}
+              p={4}
+              borderRadius="lg"
+              bgColor="rgba(255, 255, 255, 0.05)"
+              border="1px solid rgba(255, 255, 255, 0.1)"
+            >
               {Suggestions.map((suggestion, index) => (
-                <ListItem key={index} textAlign="left">
-                  <ListIcon as={MdTipsAndUpdates} />
-                  {suggestion}
-                </ListItem>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <ListItem>
+                    <Text color="gray.200" fontSize="sm" mt={1}>
+                      <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                      {suggestion}
+                    </Text>
+                  </ListItem>
+                </motion.div>
               ))}
             </List>
           </Collapse>

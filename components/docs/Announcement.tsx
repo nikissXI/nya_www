@@ -11,7 +11,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter,
   useDisclosure,
   Spinner,
   VStack,
@@ -94,14 +93,13 @@ export const AnnouncementsModal = ({}) => {
 
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
-        <ModalContent bg="#202e4fe0" color="white" maxH="70%" overflowY="auto">
-          <ModalHeader></ModalHeader>
+        <ModalContent bg="#202e4fe0" color="white" maxH="70%" overflowY="auto" mx={5} py={5}>
           <ModalCloseButton />
-          <ModalBody textAlign="center">
-            <VStack spacing={2} align="center">
+          <ModalBody >
+            <VStack spacing={2}>
               {serverData?.announcements &&
                 serverData.announcements.map((item, index) => (
-                  <Box key={index} p={1} maxW="80%">
+                  <Box key={index} p={1} w="100%">
                     <Text mb={1} fontWeight="bold" color="#f4d106">
                       {formatDate(item.timestamp)}
                     </Text>
@@ -111,12 +109,6 @@ export const AnnouncementsModal = ({}) => {
                 ))}
             </VStack>
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={onClose} size="sm">
-              关闭
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </Box>

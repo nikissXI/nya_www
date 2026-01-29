@@ -295,9 +295,10 @@ export default function Page() {
   };
 
   const OfflineReasons = [
-    `导入的WG隧道是否为自己账号的隧道，并检查当前连接的隧道名称是否为${tunnelName}，如果不是，到联机教程下载并导入`,
+    "导入的隧道必须是自己账号的！不能用其他人给的conf_key/二维码/隧道文件",
+    `隧道名称是否为${tunnelName}，如果不是，到联机教程下载并导入正确隧道`,
     "某些公共网络（如学校、公司网络）会拦截WG的流量，尝试切换其他网络试试，如使用移动流量",
-    "国内用户只能使用国内节点，海外用户只能用海外线路节点，跨境联机只有香港A节点支持",
+    "如果跨境联机用香港A，部分国家无法直接连接喵服（目前已知俄罗斯不行），这种情况需要找服主特殊处理",
   ];
 
   function standbyPage() {
@@ -629,7 +630,7 @@ export default function Page() {
           {/* 连接失败原因Modal */}
           <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
             <ModalOverlay />
-            <ModalContent maxW="md" bgColor="#002f5c">
+            <ModalContent bg="#202e4fe0" color="white" mx={5} py={5}>
               <ModalHeader>
                 <Heading size="lg">自行逐项检查</Heading>
               </ModalHeader>
@@ -647,9 +648,6 @@ export default function Page() {
                   </List>
                 </VStack>
               </ModalBody>
-              <ModalFooter>
-                <Button onClick={setNoticeOnClose}>关闭</Button>
-              </ModalFooter>
             </ModalContent>
           </Modal>
 
