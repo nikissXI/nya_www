@@ -41,7 +41,7 @@ export const AnnouncementsModal = ({}) => {
 
   return (
     <Box textAlign="center">
-      <Box mx={5} fontWeight="bold">
+      <Box mx={5} mb={3} fontWeight="bold">
         {/* <Text color="#ffca3d" size="sm" mx={5}>
           近期新增多个联机节点，具体看公告
         </Text> */}
@@ -93,9 +93,16 @@ export const AnnouncementsModal = ({}) => {
 
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
-        <ModalContent bg="#202e4fe0" color="white" maxH="70%" overflowY="auto" mx={5} py={5}>
+        <ModalContent
+          bg="#202e4fe0"
+          color="white"
+          maxH="70%"
+          overflowY="auto"
+          mx={5}
+          py={5}
+        >
           <ModalCloseButton />
-          <ModalBody >
+          <ModalBody>
             <VStack spacing={2}>
               {serverData?.announcements &&
                 serverData.announcements.map((item, index) => (

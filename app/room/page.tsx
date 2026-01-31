@@ -534,7 +534,11 @@ export default function Page() {
   }
 
   return (
-    <VStack spacing={3} alignItems="center">
+    <Flex
+      direction="column"
+      px={{ base: 4, md: 8 }}
+      align="center"
+    >
       <AnnouncementsModal />
 
       {!userInfo ? (
@@ -651,7 +655,7 @@ export default function Page() {
             </ModalContent>
           </Modal>
 
-          <Flex align="center">
+          <Flex align="center" my={3}>
             {roomRole !== "none" && (
               <Text fontSize={18} fontWeight="bold" mr={3}>
                 房间号 {roomData?.room_id}
@@ -694,6 +698,6 @@ export default function Page() {
           {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
       )}
-    </VStack>
+    </Flex>
   );
 }

@@ -9,7 +9,6 @@ import {
   Heading,
   Divider,
   Image,
-  Center,
   Input,
   useDisclosure,
   Modal,
@@ -408,7 +407,11 @@ export default function UserProfilePage() {
   };
 
   return (
-    <VStack>
+    <Flex
+      direction="column"
+      px={{ base: 4, md: 8 }}
+      align="center"
+    >
       <AnnouncementsModal />
 
       <Modal isOpen={bindTELIsOpen} onClose={bindTELOnClose}>
@@ -867,7 +870,7 @@ export default function UserProfilePage() {
                         userInfo.wg_data.release_days,
                         userInfo.wg_data.last_connect_timestamp,
                       )}
-                      天不联机会回收隧道，被回收后重新获取即可，不要钱
+                      天不联机会回收隧道，被回收后可免费获取新的，无需担心
                     </Text>
                   </Flex>
                 </Flex>
@@ -917,6 +920,6 @@ export default function UserProfilePage() {
           </VStack>
         )}
       </Box>
-    </VStack>
+    </Flex>
   );
 }
