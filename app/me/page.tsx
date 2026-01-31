@@ -41,7 +41,7 @@ import SponsorTag from "@/components/universal/SponsorTag";
 
 const calculateDaysDifference = (
   release_days: number,
-  timestamp: number
+  timestamp: number,
 ): string => {
   // 计算时间戳差值（毫秒）
   const timestamp_now = new Date().getTime();
@@ -50,10 +50,10 @@ const calculateDaysDifference = (
   // 将差值转换为天数
   const millisecondsInADay = 1000 * 60 * 60 * 24; // 1天的毫秒数
   const differenceInDays = Math.floor(
-    differenceInMilliseconds / millisecondsInADay
+    differenceInMilliseconds / millisecondsInADay,
   );
 
-  return `${release_days - differenceInDays}天`;
+  return `${release_days - differenceInDays}`;
 };
 
 export default function UserProfilePage() {
@@ -95,7 +95,7 @@ export default function UserProfilePage() {
   };
 
   const handlemodifyUsernameEnter = (
-    event: React.KeyboardEvent<HTMLDivElement>
+    event: React.KeyboardEvent<HTMLDivElement>,
   ) => {
     if (event.key === "Enter") {
       modifyUsername();
@@ -400,7 +400,7 @@ export default function UserProfilePage() {
   };
 
   const handleChangePassEnter = (
-    event: React.KeyboardEvent<HTMLDivElement>
+    event: React.KeyboardEvent<HTMLDivElement>,
   ) => {
     if (event.key === "Enter") {
       handleChangePass();
@@ -855,40 +855,21 @@ export default function UserProfilePage() {
                 </Heading>
 
                 <Flex>
-                  <Text w="80px" textAlign="right">
-                    IP地址:
-                  </Text>
-                  <Text ml={3}>{userInfo.wg_data.ip}</Text>
+                  <Text ml={3}>联机IP地址：</Text>
+                  <Text fontWeight="bold">{userInfo.wg_data.ip}</Text>
                 </Flex>
 
-                <Divider />
-
-                <Flex>
-                  <Text w="80px" textAlign="right">
-                    剩余天数:
-                  </Text>
-                  <Text ml={3}>
-                    {calculateDaysDifference(
-                      userInfo.wg_data.release_days,
-                      userInfo.wg_data.last_connect_timestamp
-                    )}
-                    <Button
-                      ml={3}
-                      color="#7dfffe"
-                      fontWeight="normal"
-                      variant="link"
-                      bgColor="transparent"
-                      onClick={() => {
-                        openToast({
-                          content:
-                            "在线就会刷新天数，如果被回收可免费获取新隧道",
-                          status: "info",
-                        });
-                      }}
-                    >
-                      有疑问点我
-                    </Button>
-                  </Text>
+                <Flex direction="column" align="stretch">
+                  <Flex>
+                    <Text ml={3} fontSize="sm" color="#ffa629">
+                      💡如果连续
+                      {calculateDaysDifference(
+                        userInfo.wg_data.release_days,
+                        userInfo.wg_data.last_connect_timestamp,
+                      )}
+                      天不联机会回收隧道，被回收后重新获取即可，不要钱
+                    </Text>
+                  </Flex>
                 </Flex>
               </VStack>
             ) : (

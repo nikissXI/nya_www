@@ -164,7 +164,7 @@ const Page = () => {
         {/* 收款码模态框 */}
         <Modal isOpen={isModalOpen} onClose={closeModal} size="lg">
           <ModalOverlay />
-          <ModalContent bgColor="#002f5c">
+          <ModalContent bg="#202e4fe0" color="white" mx={5} py={5}>
             <ModalHeader>
               <Text fontSize="xl" fontWeight="bold">
                 赞助收款码
