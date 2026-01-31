@@ -64,7 +64,7 @@ export default function Page() {
         {highlights.map((highlight, index) => (
           <Box
             key={index}
-            w={{ base: "80%", md: "240px" }}
+            w="260px"
             rounded="lg"
             px={2}
             pb={2}
