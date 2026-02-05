@@ -457,10 +457,6 @@ export default function Page() {
               <Flex>
                 <Text fontWeight="bold" fontSize="1.1rem" ml={2} color="white">
                   {item.username}
-
-                  {item.sponsorship > 0 && (
-                    <SponsorTag amount={item.sponsorship} />
-                  )}
                 </Text>
 
                 <Tag
@@ -484,6 +480,10 @@ export default function Page() {
                 >
                   联机ip {item.ip}
                 </Tag>
+
+                {item.sponsorship > 0 && (
+                  <SponsorTag amount={item.sponsorship} />
+                )}
 
                 {roomRole === "hoster" && item.ip !== roomData.hoster_ip && (
                   <Tag
@@ -534,11 +534,7 @@ export default function Page() {
   }
 
   return (
-    <Flex
-      direction="column"
-      px={{ base: 4, md: 8 }}
-      align="center"
-    >
+    <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
       <AnnouncementsModal />
 
       {!userInfo ? (

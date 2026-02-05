@@ -9,13 +9,13 @@ type SponsorTagProps = {
 
 const glow = keyframes`
   0% {
-    box-shadow: 0 0 6px 2px rgba(255, 208, 18, 0.6);
+    box-shadow: 0 0 3px 1px rgba(255, 208, 18, 0.6);
   }
   50% {
-    box-shadow: 0 0 12px 4px rgba(255, 208, 18, 1);
+    box-shadow: 0 0 6px 2px rgba(255, 208, 18, 1);
   }
   100% {
-    box-shadow: 0 0 6px 2px rgba(255, 208, 18, 0.6);
+    box-shadow: 0 0 3px 1px rgba(255, 208, 18, 0.6);
   }
 `;
 
@@ -51,12 +51,12 @@ const SponsorTag: React.FC<SponsorTagProps> = ({ amount }) => {
     color = "black";
     icon = FaCrown;
     bgGradient = "linear-gradient(270deg, #ffd012, #ff6f00, #ffd012)";
-    animation = `${gradient} 4s ease infinite, ${glow} 2s ease-in-out infinite`;
+    animation = `${gradient} 5s ease infinite, ${glow} 5s ease-in-out infinite`;
   }
 
   return (
     <Tag
-      ml={2}
+      ml={3}
       bg={bgGradient ? undefined : bg}
       bgGradient={bgGradient}
       bgSize="200% 200%"
@@ -68,7 +68,7 @@ const SponsorTag: React.FC<SponsorTagProps> = ({ amount }) => {
       cursor="default"
       userSelect="none"
     >
-      {icon && <TagLeftIcon as={icon} mr={1} />}
+      {icon && <TagLeftIcon as={icon} mr={0} />}
       <TagLabel>赞助者</TagLabel>
     </Tag>
   );
