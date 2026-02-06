@@ -35,16 +35,12 @@ export default function Page() {
       <AnnouncementsModal />
 
       {/* 网站统计信息 */}
-      <Flex
-        wrap="wrap"
-        direction={{ base: "column", md: "row" }}
-        justifyContent="center"
-      >
-        <Text w="200px" textAlign="center" fontSize={{ base: "sm", md: "md" }}>
-          网站访问人次： {serverData?.viewCount}
+      <Flex direction="row" justifyContent="center">
+        <Text w="160px" textAlign="center" fontSize="sm">
+          访问人次： {serverData?.viewCount}
         </Text>
-        <Text w="200px" textAlign="center" fontSize={{ base: "sm", md: "md" }}>
-          注册用户数量： {serverData?.userCount}
+        <Text w="160px" textAlign="center" fontSize="sm">
+          用户数量： {serverData?.userCount}
         </Text>
       </Flex>
 
