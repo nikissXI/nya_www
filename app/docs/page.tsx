@@ -335,11 +335,7 @@ const DocumentPage = () => {
             先切换到你需要的节点再导入隧道 <br />
             先切换到你需要的节点再导入隧道
           </Text>
-          <Button
-            rounded="md"
-            onClick={setNodeListModal}
-            size="sm"
-          >
+          <Button rounded="md" onClick={setNodeListModal} size="sm">
             点击切换节点
           </Button>
 
@@ -605,7 +601,8 @@ const DocumentPage = () => {
               {/* windows */}
               <TabPanel px={0} pb={1} pt={2}>
                 <Box>
-                  1. 下载隧道文件，文件名为“{tunnelName}.conf”
+                  1. 下载隧道文件，文件名为“{tunnelName}
+                  .conf”，下载好了接着往下看（没让你运行这个文件）
                   <br />
                   {DownloadButton()}
                 </Box>
@@ -670,44 +667,28 @@ const DocumentPage = () => {
                       <Text>
                         默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建。
                         <br />
-                        如果提示“隧道名称无效”就检测是否有中文字符或括号，改个名字再导入。
+                        <HighLight>
+                          如果提示“隧道名称无效”就检查conf文件是否有中文或括号，删掉再导入。
+                        </HighLight>
                       </Text>
-                      {/* <Text>
-                        <HighLight>点连接出现报错？</HighLight>
 
+                      <Text fontSize="sm">
+                       如果无法连接并且电脑安装过vmvare，就下载这个bat文件，
                         <Text
                           as="span"
+                          fontSize="sm"
                           color="#7dfffe"
                           onClick={() => {
-                            setWinError(!showWinError);
+                            window.open(
+                              process.env.NEXT_PUBLIC_BAT_FIX_URL,
+                              "_blank",
+                            );
                           }}
                         >
-                          点我解决
+                          点击下载bat
                         </Text>
+                        ，然后右键“以管理员身份运行”修复。
                       </Text>
-
-                      <Collapse in={showWinError}>
-                        <Text fontSize="sm">
-                          &emsp;如果连接出现报错“Unable to create network
-                          adapter”，就下载这个bat文件，
-                          <Text
-                            as="span"
-                            fontSize="sm"
-                            color="#7dfffe"
-                            onClick={() => {
-                              window.open(
-                                process.env.NEXT_PUBLIC_BAT_FIX_URL,
-                                "_blank"
-                              );
-                            }}
-                          >
-                            点击下载bat
-                          </Text>
-                          ，然后右键“以管理员身份运行”修复，这通常是因为安装过vm虚拟机导致的。
-                          <br />
-                          &emsp;如果是其他错误或运行bat后仍然连接报错，就尝试安装exe。
-                        </Text>
-                      </Collapse> */}
                     </TabPanel>
 
                     <TabPanel px={0} pb={0} pt={1}>
@@ -738,7 +719,7 @@ const DocumentPage = () => {
                         w="100%"
                         maxW="500px"
                       />
-                      <Text>如果连接还是报错那就找服主看看或别用了。</Text>
+                      <Text>如果连接还是报错那就找服主看看吧。</Text>
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
