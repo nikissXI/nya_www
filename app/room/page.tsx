@@ -601,14 +601,14 @@ export default function Page() {
                 点我点我
               </Button>
               <br />
-              隧道已连接仍然离线？
+              隧道已连接但还是离线👉
               <Button
                 variant="link"
                 bg="transparent"
                 color="#7dd4ff"
                 onClick={setNoticeOnOpen}
               >
-                点我排查原因
+                点我排查
               </Button>
             </Text>
           ) : (
