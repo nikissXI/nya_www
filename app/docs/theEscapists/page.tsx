@@ -123,7 +123,7 @@ export default function AndroidPage0() {
 
         <Heading size="md">方法二（QQ群操作）</Heading>
         <Text>
-          加入QQ群961793250，在群里发命令“搜索”，如要搜索2号创建的多人游戏，就发“搜索2”，机器人会给对应提示
+          加入QQ群961793250，在群里发命令“搜索”，如要搜索100.64.0.1房间，就发“搜索100.64.0.1”，机器人会给对应提示
         </Text>
 
         <Divider my={2} />
