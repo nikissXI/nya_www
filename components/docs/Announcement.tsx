@@ -42,7 +42,7 @@ export const AnnouncementsModal = ({}) => {
   return (
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
-        <Text color="#ffca3d" size="sm" mx={5}>
+        <Text color="#ffca3d" size="sm">
           新增上海D节点，别挤在上海B和C啦
         </Text>
 
