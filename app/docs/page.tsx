@@ -268,7 +268,7 @@ const DocumentPage = () => {
           <Text>
             &emsp;&emsp;喵服是
             <HighLight>免费</HighLight>
-            提供组网联机服务的联机平台，说人话就是整着玩的不求盈利。如果看不懂联机教程或不会用，可尝试加QQ交流群寻求帮助，也可以赞助10元找服主一对一教学
+            使用的。如果不会用，可加Q群寻求帮助，或赞助10元后找服主一对一教学
             <Link
               ml={1}
               color="#7dfffe"
@@ -281,13 +281,9 @@ const DocumentPage = () => {
             </Link>
           </Text>
           <Text>
-            &emsp;&emsp;喵服是个WireGuard（简称WG）服务器，WG是个组网软件，俗称VPN，通过它
-            <HighLight>可近似实现“连上同一个WiFi”，实现异地联机。</HighLight>
-          </Text>
-          <Text>
-            &emsp;&emsp;
+            &emsp;&emsp;喵服是个WireGuard(简称WG)组网服务器，
             <HighLight>
-              使用喵服联机的玩家都要各自注册账号，跟着教程安装WG客户端并导入正确的隧道
+              使用喵服联机的玩家都要各自注册账号，并跟着教程安装WG客户
             </HighLight>
             ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
           </Text>
