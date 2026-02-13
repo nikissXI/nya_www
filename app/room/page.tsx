@@ -599,7 +599,7 @@ export default function Page() {
                   router.push(`/docs`);
                 }}
               >
-                点我点我
+                点我查看
               </Button>
               <br />
               隧道已连接但还是离线👉

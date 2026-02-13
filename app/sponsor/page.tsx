@@ -100,35 +100,6 @@ const Page = () => {
           感谢赞助者们的支持！
         </Text>
 
-        {/* <Text fontSize="sm">仅列出赞助不低于50元赞助者，敬请谅解！</Text>
-
-        <TableContainer maxH="240px" overflowY="auto" overflowX="hidden">
-          <Table variant="striped" colorScheme="transparent" w="300px">
-            <Thead position="sticky" top={0} bg="#3e4e63">
-              <Tr>
-                <Th color="white" fontSize="md" w="30%" p={3}>
-                  UID
-                </Th>
-                <Th color="white" fontSize="md" w="30%" p={3}>
-                  用户名
-                </Th>
-                <Th color="white" fontSize="md" w="70%" p={3}>
-                  金额(元)
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {sponsorList.map((item, index) => (
-                <Tr key={index}>
-                  <Td p={3}>{item.uid} </Td>
-                  <Td p={3}>{item.username} </Td>
-                  <Td p={3}>{item.sponsorship}</Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer> */}
-
         <List spacing={2}>
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
@@ -157,7 +128,13 @@ const Page = () => {
           </ListItem>
         </List>
 
-        <Button colorScheme="orange" size="lg" onClick={openModal} mt={4}>
+        <Button
+          colorScheme="orange"
+          size="lg"
+          onClick={openModal}
+          mt={{ base: 0, md: 4 }}
+          mb={{ base: 2, md: 6 }}
+        >
           查看收款码
         </Button>
 
@@ -267,6 +244,35 @@ const Page = () => {
             </ModalFooter>
           </ModalContent>
         </Modal>
+
+        <Text fontSize="sm">赞助名单，仅列出赞助不低于50元的用户</Text>
+
+        <TableContainer maxH="360px"  overflowY="auto" overflowX="hidden">
+          <Table variant="striped" colorScheme="transparent" w="auto">
+            <Thead position="sticky" top={0} bg="#3e4e63">
+              <Tr>
+                <Th color="white" fontSize="md" p={3}>
+                  UID
+                </Th>
+                <Th color="white" fontSize="md" p={3}>
+                  用户名
+                </Th>
+                <Th color="white" fontSize="md" p={3}>
+                  金额(元)
+                </Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {sponsorList.map((item, index) => (
+                <Tr key={index}>
+                  <Td p={3}>{item.uid} </Td>
+                  <Td p={3}>{item.username} </Td>
+                  <Td p={3}>{item.sponsorship}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
       </VStack>
     </Box>
   );
