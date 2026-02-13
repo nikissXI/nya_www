@@ -42,9 +42,9 @@ export const AnnouncementsModal = ({}) => {
   return (
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
-        {/* <Text color="#ffca3d" size="sm">
-          新增上海D节点，别挤在上海B和C啦
-        </Text> */}
+        <Text color="#ffca3d" size="sm">
+          2月14日上午10~11点服务器维护
+        </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
           {serverData === undefined ? (
