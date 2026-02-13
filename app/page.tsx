@@ -36,10 +36,10 @@ export default function Page() {
 
       {/* 网站统计信息 */}
       <Flex direction="row" justifyContent="center">
-        <Text w="160px" textAlign="center" fontSize="sm">
+        <Text w="150px" textAlign="center" fontSize="sm">
           访问人次： {serverData?.viewCount}
         </Text>
-        <Text w="160px" textAlign="center" fontSize="sm">
+        <Text w="150px" textAlign="center" fontSize="sm">
           用户数量： {serverData?.userCount}
         </Text>
       </Flex>
