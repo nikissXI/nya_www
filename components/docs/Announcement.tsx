@@ -42,9 +42,9 @@ export const AnnouncementsModal = ({}) => {
   return (
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
-        <Text color="#ffca3d" size="sm">
+        {/* <Text color="#ffca3d" size="sm">
           节点有大幅调整，具体请看公告
-        </Text>
+        </Text> */}
 
         <Flex justify="center" align="center" wrap="wrap">
           {serverData === undefined ? (
@@ -78,7 +78,7 @@ export const AnnouncementsModal = ({}) => {
         </Flex>
 
         <Text>
-          赞助10元可加服主一对一教学
+          赞助享有专属节点和技术支持
           <Link
             ml={1}
             as={NextLink}
