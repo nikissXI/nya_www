@@ -299,7 +299,7 @@ export default function Page() {
     "导入的隧道必须是自己账号的！不能用其他人给的conf_key/二维码/隧道文件",
     "特殊区域（如学校、公司）的网络会拦截WG流量，试试流量上网可进行验证",
     "如果跨境联机请使用跨境线路的节点，如香港A节点",
-    "部分国家无法直接连接喵服（目前已知俄罗斯不行），这种情况需要找服主特殊处理"
+    "部分国家无法直接连接喵服（目前已知俄罗斯不行），这种情况需要找服主特殊处理",
   ];
 
   function standbyPage() {
@@ -587,9 +587,9 @@ export default function Page() {
           )}
 
           {onlineStatus === "离线" ? (
-            <Text color="#ffca3d" size="sm">
-              离线无法联机！需要安装WG客户端
-              <br />
+            <Text color="#ffca3d" size="sm" textAlign="center">
+              {/* 离线无法联机！需要安装WG客户端 */}
+              {/* <br /> */}
               WG客户端下载和教程👉
               <Button
                 variant="link"
@@ -600,16 +600,6 @@ export default function Page() {
                 }}
               >
                 点我查看
-              </Button>
-              <br />
-              隧道已连接但还是离线👉
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dd4ff"
-                onClick={setNoticeOnOpen}
-              >
-                点我排查
               </Button>
             </Text>
           ) : (
@@ -641,7 +631,11 @@ export default function Page() {
                 <VStack align="start" spacing={3}>
                   <List spacing={5}>
                     {OfflineReasons.map((reason, index) => (
-                      <ListItem key={index} textAlign="left" color={reason.includes("跨境") ? "#ffca3d" : "white"}>
+                      <ListItem
+                        key={index}
+                        textAlign="left"
+                        color={reason.includes("跨境") ? "#ffca3d" : "white"}
+                      >
                         <ListIcon as={MdTipsAndUpdates} />
                         {reason}
                       </ListItem>
@@ -652,7 +646,7 @@ export default function Page() {
             </ModalContent>
           </Modal>
 
-          <Flex align="center" my={3}>
+          <Flex align="center" mt={1}>
             {roomRole !== "none" && (
               <Text fontSize={18} fontWeight="bold" mr={3}>
                 房间号 {roomData?.room_id}
@@ -666,14 +660,16 @@ export default function Page() {
               fontWeight="bold"
               color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
             >
-              {onlineStatus === "离线" ? "WG离线" : "在线"}
+              {onlineStatus === "离线" ? "WG未连接" : "在线"}
             </Text>
+
             {onlineStatus === "在线" && latency && (
               <Flex align="center">
                 <GiNetworkBars size={20} color={getColor(latency)} />
                 <Box ml={1}>{latency}ms</Box>
               </Flex>
             )}
+
             <Button
               bg="transparent"
               h={5}
@@ -691,6 +687,20 @@ export default function Page() {
               </Box>
             </Button>
           </Flex>
+
+          {onlineStatus === "离线" && (
+            <Text color="#ffca3d" size="sm" mb={1}>
+              客户端已连接还是离线👉
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={setNoticeOnOpen}
+              >
+                点我排查
+              </Button>
+            </Text>
+          )}
 
           {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
