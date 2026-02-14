@@ -43,7 +43,7 @@ export const AnnouncementsModal = ({}) => {
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
         <Text color="#ffca3d" size="sm">
-          2月14日上午10~11点服务器维护
+          节点有大幅调整，具体请看公告
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
