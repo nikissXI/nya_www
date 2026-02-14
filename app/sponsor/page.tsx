@@ -107,11 +107,6 @@ const Page = () => {
           </ListItem>
 
           <ListItem textAlign="left">
-            <ListIcon as={RiVipCrownFill} />
-            赞助金额可被系统累计记录并获得赞助者铭牌，并有专用联机节点，累计赞助金额不低于10元可加服主QQ解答使用喵服联机中产生的问题
-          </ListItem>
-
-          <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
               赞助记录永久有效并可累计，解锁的节点不限期不限次使用
@@ -119,12 +114,20 @@ const Page = () => {
           </ListItem>
 
           <ListItem textAlign="left">
+            <ListIcon as={RiVipCrownFill} />
+            赞助可获得专属铭牌，并根据累计赞助金额解锁专用联机节点(名称金色的节点)
+          </ListItem>
+
+          <ListItem textAlign="left">
             <ListIcon as={IoChatboxEllipsesOutline} />
-            有疑问可联系服主&emsp;
-            <Icon as={FaWeixin} />
-            ：nikissxi&emsp;
-            <Icon as={FaQq} />
-            ：1299577815
+            赞助金额累计不低于10元可联系服主获取喵服使用相关问题的技术支持
+            <br />
+            <Text textAlign="center">
+              <Icon as={FaWeixin} />
+              ：nikissxi&emsp;
+              <Icon as={FaQq} />
+              ：1299577815
+            </Text>
           </ListItem>
         </List>
 
@@ -142,13 +145,8 @@ const Page = () => {
         <Modal isOpen={isModalOpen} onClose={closeModal} size="lg">
           <ModalOverlay />
           <ModalContent bg="#202e4fe0" color="white" mx={5} py={5}>
-            <ModalHeader>
-              <Text fontSize="xl" fontWeight="bold">
-                赞助收款码
-              </Text>
-            </ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
+            <ModalBody mt={4}>
               {/* 备注提醒 */}
               <Box
                 mb={4}
@@ -158,10 +156,7 @@ const Page = () => {
                 border="1px solid #ffeeba"
               >
                 <Text color="#856404" fontWeight="bold">
-                  ⚠️ 重要提醒：付款时请务必填写备注！
-                </Text>
-                <Text color="#856404" mt={1}>
-                  请在付款备注中填写您的喵服UID：
+                  ⚠️ 重要提醒：在付款备注中填写您的喵服UID
                 </Text>
                 <Box
                   display="flex"
@@ -179,7 +174,9 @@ const Page = () => {
                     borderRadius="md"
                     mr={2}
                   >
-                    {userInfo ? `${userInfo.uid}` : `（请先登录查看您的UID）`}
+                    {userInfo
+                      ? `UID：${userInfo.uid}`
+                      : `（请先登录查看您的UID）`}
                   </Text>
                   <Button
                     colorScheme="blue"
@@ -237,17 +234,12 @@ const Page = () => {
                 </Box>
               </SimpleGrid>
             </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="gray" onClick={closeModal}>
-                关闭
-              </Button>
-            </ModalFooter>
           </ModalContent>
         </Modal>
 
         <Text fontSize="sm">赞助名单，仅列出赞助不低于50元的用户</Text>
 
-        <TableContainer maxH="360px"  overflowY="auto" overflowX="hidden">
+        <TableContainer maxH="360px" overflowY="auto" overflowX="hidden">
           <Table variant="striped" colorScheme="transparent" w="auto">
             <Thead position="sticky" top={0} bg="#3e4e63">
               <Tr>

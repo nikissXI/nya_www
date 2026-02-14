@@ -569,6 +569,7 @@ export default function Page() {
               justify="space-between"
               borderRadius="md"
               boxShadow="sm"
+              mb={1}
             >
               <Text fontWeight="medium" fontSize="md" mr={2}>
                 当前联机节点：
