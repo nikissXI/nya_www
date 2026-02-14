@@ -641,7 +641,7 @@ export default function Page() {
                 <VStack align="start" spacing={3}>
                   <List spacing={5}>
                     {OfflineReasons.map((reason, index) => (
-                      <ListItem key={index} textAlign="left">
+                      <ListItem key={index} textAlign="left" color={reason.includes("跨境") ? "#ffca3d" : "white"}>
                         <ListIcon as={MdTipsAndUpdates} />
                         {reason}
                       </ListItem>
