@@ -571,7 +571,7 @@ const DocumentPage = () => {
                       <Text pt={1}>
                         打开浏览器的下载任务列表，点击文件“
                         {tunnelName}
-                        .conf”，然后点左下角发送到WG完成导入
+                        .conf”，然后点左下角发送到WG完成导入<br/>如果点下载没反应换其他浏览器试试(这是Safari的BUG)
                       </Text>
                     </TabPanel>
                   </TabPanels>

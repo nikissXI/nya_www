@@ -587,37 +587,7 @@ export default function Page() {
             </Button>
           )}
 
-          {onlineStatus === "离线" ? (
-            <Text color="#ffca3d" size="sm" textAlign="center">
-              {/* 离线无法联机！需要安装WG客户端 */}
-              {/* <br /> */}
-              WG客户端下载和教程👉
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dd4ff"
-                onClick={() => {
-                  router.push(`/docs`);
-                }}
-              >
-                点我查看
-              </Button>
-            </Text>
-          ) : (
-            <Text color="#ffca3d" size="sm">
-              已在线但游戏联机失败
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dd4ff"
-                onClick={() => {
-                  router.push(`/docs#games`);
-                }}
-              >
-                👉点我点我
-              </Button>
-            </Text>
-          )}
+
 
           {/* 连接失败原因Modal */}
           <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
@@ -661,7 +631,7 @@ export default function Page() {
               fontWeight="bold"
               color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
             >
-              {onlineStatus === "离线" ? "WG未连接" : "在线"}
+              {onlineStatus === "离线" ? "WG离线" : "在线"}
             </Text>
 
             {onlineStatus === "在线" && latency && (
@@ -689,9 +659,23 @@ export default function Page() {
             </Button>
           </Flex>
 
-          {onlineStatus === "离线" && (
-            <Text color="#ffca3d" size="sm" mb={1}>
-              客户端已连接还是离线👉
+          {onlineStatus === "离线" ? (
+            <Text color="#ffca3d" size="sm" textAlign="center">
+              离线状态无法联机！请安装WG客户端 
+             <br />
+              WG客户端下载和教程👉
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={() => {
+                  router.push(`/docs`);
+                }}
+              >
+                点我查看
+              </Button>
+             <br />
+              WG隧道打开还是离线👉
               <Button
                 variant="link"
                 bg="transparent"
@@ -701,7 +685,23 @@ export default function Page() {
                 点我排查
               </Button>
             </Text>
+          ) : (
+            <Text color="#ffca3d" size="sm">
+              已在线但游戏联机失败
+              <Button
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={() => {
+                  router.push(`/docs#games`);
+                }}
+              >
+                👉点我点我
+              </Button>
+            </Text>
           )}
+
+
 
           {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
