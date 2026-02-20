@@ -443,7 +443,7 @@ export const ServerNodeListModal: React.FC = () => {
                         value={type}
                         style={{ backgroundColor: "#3b4960", color: "white" }}
                       >
-                        {type === "all" ? "线路类型" : type}
+                        {type === "all" ? "筛选线路" : type}
                       </option>
                     ))}
                   </Select>
