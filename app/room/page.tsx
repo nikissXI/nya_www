@@ -52,10 +52,30 @@ interface HandleRoomResponse {
   [key: string]: any;
 }
 
+// 轮播消息数组
+const carouselMessages = [
+  "关闭浏览器不影响联机，WG不关即可",
+  "联机时使用该页面上显示的联机IP",
+  "房间里任意玩家都可以当主机",
+];
+
 export default function Page() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  // 轮播效果：每5秒更换一条消息
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCarouselIndex(
+        (prevIndex) => (prevIndex + 1) % carouselMessages.length,
+      );
+    }, 10000);
+
+    // 清理定时器
+    return () => clearInterval(interval);
+  }, []);
 
   const {
     isOpen: joinIsOpen,
@@ -411,7 +431,12 @@ export default function Page() {
               />
             </ModalBody>
             <ModalFooter>
+              <Button bgColor="#be2b2b" onClick={() => handleSetRoomPasswd("")}>
+                清除密码
+              </Button>
+
               <Button
+                ml={3}
                 bgColor="#007bc0"
                 onClick={() => handleSetRoomPasswd(inputPasswd)}
               >
@@ -422,8 +447,8 @@ export default function Page() {
         </Modal>
 
         <VStack>
-          {roomRole === "hoster" && (
-            <HStack justify="center" spacing={0}>
+          {/* {roomRole === "hoster" && (
+            <HStack justify="center" spacing={0} mt={2}>
               <Text fontWeight="bold">允许直接加入</Text>
               {roomData?.room_passwd ? <FaTimes /> : <FaCheck />}
 
@@ -461,7 +486,7 @@ export default function Page() {
                 <Text>查看房间密码</Text>
               </Button>
             </HStack>
-          )}
+          )} */}
 
           {roomData?.members.map((item, index) => (
             <Box
@@ -469,6 +494,7 @@ export default function Page() {
               key={item.ip}
               bg="rgb(75 127 187 / 38%)"
               p={1}
+              mt={2}
               borderRadius={12}
               borderColor={
                 item.ip === userInfo?.wg_data?.ip ? "#6db4ff" : "transparent"
@@ -606,7 +632,6 @@ export default function Page() {
               选择联机节点
             </Button>
           )}
-
           {/* 连接失败原因Modal */}
           <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
             <ModalOverlay />
@@ -634,14 +659,7 @@ export default function Page() {
               </ModalBody>
             </ModalContent>
           </Modal>
-
           <Flex align="center" mt={1}>
-            {roomRole !== "none" && (
-              <Text fontSize={18} fontWeight="bold" mr={3}>
-                房间号 {roomData?.room_id}
-              </Text>
-            )}
-
             <Text
               fontSize={18}
               p={0}
@@ -667,17 +685,46 @@ export default function Page() {
               onClick={() => {
                 getRoomData(false);
               }}
+              ml={1}
+              color="#7dd4ff"
             >
-              <Text fontSize={18} fontWeight="normal" color="#3fdb1d" ml={2}>
-                刷新
-              </Text>
+              <Text>刷新</Text>
               <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
                 <TbReload size={18} />
               </Box>
             </Button>
           </Flex>
 
-          {onlineStatus === "离线" ? (
+          {roomRole !== "none" && (
+            <Box fontSize={18} fontWeight="bold" mr={3}>
+              <Text
+                as="span"
+                onClick={() => {
+                  if (roomData?.room_id) copyText(roomData.room_id.toString());
+                }}
+              >
+                房间号&ensp;{roomData?.room_id}
+              </Text>
+              {roomRole === "hoster" && (
+                <Button
+                  ml={2}
+                  color="#7dd4ff"
+                  variant="link"
+                  bg="transparent"
+                  onClick={() => {
+                    setInputPasswd(
+                      roomData?.room_passwd ? roomData?.room_passwd : "",
+                    );
+                    setPassOnOpen();
+                  }}
+                >
+                  设置房间密码
+                </Button>
+              )}
+            </Box>
+          )}
+
+          {onlineStatus === "离线" && (
             <Text color="#ffca3d" size="sm" textAlign="center">
               离线状态无法联机！请安装WG客户端
               <br />
@@ -703,9 +750,13 @@ export default function Page() {
                 点我排查
               </Button>
             </Text>
-          ) : (
-            <Text color="#ffca3d" size="sm">
-              已在线但游戏联机失败
+          )}
+
+          {onlineStatus === "在线" && roomRole !== "none" && (
+            <Text color="#ffca3d" size="sm" textAlign="center">
+              {carouselMessages[carouselIndex]}
+              <br />
+              玩家均在线但不会联机
               <Button
                 variant="link"
                 bg="transparent"
@@ -714,7 +765,7 @@ export default function Page() {
                   router.push(`/docs#games`);
                 }}
               >
-                👉点我点我
+                👉点我
               </Button>
             </Text>
           )}

@@ -242,7 +242,7 @@ const DocumentPage = () => {
     <Box px={5}>
       <VStack spacing={5} align="stretch">
         <HighLight fontSize="24px">
-          认真阅读本页面教程，共6个部分，不要漏看任意内容！
+          认真阅读本页面教程，共5个部分，不要漏看任意内容！
         </HighLight>
 
         <Box>
@@ -253,9 +253,9 @@ const DocumentPage = () => {
             <ScrollLinkM to="introduction">1. 喵服简介</ScrollLinkM>
             <ScrollLinkM to="words">2. 联机常用词</ScrollLinkM>
             <ScrollLinkM to="download">3. WG下载和隧道导入</ScrollLinkM>
-            <ScrollLinkM to="room">4. 联机房间说明</ScrollLinkM>
-            <ScrollLinkM to="games">5. 具体游戏联机教程(必看)</ScrollLinkM>
-            <ScrollLinkM to="issues">6. 常见问题/联机失败</ScrollLinkM>
+            {/* <ScrollLinkM to="room">4. 联机房间说明</ScrollLinkM> */}
+            <ScrollLinkM to="games">4. 具体游戏联机教程(必看)</ScrollLinkM>
+            <ScrollLinkM to="issues">5. 常见问题/联机失败</ScrollLinkM>
           </VStack>
         </Box>
 
@@ -285,7 +285,7 @@ const DocumentPage = () => {
             <HighLight>
               使用喵服联机的玩家都要各自注册账号，并跟着教程安装WG客户
             </HighLight>
-            ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.开始联机》部分有详细说明。
+            ，所有手机、平板、电脑都能接入喵服，但能不能跨平台联机得看游戏是否支持，本文档《4.具体游戏联机教程》有详细说明。
           </Text>
         </Box>
 
@@ -769,7 +769,7 @@ const DocumentPage = () => {
           </Tabs>
         </Box>
 
-        <Box id="room">
+        {/* <Box id="room">
           <Heading size="md" pb={2} color="#00ff17">
             4. 联机房间说明
           </Heading>
@@ -794,11 +794,11 @@ const DocumentPage = () => {
             w="100%"
             maxW="500px"
           />
-        </Box>
+        </Box> */}
 
         <Box id="games">
           <Heading size="md" pb={2} color="#00ff17">
-            5. 具体游戏联机教程(必看)
+            4. 具体游戏联机教程(必看)
           </Heading>
           <Text>
             &emsp;&emsp;
@@ -836,32 +836,26 @@ const DocumentPage = () => {
 
         <Box id="issues">
           <Heading size="md" pb={2} color="#00ff17">
-            6. 常见问题/联机失败
+            5. 常见问题/联机失败
           </Heading>
 
           <VStack spacing={2} align="stretch">
             <Text>
               <HighLight>问：某游戏能不能联机/不同平台能否联机</HighLight>
               <br />
-              答：看本页面第5部分。
+              答：看本文档《4.具体游戏联机教程》。
             </Text>
 
             <Text>
               <HighLight>问：海外能不能用/能不能跨国联机</HighLight>
               <br />
-              答：海外（包括港澳台）的用户只能使用海外线路的节点，国内与海外联机只能用香港A节点，其他海外节点国内无法连接
+              答：海外（包括港澳台）的用户只能使用海外线路的节点，国内（大陆）与海外联机只能用跨境线路的节点
             </Text>
 
             <Text>
               <HighLight>问：联机失败/搜索不到游戏</HighLight>
               <br />
-              答：（1）玩家需要都在线，并在同一个联机房间里。（2）如果主机是Windows，试试把系统防火墙都关闭。（3）加入游戏的时候，主机要在游戏里，游戏放后台客机将无法加入。（4）试试换个人做主机或重开游戏，有的游戏有BUG得重开游戏。（5）重新认真阅读本文档全部内容，尤其是第5部分。
-            </Text>
-
-            <Text>
-              <HighLight>问：浏览器（喵服网站）可以关闭吗？</HighLight>
-              <br />
-              答：可以。联机通信使用的是WG客户端，不要关闭WG就行。喵服网站只是用来管理联机房间的，你甚至可以在其他设备上访问网站来管理房间。
+              答：（1）玩家需要都在线，并在同一个联机房间里。（2）如果主机是Windows，试试把系统防火墙都关闭。（3）加入游戏的时候，主机要在游戏里，游戏放后台客机将无法加入。（4）重新认真阅读本文档全部内容，尤其是第4部分。
             </Text>
           </VStack>
         </Box>
