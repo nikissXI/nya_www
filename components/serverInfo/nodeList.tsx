@@ -74,6 +74,10 @@ function sortNodes(
       const bwA = a.bandwidth || 0;
       const bwB = b.bandwidth || 0;
       return sortOrder === "asc" ? bwA - bwB : bwB - bwA;
+    } else if (sortBy === "alias") {
+      return sortOrder === "asc"
+        ? a.alias.localeCompare(b.alias)
+        : b.alias.localeCompare(a.alias);
     }
     return 0;
   });
@@ -292,7 +296,12 @@ export const ServerNodeListModal: React.FC = () => {
         }
       }, 100); // 延迟执行，确保DOM已经渲染完成
     }
-  }, [showNodeListModal, nodeReady, userInfo?.wg_data?.node_alias, setNodeReady]);
+  }, [
+    showNodeListModal,
+    nodeReady,
+    userInfo?.wg_data?.node_alias,
+    setNodeReady,
+  ]);
 
   // 获取所有网络类型
   const netTypes = [
@@ -357,18 +366,6 @@ export const ServerNodeListModal: React.FC = () => {
 
               <Flex justify="center" gap={4} width="100%">
                 <Flex align="center" flex="1">
-                  {/* <Button
-                    size="sm"
-                    variant="ghost"
-                    colorScheme="blue"
-                    mr={1}
-                    onClick={() =>
-                      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-                    }
-                  >
-                    {sortOrder === "asc" ? "升序↑" : "降序↓"}
-                  </Button> */}
-
                   <Select
                     size="sm"
                     value={sortBy}
@@ -413,6 +410,12 @@ export const ServerNodeListModal: React.FC = () => {
                     >
                       大带宽优先
                     </option>
+                    <option
+                      value="alias"
+                      style={{ backgroundColor: "#3b4960", color: "white" }}
+                    >
+                      节点名称
+                    </option>
                   </Select>
                 </Flex>
 
@@ -448,6 +451,14 @@ export const ServerNodeListModal: React.FC = () => {
               </Flex>
             </Flex>
 
+            {!userInfo?.wg_data?.node_alias && (
+              <Text fontSize="sm" align="center" color="#ffca3d">
+                请选择一个节点，点击节点名称即可
+                <br />
+                如果不会选，窗口底部有节点选择建议
+              </Text>
+            )}
+
             <Stack
               spacing={3}
               mx="auto"
@@ -475,29 +486,19 @@ export const ServerNodeListModal: React.FC = () => {
         </ModalBody>
 
         <ModalFooter py={0} flexDirection="column">
-          <Text>
-            请看讲解帮助选择合适节点
+          <Text fontSize="sm">
+            点击选择联机节点，不会选看讲解
             <Button
               ml={1}
               color="#7dd4ff"
               bgColor="transparent"
               onClick={toggleExpanded}
               variant="link"
+              fontSize="sm"
             >
-              {isExpanded ? "点击收起" : "点击查看"}
+              {isExpanded ? "收起讲解" : "查看讲解"}
             </Button>
           </Text>
-
-          {/* <Center>
-            <Button
-              color="#7dd4ff"
-              bgColor="transparent"
-              onClick={toggleExpanded}
-              variant="link"
-            >
-              {isExpanded ? "点击收起" : "点击查看"}
-            </Button>
-          </Center> */}
 
           <Collapse in={isExpanded} animateOpacity>
             <List

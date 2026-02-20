@@ -7,12 +7,14 @@ interface CustomButtonProps extends ButtonProps {
   bgColor?: string;
   colorScheme?: string;
   color?: string;
+  fontSize?: string;
 }
 export const Button: React.FC<CustomButtonProps> = ({
   children,
   bgColor = "#2976bd",
   colorScheme = "transparent",
   color = "white",
+  fontSize = "md",
   ...props
 }) => {
   return (
@@ -22,6 +24,7 @@ export const Button: React.FC<CustomButtonProps> = ({
       color={color}
       bgColor={bgColor}
       colorScheme={colorScheme} // 或者定义一个透明的颜色方案
+      fontSize={fontSize}
       sx={{
         border: "none",
         _hover: {

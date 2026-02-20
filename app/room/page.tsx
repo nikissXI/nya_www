@@ -348,9 +348,7 @@ export default function Page() {
           </ModalContent>
         </Modal>
 
-        <Heading mb={5}>请选择操作</Heading>
-
-        <VStack spacing={6} alignItems="center">
+        <VStack spacing={6} mt={3}>
           <Button h="50px" fontSize="25px" onClick={handleCreateRoom}>
             创建房间
           </Button>
@@ -587,8 +585,6 @@ export default function Page() {
             </Button>
           )}
 
-
-
           {/* 连接失败原因Modal */}
           <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
             <ModalOverlay />
@@ -661,8 +657,8 @@ export default function Page() {
 
           {onlineStatus === "离线" ? (
             <Text color="#ffca3d" size="sm" textAlign="center">
-              离线状态无法联机！请安装WG客户端 
-             <br />
+              离线状态无法联机！请安装WG客户端
+              <br />
               WG客户端下载和教程👉
               <Button
                 variant="link"
@@ -674,7 +670,7 @@ export default function Page() {
               >
                 点我查看
               </Button>
-             <br />
+              <br />
               WG隧道打开还是离线👉
               <Button
                 variant="link"
@@ -700,8 +696,6 @@ export default function Page() {
               </Button>
             </Text>
           )}
-
-
 
           {roomRole === "none" ? standbyPage() : joinedPage()}
         </>
