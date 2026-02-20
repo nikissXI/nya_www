@@ -396,25 +396,25 @@ export const ServerNodeListModal: React.FC = () => {
                       value="delay"
                       style={{ backgroundColor: "#3b4960", color: "white" }}
                     >
-                      低延迟优先
+                      延迟优先排序
                     </option>
                     <option
                       value="net"
                       style={{ backgroundColor: "#3b4960", color: "white" }}
                     >
-                      低负载优先
+                      负载优先排序
                     </option>
                     <option
                       value="bandwidth"
                       style={{ backgroundColor: "#3b4960", color: "white" }}
                     >
-                      大带宽优先
+                      带宽优先排序
                     </option>
                     <option
                       value="alias"
                       style={{ backgroundColor: "#3b4960", color: "white" }}
                     >
-                      节点名称
+                      节点名称排序
                     </option>
                   </Select>
                 </Flex>
