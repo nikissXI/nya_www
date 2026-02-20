@@ -349,7 +349,21 @@ export default function Page() {
         </Modal>
 
         <VStack spacing={6} mt={3}>
-          <Button h="50px" fontSize="25px" onClick={handleCreateRoom}>
+          <Button
+            h="50px"
+            fontSize="25px"
+            onClick={() => {
+              if (onlineStatus === "离线") {
+                openToast({
+                  content: "需要在线状态才能创建房间",
+                  status: "warning",
+                });
+                return;
+              }
+
+              handleCreateRoom();
+            }}
+          >
             创建房间
           </Button>
 
@@ -357,6 +371,14 @@ export default function Page() {
             h="50px"
             fontSize="25px"
             onClick={() => {
+              if (onlineStatus === "离线") {
+                openToast({
+                  content: "需要在线状态才能加入房间",
+                  status: "warning",
+                });
+                return;
+              }
+
               joinOnOpen();
               setHideJoinPassInput(true);
               setInputRoomId("");
