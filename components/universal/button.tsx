@@ -7,7 +7,7 @@ interface CustomButtonProps extends ButtonProps {
   bgColor?: string;
   colorScheme?: string;
   color?: string;
-  fontSize?: string;
+  fontSize?: any;
 }
 export const Button: React.FC<CustomButtonProps> = ({
   children,
