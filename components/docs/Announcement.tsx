@@ -1,14 +1,12 @@
 import NextLink from "next/link";
 import {
   Box,
-  Button,
   Flex,
   Text,
   Link,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalCloseButton,
   ModalBody,
   useDisclosure,
@@ -55,7 +53,7 @@ export const AnnouncementsModal = ({}) => {
           ) : serverData.announcements &&
             serverData.announcements.length > 0 ? (
             <Text noOfLines={1}>
-              公告更新时间{" "}
+              公告更新时间
               {formatDate(serverData.announcements[0].timestamp, true)}
             </Text>
           ) : (
@@ -64,7 +62,7 @@ export const AnnouncementsModal = ({}) => {
 
           {serverData?.announcements &&
             serverData?.announcements.length > 0 && (
-              <Button
+              <Text
                 ml={1}
                 color="#7dd4ff"
                 onClick={onOpen}
@@ -73,7 +71,7 @@ export const AnnouncementsModal = ({}) => {
                 _hover={{ textDecoration: "none" }}
               >
                 点击查看
-              </Button>
+              </Text>
             )}
         </Flex>
 

@@ -494,7 +494,6 @@ export default function Page() {
               key={item.ip}
               bg="rgb(75 127 187 / 38%)"
               p={1}
-              mt={2}
               borderRadius={12}
               borderColor={
                 item.ip === userInfo?.wg_data?.ip ? "#6db4ff" : "transparent"
@@ -609,7 +608,7 @@ export default function Page() {
         </>
       ) : (
         <>
-          {userInfo?.wg_data?.node_alias ? (
+          {userInfo?.wg_data?.node_alias && (
             <Flex
               align="center"
               justify="space-between"
@@ -618,7 +617,7 @@ export default function Page() {
               mb={1}
             >
               <Text fontWeight="medium" fontSize="md" mr={2}>
-                当前联机节点：
+                联机节点：
                 <Text as="span" fontWeight="bold">
                   {userInfo?.wg_data?.node_alias}
                 </Text>
@@ -627,11 +626,8 @@ export default function Page() {
                 切换
               </Button>
             </Flex>
-          ) : (
-            <Button rounded="md" onClick={setNodeListModal}>
-              选择联机节点
-            </Button>
           )}
+
           {/* 连接失败原因Modal */}
           <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
             <ModalOverlay />
@@ -696,7 +692,7 @@ export default function Page() {
           </Flex>
 
           {roomRole !== "none" && (
-            <Box fontSize={18} fontWeight="bold" mr={3}>
+            <Text fontSize={18} fontWeight="bold" mr={3}>
               <Text
                 as="span"
                 onClick={() => {
@@ -721,11 +717,11 @@ export default function Page() {
                   设置房间密码
                 </Button>
               )}
-            </Box>
+            </Text>
           )}
 
           {onlineStatus === "离线" && (
-            <Text color="#ffca3d" size="sm" textAlign="center">
+            <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
               离线状态无法联机！请安装WG客户端
               <br />
               WG客户端下载和教程👉
@@ -753,7 +749,7 @@ export default function Page() {
           )}
 
           {onlineStatus === "在线" && roomRole !== "none" && (
-            <Text color="#ffca3d" size="sm" textAlign="center">
+            <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
               {carouselMessages[carouselIndex]}
               <br />
               玩家均在线但不会联机

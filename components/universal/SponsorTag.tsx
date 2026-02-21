@@ -35,7 +35,7 @@ const SponsorTag: React.FC<SponsorTagProps> = ({ amount }) => {
   let bg = "#ffd012";
   let color = "white";
   let icon = null;
-  let size = "md";
+  let size = "sm";
   let animation = undefined;
   let bgGradient = undefined;
 
@@ -56,7 +56,7 @@ const SponsorTag: React.FC<SponsorTagProps> = ({ amount }) => {
 
   return (
     <Tag
-      ml={3}
+      ml={2}
       bg={bgGradient ? undefined : bg}
       bgGradient={bgGradient}
       bgSize="200% 200%"
