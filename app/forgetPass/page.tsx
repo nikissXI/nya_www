@@ -213,7 +213,7 @@ export default function Page() {
             </Stack>
           </RadioGroup>
         </Flex> */}
-        <Text>
+        <Text textAlign="center">
           本页面仅支持通过电子邮箱找回密码
           <br />
           如果仅绑定了手机号，联系服主找回

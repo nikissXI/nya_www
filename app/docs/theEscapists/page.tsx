@@ -52,7 +52,6 @@ export default function AndroidPage0() {
     <Center>
       <VStack spacing={3} mx="5vw">
         <Button
-          size="sm"
           bgColor="#c1447d"
           onClick={() => {
             window.open("https://b23.tv/2dcjPHv", "_blank");

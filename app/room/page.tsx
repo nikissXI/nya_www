@@ -584,7 +584,7 @@ export default function Page() {
       <AnnouncementsModal />
 
       {!userInfo ? (
-        <>
+        <VStack spacing={3} align="center">
           <Heading size="md">你还没登录呢</Heading>
           <Button
             variant="outline"
@@ -595,9 +595,9 @@ export default function Page() {
             点击登录
           </Button>
           <NoticeText />
-        </>
+        </VStack>
       ) : !userInfo?.wg_data ? (
-        <>
+        <VStack spacing={3} align="center">
           <Heading size="md" color="#ffa629">
             你还没获取隧道呢
           </Heading>
@@ -605,7 +605,7 @@ export default function Page() {
           <Button rounded={5} onClick={getTunnel} bgColor="#007bc0" size="sm">
             点击获取隧道
           </Button>
-        </>
+        </VStack>
       ) : (
         <>
           {userInfo?.wg_data?.node_alias && (
