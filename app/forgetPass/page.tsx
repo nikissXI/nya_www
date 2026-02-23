@@ -213,7 +213,11 @@ export default function Page() {
             </Stack>
           </RadioGroup>
         </Flex> */}
-        <Text>通过电子邮箱找回密码（不支持手机找回）</Text>
+        <Text>
+          本页面仅支持通过电子邮箱找回密码
+          <br />
+          如果仅绑定了手机号，联系服主找回
+        </Text>
 
         <Input
           type="text"
