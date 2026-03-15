@@ -1,25 +1,28 @@
 "use client";
-import { useRouter } from "next/navigation";
 import {
   Heading,
-  VStack,
+  Box,
   Text,
   Divider,
   Input,
   Flex,
-  Center,
   Image,
+  Icon,
+  List,
+  ListItem,
+  ListIcon,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
-import { openToast } from "@/components/universal/toast";
 import { getAuthToken } from "@/store/authKey";
-import { isInteger } from "@/utils/strings";
+import { MdTipsAndUpdates } from "react-icons/md";
+import BackButton from "@/components/docs/BackButton";
+import DocFlex from "@/components/docs/DocFlex";
+import DocLink from "@/components/docs/DocLink";
 
 export default function AndroidPage0() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const router = useRouter();
   const { userInfo, setShowLoginModal } = useUserStateStore();
   const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");
@@ -48,57 +51,58 @@ export default function AndroidPage0() {
     }
   };
 
+  const TextList = [
+    "喵服关联QQ群：961793250",
+    "连接WiFi才可以进行多人游戏，否则会出现错误“你需要网络连接到局域网会话”",
+    "主机连上喵服后创建多人游戏就行，客机加入需要创建搜索任务才能搜索到房间，创建搜索任务有两种方式，接着往下看",
+    "如果出现加入进去后提示“此会话已不可用”，有两种情况，要么是主机切窗口导致游戏变离线模式，要么是游戏版本号不一致",
+    "如果出现搜索不到的情况联系服主处理，最后一次测试时间2025/12/15，安卓和苹果联机没问题，测试游戏均为东品代理的国服版本：安卓1.3.2，苹果版本1.70.2",
+  ];
+
   return (
-    <Center>
-      <VStack spacing={3} mx="5vw">
-        <Button
-          bgColor="#c1447d"
-          onClick={() => {
-            window.open("https://b23.tv/2dcjPHv", "_blank");
-          }}
-        >
-          点击查看视频演示<br/>仅作辅助，图文还是得看
-        </Button>
+    <DocFlex>
+      <Heading size="lg" textAlign="center">
+        仅支持正版逃脱者手游联机
+      </Heading>
 
-        <Text>由于这逃脱者的联机机制很傻逼，想联机就认真看教程的每个字！</Text>
+      <DocLink
+        linkText="简略视频演示"
+        linkUrl="https://www.bilibili.com/video/BV13xijemE3L/"
+      />
 
-        <Text>
-          需要连接WiFi才可以进行多人游戏，否则会出现如图报错。
-          <Image
-            h="5rem"
-            src="/images/theEscapists/theEscapists_lan_error.jpg"
-            alt="theEscapists_lan_error"
-          />
-        </Text>
+      {/* <Image
+        h="5rem"
+        src="/images/theEscapists/theEscapists_lan_error.jpg"
+        alt="theEscapists_lan_error"
+      /> */}
+      <List spacing={2}>
+        {TextList.map((reason, index) => (
+          <ListItem key={index} textAlign="left">
+            <ListIcon as={MdTipsAndUpdates} />
+            {reason}
+          </ListItem>
+        ))}
+      </List>
+      <Divider my={4} />
 
-        <Text>
-          主机连上喵服后创建多人游戏就行，客机加入需要创建搜索任务才能搜索到房间
-        </Text>
-        <Text>
-          创建搜索任务有两种方法，二选一即可，一种在网页操作，一种在QQ里操作
-        </Text>
-        <Text>
-          如果出现搜索不到的情况请联系服主处理，最后一次测试时间2025/12/15，安卓和苹果联机没问题，（测试游戏均为东品代理的国服版本：安卓1.3.2，苹果版本1.70.2），破解版联机问题概不负责。
-        </Text>
+      <Heading size="lg" mb={3}>
+        创建搜索任务
+      </Heading>
 
-        <Divider my={2} />
-
-        <Heading size="md">方法一（网页操作）</Heading>
-        <Text>
-          在下方填写要搜索加入的主机ip，如要搜索100.64.0.1房间，就填“搜索100.64.0.1”然后点提交
-        </Text>
-
+      <Box w="100%">
+        <Heading size="md">方式一（网页操作）</Heading>
+        如搜索联机ip为100.64.0.1创建的房间，就填“100.64.0.1”然后点搜索
         <Flex>
           {userInfo ? (
             <Flex>
               <Input
-                w="130px"
+                w="160px"
                 type="text"
                 value={inputIp}
                 onChange={(e) => {
                   setInputIp(e.target.value);
                 }}
-                placeholder="要加入的ip"
+                placeholder="要加入的主机ip"
               />
 
               <Button
@@ -106,7 +110,7 @@ export default function AndroidPage0() {
                   createHelper(inputIp);
                 }}
               >
-                提交
+                搜索
               </Button>
             </Flex>
           ) : (
@@ -115,39 +119,24 @@ export default function AndroidPage0() {
             </Button>
           )}
         </Flex>
-
         <Text color="#ffd648">{showText}</Text>
+      </Box>
 
-        <Divider my={2} />
+      <Box w="100%" mt={4}>
+        <Heading size="md">方式二（QQ群操作）</Heading>
+        加入QQ群961793250，在群里发命令“搜索”，如要搜索100.64.0.1房间，就发“搜索100.64.0.1”，机器人会给对应提示
+      </Box>
 
-        <Heading size="md">方法二（QQ群操作）</Heading>
-        <Text>
-          加入QQ群961793250，在群里发命令“搜索”，如要搜索100.64.0.1房间，就发“搜索100.64.0.1”，机器人会给对应提示
-        </Text>
+      {/* 
+        <Image
+          h="5rem"
+          src="/images/theEscapists/theEscapists_session_error.jpg"
+          alt="theEscapists_session_error"
+        /> */}
 
-        <Divider my={2} />
+      <Divider my={5} />
 
-        <Text>
-          如果出现以下提示，有两种情况，要么是主机切窗口导致游戏变离线模式，要么是游戏版本号不一致。
-          <Image
-            h="5rem"
-            src="/images/theEscapists/theEscapists_session_error.jpg"
-            alt="theEscapists_session_error"
-          />
-        </Text>
-
-        <Divider my={2} />
-
-        <Button
-          mb={5}
-          bgColor="#b23333"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          返回
-        </Button>
-      </VStack>
-    </Center>
+      <BackButton />
+    </DocFlex>
   );
 }

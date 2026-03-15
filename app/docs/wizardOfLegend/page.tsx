@@ -1,52 +1,37 @@
 "use client";
 
-import { Flex, Center, Divider, Text } from "@chakra-ui/react";
+import { Icon, Divider, Text, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { useRouter } from "next/navigation";
+import DocFlex from "@/components/docs/DocFlex";
+import DocLink from "@/components/docs/DocLink";
+import BackButton from "@/components/docs/BackButton";
+import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function Page() {
-  const router = useRouter();
-
   return (
-    <Center>
-      <Flex
-        direction="column"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={5}
-        mx="5vw"
-      >
-        <Text my={3}>
-          玩家都处于一个联机房间后，进游戏创建或加入就行
-          <br />
-          客机加入的时候主机别把游戏后台
-          <br />
-          支持安卓、苹果一起联机，不支持电脑（传说法师1电脑版没有联机模式，2才有）
-        </Text>
+    <DocFlex>
+      <Heading size="lg" textAlign="center">
+        仅手游，PC不支持联机
+      </Heading>
 
-        <Button
-          bgColor="#c1447d"
-          onClick={() => {
-            window.open(
-              "https://www.bilibili.com/video/BV1svije6Eda/",
-              "_blank"
-            );
-          }}
-        >
-          点击查看视频演示<br/>仅作辅助，图文还是得看
-        </Button>
+      <DocLink
+        linkText="视频演示"
+        linkUrl="https://www.bilibili.com/video/BV1svije6Eda/"
+      />
 
-        <Divider my={5} />
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        喵服关联QQ群：981286541
+      </Text>
 
-        <Button
-          bgColor="#b23333"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          返回
-        </Button>
-      </Flex>
-    </Center>
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        玩家都处于同个联机房间并在线后，主机进游戏创建联机房间，创建好后不要切出游戏外，客机进游戏点加入房间搜索即可
+      </Text>
+
+      <Divider my={5} />
+
+      <BackButton />
+    </DocFlex>
   );
 }

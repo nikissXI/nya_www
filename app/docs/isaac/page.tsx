@@ -1,48 +1,28 @@
 "use client";
 
-import { Flex, Center, Divider, Text } from "@chakra-ui/react";
+import { Divider, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { useRouter } from "next/navigation";
+import DocFlex from "@/components/docs/DocFlex";
+import DocLink from "@/components/docs/DocLink";
+import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
-  const router = useRouter();
-
   return (
-    <Center>
-      <Flex
-        direction="column"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={5}
-        mx="5vw"
-      >
-        <Text my={3}>
-          教程由B站UP主Winters_Stone1制作，请点击按钮跳转到B站观看视频教程
-        </Text>
+    <DocFlex>
+      <Text mt={3} textAlign="center">
+        教程由B站UP主Winters_Stone1制作，请到B站观看视频教程
+      </Text>
 
-        <Button
-          bgColor="#c1447d"
-          onClick={() => {
-            window.open(
-              "https://www.bilibili.com/video/BV1dZSeBLE4e/",
-              "_blank"
-            );
-          }}
-        >
-          点击跳转至B站
-        </Button>
+      <DocLink
+        linkText=""
+        linkUrl="https://www.bilibili.com/video/BV1dZSeBLE4e/"
+      />
 
-        <Divider my={5} />
+      <Text textAlign="center">喵服关联QQ群：1074963191</Text>
 
-        <Button
-          bgColor="#b23333"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          返回
-        </Button>
-      </Flex>
-    </Center>
+      <Divider my={5} />
+
+      <BackButton />
+    </DocFlex>
   );
 }

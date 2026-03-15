@@ -1,54 +1,38 @@
 "use client";
 
-import { Flex, Center, Divider, Text } from "@chakra-ui/react";
+import { Icon, Center, Divider, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { useRouter } from "next/navigation";
+import { MdTipsAndUpdates } from "react-icons/md";
+import DocFlex from "@/components/docs/DocFlex";
+import DocLink from "@/components/docs/DocLink";
+import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
-  const router = useRouter();
-
   return (
-    <Center>
-      <Flex
-        direction="column"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={5}
-        mx="5vw"
-      >
-        <Text my={3}>
-          玩家都处于一个联机房间后，进游戏创建或加入就行
-          <br />
-          客机也可以填主机的喵服IP加入，加入的时候主机别把游戏后台
-          <br />
-          支持安卓、苹果一起联机，PC只能跟PC联机
-          <br />
-          要把前面的序章打完才会解锁联机功能
-        </Text>
+    <DocFlex>
+      <DocLink
+        linkText="简略视频演示"
+        linkUrl="https://www.bilibili.com/video/BV1FLeJeNEq6/"
+      />
 
-        <Button
-          bgColor="#c1447d"
-          onClick={() => {
-            window.open(
-              "https://www.bilibili.com/video/BV1FLeJeNEq6/",
-              "_blank"
-            );
-          }}
-        >
-          点击查看视频教程
-        </Button>
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        喵服关联QQ群：966579113
+      </Text>
 
-        <Divider my={5} />
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        要把前面的序章打完才会解锁联机功能，支持安卓、苹果一起联机，PC只能跟PC联机
+      </Text>
 
-        <Button
-          bgColor="#b23333"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          返回
-        </Button>
-      </Flex>
-    </Center>
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        玩家都处于同个联机房间并在线后，一个人做主机创建联机副本，另一个人填主机的喵服ip加入，加入的时候主机别切到游戏外
+      </Text>
+
+      <Divider my={5} />
+
+      <BackButton />
+    </DocFlex>
   );
 }

@@ -56,14 +56,16 @@ interface Article {
 }
 
 const articles: Article[] = [
-  { path: "/docs/theEscapists", title: "逃脱者（必须看!!）（安卓、iOS）" },
+  { path: "/docs/theEscapists", title: "逃脱者手游（安卓、iOS）" },
   { path: "/docs/stardewValley", title: "星露谷物语（全平台）" },
   { path: "/docs/terraria", title: "泰拉瑞亚（全平台）" },
+  { path: "/docs/slayTheSpire", title: "杀戮尖塔（全平台）" },
   { path: "/docs/l4d2", title: "求生之路2（PC）" },
   { path: "/docs/minecraft", title: "我的世界（全平台）" },
-  { path: "/docs/wizardOfLegend", title: "传说法师1（安卓、iOS）" },
+  { path: "/docs/wizardOfLegend", title: "传说法师手游（安卓、iOS）" },
   { path: "/docs/isaac", title: "以撒的结合（PC）" },
   { path: "/docs/doNotStarve", title: "饥荒（PC）" },
+  { path: "/docs/mindustry", title: "像素工厂（全平台）" },
   { path: "/docs/machinesAtWar3", title: "机械战争3（全平台）" },
   { path: "/docs/projectZomboid", title: "僵尸毁灭工程（PC）" },
   { path: "/docs/juicyRealm", title: "恶果之地（全平台）" },
@@ -241,10 +243,6 @@ const DocumentPage = () => {
   return (
     <Box px={5}>
       <VStack spacing={5} align="stretch">
-        <HighLight fontSize="24px">
-          认真阅读本页面教程，共5个部分，不要漏看任意内容！
-        </HighLight>
-
         <Box>
           <Heading size="md" pb={2} color="#00ff17">
             目录（点击可跳转）
@@ -253,7 +251,6 @@ const DocumentPage = () => {
             <ScrollLinkM to="introduction">1. 喵服简介</ScrollLinkM>
             <ScrollLinkM to="words">2. 联机常用词</ScrollLinkM>
             <ScrollLinkM to="download">3. WG下载和隧道导入</ScrollLinkM>
-            {/* <ScrollLinkM to="room">4. 联机房间说明</ScrollLinkM> */}
             <ScrollLinkM to="games">4. 具体游戏联机教程(必看)</ScrollLinkM>
             <ScrollLinkM to="issues">5. 常见问题/联机失败</ScrollLinkM>
           </VStack>
@@ -768,33 +765,6 @@ const DocumentPage = () => {
             </TabPanels>
           </Tabs>
         </Box>
-
-        {/* <Box id="room">
-          <Heading size="md" pb={2} color="#00ff17">
-            4. 联机房间说明
-          </Heading>
-          <Text>
-            需要在同一个节点方可联机；联机房间页面功能介绍看图；在一个联机房间里，谁都可以作为主机创建多人游戏，其他人则作为客机加入游戏
-          </Text>
-          <Image
-            src="/images/wg/room_introduction_1.jpg"
-            alt="room_introduction_1"
-            border="2px"
-            borderColor="#ff734f"
-            borderRadius="md"
-            w="100%"
-            maxW="500px"
-          />
-          <Image
-            src="/images/wg/room_introduction_2.jpg"
-            alt="room_introduction_2"
-            border="2px"
-            borderColor="#ff734f"
-            borderRadius="md"
-            w="100%"
-            maxW="500px"
-          />
-        </Box> */}
 
         <Box id="games">
           <Heading size="md" pb={2} color="#00ff17">

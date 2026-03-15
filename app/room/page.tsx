@@ -720,6 +720,12 @@ export default function Page() {
             </Text>
           )}
 
+          {roomData?.members.length === 1 && (
+            <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
+              邀请你的联机伙伴加入房间才能联机
+            </Text>
+          )}
+
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
               离线状态无法联机！请安装WG客户端

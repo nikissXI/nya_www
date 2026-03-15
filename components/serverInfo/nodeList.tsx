@@ -271,14 +271,6 @@ export const ServerNodeListModal: React.FC = () => {
   const [filterBy, setFilterBy] = useState("all");
   // const nodeListRef = useRef<HTMLDivElement>(null);
 
-  const Suggestions = [
-    "线路选择指南：多线 - 适合中国大陆任意网络；电信 - 适合电信宽带或流量上网；跨境 - 适合跨中国大陆（即国内和国外）联机；海外 - 除中国大陆外都适合",
-    "负载值解读：负载越低节点越流畅，高峰期可能拥挤导致卡顿，追求稳定可选择金色的赞助节点",
-    "带宽选择：M表示Mbps，每个用户可使用的最高网络带宽。大部分游戏1M足够，联机人数多时建议选择更大带宽的节点",
-    "延迟说明：网络延迟越低越好，单位是毫秒(ms)。实际游戏联机延迟是主机与客机延迟的总和",
-    "选择建议：优先选择延迟低、负载小、带宽足够的节点，根据您的网络环境选择合适的线路类型",
-  ];
-
   // 处理节点数据
   const nodes = nodeMap ? Array.from(nodeMap.values()) : [];
   const filteredNodes = filterNodes(nodes, filterBy);
@@ -318,7 +310,7 @@ export const ServerNodeListModal: React.FC = () => {
     >
       <ModalOverlay />
       <ModalContent
-        bgColor="#3b4960e3"
+        bgColor="#3b4960f1"
         maxW={{ base: "90vw", md: "360px" }}
         py={4}
       >
@@ -454,10 +446,79 @@ export const ServerNodeListModal: React.FC = () => {
             {!userInfo?.wg_data?.node_alias && (
               <Text fontSize="sm" align="center" color="#ffca3d">
                 请选择一个节点，点击节点名称即可
-                <br />
-                如果不会选，窗口底部有节点选择建议
               </Text>
             )}
+
+            <Text fontSize="sm" textAlign="center">
+              点击选择联机节点，不会选看讲解
+              <Button
+                ml={1}
+                color="#7dd4ff"
+                bgColor="transparent"
+                onClick={toggleExpanded}
+                variant="link"
+                fontSize="sm"
+              >
+                {isExpanded ? "收起讲解" : "查看讲解"}
+              </Button>
+            </Text>
+
+            <Collapse in={isExpanded} animateOpacity>
+              <List
+                maxH="30vh"
+                overflowY="auto"
+                spacing={3}
+                p={2}
+                borderRadius="lg"
+                bgColor="rgba(255, 255, 255, 0.05)"
+                border="1px solid rgba(255, 255, 255, 0.1)"
+              >
+                <ListItem>
+                  <Text color="gray.200" fontSize="sm" mt={1}>
+                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    线路选择指南：
+                    <br />
+                    多线 - 适合中国大陆任意网络
+                    <br />
+                    电信 - 适合电信宽带或流量上网
+                    <br />
+                    跨境 - 适合跨中国大陆（即国内和国外）联机
+                    <br />
+                    海外 - 除中国大陆外都适合
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <Text color="gray.200" fontSize="sm" mt={1}>
+                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    负载值解读：
+                    <br />
+                    负载越低节点越流畅，高峰期可能拥挤导致卡顿
+                    <br />
+                    追求稳定可选择金色的赞助节点
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <Text color="gray.200" fontSize="sm" mt={1}>
+                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    带宽选择：
+                    <br />
+                    M表示Mbps，每个用户可使用的最高网络带宽
+                    <br />
+                    大部分游戏1M足够，联机人数多时建议选择更大带宽的节点
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <Text color="gray.200" fontSize="sm" mt={1}>
+                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    延迟说明：
+                    <br />
+                    网络延迟越低越好，单位是毫秒(ms)
+                    <br />
+                    实际游戏联机延迟是主机与客机延迟的总和
+                  </Text>
+                </ListItem>
+              </List>
+            </Collapse>
 
             <Stack
               spacing={3}
@@ -485,50 +546,7 @@ export const ServerNodeListModal: React.FC = () => {
           </VStack>
         </ModalBody>
 
-        <ModalFooter py={0} flexDirection="column">
-          <Text fontSize="sm">
-            点击选择联机节点，不会选看讲解
-            <Button
-              ml={1}
-              color="#7dd4ff"
-              bgColor="transparent"
-              onClick={toggleExpanded}
-              variant="link"
-              fontSize="sm"
-            >
-              {isExpanded ? "收起讲解" : "查看讲解"}
-            </Button>
-          </Text>
-
-          <Collapse in={isExpanded} animateOpacity>
-            <List
-              maxH="30vh"
-              overflowY="auto"
-              spacing={3}
-              mt={2}
-              p={4}
-              borderRadius="lg"
-              bgColor="rgba(255, 255, 255, 0.05)"
-              border="1px solid rgba(255, 255, 255, 0.1)"
-            >
-              {Suggestions.map((suggestion, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <ListItem>
-                    <Text color="gray.200" fontSize="sm" mt={1}>
-                      <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
-                      {suggestion}
-                    </Text>
-                  </ListItem>
-                </motion.div>
-              ))}
-            </List>
-          </Collapse>
-        </ModalFooter>
+        <ModalFooter py={0} flexDirection="column"></ModalFooter>
       </ModalContent>
     </Modal>
   );
