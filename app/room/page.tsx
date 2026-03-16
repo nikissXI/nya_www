@@ -17,12 +17,7 @@ import {
   ModalFooter,
   useDisclosure,
   Flex,
-  Switch,
   Tag,
-  useColorModeValue,
-  List,
-  ListItem,
-  ListIcon,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -34,12 +29,11 @@ import { useUserStateStore } from "@/store/user-state";
 import { getAuthToken } from "@/store/authKey";
 import { copyText, isInteger } from "@/utils/strings";
 import { IoIosExit } from "react-icons/io";
-import { FaCheck, FaTimes } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
 import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
-import { MdTipsAndUpdates } from "react-icons/md";
+import OfflineReasons from "@/components/docs/OfflineReasons";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -89,12 +83,6 @@ export default function Page() {
     onClose: setPassOnClose,
   } = useDisclosure();
 
-  const {
-    isOpen: setNoticeIsOpen,
-    onOpen: setNoticeOnOpen,
-    onClose: setNoticeOnClose,
-  } = useDisclosure();
-
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
 
   const [inputRoomId, setInputRoomId] = useState("");
@@ -112,7 +100,7 @@ export default function Page() {
     disableFlush,
     setShowLoginModal,
     setNodeListModal,
-    tunnelName,
+    setOfflineReasonsModal,
   } = useUserStateStore();
 
   useEffect(() => {
@@ -314,14 +302,6 @@ export default function Page() {
     }
   };
 
-  const OfflineReasons = [
-    `隧道名称是否为${tunnelName}，如果不是，到联机教程导入正确隧道`,
-    "导入的隧道必须是自己账号的！不能用其他人给的conf_key/二维码/隧道文件",
-    "特殊区域（如学校、公司）的网络会拦截WG流量，试试流量上网可进行验证",
-    "如果跨境联机请使用跨境线路的节点，如香港A节点",
-    "部分国家无法直接连接喵服（目前已知俄罗斯不行），这种情况需要找服主特殊处理",
-  ];
-
   function standbyPage() {
     return (
       <Box textAlign="center">
@@ -418,7 +398,7 @@ export default function Page() {
         <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
           <ModalOverlay />
           <ModalContent bgColor="#002f5c">
-            <ModalHeader>设置房间密码</ModalHeader>
+            <ModalHeader>设置加入房间的密码</ModalHeader>
 
             <ModalCloseButton />
 
@@ -628,33 +608,7 @@ export default function Page() {
             </Flex>
           )}
 
-          {/* 连接失败原因Modal */}
-          <Modal isOpen={setNoticeIsOpen} onClose={setNoticeOnClose}>
-            <ModalOverlay />
-            <ModalContent bg="#202e4fe0" color="white" mx={5} py={5}>
-              <ModalHeader>
-                <Heading size="lg">自行逐项检查</Heading>
-              </ModalHeader>
-              <ModalCloseButton />
-
-              <ModalBody>
-                <VStack align="start" spacing={3}>
-                  <List spacing={5}>
-                    {OfflineReasons.map((reason, index) => (
-                      <ListItem
-                        key={index}
-                        textAlign="left"
-                        color={reason.includes("跨境") ? "#ffca3d" : "white"}
-                      >
-                        <ListIcon as={MdTipsAndUpdates} />
-                        {reason}
-                      </ListItem>
-                    ))}
-                  </List>
-                </VStack>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+          <OfflineReasons />
           <Flex align="center" mt={1}>
             <Text
               fontSize={18}
@@ -663,7 +617,7 @@ export default function Page() {
               fontWeight="bold"
               color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
             >
-              {onlineStatus === "离线" ? "WG离线" : "在线"}
+              {onlineStatus}
             </Text>
 
             {onlineStatus === "在线" && latency && (
@@ -691,6 +645,14 @@ export default function Page() {
             </Button>
           </Flex>
 
+          {onlineStatus === "在线" &&
+            roomData?.members.length === 1 &&
+            roomRole === "hoster" && (
+              <Text color="#ffca3d" size="sm" textAlign="center" mt={1}>
+                邀请你的联机伙伴加入房间才能联机
+              </Text>
+            )}
+
           {roomRole !== "none" && (
             <Text fontSize={18} fontWeight="bold" mr={3}>
               <Text
@@ -714,15 +676,9 @@ export default function Page() {
                     setPassOnOpen();
                   }}
                 >
-                  设置房间密码
+                  设置密码
                 </Button>
               )}
-            </Text>
-          )}
-
-          {roomData?.members.length === 1 && (
-            <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
-              邀请你的联机伙伴加入房间才能联机
             </Text>
           )}
 
@@ -747,27 +703,28 @@ export default function Page() {
                 variant="link"
                 bg="transparent"
                 color="#7dd4ff"
-                onClick={setNoticeOnOpen}
+                onClick={setOfflineReasonsModal}
               >
                 点我排查
               </Button>
             </Text>
           )}
 
-          {onlineStatus === "在线" && roomRole !== "none" && (
+          {onlineStatus === "在线" && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
               {carouselMessages[carouselIndex]}
               <br />
-              玩家均在线但不会联机
+              复习联机教程
               <Button
                 variant="link"
                 bg="transparent"
                 color="#7dd4ff"
                 onClick={() => {
-                  router.push(`/docs#games`);
+                  router.push(`/docs`);
+                  //#games
                 }}
               >
-                👉点我
+                👉点我查看
               </Button>
             </Text>
           )}

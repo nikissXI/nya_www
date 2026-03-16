@@ -48,8 +48,7 @@ const TunnelUpdateModal = () => {
         <ModalHeader alignSelf="center">请更新WG隧道文件</ModalHeader>
         <ModalBody>
           <Text>你获取了新ip，旧ip及其隧道已失效</Text>
-          <Text>需要下载并导入新隧道才能正常连接喵服</Text>
-          <Text>到联机教程页面，再操作一次“WG下载和隧道导入”即可</Text>
+          <Text>需要导入新IP的隧道才能连接喵服</Text>
 
           <Text textAlign="center" mt={4}>
             {!canClose && `还有 ${countdown} 秒可以跳转`}

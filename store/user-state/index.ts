@@ -131,6 +131,9 @@ interface ILoginStateSlice {
 
   showLoginModal: boolean;
   setShowLoginModal: () => void;
+
+  showOfflineReasonsModal: boolean;
+  setOfflineReasonsModal: () => void;
 }
 
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
@@ -735,11 +738,19 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       showLoginModal: false,
-
       setShowLoginModal: () => {
         set(
           produce((draft) => {
             draft.showLoginModal = !draft.showLoginModal;
+          }),
+        );
+      },
+
+      showOfflineReasonsModal: false,
+      setOfflineReasonsModal: () => {
+        set(
+          produce((draft) => {
+            draft.showOfflineReasonsModal = !draft.showOfflineReasonsModal;
           }),
         );
       },
