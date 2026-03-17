@@ -39,11 +39,7 @@ const OfflineReasons = () => {
           <VStack align="start" spacing={3}>
             <List spacing={5}>
               {OfflineReasons.map((reason, index) => (
-                <ListItem
-                  key={index}
-                  textAlign="left"
-                  color={reason.includes("跨境") ? "#ffca3d" : "white"}
-                >
+                <ListItem key={index} textAlign="left">
                   <ListIcon as={MdTipsAndUpdates} />
                   {reason}
                 </ListItem>
