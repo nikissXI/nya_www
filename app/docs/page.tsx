@@ -361,14 +361,14 @@ const DocumentPage = () => {
         如果你是第一次用组网软件，需要点耐心和细心看完教程
       </Heading>
 
-      <Text>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        喵服是基于WireGuard(简称WG)组网的联机平台，手机、电脑都能安装喵服
-      </Text>
-
       <Text my={2}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         使用喵服联机的玩家都要注册账号，并跟着教程安装WG客户端、导入隧道
+      </Text>
+
+      <Text>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        手机、电脑都能安装WG客户端，要安装在运行游戏的设备上
       </Text>
 
       <Box
