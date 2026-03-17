@@ -708,7 +708,9 @@ export default function Page() {
             </Text>
           )}
 
-          {roomRole !== "none" && carouselMessages[carouselIndex]}
+          {onlineStatus === "在线" &&
+            roomRole !== "none" &&
+            carouselMessages[carouselIndex]}
 
           {onlineStatus === "在线" && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
