@@ -242,23 +242,37 @@ const DocumentPage = () => {
   const SelectNode = () => {
     return (
       <Box mb={1}>
-        ① 选择联机节点，后续步骤导入/下载的将会是该节点的隧道；
-        <HighLight>
-          如果切换新节点，需要导入新节点的隧道；隧道不能多个玩家共用
-        </HighLight>
-        <Text fontWeight="medium" fontSize="md" mr={2}>
-          当前选择的是&ensp;{userInfo?.wg_data?.node_alias}&ensp;节点
+        <Text>
+          ① 当前选择的是&ensp;
+          <Text as="span" fontWeight="bold">
+            {userInfo?.wg_data?.node_alias}
+          </Text>
+          &ensp;节点
         </Text>
+
         <Button ml={4} onClick={setNodeListModal} size="sm">
           点击切换节点
         </Button>
+
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={2} />
+          <HighLight fontSize="sm">
+            后续步骤导入或下载的是{userInfo?.wg_data?.node_alias}
+            节点的隧道，如果切换了新节点，要来这导入新节点的隧道
+          </HighLight>
+        </Text>
+
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={2} />
+          <HighLight fontSize="sm">隧道与账号绑定，不能多个玩家共用</HighLight>
+        </Text>
       </Box>
     );
   };
 
   const CheckConnect = () => {
     return (
-      <Box mt={1}>
+      <Box mt={5}>
         ⑤ 检查WG是否连上，在线就是成功了
         <Flex align="center">
           &emsp;
@@ -352,13 +366,13 @@ const DocumentPage = () => {
         喵服是基于WireGuard(简称WG)组网的联机平台，手机、电脑都能安装喵服
       </Text>
 
-      <Text mt={2}>
+      <Text my={2}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         使用喵服联机的玩家都要注册账号，并跟着教程安装WG客户端、导入隧道
       </Text>
 
       <Box
-        mt={2}
+        mt={5}
         id="download"
         display={tunnelName === undefined ? "hidden" : "block"}
       >
@@ -411,7 +425,8 @@ const DocumentPage = () => {
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={2}>
               <SelectNode />
-              <Text>
+
+              <Text mt={5}>
                 ② 下载并安装WG客户端
                 <Text
                   as="span"
@@ -420,8 +435,12 @@ const DocumentPage = () => {
                     setAndroidDLWarning(!showAndroidDLWarning);
                   }}
                 >
-                  &ensp;如果下载不了，点我
+                  &ensp;无法下载点我
                 </Text>
+                <br />
+                <HighLight fontSize="sm">
+                  &emsp;必须使用这里下载的WG客户端
+                </HighLight>
               </Text>
 
               <Button
@@ -438,7 +457,8 @@ const DocumentPage = () => {
                   &emsp;到浏览器打开网站再下载，无法下载的都是因为在QQ、微信这些非浏览器应用中下载。
                 </Text>
               </Collapse>
-              <Box py={1}>
+
+              <Box mt={5}>
                 ③ 复制黄字
                 <Text
                   ml={2}
@@ -462,15 +482,13 @@ const DocumentPage = () => {
                 </Text>
               </Box>
               <Text>
-                然后运行WG，点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入。
+                &emsp;然后运行WG，点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入。
                 <br />
                 &emsp;导入的隧道名称应是 “{tunnelName}”
                 <br />
-                <HighLight fontSize="sm">
-                  &emsp;要在这下载的WG才有“通过conf_key导入”选项
-                </HighLight>
               </Text>
-              <Box py={1}>
+
+              <Box mt={5}>
                 ④ 打开隧道开关，就连上喵服了
                 <Flex>
                   &emsp;开关长这样=&gt;
@@ -482,9 +500,10 @@ const DocumentPage = () => {
                   />
                 </Flex>
               </Box>
-              <Flex alignItems="center">
+              <Flex alignItems="center" mt={1}>
                 &emsp;小米/红米设备要改个设置
                 <Text
+                  ml={2}
                   as="span"
                   color="#7dfffe"
                   size="sm"
@@ -505,6 +524,7 @@ const DocumentPage = () => {
                   borderRadius="md"
                 />
               </Collapse>
+
               <CheckConnect />
             </TabPanel>
 
@@ -512,7 +532,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={2}>
               <SelectNode />
 
-              <Box>
+              <Box mt={5}>
                 ② 安装WG客户端，
                 <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
                 ，如果没有海外账号，这网站里有
@@ -534,10 +554,12 @@ const DocumentPage = () => {
               </Box>
 
               <Tabs variant="line" colorScheme="orange">
-                <Text pt={2} fontWeight="bolder">
-                  iOS导入隧道有扫码和下载两种方法
+                <Text mt={5} fontWeight="bolder">
+                  iOS导入隧道可以扫码或下载
                   <br />
-                  注意不要在远程控制的状态下导入
+                  <HighLight fontSize="sm">
+                    注意不要在远程控制的状态下导入
+                  </HighLight>
                 </Text>
 
                 <TabList
@@ -569,7 +591,7 @@ const DocumentPage = () => {
                     </HighLight>
 
                     <Text>
-                      ③ 打开WG，点右上角+号，扫描二维码，隧道名称写
+                      ③ 打开WG，点右上角+号，扫描二维码，隧道名称写&ensp;
                       {tunnelName}
                     </Text>
 
@@ -588,7 +610,7 @@ const DocumentPage = () => {
                       如果点下载没反应换其他浏览器试试(触发BUG了)
                     </HighLight>
 
-                    <Text>② 下载隧道文件</Text>
+                    <Text>③ 下载隧道文件</Text>
                     {DownloadButton(true)}
 
                     <Text pt={1}>
@@ -600,7 +622,7 @@ const DocumentPage = () => {
                 </TabPanels>
               </Tabs>
 
-              <Box pt={3}>
+              <Box mt={5}>
                 ④ 打开隧道开关，就连上喵服了
                 <Flex ml={4}>
                   开关长这样=&gt;
@@ -611,9 +633,9 @@ const DocumentPage = () => {
                     alt="iOS_switch"
                   />
                 </Flex>
-                如果仍然离线，在隧道关闭的状态，检查对端的地址是否为nya-
-                {tunnelName}开头，如果不是，就删掉重新导入 <br />
-                出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
+                {/* <Text fontSize="sm">
+                  出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
+                </Text> */}
               </Box>
 
               <CheckConnect />
@@ -651,28 +673,27 @@ const DocumentPage = () => {
                   <TabPanel px={0} pb={0} pt={1}>
                     <SelectNode />
 
-                    <Flex alignItems="center">
-                      <Text>② 下载msi运行并安装</Text>
-                      <Button
-                        size="sm"
-                        mx={2}
-                        onClick={() => {
-                          window.open(
-                            process.env.NEXT_PUBLIC_WG_MSI_URL,
-                            "_blank",
-                          );
-                        }}
-                      >
-                        点击下载msi
-                      </Button>
-                    </Flex>
+                    <Text mt={5}>② 下载msi运行并安装</Text>
+                    <Button
+                      size="sm"
+                      mx={2}
+                      onClick={() => {
+                        window.open(
+                          process.env.NEXT_PUBLIC_WG_MSI_URL,
+                          "_blank",
+                        );
+                      }}
+                    >
+                      点击下载msi
+                    </Button>
 
-                    <Box>
+                    <Box mt={5}>
                       ③ 下载隧道文件，文件名为“{tunnelName}
-                      .conf” {DownloadButton()}
+                      .conf”
                     </Box>
+                    {DownloadButton()}
 
-                    <Text>
+                    <Text mt={5}>
                       ④ 跟着下图操作完成隧道导入，看红字就行
                       <br />
                       默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建
@@ -702,28 +723,29 @@ const DocumentPage = () => {
                   </TabPanel>
 
                   <TabPanel px={0} pb={0} pt={1}>
-                    <Flex alignItems="center">
-                      <Text>② 下载exe安装包</Text>
-                      <Button
-                        size="sm"
-                        mx={2}
-                        onClick={() => {
-                          window.open(
-                            process.env.NEXT_PUBLIC_WG_EXE_URL,
-                            "_blank",
-                          );
-                        }}
-                      >
-                        点击下载exe
-                      </Button>
-                    </Flex>
+                    <SelectNode />
 
-                    <Box>
+                    <Text mt={5}>② 下载exe安装包</Text>
+                    <Button
+                      size="sm"
+                      mx={2}
+                      onClick={() => {
+                        window.open(
+                          process.env.NEXT_PUBLIC_WG_EXE_URL,
+                          "_blank",
+                        );
+                      }}
+                    >
+                      点击下载exe
+                    </Button>
+
+                    <Box mt={5}>
                       ③ 下载隧道文件，文件名为“{tunnelName}
-                      .conf” {DownloadButton()}
+                      .conf”
                     </Box>
+                    {DownloadButton()}
 
-                    <Text>
+                    <Text mt={5}>
                       ④ 双击运行安装后，跟着下图操作完成隧道导入，看红字就行
                     </Text>
                     <Image
@@ -744,7 +766,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={2}>
               <SelectNode />
 
-              <Box>
+              <Box mt={5}>
                 ② 安装WG客户端，
                 <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
                 ，如果没有海外账号，这网站里有
@@ -765,12 +787,10 @@ const DocumentPage = () => {
                 />
               </Box>
 
-              <Box py={1}>
-                ③ 下载隧道文件，文件名为“{tunnelName}.conf”
-                {DownloadButton()}
-              </Box>
+              <Box mt={5}>③ 下载隧道文件，文件名为“{tunnelName}.conf”</Box>
+              {DownloadButton()}
 
-              <Box>
+              <Box mt={5}>
                 <Text>④ 运行WG，跟着下图操作完成隧道导入，看红字就行</Text>
                 <Image
                   src="/images/wg/mac.jpg"
@@ -788,7 +808,7 @@ const DocumentPage = () => {
       </Box>
 
       <Box id="games">
-        <Heading size="md" py={2} color="#00ff17">
+        <Heading size="md" pt={6} color="#00ff17">
           现在可以开始游戏联机了
         </Heading>
         <Text>
