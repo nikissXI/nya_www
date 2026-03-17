@@ -286,7 +286,7 @@ const DocumentPage = () => {
             </Box>
           </Button>
         </Flex>
-        &emsp;如果WG隧道打开还是离线👉
+        &emsp;WG隧道打开还是离线👉
         <Button
           variant="link"
           bg="transparent"
