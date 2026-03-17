@@ -57,6 +57,7 @@ export interface NodeInfo {
   bandwidth: number;
   net: number | null;
   net_type: string;
+  node_desc: string;
   ping_host: string;
   sponsor: boolean;
   delay: number;

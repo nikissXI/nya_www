@@ -244,7 +244,7 @@ const DocumentPage = () => {
       <Box mb={1}>
         ① 选择联机节点，后续步骤导入/下载的将会是该节点的隧道；
         <HighLight>
-          如果更换新节点，需要导入新节点的隧道；隧道不能多个玩家共用
+          如果切换新节点，需要导入新节点的隧道；隧道不能多个玩家共用
         </HighLight>
         <Text fontWeight="medium" fontSize="md" mr={2}>
           当前选择的是&ensp;{userInfo?.wg_data?.node_alias}&ensp;节点

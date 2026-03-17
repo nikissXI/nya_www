@@ -18,6 +18,7 @@ import {
   Icon,
   Select,
   SimpleGrid,
+  Input,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
 import { useState, useEffect, useRef } from "react";
@@ -84,10 +85,13 @@ function sortNodes(
 }
 
 // 筛选函数
-function filterNodes(nodes: NodeInfo[], filterBy: string) {
+function filterNodes(nodes: NodeInfo[], filterBy: string, searchTerm: string) {
   return nodes.filter((node) => {
     const matchesFilter = filterBy === "all" || node.net_type === filterBy;
-    return matchesFilter;
+    const matchesSearch =
+      !searchTerm ||
+      node.alias.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
   });
 }
 
@@ -155,17 +159,17 @@ const ServerNodeItem: React.FC<{
               </Text>
               {node.net !== null ? (
                 <>
-                  <Badge
-                    colorScheme={
-                      getNetTypeBadgeProps(node.net_type).colorScheme
-                    }
-                    fontSize="xs"
-                  >
+                  <Badge colorScheme="orange" fontSize="xs">
                     {node.net_type}
                   </Badge>
                   <Badge colorScheme="teal" fontSize="xs" mx={1}>
                     {node.bandwidth}M
                   </Badge>
+                  {node.node_desc && (
+                    <Badge colorScheme="gray" fontSize="xs">
+                      {node.node_desc}
+                    </Badge>
+                  )}
                 </>
               ) : (
                 <Badge colorScheme="gray" fontSize="xs">
@@ -269,11 +273,12 @@ export const ServerNodeListModal: React.FC = () => {
   const [sortBy, setSortBy] = useState("delay");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterBy, setFilterBy] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   // const nodeListRef = useRef<HTMLDivElement>(null);
 
   // 处理节点数据
   const nodes = nodeMap ? Array.from(nodeMap.values()) : [];
-  const filteredNodes = filterNodes(nodes, filterBy);
+  const filteredNodes = filterNodes(nodes, filterBy, searchTerm);
   const sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
 
   // 自动滚动到选中节点
@@ -311,137 +316,115 @@ export const ServerNodeListModal: React.FC = () => {
       <ModalOverlay />
       <ModalContent
         bgColor="#3b4960f1"
-        maxW={{ base: "90vw", md: "360px" }}
+        maxW={{ base: "full", md: "360px" }}
         py={4}
       >
         <ModalBody>
           <VStack spacing={2} align="stretch">
-            <Flex flexDirection="column" gap={3} width="100%">
-              <Flex justify="center" gap={4} width="100%">
-                <Button
-                  size="sm"
-                  onClick={async () => {
-                    if (disableGetNodeList === true) return;
-
-                    setDisableGetNodeList(true);
-                    setTimeout(() => {
-                      setDisableGetNodeList(false);
-                    }, 3000);
-
-                    await getNodeList();
-                  }}
-                  disabled={disableGetNodeList}
-                  flex="1"
+            <SimpleGrid columns={3} spacing={2} width="100%">
+              <Text fontSize="sm">节点排序</Text>
+              <Text fontSize="sm">线路筛选</Text>
+              <Text fontSize="sm">节点搜索</Text>
+              <Select
+                size="xs"
+                value={sortBy}
+                onChange={(e) => {
+                  const newSortBy = e.target.value;
+                  setSortBy(newSortBy);
+                  // 当选择带宽优先时，自动设置为降序，确保带宽大的排在前面
+                  if (newSortBy === "bandwidth") {
+                    setSortOrder("desc");
+                  } else {
+                    setSortOrder("asc");
+                  }
+                }}
+                bgColor="rgba(255, 255, 255, 0.05)"
+                borderColor="rgba(255, 255, 255, 0.1)"
+                borderRadius="md"
+                color="white"
+                width="100%"
+                height="28px"
+                _focus={{
+                  borderColor: "#7dd4ff",
+                  boxShadow: "0 0 0 1px #7dd4ff",
+                }}
+                _hover={{
+                  borderColor: "rgba(255, 255, 255, 0.3)",
+                }}
+              >
+                <option
+                  value="delay"
+                  style={{ backgroundColor: "#3b4960", color: "white" }}
                 >
-                  刷新列表
-                </Button>
-
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    if (!userInfo?.wg_data?.node_alias) {
-                      openToast({
-                        content: "选择节点后才能关闭",
-                        status: "warning",
-                      });
-                      return;
-                    }
-
-                    setNodeListModal();
-                  }}
-                  bgColor="#be2b2b"
-                  flex="1"
+                  延迟
+                </option>
+                <option
+                  value="net"
+                  style={{ backgroundColor: "#3b4960", color: "white" }}
                 >
-                  关闭窗口
-                </Button>
-              </Flex>
-
-              <Flex justify="center" gap={4} width="100%">
-                <Flex align="center" flex="1">
-                  <Select
-                    size="sm"
-                    value={sortBy}
-                    onChange={(e) => {
-                      const newSortBy = e.target.value;
-                      setSortBy(newSortBy);
-                      // 当选择带宽优先时，自动设置为降序，确保带宽大的排在前面
-                      if (newSortBy === "bandwidth") {
-                        setSortOrder("desc");
-                      } else {
-                        setSortOrder("asc");
-                      }
-                    }}
-                    bgColor="rgba(255, 255, 255, 0.05)"
-                    borderColor="rgba(255, 255, 255, 0.1)"
-                    borderRadius="lg"
-                    color="white"
-                    width="100%"
-                    _focus={{
-                      borderColor: "#7dd4ff",
-                      boxShadow: "0 0 0 1px #7dd4ff",
-                    }}
-                    _hover={{
-                      borderColor: "rgba(255, 255, 255, 0.3)",
-                    }}
+                  负载
+                </option>
+                <option
+                  value="bandwidth"
+                  style={{ backgroundColor: "#3b4960", color: "white" }}
+                >
+                  带宽
+                </option>
+                <option
+                  value="alias"
+                  style={{ backgroundColor: "#3b4960", color: "white" }}
+                >
+                  节点
+                </option>
+              </Select>
+              <Select
+                size="xs"
+                value={filterBy}
+                onChange={(e) => setFilterBy(e.target.value)}
+                borderRadius="md"
+                bgColor="rgba(255, 255, 255, 0.05)"
+                borderColor="rgba(255, 255, 255, 0.1)"
+                color="white"
+                width="100%"
+                height="28px"
+                _focus={{
+                  borderColor: "#7dd4ff",
+                  boxShadow: "0 0 0 1px #7dd4ff",
+                }}
+                _hover={{
+                  borderColor: "rgba(255, 255, 255, 0.3)",
+                }}
+              >
+                {netTypes.map((type) => (
+                  <option
+                    key={type}
+                    value={type}
+                    style={{ backgroundColor: "#3b4960", color: "white" }}
                   >
-                    <option
-                      value="delay"
-                      style={{ backgroundColor: "#3b4960", color: "white" }}
-                    >
-                      延迟优先排序
-                    </option>
-                    <option
-                      value="net"
-                      style={{ backgroundColor: "#3b4960", color: "white" }}
-                    >
-                      负载优先排序
-                    </option>
-                    <option
-                      value="bandwidth"
-                      style={{ backgroundColor: "#3b4960", color: "white" }}
-                    >
-                      带宽优先排序
-                    </option>
-                    <option
-                      value="alias"
-                      style={{ backgroundColor: "#3b4960", color: "white" }}
-                    >
-                      节点名称排序
-                    </option>
-                  </Select>
-                </Flex>
-
-                <Flex align="center" flex="1">
-                  <Select
-                    size="sm"
-                    value={filterBy}
-                    onChange={(e) => setFilterBy(e.target.value)}
-                    borderRadius="lg"
-                    bgColor="rgba(255, 255, 255, 0.05)"
-                    borderColor="rgba(255, 255, 255, 0.1)"
-                    color="white"
-                    width="100%"
-                    _focus={{
-                      borderColor: "#7dd4ff",
-                      boxShadow: "0 0 0 1px #7dd4ff",
-                    }}
-                    _hover={{
-                      borderColor: "rgba(255, 255, 255, 0.3)",
-                    }}
-                  >
-                    {netTypes.map((type) => (
-                      <option
-                        key={type}
-                        value={type}
-                        style={{ backgroundColor: "#3b4960", color: "white" }}
-                      >
-                        {type === "all" ? "筛选线路" : type}
-                      </option>
-                    ))}
-                  </Select>
-                </Flex>
-              </Flex>
-            </Flex>
+                    {type === "all" ? "所有" : type}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                size="xs"
+                placeholder="名称"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                borderRadius="md"
+                bgColor="rgba(255, 255, 255, 0.05)"
+                borderColor="rgba(255, 255, 255, 0.1)"
+                color="white"
+                width="100%"
+                height="28px"
+                _focus={{
+                  borderColor: "#7dd4ff",
+                  boxShadow: "0 0 0 1px #7dd4ff",
+                }}
+                _hover={{
+                  borderColor: "rgba(255, 255, 255, 0.3)",
+                }}
+              />
+            </SimpleGrid>
 
             {!userInfo?.wg_data?.node_alias && (
               <Text fontSize="sm" align="center" color="#ffca3d">
@@ -543,6 +526,45 @@ export const ServerNodeListModal: React.FC = () => {
                 </Box>
               )}
             </Stack>
+
+            <Flex justify="center" gap={4} width="100%">
+              <Button
+                size="sm"
+                onClick={async () => {
+                  if (disableGetNodeList === true) return;
+
+                  setDisableGetNodeList(true);
+                  setTimeout(() => {
+                    setDisableGetNodeList(false);
+                  }, 3000);
+
+                  await getNodeList();
+                }}
+                disabled={disableGetNodeList}
+                flex="1"
+              >
+                刷新列表
+              </Button>
+
+              <Button
+                size="sm"
+                onClick={() => {
+                  if (!userInfo?.wg_data?.node_alias) {
+                    openToast({
+                      content: "选择节点后才能关闭",
+                      status: "warning",
+                    });
+                    return;
+                  }
+
+                  setNodeListModal();
+                }}
+                bgColor="#be2b2b"
+                flex="1"
+              >
+                关闭窗口
+              </Button>
+            </Flex>
           </VStack>
         </ModalBody>
 

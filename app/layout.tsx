@@ -3,7 +3,6 @@ import "./globals.css";
 import Frame from "@/components/Frame";
 import React from "react";
 import { Box, ChakraProvider } from "@chakra-ui/react";
-// import SentryInit from "@/utils/SentryInit";
 
 export const metadata: Metadata = {
   title: "喵~服远程联机平台",
@@ -17,12 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      {/* <SentryInit /> */}
-
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-
       <body>
         <ChakraProvider>
           {/* 全局背景图 */}
