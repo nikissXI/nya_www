@@ -273,7 +273,7 @@ const DocumentPage = () => {
   const CheckConnect = () => {
     return (
       <Box mt={5}>
-        ⑤ 检查WG是否连上，在线就是成功了
+        ⑤ WG隧道打开5秒后点刷新，在线就可以了
         <Flex align="center">
           &emsp;
           <Text
@@ -459,7 +459,7 @@ const DocumentPage = () => {
               </Collapse>
 
               <Box mt={5}>
-                ③ 复制黄字
+                ③ 点击或长按黄字复制
                 <Text
                   ml={2}
                   as="span"
@@ -468,7 +468,7 @@ const DocumentPage = () => {
                     getConfKey();
                   }}
                 >
-                  点我刷新key
+                  key失效点我
                 </Text>
                 <Text
                   ml={1}
@@ -482,10 +482,9 @@ const DocumentPage = () => {
                 </Text>
               </Box>
               <Text>
-                &emsp;然后运行WG，点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入。
+                &emsp;然后运行WG点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入
                 <br />
                 &emsp;导入的隧道名称应是 “{tunnelName}”
-                <br />
               </Text>
 
               <Box mt={5}>

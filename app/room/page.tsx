@@ -355,7 +355,7 @@ export default function Page() {
             onClick={() => {
               if (onlineStatus === "离线") {
                 openToast({
-                  content: "需要在线状态才能创建房间",
+                  content: "WG客户端未连接",
                   status: "warning",
                 });
                 return;
@@ -373,7 +373,7 @@ export default function Page() {
             onClick={() => {
               if (onlineStatus === "离线") {
                 openToast({
-                  content: "需要在线状态才能加入房间",
+                  content: "WG客户端未连接",
                   status: "warning",
                 });
                 return;
@@ -684,8 +684,6 @@ export default function Page() {
 
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
-              离线状态无法联机！请安装WG客户端
-              <br />
               WG客户端下载和教程👉
               <Button
                 variant="link"
@@ -710,10 +708,10 @@ export default function Page() {
             </Text>
           )}
 
+          {roomRole !== "none" && carouselMessages[carouselIndex]}
+
           {onlineStatus === "在线" && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
-              {carouselMessages[carouselIndex]}
-              <br />
               复习联机教程
               <Button
                 variant="link"
