@@ -320,8 +320,8 @@ export const ServerNodeListModal: React.FC = () => {
         py={4}
       >
         <ModalBody>
-          <VStack spacing={2} align="stretch">
-            <SimpleGrid columns={3} spacing={2} width="100%">
+          <VStack spacing={1} align="stretch">
+            <SimpleGrid columns={3} spacingX={3} spacingY={1} width="100%">
               <Text fontSize="sm">节点排序</Text>
               <Text fontSize="sm">线路筛选</Text>
               <Text fontSize="sm">节点搜索</Text>
@@ -425,12 +425,6 @@ export const ServerNodeListModal: React.FC = () => {
                 }}
               />
             </SimpleGrid>
-
-            {!userInfo?.wg_data?.node_alias && (
-              <Text fontSize="sm" align="center" color="#ffca3d">
-                请选择一个节点，点击节点名称即可
-              </Text>
-            )}
 
             <Text fontSize="sm" textAlign="center">
               点击选择联机节点，不会选看讲解
@@ -551,7 +545,8 @@ export const ServerNodeListModal: React.FC = () => {
                 onClick={() => {
                   if (!userInfo?.wg_data?.node_alias) {
                     openToast({
-                      content: "选择节点后才能关闭",
+                      content:
+                        "选择节点后才能关闭，如果没有合适的节点，先随便选一个",
                       status: "warning",
                     });
                     return;
