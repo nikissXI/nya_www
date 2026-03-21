@@ -173,7 +173,7 @@ const ServerNodeItem: React.FC<{
                 </>
               ) : (
                 <Badge colorScheme="gray" fontSize="xs">
-                  离线
+                  故障
                 </Badge>
               )}
             </Flex>
