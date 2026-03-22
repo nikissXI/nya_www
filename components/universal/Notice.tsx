@@ -9,9 +9,11 @@ export const NoticeText = () => {
         温馨提示
       </Heading>
       <Text px={10} textAlign="left">
-        如果网站不能正常加载或功能异常，请更换浏览器试试，以下仅做推荐
-        <br />
-        别用百度浏览器！别用百度浏览器！别用百度浏览器！
+        <Text as="span" color="gold">
+          如果网站不能正常加载或功能异常，请更换浏览器试试，以下仅做推荐
+          <br />
+          别用百度浏览器！别用百度浏览器！别用百度浏览器！
+        </Text>
         <br />
         苹果：内置浏览器Safari
         <br />
@@ -19,7 +21,7 @@ export const NoticeText = () => {
         <br />
         电脑：谷歌、火狐、edge
         <br />
-        仍然无法解决就加服主QQ：1299577815
+        仍然无法解决就加Q群1047464328找群主(即服主)
       </Text>
     </VStack>
   );
