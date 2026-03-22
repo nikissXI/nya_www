@@ -617,7 +617,7 @@ export default function Page() {
               fontWeight="bold"
               color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
             >
-              {onlineStatus}
+              {onlineStatus === "在线" ? "在线" : "WG未连接!!"}
             </Text>
 
             {onlineStatus === "在线" && latency && (

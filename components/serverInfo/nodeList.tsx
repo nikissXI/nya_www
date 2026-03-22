@@ -21,7 +21,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -374,7 +374,7 @@ export const ServerNodeListModal: React.FC = () => {
                   value="alias"
                   style={{ backgroundColor: "#3b4960", color: "white" }}
                 >
-                  节点
+                  名称
                 </option>
               </Select>
               <Select
