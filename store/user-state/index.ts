@@ -1,4 +1,7 @@
-import { produce } from "immer";
+import { produce, enableMapSet } from "immer";
+
+// Enable Map and Set support for Immer
+enableMapSet();
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
@@ -422,17 +425,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // 选择最低延迟
           const minDelay = Math.min(delay1, delay2);
 
-          if (node) {
-            set(
-              produce((draft) => {
-                node.delay = minDelay;
-                const newMap = new Map(get().nodeMap);
-                // 合并旧数据和新数据
-                newMap.set(node_alias, node);
-                draft.nodeMap = newMap;
-              }),
-            );
-          }
+          set(
+            produce((draft) => {
+              const draftNode = draft.nodeMap.get(node_alias);
+              if (draftNode) {
+                draftNode.delay = minDelay;
+              }
+            }),
+          );
+
           return minDelay;
         } catch (error) {
           if (error instanceof Error) {
@@ -454,17 +455,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             });
           }
 
-          if (node) {
-            set(
-              produce((draft) => {
-                node.delay = 0;
-                const newMap = new Map(get().nodeMap);
-                // 合并旧数据和新数据
-                newMap.set(node_alias, node);
-                draft.nodeMap = newMap;
-              }),
-            );
-          }
+          set(
+            produce((draft) => {
+              const draftNode = draft.nodeMap.get(node_alias);
+              if (draftNode) {
+                draftNode.delay = 0;
+              }
+            }),
+          );
+
           return 0;
         }
       },
