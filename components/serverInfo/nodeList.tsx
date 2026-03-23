@@ -33,8 +33,8 @@ import { motion } from "framer-motion";
 
 // 负载等级判断函数
 function getNetBadgeProps(net: number) {
-  if (net < 50) return { colorScheme: "green" };
-  if (net < 85) return { colorScheme: "yellow" };
+  if (net <= 50) return { colorScheme: "green" };
+  if (net <= 85) return { colorScheme: "yellow" };
   return { colorScheme: "red" };
 }
 

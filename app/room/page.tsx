@@ -101,6 +101,7 @@ export default function Page() {
     setShowLoginModal,
     setNodeListModal,
     setOfflineReasonsModal,
+    nodeNetLoad,
   } = useUserStateStore();
 
   useEffect(() => {
@@ -595,15 +596,75 @@ export default function Page() {
               borderRadius="md"
               boxShadow="sm"
               mb={1}
+              bg="rgba(75, 127, 187, 0.38)"
+              p={3}
+              w="100%"
+              maxW="300px"
             >
-              <Text fontWeight="medium" fontSize="md" mr={2}>
-                联机节点：
-                <Text as="span" fontWeight="bold">
-                  {userInfo?.wg_data?.node_alias}
-                </Text>
-              </Text>
-              <Button rounded="md" onClick={setNodeListModal} size="sm">
-                切换
+              <Flex direction="column" flex="1" mr={3}>
+                <Flex align="center" mb={1}>
+                  {nodeNetLoad !== -1 ? (
+                    <Text fontWeight="medium" fontSize="sm">
+                      负载
+                      <Text
+                        as="span"
+                        ml={1}
+                        fontWeight="bold"
+                        color={
+                          nodeNetLoad >= 85
+                            ? "#ff4444"
+                            : nodeNetLoad >= 50
+                              ? "#ffa524"
+                              : "#3fdb1d"
+                        }
+                      >
+                        {nodeNetLoad}%
+                      </Text>
+                    </Text>
+                  ) : (
+                    <Text fontWeight="bold" fontSize="md" color="#ff5333">
+                      节点故障
+                    </Text>
+                  )}
+
+                  <Text as="span" fontWeight="bold" mx="auto">
+                    {userInfo?.wg_data?.node_alias}
+                  </Text>
+                </Flex>
+
+                {nodeNetLoad !== -1 && (
+                  <Box
+                    w="100%"
+                    h="6px"
+                    bg="rgba(255, 255, 255, 0.2)"
+                    borderRadius="full"
+                    overflow="hidden"
+                  >
+                    <Box
+                      w={`${Math.min(nodeNetLoad, 100)}%`}
+                      h="100%"
+                      bg={
+                        nodeNetLoad > 80
+                          ? "#ff4444"
+                          : nodeNetLoad > 50
+                            ? "#ffa524"
+                            : "#3fdb1d"
+                      }
+                      borderRadius="full"
+                      transition="width 0.3s ease"
+                    />
+                  </Box>
+                )}
+              </Flex>
+              <Button
+                rounded="md"
+                onClick={setNodeListModal}
+                size="sm"
+                bgColor="#007bc0"
+                _hover={{ bgColor: "#005a9e" }}
+                color="white"
+              >
+                切换节点
               </Button>
             </Flex>
           )}

@@ -117,6 +117,7 @@ interface ILoginStateSlice {
   pingHost: string | undefined;
   tunnelName: string | undefined;
   latency: number | undefined;
+  nodeNetLoad: number;
   onlineStatus: "在线" | "离线";
 
   // 刷新房间信息冷却
@@ -351,6 +352,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             draft.roomRole = "none";
             draft.roomData = undefined;
             draft.latency = undefined;
+            draft.nodeNetLoad = -1;
           }),
         );
       },
@@ -599,6 +601,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       pingHost: undefined,
       tunnelName: undefined,
       latency: undefined,
+      nodeNetLoad: -1,
       onlineStatus: "离线",
 
       // 刷新房间信息冷却
@@ -699,6 +702,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
 
           const roomData = data.data as RoomInfo;
+          const nodeNetLoad = data.node_net_load;
 
           let roomRole: string = "none";
           if (roomData) {
@@ -708,6 +712,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.roomRole = roomRole;
+              draft.nodeNetLoad = nodeNetLoad;
             }),
           );
 
