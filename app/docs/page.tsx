@@ -80,6 +80,7 @@ const articles: Article[] = [
   { path: "/docs/minecraft", title: "我的世界（全平台）" },
   { path: "/docs/wizardOfLegend", title: "传说法师手游（安卓、iOS）" },
   { path: "/docs/isaac", title: "以撒的结合（PC）" },
+  { path: "/docs/overcooked", title: "胡闹厨房（PC）" },
   { path: "/docs/doNotStarve", title: "饥荒（PC）" },
   { path: "/docs/mindustry", title: "像素工厂（全平台）" },
   { path: "/docs/machinesAtWar3", title: "机械战争3（全平台）" },
@@ -606,7 +607,7 @@ const DocumentPage = () => {
                     <HighLight fontSize="sm">
                       建议使用Safari浏览器访问网站再下载
                       <br />
-                      如果点下载没反应换其他浏览器试试(触发BUG了)
+                      如果点了下载没反应就是触发BUG了，等几分钟或换个浏览器再试试
                     </HighLight>
 
                     <Text>③ 下载隧道文件</Text>
@@ -615,7 +616,9 @@ const DocumentPage = () => {
                     <Text pt={1}>
                       打开浏览器的下载任务列表，点击文件“
                       {tunnelName}
-                      .conf”，然后点左下角发送到WG完成导入
+                      .conf”，然后点左下角发送到WG
+                      <br />
+                      或者，到WG里导入配置也行
                     </Text>
                   </TabPanel>
                 </TabPanels>
@@ -632,9 +635,9 @@ const DocumentPage = () => {
                     alt="iOS_switch"
                   />
                 </Flex>
-                {/* <Text fontSize="sm">
-                  出现DBS解析失败是因为没给WG访问网络的权限，如果已经给权限就换个网络试试。
-                </Text> */}
+                <Text fontSize="sm">
+                  如果出现DBS解析失败，并重新打开几次都不行，就换个网络再试
+                </Text>
               </Box>
 
               <CheckConnect />
