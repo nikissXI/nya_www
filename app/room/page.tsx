@@ -706,14 +706,6 @@ export default function Page() {
             </Button>
           </Flex>
 
-          {onlineStatus === "在线" &&
-            roomData?.members.length === 1 &&
-            roomRole === "hoster" && (
-              <Text color="#ffca3d" size="sm" textAlign="center" mt={1}>
-                邀请你的联机伙伴加入房间才能联机
-              </Text>
-            )}
-
           {roomRole !== "none" && (
             <Text fontSize={18} fontWeight="bold" mr={3}>
               <Text
@@ -742,6 +734,14 @@ export default function Page() {
               )}
             </Text>
           )}
+
+          {onlineStatus === "在线" &&
+            roomData?.members.length === 1 &&
+            roomRole === "hoster" && (
+              <Text color="#ffca3d" size="sm" textAlign="center">
+                邀请你的联机伙伴加入房间才能联机
+              </Text>
+            )}
 
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
@@ -774,7 +774,7 @@ export default function Page() {
             carouselMessages[carouselIndex]}
 
           {onlineStatus === "在线" && (
-            <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
+            <Text size="sm" textAlign="center" mb={2}>
               复习联机教程
               <Button
                 variant="link"
