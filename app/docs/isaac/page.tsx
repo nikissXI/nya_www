@@ -20,6 +20,10 @@ export default function Page() {
 
       <Text textAlign="center">喵服关联QQ群：1074963191</Text>
 
+      <Text textAlign="center">
+        联机流量不一定100%能走喵服，如果使用喵服后还是觉得卡顿，可以加群找服主问问
+      </Text>
+
       <Divider my={5} />
 
       <BackButton />

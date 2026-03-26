@@ -338,7 +338,7 @@ const DocumentPage = () => {
         }}
         isDisabled={userInfo ? false : true}
       >
-        点击下载隧道文件
+        点击下载{userInfo?.wg_data?.node_alias}隧道文件
       </Button>
     );
   };

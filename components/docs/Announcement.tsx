@@ -53,7 +53,7 @@ export const AnnouncementsModal = ({}) => {
           ) : serverData.announcements &&
             serverData.announcements.length > 0 ? (
             <Text noOfLines={1}>
-              公告更新时间
+              节点公告&ensp;
               {formatDate(serverData.announcements[0].timestamp, true)}
             </Text>
           ) : (
