@@ -30,6 +30,7 @@ export function Header({ path }: { path: string }) {
       juicyRealm: "恶果之地",
       aresVirus2: "阿瑞斯病毒2",
       overcooked: "胡闹厨房",
+      survivalcraft: "生存战争",
     };
 
     const titles: { [key: string]: string } = {

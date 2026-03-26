@@ -34,6 +34,10 @@ const DocFlex = ({ children }: { children: React.ReactNode }) => {
         </Text>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={2} />
+          手机或平板做主机时，要保持在游戏中，否则客机无法加入或掉线
+        </Text>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={2} />
           电脑Windows做主机时，如果客机无法加入，把系统防火墙都关闭再试试
         </Text>
       </Box>
