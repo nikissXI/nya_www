@@ -50,24 +50,21 @@ export default function Page() {
 
       <Text mt={3}>下方用安卓国际版演示，其他平台的类似（自己摸索一下）</Text>
 
-      <Text mt={3}>
-        进入多人模式，选择玩家（如果没有就新建），然后点开始游戏
-      </Text>
       <Image src="/images/terraria/terraria_1.jpg" alt="terraria_1" />
 
-      <Text mt={3}>
-        这个界面大部分时候是搜索不到的，别在这傻等。如果你要做主机，就点右下角的“+主机”
-      </Text>
-      <Image src="/images/terraria/terraria_2.jpg" alt="terraria_2" />
+      <Heading size="lg" textAlign="center" mt={3}>
+        主机操作步骤
+      </Heading>
 
-      <Text mt={3}>然后选择地图（如果没有就新建）</Text>
       <Image src="/images/terraria/terraria_3.jpg" alt="terraria_3" />
 
-      <Text mt={3}>客机（加入的）点这个，然后点右下角的“+添加”</Text>
-      <Image src="/images/terraria/terraria_4.jpg" alt="terraria_4" />
+      <Heading size="lg" textAlign="center" mt={5}>
+        客机操作步骤
+      </Heading>
 
-      <Text mt={3}>填主机的喵服IP，端口号默认7777就行，然后点开始游戏</Text>
-      <Image src="/images/terraria/terraria_5.jpg" alt="terraria_5" />
+      <Image src="/images/terraria/terraria_2.jpg" alt="terraria_2" />
+
+      <Image src="/images/terraria/terraria_4.jpg" alt="terraria_4" />
 
       <Divider my={5} />
 
