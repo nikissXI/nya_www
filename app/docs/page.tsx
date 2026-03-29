@@ -275,7 +275,7 @@ const DocumentPage = () => {
   const CheckConnect = () => {
     return (
       <Box mt={5}>
-        ⑤ WG隧道打开5秒后点刷新，在线就可以了
+        ⑤ WG隧道打开后<HighLight>等5秒</HighLight>点刷新，在线就可以了
         <Flex align="center">
           &emsp;
           <Text
