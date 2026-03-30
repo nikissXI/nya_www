@@ -502,7 +502,7 @@ const DocumentPage = () => {
                 </Flex>
               </Box>
               <Flex alignItems="center" mt={1}>
-                &emsp;小米/红米设备要改个设置
+                &emsp;<HighLight>小米/红米设备要改个设置</HighLight>
                 <Text
                   ml={2}
                   as="span"
