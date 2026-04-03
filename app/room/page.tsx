@@ -51,6 +51,15 @@ const carouselMessages = [
   "关闭浏览器不影响联机，WG不关即可",
   "联机时使用该页面上显示的联机IP",
   "房间里任意玩家都可以当主机",
+  "如果校园网联机体验不佳，换流量试试",
+];
+
+const carouselMessagesVip = [
+  "关闭浏览器不影响联机，WG不关即可",
+  "联机时使用该页面上显示的联机IP",
+  "房间里任意玩家都可以当主机",
+  "如果校园网联机体验不佳，换流量试试",
+  "联机有任何问题都可以联系服主",
 ];
 
 export default function Page() {
@@ -65,7 +74,7 @@ export default function Page() {
       setCarouselIndex(
         (prevIndex) => (prevIndex + 1) % carouselMessages.length,
       );
-    }, 10000);
+    }, 8000);
 
     // 清理定时器
     return () => clearInterval(interval);
@@ -770,8 +779,10 @@ export default function Page() {
           )}
 
           {onlineStatus === "在线" &&
-            roomRole !== "none" &&
-            carouselMessages[carouselIndex]}
+          roomRole !== "none" &&
+          userInfo?.sponsorship > 10
+            ? carouselMessagesVip[carouselIndex]
+            : carouselMessages[carouselIndex]}
 
           {onlineStatus === "在线" && (
             <Text size="sm" textAlign="center" mb={2}>
