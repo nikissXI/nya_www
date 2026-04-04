@@ -779,10 +779,10 @@ export default function Page() {
           )}
 
           {onlineStatus === "在线" &&
-          roomRole !== "none" &&
-          userInfo?.sponsorship > 10
-            ? carouselMessagesVip[carouselIndex]
-            : carouselMessages[carouselIndex]}
+            roomRole !== "none" &&
+            (userInfo?.sponsorship > 10
+              ? carouselMessagesVip[carouselIndex]
+              : carouselMessages[carouselIndex])}
 
           {onlineStatus === "在线" && (
             <Text size="sm" textAlign="center" mb={2}>
