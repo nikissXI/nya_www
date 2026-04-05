@@ -272,49 +272,6 @@ const DocumentPage = () => {
     );
   };
 
-  const CheckConnect = () => {
-    return (
-      <Box mt={5}>
-        ⑤ WG隧道打开后<HighLight>等5秒</HighLight>点刷新，在线就可以了
-        <Flex align="center">
-          &emsp;
-          <Text
-            mr={1}
-            fontWeight="bold"
-            color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
-          >
-            {onlineStatus}
-          </Text>
-          <Button
-            bg="transparent"
-            h={5}
-            px={0}
-            disabled={disableFlush}
-            onClick={() => {
-              getRoomData(false);
-            }}
-            ml={1}
-            color="#7dd4ff"
-          >
-            <Text>刷新</Text>
-            <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
-              <TbReload size={18} />
-            </Box>
-          </Button>
-        </Flex>
-        &emsp;WG隧道打开还是离线👉
-        <Button
-          variant="link"
-          bg="transparent"
-          color="#7dd4ff"
-          onClick={setOfflineReasonsModal}
-        >
-          点我排查
-        </Button>
-      </Box>
-    );
-  };
-
   const DownloadButton = (isIOS: boolean = false) => {
     return (
       <Button
@@ -525,8 +482,6 @@ const DocumentPage = () => {
                   borderRadius="md"
                 />
               </Collapse>
-
-              <CheckConnect />
             </TabPanel>
 
             {/* iOS */}
@@ -640,8 +595,6 @@ const DocumentPage = () => {
                   如果出现DBS解析失败，并重新打开几次都不行，就换个网络再试
                 </Text>
               </Box>
-
-              <CheckConnect />
             </TabPanel>
 
             {/* windows */}
@@ -760,8 +713,6 @@ const DocumentPage = () => {
                     />
                   </TabPanel>
                 </TabPanels>
-
-                <CheckConnect />
               </Tabs>
             </TabPanel>
 
@@ -803,20 +754,56 @@ const DocumentPage = () => {
                   maxW="500px"
                 />
               </Box>
-
-              <CheckConnect />
             </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
 
-      <Box id="games">
-        <Heading size="md" pt={6} color="#00ff17">
-          现在可以开始游戏联机了
-        </Heading>
-        <Text>
+      <Box mt={5}>
+        ⑤ WG隧道打开后<HighLight>等5秒</HighLight>点刷新，在线就可以了
+        <Flex align="center">
           &emsp;
-          支持填IP加入的游戏都支持使用喵服联机，通过局域网搜索的部分支持。在下方列表中的游戏就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台。<HighLight>点击游戏名阅读联机操作指导</HighLight>，没有的游戏请自行尝试或加群1047464328找群(即服主)询问
+          <Text
+            mr={1}
+            fontWeight="bold"
+            color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
+          >
+            {onlineStatus}
+          </Text>
+          <Button
+            bg="transparent"
+            h={5}
+            px={0}
+            disabled={disableFlush}
+            onClick={() => {
+              getRoomData(false);
+            }}
+            ml={1}
+            color="#7dd4ff"
+          >
+            <Text>刷新</Text>
+            <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
+              <TbReload size={18} />
+            </Box>
+          </Button>
+        </Flex>
+        &emsp;WG隧道打开还是离线👉
+        <Button
+          variant="link"
+          bg="transparent"
+          color="#7dd4ff"
+          onClick={setOfflineReasonsModal}
+        >
+          点我排查
+        </Button>
+      </Box>
+
+      <Box id="games" mt={5}>
+        <Text>
+          ⑥
+          在下方列表中的游戏就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台。
+          <HighLight>点击游戏名阅读联机操作指导</HighLight>
+          ，没有的游戏请自行尝试或加群1047464328找群(即服主)询问
         </Text>
         <Box>
           <Input
