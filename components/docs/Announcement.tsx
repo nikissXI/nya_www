@@ -40,9 +40,9 @@ export const AnnouncementsModal = ({}) => {
   return (
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
-        {/* <Text color="#ffca3d" size="sm">
-          明天将会移除两个节点，具体请看公告
-        </Text> */}
+        <Text color="#ffca3d" size="sm">
+          香港A暂时停用，跨境联机请用广州H
+        </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
           {serverData === undefined ? (
