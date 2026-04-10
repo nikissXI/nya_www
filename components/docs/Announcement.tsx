@@ -41,7 +41,7 @@ export const AnnouncementsModal = ({}) => {
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
         <Text color="#ffca3d" size="sm">
-          4月10日上午维护，合并部分节点
+          4月11日上午维护，合并部分节点
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
