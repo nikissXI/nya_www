@@ -40,9 +40,9 @@ export const AnnouncementsModal = ({}) => {
   return (
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
-        <Text color="#ffca3d" size="sm">
+        {/* <Text color="#ffca3d" size="sm">
           多个节点有调整，具体看群公告
-        </Text>
+        </Text> */}
 
         <Flex justify="center" align="center" wrap="wrap">
           {serverData === undefined ? (
