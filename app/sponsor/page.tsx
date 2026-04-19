@@ -109,13 +109,13 @@ const Page = () => {
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
-              赞助记录永久有效并可累计，解锁的节点不限期不限次使用
+              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用（注意：专用节点需要每个账号都赞助解锁）
             </HighLight>
           </ListItem>
 
           <ListItem textAlign="left">
             <ListIcon as={RiVipCrownFill} />
-            赞助可获得专属铭牌，并根据累计赞助金额解锁专用联机节点(名称金色的节点)
+            赞助可获得专属铭牌，并且累计赞助10元解锁专用节点（其中跨境节点需要20元）
           </ListItem>
 
           <ListItem textAlign="left">
