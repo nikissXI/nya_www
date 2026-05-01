@@ -82,8 +82,8 @@ interface ILoginStateSlice {
   getTunnel: () => void;
 
   // 是否下次登录跳转到教程问答区
-  goToIssues: boolean;
-  setGoToIssues: (state: boolean) => void;
+  goToDoc: boolean;
+  setGoToDoc: (state: boolean) => void;
 
   // 登录加载状态
   loginLoading: boolean;
@@ -92,6 +92,9 @@ interface ILoginStateSlice {
   getUserInfo: () => Promise<void>;
   // 退出登录
   logout: () => void;
+
+  // 获取邀请码
+  getInviteCode: () => void;
 
   // 获取节点延迟
   getNodeLatency: (
@@ -146,6 +149,27 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
     return {
       // 访问唯一标识
       uuid: "",
+
+      // 邀请码
+      getInviteCode: () => {
+        // 判断url中是否存在i参数
+        const urlParams = new URLSearchParams(window.location.search);
+        var inviteCode = urlParams.get("i");
+        // url中存在邀请码参数，则存入
+        if (inviteCode) {
+          localStorage.setItem("inviteCode", inviteCode);
+          console.log(`从邀请码url中获取邀请码: ${inviteCode}`);
+        }
+        // else {
+        //   // url中不存在邀请码参数，则从localStorage中获取
+        //   inviteCode = localStorage.getItem("inviteCode");
+        //   if (inviteCode) {
+        //     console.log(`从邀请码localStorage中获取邀请码: ${inviteCode}`);
+        //   } else {
+        //     console.log("邀请码不存在");
+        //   }
+        // }
+      },
 
       // 网站访问数据和关联群
       serverData: undefined,
@@ -244,11 +268,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       // 是否下次登录跳转到教程问答区
-      goToIssues: false,
-      setGoToIssues: (goToIssues: boolean) => {
+      goToDoc: false,
+      setGoToDoc: (goToDoc: boolean) => {
         set(
           produce((draft) => {
-            draft.goToIssues = goToIssues;
+            draft.goToDoc = goToDoc;
           }),
         );
       },

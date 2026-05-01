@@ -22,7 +22,6 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Link as ScrollLink } from "react-scroll";
 import { useUserStateStore } from "@/store/user-state";
 import { useRouter } from "next/navigation";
 import { openToast } from "@/components/universal/toast";
@@ -31,21 +30,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
-import { GiNetworkBars } from "react-icons/gi";
 import OfflineReasons from "@/components/docs/OfflineReasons";
-
-interface TableOfContentsLinkProps {
-  to: string;
-  children: React.ReactNode;
-}
-
-const ScrollLinkM: React.FC<TableOfContentsLinkProps> = ({ to, children }) => {
-  return (
-    <ScrollLink to={to} smooth={true} duration={500} offset={-100}>
-      <Text>{children}</Text>
-    </ScrollLink>
-  );
-};
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
@@ -59,12 +44,6 @@ const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
-
-function getColor(latency: number) {
-  if (latency > 100) return "#ffa524";
-  else if (latency > 0) return "#3fdb1d";
-  else return "#ff3b3b";
-}
 
 interface Article {
   path: string;
@@ -92,22 +71,16 @@ const articles: Article[] = [
 
 const DocumentPage = () => {
   const {
-    setGoToIssues,
+    setGoToDoc,
     confKey,
     getConfKey,
     userInfo,
     setNodeListModal,
     tunnelName,
-    roomData,
     getRoomData,
-    setRoomData,
-    roomRole,
-    latency,
-    getTunnel,
     onlineStatus,
     rotate,
     disableFlush,
-    setShowLoginModal,
     setOfflineReasonsModal,
   } = useUserStateStore();
 
@@ -116,13 +89,13 @@ const DocumentPage = () => {
   useEffect(() => {
     if (userInfo?.wg_data) {
       getConfKey();
-      setGoToIssues(false);
+      setGoToDoc(false);
     } else {
-      setGoToIssues(true);
+      setGoToDoc(true);
       openToast({ content: "请登陆后再访问教程", status: "info" });
       router.push("/me");
     }
-  }, [userInfo, getConfKey, router, setGoToIssues]);
+  }, [userInfo, getConfKey, router, setGoToDoc]);
 
   const handleCopyLink = async (confKey: string) => {
     try {
@@ -179,29 +152,6 @@ const DocumentPage = () => {
 
   //////////////////////
   //////////////////////
-  const [showScroll, setShowScroll] = useState(false);
-
-  const handleScroll = () => {
-    if (window.scrollY > 150) {
-      setShowScroll(true);
-    } else {
-      setShowScroll(false);
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -210,22 +160,6 @@ const DocumentPage = () => {
       // 设置一个延迟，确保页面加载完成后再执行滚动
       const timer = setTimeout(() => {
         const gamesElement = document.getElementById(hash.replace("#", ""));
-        if (gamesElement) {
-          window.scrollTo({
-            top: gamesElement.offsetTop - 150,
-            behavior: "smooth",
-          });
-        }
-      }, 500);
-
-      // 清理定时器
-      return () => clearTimeout(timer);
-    }
-
-    if (hash === "#download") {
-      // 设置一个延迟，确保页面加载完成后再执行滚动
-      const timer = setTimeout(() => {
-        const gamesElement = document.getElementById("download");
         if (gamesElement) {
           window.scrollTo({
             top: gamesElement.offsetTop - 150,
@@ -303,18 +237,6 @@ const DocumentPage = () => {
   return (
     <Box px={5}>
       <OfflineReasons />
-      {/* <Box>
-          <Heading size="md" pb={2} color="#00ff17">
-            目录（点击可跳转）
-          </Heading>
-          <VStack spacing={2} align="start" color="#7dfffe">
-            <ScrollLinkM to="notice">1. 前言</ScrollLinkM>
-            <ScrollLinkM to="download">2. WG下载和隧道导入</ScrollLinkM>
-            <ScrollLinkM to="games">3. 具体游戏联机教程(必看)</ScrollLinkM>
-          </VStack>
-        </Box>
-
-        <Divider /> */}
 
       <Heading size="md" pb={2} color="#00ff17">
         如果你是第一次用组网软件，需要点耐心和细心看完教程
@@ -330,11 +252,7 @@ const DocumentPage = () => {
         手机、电脑都能安装WG客户端，要安装在运行游戏的设备上
       </Text>
 
-      <Box
-        mt={5}
-        id="download"
-        display={tunnelName === undefined ? "hidden" : "block"}
-      >
+      <Box mt={5} display={tunnelName === undefined ? "hidden" : "block"}>
         {/* <Heading size="md" pb={2} color="#00ff17">
           2. WG下载和隧道导入
         </Heading>*/}

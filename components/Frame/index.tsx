@@ -13,6 +13,7 @@ import { LoginModal } from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
 import TunnelUpdateModal from "../docs/ReGetIpModal";
 import { ServerNodeListModal } from "../serverInfo/nodeList";
+import { useEffect } from "react";
 
 export default function Frame({
   children,
@@ -20,7 +21,12 @@ export default function Frame({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname(); // 获取当前路径名
-  const { loginLoading } = useUserStateStore();
+  const { loginLoading, getInviteCode } = useUserStateStore();
+
+  // 登录加载完成后获取邀请码
+  useEffect(() => {
+    getInviteCode();
+  }, [getInviteCode]);
 
   return (
     <>

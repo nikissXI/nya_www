@@ -8,7 +8,6 @@ import { useState, useEffect, useCallback } from "react";
 
 export default function Footer({ path }: { path: string }) {
   const router = useRouter();
-  // const rootPath = "/" + path.split("/")[1];
 
   const [activeButton, setActiveButton] = useState<string>("");
 

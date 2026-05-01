@@ -40,7 +40,7 @@ export function LoginModal() {
 
   const {
     userInfo,
-    goToIssues,
+    goToDoc,
     uuid,
     getUserInfo,
     showLoginModal,
@@ -131,8 +131,8 @@ export function LoginModal() {
         setAuthToken(data.token);
         getUserInfo();
         setShowLoginModal();
-        if (goToIssues === true) {
-          router.push("/docs#issues");
+        if (goToDoc === true) {
+          router.push("/docs");
         }
       } else {
         openToast({ content: data.msg, status: "warning" });
