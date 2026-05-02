@@ -26,6 +26,11 @@ export default function Page() {
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
+        注意，苹果系统只能作为主机，不能作为客机（即不能搜索房间）
+      </Text>
+
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
         玩家都处于同个联机房间并在线后，主机进游戏创建联机房间，创建好后不要切出游戏外，客机进游戏点加入房间搜索即可
       </Text>
 

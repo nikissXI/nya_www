@@ -301,7 +301,7 @@ const DocumentPage = () => {
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={2}>
-              <HighLight>注意！不兼容华为鸿蒙6系统</HighLight>
+              <HighLight>注意！目前不支持鸿蒙6系统</HighLight>
 
               <SelectNode />
 
