@@ -155,9 +155,10 @@ const Page = () => {
                 borderRadius="md"
                 border="1px solid #ffeeba"
               >
-                <Text color="#856404" fontWeight="bold">
-                  ⚠️ 重要提醒：在付款备注中填写您的喵服UID
+                <Text color="#856404" fontWeight="bold" fontSize="xl">
+                  ⚠️ 在付款备注中写上喵服UID，否则无法录入
                 </Text>
+
                 <Box
                   display="flex"
                   alignItems="center"
@@ -178,6 +179,7 @@ const Page = () => {
                       ? `UID：${userInfo.uid}`
                       : `（请先登录查看您的UID）`}
                   </Text>
+
                   <Button
                     colorScheme="blue"
                     size="sm"
@@ -204,6 +206,7 @@ const Page = () => {
                     复制UID
                   </Button>
                 </Box>
+
                 <Text color="#856404">
                   赞助信息由服主手动录入，因此更新有延迟；如果催录入、漏了备注、无法备注、无法付款等等，请联系服主
                   <br />
