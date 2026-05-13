@@ -13,8 +13,8 @@ export default function Page() {
   // 平台亮点数据
   const highlights = [
     {
-      title: "免费使用",
-      description: "无需付费，多个免费节点直接使用",
+      title: "免费无广",
+      description: "多个免费节点直接使用，无任何广告",
       icon: "✨",
     },
     {

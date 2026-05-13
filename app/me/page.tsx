@@ -407,11 +407,7 @@ export default function UserProfilePage() {
   };
 
   return (
-    <Flex
-      direction="column"
-      px={{ base: 4, md: 8 }}
-      align="center"
-    >
+    <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
       <AnnouncementsModal />
 
       <Modal isOpen={bindTELIsOpen} onClose={bindTELOnClose}>
@@ -861,6 +857,8 @@ export default function UserProfilePage() {
                   <Text ml={3}>联机IP地址：</Text>
                   <Text fontWeight="bold">{userInfo.wg_data.ip}</Text>
                 </Flex>
+
+                <Text ml={3}>联机教程请到联机房间页面查看</Text>
 
                 <Flex direction="column" align="stretch">
                   <Flex>
