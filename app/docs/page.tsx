@@ -301,7 +301,9 @@ const DocumentPage = () => {
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={2}>
-              <HighLight>注意！目前不支持鸿蒙6系统</HighLight>
+              <HighLight>
+                注意！WG不兼容鸿蒙6系统，不过可以联系服主了解其他联机方式
+              </HighLight>
 
               <SelectNode />
 
