@@ -15,6 +15,10 @@ export default function Page() {
       </Text>
 
       <Text my={1}>
+        端游不清楚能否跟手游联机，待验证
+      </Text>
+
+      <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         玩家都处于同个联机房间并在线后，主机创建多人游戏，客机进浏览游戏，右上角的连接选LAN，然后刷新房间列表即可
       </Text>

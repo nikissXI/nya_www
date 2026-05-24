@@ -61,7 +61,7 @@ const articles: Article[] = [
   { path: "/docs/wizardOfLegend", title: "传说法师手游（安卓、iOS）" },
   { path: "/docs/isaac", title: "以撒的结合（PC）" },
   { path: "/docs/overcooked", title: "胡闹厨房（PC）" },
-  { path: "/docs/doNotStarve", title: "饥荒（PC）" },
+  { path: "/docs/doNotStarve", title: "饥荒（全平台）" },
   { path: "/docs/mindustry", title: "像素工厂（全平台）" },
   { path: "/docs/machinesAtWar3", title: "机械战争3（全平台）" },
   { path: "/docs/projectZomboid", title: "僵尸毁灭工程（PC）" },
