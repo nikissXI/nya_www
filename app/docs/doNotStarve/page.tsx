@@ -15,7 +15,7 @@ export default function Page() {
       </Text>
 
       <Text my={1}>
-        端游不清楚能否跟手游联机，待验证
+        端游目前不能与手游联机
       </Text>
 
       <Text my={1}>
