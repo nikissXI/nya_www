@@ -525,7 +525,7 @@ const DocumentPage = () => {
 
               <Text mt={5}>
                 ②
-                下载msi运行并安装，如果运行不了msi安装包，自己网上搜解决办法或联系服主协助
+                下载并安装WG客户端，如果双击无法安装，自己网上搜“msi文件无法打开”解决
               </Text>
               <Button
                 size="sm"
@@ -534,7 +534,7 @@ const DocumentPage = () => {
                   window.open(process.env.NEXT_PUBLIC_WG_MSI_URL, "_blank");
                 }}
               >
-                点击下载msi
+                点击下载安装包
               </Button>
 
               <Box mt={5}>
