@@ -29,6 +29,23 @@ export default function Page() {
 
   return (
     <DocFlex>
+      <Text my={3} fontSize="lg">
+        电脑端联机建议用UU加速器(里面有免费组网联机功能)，比喵服更简单易用
+        <Link ml={1} color="#7dd4ff" href="https://uu.163.com/" target="_blank">
+          https://uu.163.com/
+        </Link>
+        <br />
+        UU加速器联机使用教程
+        <Link
+          ml={1}
+          color="#7dd4ff"
+          href="https://www.bilibili.com/video/BV1wbQbBmEPv/"
+          target="_blank"
+        >
+          https://www.bilibili.com/video/BV1wbQbBmEPv/
+        </Link>
+      </Text>
+
       <Heading size="lg" textAlign="center">
         Java、基岩版通用
       </Heading>
