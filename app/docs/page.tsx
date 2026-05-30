@@ -415,11 +415,11 @@ const DocumentPage = () => {
                 <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
                 ，如果没有海外账号，这网站里有
                 <Link
-                  href="https://id.ali-door.top/share/damaiye"
+                  href="https://nodewu.com/iosid"
                   color="#7dfffe"
                   target="_blank"
                 >
-                  https://id.ali-door.top/share/damaiye
+                  https://nodewu.com/iosid
                 </Link>
                 ，或者自己去注册或租一个
                 <Image
