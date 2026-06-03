@@ -461,7 +461,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <br />
                     跨境 - 适合跨中国大陆（即国内和国外）联机
                     <br />
-                    海外 - 除中国大陆外都适合
+                    境外 - 除中国大陆外都适合
                   </Text>
                 </ListItem>
                 <ListItem>
