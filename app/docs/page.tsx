@@ -328,7 +328,7 @@ const DocumentPage = () => {
                 ml={4}
                 size="sm"
                 onClick={() => {
-                  window.open(process.env.NEXT_PUBLIC_WG_APK_URL, "_blank");
+                  window.open("/apks/wireguard.apk", "_blank");
                 }}
               >
                 点击下载安装包
@@ -526,15 +526,28 @@ const DocumentPage = () => {
               <Text mt={5}>
                 ②
                 下载并安装WG客户端，如果双击无法安装，自己网上搜“msi文件无法打开”解决
+                <br />
+                安装包有新版和旧版，新版连接报错就换旧版试试
               </Text>
+
               <Button
                 size="sm"
                 mx={2}
                 onClick={() => {
-                  window.open(process.env.NEXT_PUBLIC_WG_MSI_URL, "_blank");
+                  window.open("/apks/wireguard-amd64-1.1.msi", "_blank");
                 }}
               >
-                点击下载安装包
+                点击下载安装包(新)
+              </Button>
+
+              <Button
+                size="sm"
+                mx={2}
+                onClick={() => {
+                  window.open("/apks/wireguard-amd64-0.5.3.msi", "_blank");
+                }}
+              >
+                点击下载安装包(旧)
               </Button>
 
               <Box mt={5}>
@@ -553,7 +566,7 @@ const DocumentPage = () => {
                   as="span"
                   color="#7dfffe"
                   onClick={() => {
-                    window.open(process.env.NEXT_PUBLIC_BAT_FIX_URL, "_blank");
+                    window.open("/apks/修复VM错误.bat", "_blank");
                   }}
                 >
                   点击下载
@@ -568,123 +581,6 @@ const DocumentPage = () => {
                 maxW="500px"
               />
             </TabPanel>
-            {/* <TabPanel px={0} pb={1} pt={2}>
-              <Tabs variant="line" colorScheme="orange">
-                <Text fontWeight="bolder">
-                  客户端有msi和exe两种安装包 ，如果msi不能安装就用exe
-                </Text>
-                <TabList
-                  mt={1}
-                  display="inline-flex"
-                  alignItems="center"
-                  maxW="fit-content"
-                >
-                  <Tab
-                    py={1}
-                    fontWeight="bolder"
-                    _selected={{ color: "white", bg: "blue.600" }}
-                  >
-                    msi(推荐)
-                  </Tab>
-                  <Tab
-                    py={1}
-                    fontWeight="bolder"
-                    _selected={{ color: "white", bg: "blue.600" }}
-                  >
-                    exe
-                  </Tab>
-                </TabList>
-
-                <TabPanels>
-                  <TabPanel px={0} pb={0} pt={1}>
-                    <SelectNode />
-
-                    <Text mt={5}>② 下载msi运行并安装</Text>
-                    <Button
-                      size="sm"
-                      mx={2}
-                      onClick={() => {
-                        window.open(
-                          process.env.NEXT_PUBLIC_WG_MSI_URL,
-                          "_blank",
-                        );
-                      }}
-                    >
-                      点击下载msi
-                    </Button>
-
-                    <Box mt={5}>
-                      ③ 下载隧道文件，文件名为“{tunnelName}
-                      .conf”
-                    </Box>
-                    {DownloadButton()}
-
-                    <Text mt={5}>
-                      ④ 跟着下图操作完成隧道导入，看红字就行
-                      <br />
-                      默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建
-                      <br />
-                      如果无法连接并且电脑安装过vmvare，就下载这个bat文件，
-                      <Text
-                        as="span"
-                        color="#7dfffe"
-                        onClick={() => {
-                          window.open(
-                            process.env.NEXT_PUBLIC_BAT_FIX_URL,
-                            "_blank",
-                          );
-                        }}
-                      >
-                        点击下载
-                      </Text>
-                      ，然后右键“以管理员身份运行”修复
-                    </Text>
-                    <Image
-                      src="/images/wg/win_msi.jpg"
-                      alt="win_msi"
-                      borderRadius="md"
-                      w="100%"
-                      maxW="500px"
-                    />
-                  </TabPanel>
-
-                  <TabPanel px={0} pb={0} pt={1}>
-                    <SelectNode />
-
-                    <Text mt={5}>② 下载exe安装包</Text>
-                    <Button
-                      size="sm"
-                      mx={2}
-                      onClick={() => {
-                        window.open(
-                          process.env.NEXT_PUBLIC_WG_EXE_URL,
-                          "_blank",
-                        );
-                      }}
-                    >
-                      点击下载exe
-                    </Button>
-
-                    <Box mt={5}>
-                      ③ 下载隧道文件，文件名为“{tunnelName}
-                      .conf”
-                    </Box>
-                    {DownloadButton()}
-
-                    <Text mt={5}>
-                      ④ 双击运行安装后，跟着下图操作完成隧道导入，看红字就行
-                    </Text>
-                    <Image
-                      src="/images/wg/win_exe.jpg"
-                      alt="win_exe"
-                      borderRadius="md"
-                      w="100%"
-                      maxW="500px"
-                    />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </TabPanel> */}
 
             {/* MAC */}
             <TabPanel px={0} pb={1} pt={2}>
