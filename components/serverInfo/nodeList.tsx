@@ -457,7 +457,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <br />
                     多线 - 适合中国大陆任意网络
                     <br />
-                    电信 - 适合电信宽带或流量上网
+                    电信 - 适合中国电信用户（不懂就别选）
                     <br />
                     跨境 - 适合跨中国大陆（即国内和国外）联机
                     <br />
@@ -469,19 +469,9 @@ export const ServerNodeListModal: React.FC = () => {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     负载值解读：
                     <br />
-                    负载越低节点越流畅，高峰期可能拥挤导致卡顿
+                    负载越低节点越流畅，负载高就会导致联机卡顿
                     <br />
-                    追求稳定可选择金色的赞助节点
-                  </Text>
-                </ListItem>
-                <ListItem>
-                  <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
-                    带宽选择：
-                    <br />
-                    M表示Mbps，每个用户可使用的最高网络带宽
-                    <br />
-                    大部分游戏1M足够，联机人数多时建议选择更大带宽的节点
+                    追求稳定可选择金色的赞助节点（用的人少）
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -489,9 +479,17 @@ export const ServerNodeListModal: React.FC = () => {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     延迟说明：
                     <br />
-                    网络延迟越低越好，单位是毫秒(ms)
+                    网络延迟一般来说越低越好，如果不是延迟敏感游戏不必追求低延迟
                     <br />
                     实际游戏联机延迟是主机与客机延迟的总和
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <Text color="gray.200" fontSize="sm" mt={1}>
+                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    带宽选择：
+                    <br />
+                    大部分游戏1M足够，如果1M节点低负载的时候也卡顿，就试试2M的
                   </Text>
                 </ListItem>
               </List>

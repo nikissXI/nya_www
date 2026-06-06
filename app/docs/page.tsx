@@ -527,18 +527,8 @@ const DocumentPage = () => {
                 ②
                 下载并安装WG客户端，如果双击无法安装，自己网上搜“msi文件无法打开”解决
                 <br />
-                安装包有新版和旧版，新版连接报错就换旧版试试
+                <HighLight>安装包有A版和B版，A版连接报错就换B版试试</HighLight>
               </Text>
-
-              <Button
-                size="sm"
-                mx={2}
-                onClick={() => {
-                  window.open("/apks/wireguard-amd64-1.1.msi", "_blank");
-                }}
-              >
-                点击下载安装包(新)
-              </Button>
 
               <Button
                 size="sm"
@@ -547,7 +537,17 @@ const DocumentPage = () => {
                   window.open("/apks/wireguard-amd64-0.5.3.msi", "_blank");
                 }}
               >
-                点击下载安装包(旧)
+                点击下载安装包(A)
+              </Button>
+
+              <Button
+                size="sm"
+                mx={2}
+                onClick={() => {
+                  window.open("/apks/wireguard-amd64-1.1.msi", "_blank");
+                }}
+              >
+                点击下载安装包(B)
               </Button>
 
               <Box mt={5}>
@@ -560,7 +560,7 @@ const DocumentPage = () => {
                 ④ 跟着下图操作完成隧道导入，看红字就行
                 <br />
                 默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建
-                <br />
+                {/* <br />
                 如果无法连接并且电脑安装过vmvare，就下载这个bat文件，
                 <Text
                   as="span"
@@ -571,7 +571,7 @@ const DocumentPage = () => {
                 >
                   点击下载
                 </Text>
-                ，然后右键“以管理员身份运行”修复
+                ，然后右键“以管理员身份运行”修复 */}
               </Text>
               <Image
                 src="/images/wg/win_msi.jpg"

@@ -11,7 +11,7 @@ export default function Page() {
     <DocFlex>
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        喵服关联QQ群：1028235187
+        喵服关联QQ群：641115719
       </Text>
 
       <Text my={1}>
