@@ -31,6 +31,7 @@ const RelateGroups = () => {
           喵服关联QQ群
         </Center>
 
+        <Center my={1}>综合服务群&ensp;1047464328</Center>
         {serverData?.relateGroup?.map(
           (group, index) =>
             group.qq !== 1047464328 &&
@@ -38,9 +39,8 @@ const RelateGroups = () => {
               <Center key={index} my={1}>
                 {group.name}&ensp;{group.qq}
               </Center>
-            )
+            ),
         )}
-        <Center my={1}>综合服务群&ensp;1047464328</Center>
       </Flex>
     </Box>
   );
