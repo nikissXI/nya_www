@@ -10,10 +10,6 @@ import { MdTipsAndUpdates } from "react-icons/md";
 export default function Page() {
   return (
     <DocFlex>
-      <Heading my={3} size="md" textAlign="center">
-        教程仍未完善，欢迎加群补充
-      </Heading>
-
       <DocLink
         linkText="杀戮尖塔2手游移植版获取方式"
         linkUrl="https://space.bilibili.com/116375500/dynamic"
@@ -22,6 +18,16 @@ export default function Page() {
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         喵服关联QQ群：698892019
+      </Text>
+
+      <Text mt={3}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        使用喵服联机的时候，要把联机大厅mod关掉，否则会冲突导致无法联机
+      </Text>
+
+      <Text mt={3}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        该游戏联机建议使用节点STS，专门为这游戏开的
       </Text>
 
       <Text mt={3}>
