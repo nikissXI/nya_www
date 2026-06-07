@@ -41,7 +41,7 @@ export const AnnouncementsModal = ({}) => {
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
         <Text color="#ffca3d" size="sm">
-          多个节点有增删，具体看群公告
+          喵服不适合玩MC，请选其他联机工具
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
