@@ -414,9 +414,10 @@ const DocumentPage = () => {
                 ② 安装WG客户端，
                 <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
                 ，如果没有海外账号，给如下几个建议
-                <br /> &emsp;1.自己网上找教程注册一个，以后干别的也用得上
+                <br /> &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
                 <br /> &emsp;2.tb或pdd搜“苹果游戏”租个号，选类似“国际服手游大全”
                 <br /> &emsp;3.网上搜“苹果账号分享”，碰碰运气
+                <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
                 <Image
                   src="/images/wg/app_store.jpg"
                   alt="app_store"

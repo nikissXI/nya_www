@@ -41,7 +41,7 @@ export const AnnouncementsModal = ({}) => {
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
         <Text color="#ffca3d" size="sm">
-          喵服不适合玩MC，请选其他联机工具
+          我的世界的玩家，请选其他联机工具
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
