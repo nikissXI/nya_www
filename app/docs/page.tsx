@@ -414,7 +414,8 @@ const DocumentPage = () => {
                 ② 安装WG客户端，
                 <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
                 ，如果没有海外账号，给如下几个建议
-                <br /> &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
+                <br />{" "}
+                &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
                 <br /> &emsp;2.tb或pdd搜“苹果游戏”租个号，选类似“国际服手游大全”
                 <br /> &emsp;3.网上搜“苹果账号分享”，碰碰运气
                 <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
@@ -523,18 +524,10 @@ const DocumentPage = () => {
                 ②
                 下载并安装WG客户端，如果双击无法安装，自己网上搜“msi文件无法打开”解决
                 <br />
-                <HighLight>安装包有A版和B版，A版连接报错就换B版试试</HighLight>
+                <HighLight>
+                  如果新版连接隧道报错，就换旧版试试，还不行就加群找群主问问
+                </HighLight>
               </Text>
-
-              <Button
-                size="sm"
-                mx={2}
-                onClick={() => {
-                  window.open("/apks/wireguard-amd64-0.5.3.msi", "_blank");
-                }}
-              >
-                点击下载安装包(A)
-              </Button>
 
               <Button
                 size="sm"
@@ -543,7 +536,17 @@ const DocumentPage = () => {
                   window.open("/apks/wireguard-amd64-1.1.msi", "_blank");
                 }}
               >
-                点击下载安装包(B)
+                点击下载安装包(新)
+              </Button>
+
+              <Button
+                size="sm"
+                mx={2}
+                onClick={() => {
+                  window.open("/apks/wireguard-amd64-0.5.3.msi", "_blank");
+                }}
+              >
+                点击下载安装包(旧)
               </Button>
 
               <Box mt={5}>
@@ -586,7 +589,8 @@ const DocumentPage = () => {
                 ② 安装WG客户端，
                 <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
                 ，如果没有海外账号，给如下几个建议
-                <br /> &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
+                <br />{" "}
+                &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
                 <br /> &emsp;2.tb或pdd搜“苹果游戏”租个号，选类似“国际服手游大全”
                 <br /> &emsp;3.网上搜“苹果账号分享”，碰碰运气
                 <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）

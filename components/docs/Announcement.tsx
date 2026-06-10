@@ -41,7 +41,7 @@ export const AnnouncementsModal = ({}) => {
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
         <Text color="#ffca3d" size="sm">
-          我的世界的玩家，请选其他联机工具
+          杀戮尖塔联机有专用节点STS
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
