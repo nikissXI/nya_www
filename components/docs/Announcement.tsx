@@ -16,6 +16,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
+import { useEffect, useState } from "react";
 
 const formatDate = (rawTs: number, short: boolean = false): string => {
   // 支持秒或毫秒
@@ -32,16 +33,36 @@ const formatDate = (rawTs: number, short: boolean = false): string => {
   else return `${year}年${month}月${date}日 ${hours}:${minutes}`;
 };
 
+const carouselMessages = [
+  "杀戮尖塔联机有专用节点STS",
+  "不建议用喵服玩MC，联机会卡",
+  "切换节点后，要使用对应隧道",
+];
+
 export const AnnouncementsModal = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { serverData } = useUserStateStore();
 
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  // 轮播效果：每5秒更换一条消息
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCarouselIndex(
+        (prevIndex) => (prevIndex + 1) % carouselMessages.length,
+      );
+    }, 8000);
+
+    // 清理定时器
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
         <Text color="#ffca3d" size="sm">
-          杀戮尖塔联机有专用节点STS
+          {carouselMessages[carouselIndex]}
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
