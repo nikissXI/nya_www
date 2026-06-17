@@ -14,9 +14,7 @@ export default function Page() {
         喵服关联QQ群：641115719
       </Text>
 
-      <Text my={1}>
-        端游目前不能与手游联机
-      </Text>
+      <Text my={1}>端游目前不能与手游联机</Text>
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
@@ -27,11 +25,12 @@ export default function Page() {
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        如果房间列表搜索不到，按“~”调出控制台，输入命令“c_connect(&quot;主机IP&quot;,10999,&quot;密码&quot;)”，如“c_connect(&quot;100.64.0.1&quot;,10999,&quot;123456&quot;)”
+        电脑端联机时，如果房间列表搜索不到，按“~”调出控制台，输入命令“c_connect(&quot;主机IP&quot;,10999,&quot;密码&quot;)”，如“c_connect(&quot;100.64.0.1&quot;,10999,&quot;123456&quot;)”，如果仍然搜不到，主机关闭系统防火墙后再试
       </Text>
+
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        如果仍然搜不到，主机关闭系统防火墙后再试
+        手游端联机时，如果客机加入时提示“这个服务器仅允许在相同局域网的玩家连接”，主机重开游戏再试试
       </Text>
 
       <Divider my={5} />
