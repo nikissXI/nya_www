@@ -53,7 +53,7 @@ interface Article {
 const articles: Article[] = [
   { path: "/docs/theEscapists", title: "逃脱者手游（安卓、iOS）" },
   { path: "/docs/stardewValley", title: "星露谷物语（全平台）" },
-  { path: "/docs/doNotStarve", title: "饥荒（全平台）" },
+  { path: "/docs/doNotStarve", title: "饥荒联机版（全平台）" },
   { path: "/docs/slayTheSpire", title: "杀戮尖塔（全平台）" },
   { path: "/docs/terraria", title: "泰拉瑞亚（全平台）" },
   { path: "/docs/l4d2", title: "求生之路2（PC）" },
@@ -417,7 +417,8 @@ const DocumentPage = () => {
                 <br />
                 &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
                 <br /> &emsp;2.tb或pdd搜“苹果游戏”租个号，选类似“国际服手游大全”
-                <br /> &emsp;3.网上搜“苹果账号分享”，这是随机搜的一个，不包能用 https://nodewu.com/iosid/
+                <br /> &emsp;3.网上搜“苹果账号分享”，这是随机搜的一个，不包能用
+                https://nodewu.com/iosid/
                 <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
                 <Image
                   src="/images/wg/app_store.jpg"
@@ -524,6 +525,8 @@ const DocumentPage = () => {
                 ②
                 下载并安装WG客户端，如果双击无法安装，自己网上搜“msi文件无法打开”解决
                 <br />
+                如果文件下载失败，就加Q群1047464328，群文件有
+                <br />
                 <HighLight>
                   如果新版连接隧道报错，就换旧版试试，还不行就加群找群主问问
                 </HighLight>
@@ -592,7 +595,8 @@ const DocumentPage = () => {
                 <br />
                 &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
                 <br /> &emsp;2.tb或pdd搜“苹果游戏”租个号，选类似“国际服手游大全”
-                <br /> &emsp;3.网上搜“苹果账号分享”，这是随机搜的一个，不包能用 https://nodewu.com/iosid/
+                <br /> &emsp;3.网上搜“苹果账号分享”，这是随机搜的一个，不包能用
+                https://nodewu.com/iosid/
                 <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
                 <Image
                   src="/images/wg/app_store_mac.jpg"
