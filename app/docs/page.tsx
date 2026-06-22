@@ -527,12 +527,10 @@ const DocumentPage = () => {
                 <br />
                 如果文件下载失败，就加Q群1047464328，群文件有
                 <br />
-                <HighLight>
-                  如果新版连接隧道报错，就换旧版试试，还不行就加群找群主问问
-                </HighLight>
+                <HighLight>如果连接隧道报错，可以加Q群找群主问问</HighLight>
               </Text>
 
-              <Button
+              {/* <Button
                 size="sm"
                 mx={2}
                 onClick={() => {
@@ -540,7 +538,7 @@ const DocumentPage = () => {
                 }}
               >
                 点击下载安装包(新)
-              </Button>
+              </Button> */}
 
               <Button
                 size="sm"
@@ -549,7 +547,7 @@ const DocumentPage = () => {
                   window.open("/apks/wireguard-amd64-0.5.3.msi", "_blank");
                 }}
               >
-                点击下载安装包(旧)
+                点击下载安装包
               </Button>
 
               <Box mt={5}>
