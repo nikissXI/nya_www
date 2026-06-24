@@ -522,8 +522,15 @@ const DocumentPage = () => {
               <SelectNode />
 
               <Text mt={5}>
-                ②
-                下载并安装WG客户端，如果双击无法安装，自己网上搜“msi文件无法打开”解决
+                ② 下载并安装WG客户端，如果双击无法安装，看这个
+                <Link
+                  ml={1}
+                  color="#7dd4ff"
+                  href="https://zhuanlan.zhihu.com/p/589250265"
+                  target="_blank"
+                >
+                  点我跳转
+                </Link>
                 <br />
                 如果文件下载失败，就加Q群1047464328，群文件有
                 <br />
