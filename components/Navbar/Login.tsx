@@ -27,8 +27,7 @@ import { getHash, validateTel, validateEmail } from "@/utils/strings";
 import { setAuthToken } from "@/store/authKey";
 
 interface LoginReqBody {
-  verifyType: string; // 注册类型：qq或tel
-  account: string; // 手机或QQ
+  account: string; // 手机或邮箱
   password: string; // 登陆密码sha256
   uuid: string; // 表单uuid
   captcha_code: string; // 表单图片验证码
@@ -52,7 +51,6 @@ export function LoginModal() {
   const [captchaImageUrl, setCaptchaImageUrl] = useState("");
 
   // 填写的表单数据
-  const [verifyType, setVerifyType] = useState("email");
   const [inputAccount, setInputAccount] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
@@ -82,7 +80,7 @@ export function LoginModal() {
   const toggleLoginButton = (
     inputAccount: string,
     inputPassword: string,
-    inputCaptcha: string
+    inputCaptcha: string,
   ) => {
     if (inputAccount && inputPassword && inputCaptcha) {
       setDisableLogin(false);
@@ -96,20 +94,7 @@ export function LoginModal() {
       return;
     }
 
-    if (verifyType === "tel") {
-      if (!validateTel(inputAccount)) {
-        openToast({ content: `请正确填写手机号`, status: "warning" });
-        return;
-      }
-    } else {
-      if (!validateEmail(inputAccount)) {
-        openToast({ content: `请正确填写电子邮箱`, status: "warning" });
-        return;
-      }
-    }
-
     const req_data: LoginReqBody = {
-      verifyType: verifyType,
       account: inputAccount,
       password: getHash(inputPassword),
       uuid: uuid,
@@ -166,25 +151,6 @@ export function LoginModal() {
               </Text>
             )} */}
 
-            <Flex>
-              <Text ml={3}>登陆方式</Text>
-
-              <RadioGroup
-                ml={3}
-                value={verifyType}
-                onChange={(value) => {
-                  setInputAccount("");
-                  setVerifyType(value);
-                  toggleLoginButton("", inputPassword, inputCaptcha);
-                }}
-              >
-                <Stack spacing={3} direction="row">
-                  <Radio value="email">电子邮箱</Radio>
-                  <Radio value="tel">手机</Radio>
-                </Stack>
-              </RadioGroup>
-            </Flex>
-
             <Flex border="1px" borderColor="#379fff" borderRadius="md">
               <Input
                 px={3}
@@ -197,12 +163,10 @@ export function LoginModal() {
                   toggleLoginButton(
                     e.target.value,
                     inputPassword,
-                    inputCaptcha
+                    inputCaptcha,
                   );
                 }}
-                placeholder={
-                  verifyType === "tel" ? "请输入手机号" : "请输入电子邮箱"
-                }
+                placeholder="请输入手机或邮箱"
               />
             </Flex>
 
@@ -247,7 +211,7 @@ export function LoginModal() {
                   toggleLoginButton(
                     inputAccount,
                     inputPassword,
-                    e.target.value
+                    e.target.value,
                   );
                 }}
                 placeholder="请输入图片验证码"
