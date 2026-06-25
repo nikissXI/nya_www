@@ -818,7 +818,7 @@ export default function UserProfilePage() {
               <Divider />
               <Flex>
                 <Text w="50px" textAlign="right">
-                  联机IP:
+                  IP:
                 </Text>
                 <Text ml={3}>{userInfo.ip}</Text>
               </Flex>
