@@ -126,7 +126,7 @@ const ServerNodeItem: React.FC<{
         }
         onClick={async () => {
           if (node.net === null || selectNodeLock === true) return;
-          if (node.alias === userInfo?.wg_data?.node_alias) {
+          if (node.alias === userInfo?.node_alias) {
             openToast({
               content: "已经在使用该节点",
               status: "info",
@@ -283,8 +283,8 @@ export const ServerNodeListModal: React.FC = () => {
 
   // 自动滚动到选中节点
   useEffect(() => {
-    if (showNodeListModal && nodeReady && userInfo?.wg_data?.node_alias) {
-      const selectedNodeId = userInfo.wg_data.node_alias;
+    if (showNodeListModal && nodeReady && userInfo?.node_alias) {
+      const selectedNodeId = userInfo.node_alias;
       setTimeout(() => {
         const nodeElement = document.getElementById(selectedNodeId);
         if (nodeElement) {
@@ -296,7 +296,7 @@ export const ServerNodeListModal: React.FC = () => {
   }, [
     showNodeListModal,
     nodeReady,
-    userInfo?.wg_data?.node_alias,
+    userInfo?.node_alias,
     setNodeReady,
   ]);
 
@@ -310,7 +310,7 @@ export const ServerNodeListModal: React.FC = () => {
     <Modal
       isOpen={showNodeListModal}
       onClose={setNodeListModal}
-      closeOnOverlayClick={userInfo?.wg_data?.node_alias ? true : false}
+      closeOnOverlayClick={userInfo?.node_alias ? true : false}
       isCentered
     >
       <ModalOverlay />
@@ -509,7 +509,7 @@ export const ServerNodeListModal: React.FC = () => {
                   <ServerNodeItem
                     key={node.alias}
                     node={node}
-                    selected={userInfo?.wg_data?.node_alias === node.alias}
+                    selected={userInfo?.node_alias === node.alias}
                   />
                 ))
               ) : (
@@ -541,7 +541,7 @@ export const ServerNodeListModal: React.FC = () => {
               <Button
                 size="sm"
                 onClick={() => {
-                  if (!userInfo?.wg_data?.node_alias) {
+                  if (!userInfo?.node_alias) {
                     openToast({
                       content:
                         "选择节点后才能关闭，如果没有合适的节点，先随便选一个",

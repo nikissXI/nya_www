@@ -23,14 +23,6 @@ interface ServerData {
   relateGroup: GroupItem[] | null;
   announcements: AnnouncementItem[] | null;
 }
-// 登录后的用户数据及wireguard信息
-interface WGData {
-  node_alias: string;
-  ip: string;
-  last_connect_timestamp: number;
-  release_days: number;
-  conf_text: string;
-}
 interface UserInfo {
   uid: number;
   username: string;
@@ -38,7 +30,9 @@ interface UserInfo {
   email: string;
   qq: string;
   sponsorship: number;
-  wg_data: WGData | null;
+  node_alias: string;
+  ip: string;
+  last_connect_timestamp: number;
 }
 // 登录后，用户访问房间列表拉取的房间信息
 interface Member {
@@ -78,9 +72,6 @@ interface ILoginStateSlice {
   confKey: string | null;
   getConfKey: () => void;
 
-  // 获取隧道
-  getTunnel: () => void;
-
   // 是否下次登录跳转到教程问答区
   goToDoc: boolean;
   setGoToDoc: (state: boolean) => void;
@@ -119,6 +110,7 @@ interface ILoginStateSlice {
 
   pingHost: string | undefined;
   tunnelName: string | undefined;
+  confText: string | undefined;
   latency: number | undefined;
   nodeNetLoad: number;
   onlineStatus: "在线" | "离线";
@@ -222,51 +214,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      // 获取隧道
-      getTunnel: async () => {
-        try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-          const resp = await fetch(`${apiUrl}/getIp`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${getAuthToken()}`,
-            },
-          });
-
-          if (!resp.ok) {
-            throw new Error("请求出错");
-          }
-          const data = await resp.json();
-          if (data.code === 0) {
-            // 更新用户信息
-            set(
-              produce((draft) => {
-                draft.userInfo.wg_data = data.wg_data;
-              }),
-            );
-
-            openToast({
-              content: `隧道${data.wg_data.ip}绑定成功`,
-              status: "success",
-            });
-
-            // 获取隧道后弹出节点选择框
-            if (data.wg_data) {
-              get().setNodeListModal();
-            }
-            if (data.reget_ip) {
-              get().setNeedShowReget();
-            }
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-            window.location.reload();
-          }
-        } catch (error) {
-          openToast({ content: "服务异常，请联系服主处理", status: "error" });
-        } finally {
-        }
-      },
-
       // 是否下次登录跳转到教程问答区
       goToDoc: false,
       setGoToDoc: (goToDoc: boolean) => {
@@ -322,18 +269,21 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               throw new Error("服务器出错，请稍后再试");
             }
             const data = await resp.json();
+
+            // IP变更弹窗
+            if (data.data.reget_ip) {
+              get().setNeedShowReget();
+            }
+
             const userInfo: UserInfo = data.data;
             set(
               produce((draft) => {
                 draft.userInfo = userInfo;
               }),
             );
-            // 如果有隧道信息就拉节点列表
-            if (userInfo.wg_data) {
-              // 如果没选节点就弹出节点列表
-              if (!userInfo.wg_data.node_alias) get().setNodeListModal();
-              else get().selectNode(userInfo.wg_data.node_alias, false);
-            }
+            // 如果没选节点就弹出节点列表
+            if (!userInfo.node_alias) get().setNodeListModal();
+            else get().selectNode(userInfo.node_alias, false);
           } catch (error) {
             if (error instanceof Error) {
               if (error.message === "登陆凭证失效") {
@@ -377,6 +327,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             draft.roomData = undefined;
             draft.latency = undefined;
             draft.nodeNetLoad = -1;
+            draft.confText = undefined;
           }),
         );
       },
@@ -597,12 +548,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           if (data.code === 0) {
             set(
               produce((draft) => {
-                if (draft?.userInfo?.wg_data) {
+                if (draft?.userInfo) {
                   // 更新用户选择的节点
-                  draft.userInfo.wg_data.node_alias = node_alias;
+                  draft.userInfo.node_alias = node_alias;
                   draft.tunnelName = data.tunnel_name;
                   draft.pingHost = data.ping_host;
-                  draft.userInfo.wg_data.conf_text = data.conf_text;
+                  draft.confText = data.conf_text;
                 }
               }),
             );
@@ -624,6 +575,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       pingHost: undefined,
       tunnelName: undefined,
+      confText: undefined,
       latency: undefined,
       nodeNetLoad: -1,
       onlineStatus: "离线",
@@ -694,7 +646,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               draft.onlineStatus = is_online ? "在线" : "离线";
             }),
           );
-          const node_alias = get().userInfo?.wg_data?.node_alias;
+          const node_alias = get().userInfo?.node_alias;
           const pingHost = get().pingHost;
 
           if (is_online && pingHost && node_alias) {

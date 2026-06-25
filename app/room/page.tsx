@@ -103,7 +103,6 @@ export default function Page() {
     setRoomData,
     roomRole,
     latency,
-    getTunnel,
     onlineStatus,
     rotate,
     disableFlush,
@@ -114,10 +113,10 @@ export default function Page() {
   } = useUserStateStore();
 
   useEffect(() => {
-    if (userInfo?.wg_data?.node_alias) {
+    if (userInfo?.node_alias) {
       getRoomData();
     }
-  }, [userInfo?.wg_data?.node_alias, getRoomData]);
+  }, [userInfo?.node_alias, getRoomData]);
 
   // 通用请求函数，自动管理 loading 和错误处理
   const requestRoomApi = useCallback(
@@ -485,9 +484,7 @@ export default function Page() {
               bg="rgb(75 127 187 / 38%)"
               p={1}
               borderRadius={12}
-              borderColor={
-                item.ip === userInfo?.wg_data?.ip ? "#6db4ff" : "transparent"
-              }
+              borderColor={item.ip === userInfo?.ip ? "#6db4ff" : "transparent"}
               borderWidth={3}
             >
               <Flex>
@@ -586,19 +583,9 @@ export default function Page() {
           </Button>
           <NoticeText />
         </VStack>
-      ) : !userInfo?.wg_data ? (
-        <VStack spacing={3} align="center">
-          <Heading size="md" color="#ffa629">
-            你还没获取隧道呢
-          </Heading>
-
-          <Button rounded={5} onClick={getTunnel} bgColor="#007bc0" size="sm">
-            点击获取隧道
-          </Button>
-        </VStack>
       ) : (
         <>
-          {userInfo?.wg_data?.node_alias && (
+          {userInfo?.node_alias && (
             <Flex
               align="center"
               justify="space-between"
@@ -637,7 +624,7 @@ export default function Page() {
                   )}
 
                   <Text as="span" fontWeight="bold" mx="auto">
-                    {userInfo?.wg_data?.node_alias}
+                    {userInfo?.node_alias}
                   </Text>
                 </Flex>
 

@@ -81,13 +81,14 @@ const DocumentPage = () => {
     onlineStatus,
     rotate,
     disableFlush,
+    confText,
     setOfflineReasonsModal,
   } = useUserStateStore();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (userInfo?.wg_data) {
+    if (confText) {
       getConfKey();
       setGoToDoc(false);
     } else {
@@ -181,7 +182,7 @@ const DocumentPage = () => {
         <Text>
           ① 当前选择的是&ensp;
           <Text as="span" fontWeight="bold">
-            {userInfo?.wg_data?.node_alias}
+            {userInfo?.node_alias}
           </Text>
           &ensp;节点
         </Text>
@@ -193,7 +194,7 @@ const DocumentPage = () => {
         <Text>
           <Icon as={MdTipsAndUpdates} mr={2} />
           <HighLight fontSize="sm">
-            后续步骤导入或下载的是{userInfo?.wg_data?.node_alias}
+            后续步骤导入或下载的是{userInfo?.node_alias}
             节点的隧道，如果切换了新节点，要来这导入新节点的隧道
           </HighLight>
         </Text>
@@ -213,13 +214,13 @@ const DocumentPage = () => {
         size="sm"
         onClick={() => {
           if (!isIOS) {
-            if (userInfo?.wg_data) GenConfFile(userInfo.wg_data.conf_text);
+            if (confText) GenConfFile(confText);
             return;
           }
 
           const isSafari = navigator.userAgent.includes("Safari");
           if (isSafari) {
-            if (userInfo?.wg_data) GenConfFile(userInfo.wg_data.conf_text);
+            if (confText) GenConfFile(confText);
           } else {
             openToast({
               content: "请在Safari中打开网站下载",
@@ -229,7 +230,7 @@ const DocumentPage = () => {
         }}
         isDisabled={userInfo ? false : true}
       >
-        点击下载{userInfo?.wg_data?.node_alias}隧道文件
+        点击下载{userInfo?.node_alias}隧道文件
       </Button>
     );
   };
@@ -474,7 +475,7 @@ const DocumentPage = () => {
                     <Box borderWidth={5} borderColor="white" w="min">
                       <QRCodeSVG
                         size={256}
-                        value={userInfo?.wg_data?.conf_text as string}
+                        value={confText as string}
                       />
                     </Box>
                   </TabPanel>

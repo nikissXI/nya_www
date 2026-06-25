@@ -27,7 +27,6 @@ import {
   getHash,
   validatePassword,
   validateTel,
-  timestampToDateString,
   validateEmail,
 } from "@/utils/strings";
 import { getAuthToken, setAuthToken } from "@/store/authKey";
@@ -38,27 +37,10 @@ import { PiCoffeeBold } from "react-icons/pi";
 import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
 
-const calculateDaysDifference = (
-  release_days: number,
-  timestamp: number,
-): string => {
-  // 计算时间戳差值（毫秒）
-  const timestamp_now = new Date().getTime();
-  const differenceInMilliseconds = Math.abs(timestamp_now - timestamp * 1000);
-
-  // 将差值转换为天数
-  const millisecondsInADay = 1000 * 60 * 60 * 24; // 1天的毫秒数
-  const differenceInDays = Math.floor(
-    differenceInMilliseconds / millisecondsInADay,
-  );
-
-  return `${release_days - differenceInDays}`;
-};
-
 export default function UserProfilePage() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { uuid, getUserInfo, userInfo, logout, getTunnel, setShowLoginModal } =
+  const { uuid, getUserInfo, userInfo, logout, setShowLoginModal } =
     useUserStateStore();
 
   // 修改用户名
@@ -833,6 +815,14 @@ export default function UserProfilePage() {
                 </Flex>
               </Flex>
 
+              <Divider />
+              <Flex>
+                <Text w="50px" textAlign="right">
+                  联机IP:
+                </Text>
+                <Text ml={3}>{userInfo.ip}</Text>
+              </Flex>
+
               {userInfo.sponsorship && (
                 <>
                   <Divider />
@@ -846,49 +836,6 @@ export default function UserProfilePage() {
                 </>
               )}
             </VStack>
-
-            {userInfo.wg_data ? (
-              <VStack spacing={1} mt={5} align="stretch" w="260px">
-                <Heading mb={1} size="md" textAlign="center">
-                  隧道信息
-                </Heading>
-
-                <Flex>
-                  <Text ml={3}>联机IP地址：</Text>
-                  <Text fontWeight="bold">{userInfo.wg_data.ip}</Text>
-                </Flex>
-
-                <Text ml={3}>联机教程请到联机房间页面查看</Text>
-
-                <Flex direction="column" align="stretch">
-                  <Flex>
-                    <Text ml={3} fontSize="sm" color="#ffa629">
-                      💡如果连续
-                      {calculateDaysDifference(
-                        userInfo.wg_data.release_days,
-                        userInfo.wg_data.last_connect_timestamp,
-                      )}
-                      天不联机会回收隧道，被回收后可免费获取新的，无需担心
-                    </Text>
-                  </Flex>
-                </Flex>
-              </VStack>
-            ) : (
-              <VStack spacing={3} mt={5} align="center">
-                <Heading size="md" color="#ffa629">
-                  你还没获取隧道呢
-                </Heading>
-
-                <Button
-                  rounded={5}
-                  onClick={getTunnel}
-                  bgColor="#007bc0"
-                  size="sm"
-                >
-                  点击获取隧道
-                </Button>
-              </VStack>
-            )}
 
             <VStack spacing={5} mt={5}>
               <Button

@@ -9,9 +9,6 @@ import {
   Input,
   Image,
   VStack,
-  RadioGroup,
-  Radio,
-  Stack,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
 import useCaptcha from "@/utils/GetCaptcha";
