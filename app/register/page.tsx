@@ -234,9 +234,11 @@ export default function Page() {
           </RadioGroup>
         </Flex>
 
-        <Text display={verifyType === "email" ? "none" : "flex"}>
-          建议使用电子邮箱，忘记密码无法通过手机号找回
-        </Text>
+        {verifyType === "email" ? (
+          <Text>本日注册量突然暴增导致邮箱限额了，如果邮箱验证码发送失败请先用手机注册，明天再绑定邮箱</Text>
+        ) : (
+          <Text>建议使用电子邮箱，忘记密码无法通过手机号找回</Text>
+        )}
 
         <Input
           type="text"
