@@ -293,12 +293,7 @@ export const ServerNodeListModal: React.FC = () => {
         }
       }, 100); // 延迟执行，确保DOM已经渲染完成
     }
-  }, [
-    showNodeListModal,
-    nodeReady,
-    userInfo?.node_alias,
-    setNodeReady,
-  ]);
+  }, [showNodeListModal, nodeReady, userInfo?.node_alias, setNodeReady]);
 
   // 获取所有网络类型
   const netTypes = [
@@ -453,15 +448,21 @@ export const ServerNodeListModal: React.FC = () => {
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    如需独享节点请联系服主进行定制
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <Text color="gray.200" fontSize="sm" mt={1}>
+                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     线路选择指南：
                     <br />
-                    多线 - 适合中国大陆任意网络
+                    多线 - 首选，适合中国大陆任意网络
                     <br />
-                    电信 - 适合中国电信用户（不懂就别选）
+                    电信 - 适合中国电信用户（不懂就别选，小心卡出屎）
                     <br />
-                    跨境 - 适合跨中国大陆（即国内和国外）联机
+                    跨境 - 适合跨中国大陆（即国内和国外）联机，港澳台也算“国外”
                     <br />
-                    境外 - 除中国大陆外都适合
+                    境外 - 除中国大陆外都适合，港澳台也合适
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -479,9 +480,9 @@ export const ServerNodeListModal: React.FC = () => {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     延迟说明：
                     <br />
-                    网络延迟一般来说越低越好，如果不是延迟敏感游戏不必追求低延迟
+                    网络延迟越低越好，如果不是延迟敏感游戏不必追求低延迟
                     <br />
-                    实际游戏联机延迟是主机与客机延迟的总和
+                    一般主机延迟越低联机体验越好，实际游戏联机延迟是主机与客机延迟的总和
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -489,7 +490,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     带宽选择：
                     <br />
-                    大部分游戏1M足够，如果1M节点低负载的时候也卡顿，就试试2M的
+                    不同游戏所需带宽不一样，卡牌类游戏0.3M完全足够，大多游戏1M左右即可，但如果地图需要实时那要求非常高（比如MC就别用喵服了）
                   </Text>
                 </ListItem>
               </List>

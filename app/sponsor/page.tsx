@@ -111,6 +111,11 @@ const Page = () => {
           </ListItem>
 
           <ListItem textAlign="left">
+            <ListIcon as={FaCode} />
+            如果需要独享联机节点，可以联系服主进行定制（不低于100元/月）
+          </ListItem>
+
+          <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
               赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用
