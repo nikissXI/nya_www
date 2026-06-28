@@ -96,7 +96,7 @@ const DocumentPage = () => {
       openToast({ content: "请登陆后再访问教程", status: "info" });
       router.push("/me");
     }
-  }, [userInfo, getConfKey, router, setGoToDoc]);
+  }, [userInfo, getConfKey, router, setGoToDoc, confText]);
 
   const handleCopyLink = async (confKey: string) => {
     try {
