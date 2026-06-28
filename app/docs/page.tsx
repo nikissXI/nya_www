@@ -531,7 +531,7 @@ const DocumentPage = () => {
                   点我查看解决方法
                 </Link>
                 <br />
-                如果文件下载失败，就加Q群1047464328，群文件有
+                如果文件下载失败，就加Q群924644467，群文件有
               </Text>
 
               <Button
@@ -573,7 +573,7 @@ const DocumentPage = () => {
                       fontSize="sm"
                       color="#7dfffe"
                       onClick={() => {
-                        window.open("/apks/修复VM错误.bat", "_blank");
+                        window.open("/apks/右键以管理员身份运行.bat", "_blank");
                       }}
                     >
                       点击下载bat修复文件
