@@ -33,7 +33,11 @@ import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
 import { FaCode } from "react-icons/fa";
 import { FaWeixin } from "react-icons/fa";
-import { RiVipCrownFill, RiMoneyCnyBoxLine } from "react-icons/ri";
+import {
+  RiVipCrownFill,
+  RiMoneyCnyBoxLine,
+  RiAccessibilityLine,
+} from "react-icons/ri";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
@@ -103,14 +107,19 @@ const Page = () => {
         <List spacing={2}>
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            喵服由服主一人运营，赞助将帮助喵服持续提供联机服务
+            喵服由服主一人运营，赞助将帮助喵服持续提供及优化联机服务
           </ListItem>
 
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
-              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用（注意：专用节点需要每个账号都赞助解锁）
+              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用
             </HighLight>
+          </ListItem>
+
+          <ListItem textAlign="left">
+            <ListIcon as={RiAccessibilityLine} />
+            <HighLight>如果使用专用节点需要每个账号都赞助解决</HighLight>
           </ListItem>
 
           <ListItem textAlign="left">
@@ -208,7 +217,10 @@ const Page = () => {
                 </Box>
 
                 <Text color="#856404">
-                  赞助信息由服主手动录入，因此更新有延迟；如果催录入、漏了备注、无法备注、无法付款等等，请联系服主
+                  <Text as="span" fontWeight="bold">
+                    赞助金额由服主手动录入，就是看到了才更新；
+                  </Text>
+                  如果催录入、漏了备注、无法备注、无法付款等等，请联系服主
                   <br />
                   <Icon as={FaWeixin} />
                   ：nikissxi&emsp;
