@@ -472,7 +472,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <br />
                     负载越低节点越流畅，负载高就会导致联机卡顿
                     <br />
-                    追求稳定可选择金色的赞助节点（用的人少）
+                    追求稳定可选择赞助解锁金色的专用节点（用的人少）
                   </Text>
                 </ListItem>
                 <ListItem>
