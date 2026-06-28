@@ -110,6 +110,7 @@ export default function Page() {
     setNodeListModal,
     setOfflineReasonsModal,
     nodeNetLoad,
+    canCreate,
   } = useUserStateStore();
 
   useEffect(() => {
@@ -361,6 +362,7 @@ export default function Page() {
           <Button
             h="50px"
             fontSize="25px"
+            disabled={!canCreate}
             onClick={() => {
               if (onlineStatus === "离线") {
                 openToast({

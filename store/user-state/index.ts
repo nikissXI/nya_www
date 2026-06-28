@@ -113,6 +113,7 @@ interface ILoginStateSlice {
   confText: string | undefined;
   latency: number | undefined;
   nodeNetLoad: number;
+  canCreate: boolean;
   onlineStatus: "在线" | "离线";
 
   // 刷新房间信息冷却
@@ -327,6 +328,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             draft.roomData = undefined;
             draft.latency = undefined;
             draft.nodeNetLoad = -1;
+            draft.canCreate = true;
             draft.confText = undefined;
           }),
         );
@@ -578,6 +580,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       confText: undefined,
       latency: undefined,
       nodeNetLoad: -1,
+      canCreate: true,
       onlineStatus: "离线",
 
       // 刷新房间信息冷却
@@ -678,7 +681,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
 
           const roomData = data.data as RoomInfo;
-          const nodeNetLoad = data.node_net_load;
 
           let roomRole: string = "none";
           if (roomData) {
@@ -688,7 +690,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set(
             produce((draft) => {
               draft.roomRole = roomRole;
-              draft.nodeNetLoad = nodeNetLoad;
+              draft.nodeNetLoad = data.node_net_load;
+              draft.canCreate = data.can_create;
             }),
           );
 
