@@ -249,7 +249,7 @@ export default function Page() {
           type="text"
           value={inputAccount}
           onChange={(e) => setInputAccount(e.target.value)}
-          placeholder={verifyType === "tel" ? "请输入手机号" : "请输入电子邮箱"}
+          placeholder={verifyType === "tel" ? "请输入手机号" : "请输入邮箱地址"}
         />
 
         {/* <Flex display={verifyType === "tel" ? "none" : "flex"}>

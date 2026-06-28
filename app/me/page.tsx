@@ -92,9 +92,9 @@ export default function UserProfilePage() {
   const [inputCaptcha, setInputCaptcha] = useState("");
 
   // 绑定验证用的
-  const [sendVerifyButtonText, setSendVerifyButtonText] =
-    useState("获取验证码");
-  const [inputVerifyCode, setInputVerifyCode] = useState("");
+  // const [sendVerifyButtonText, setSendVerifyButtonText] =
+  //   useState("获取验证码");
+  // const [inputVerifyCode, setInputVerifyCode] = useState("");
 
   // 绑定QQ相关
   const {
@@ -177,33 +177,33 @@ export default function UserProfilePage() {
     onClose: bindTELOnClose,
   } = useDisclosure();
 
-  const sendSMS = async (tel: string) => {
-    if (!validateTel(tel)) {
-      openToast({ content: `请正确填写手机号`, status: "warning" });
-      return;
-    }
+  // const sendSMS = async (tel: string) => {
+  //   if (!validateTel(tel)) {
+  //     openToast({ content: `请正确填写手机号`, status: "warning" });
+  //     return;
+  //   }
 
-    const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 1) {
-        openToast({ content: "该手机号已被注册", status: "warning" });
-      } else {
-        const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.code === 0) {
-            openToast({ content: data.msg, status: "success" });
-            setSendVerifyButtonText("验证码已发");
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-          }
-        }
-      }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
-    }
-  };
+  //   const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
+  //   if (resp.ok) {
+  //     const data = await resp.json();
+  //     if (data.code === 1) {
+  //       openToast({ content: "该手机号已被注册", status: "warning" });
+  //     } else {
+  //       const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
+  //       if (resp.ok) {
+  //         const data = await resp.json();
+  //         if (data.code === 0) {
+  //           openToast({ content: data.msg, status: "success" });
+  //           setSendVerifyButtonText("验证码已发");
+  //         } else {
+  //           openToast({ content: data.msg, status: "warning" });
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
+  //   }
+  // };
 
   const handleBindTEL = async () => {
     const req_data = {
@@ -249,38 +249,38 @@ export default function UserProfilePage() {
     onClose: bindEmailOnClose,
   } = useDisclosure();
 
-  const sendEmail = async (email: string) => {
-    if (!validateEmail(email)) {
-      openToast({ content: `请正确填写电子邮箱`, status: "warning" });
-      return;
-    }
+  // const sendEmail = async (email: string) => {
+  //   if (!validateEmail(email)) {
+  //     openToast({ content: `请正确填写电子邮箱`, status: "warning" });
+  //     return;
+  //   }
 
-    const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 1) {
-        openToast({ content: "该电子邮箱已被注册", status: "warning" });
-      } else {
-        const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.code === 0) {
-            openToast({ content: data.msg, status: "success" });
-            setSendVerifyButtonText("验证码已发");
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-          }
-        }
-      }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
-    }
-  };
+  //   const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
+  //   if (resp.ok) {
+  //     const data = await resp.json();
+  //     if (data.code === 1) {
+  //       openToast({ content: "该电子邮箱已被注册", status: "warning" });
+  //     } else {
+  //       const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
+  //       if (resp.ok) {
+  //         const data = await resp.json();
+  //         if (data.code === 0) {
+  //           openToast({ content: data.msg, status: "success" });
+  //           setSendVerifyButtonText("验证码已发");
+  //         } else {
+  //           openToast({ content: data.msg, status: "warning" });
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
+  //   }
+  // };
 
   const handleBindEmail = async () => {
     const req_data = {
       email: inputAccount,
-      verify_code: inputVerifyCode,
+      // verify_code: inputVerifyCode,
       uuid: uuid,
       captcha_code: inputCaptcha,
     };
@@ -472,7 +472,7 @@ export default function UserProfilePage() {
                 onChange={(e) => setInputAccount(e.target.value)}
                 placeholder="请输入电子邮箱"
               />
-              <Flex>
+              {/* <Flex>
                 <Input
                   type="number"
                   value={inputVerifyCode}
@@ -490,7 +490,7 @@ export default function UserProfilePage() {
                 >
                   {sendVerifyButtonText}
                 </Button>
-              </Flex>
+              </Flex> */}
               <Flex>
                 <Input
                   value={inputCaptcha}
@@ -712,42 +712,39 @@ export default function UserProfilePage() {
               </Flex>
 
               <Divider />
-              {userInfo.tel && (
-                <>
-                  <Flex>
-                    <Text w="50px" textAlign="right">
-                      手机:
-                    </Text>
-                    <Flex ml={3}>
-                      {userInfo.tel}
 
-                      <Button
-                        ml={1}
-                        color="#7dfffe"
-                        fontWeight="normal"
-                        variant="link"
-                        bgColor="transparent"
-                        onClick={async () => {
-                          // setCaptchaImageUrl(await fetchCaptcha());
-                          // bindTELOnopen();
-                          // setInputAccount("");
-                          // setInputVerifyCode("");
-                          // setInputCaptcha("");
-                          // setSendVerifyButtonText("获取验证码");
-                          openToast({
-                            content: "功能停用，如有特殊需要请联系服主",
-                            status: "warning",
-                          });
-                        }}
-                      >
-                        换绑
-                      </Button>
-                    </Flex>
-                  </Flex>
+              <Flex>
+                <Text w="50px" textAlign="right">
+                  手机:
+                </Text>
+                <Flex ml={3}>
+                  {userInfo.tel}
 
-                  <Divider />
-                </>
-              )}
+                  <Button
+                    ml={1}
+                    color="#7dfffe"
+                    fontWeight="normal"
+                    variant="link"
+                    bgColor="transparent"
+                    onClick={async () => {
+                      setCaptchaImageUrl(await fetchCaptcha());
+                      bindTELOnopen();
+                      setInputAccount("");
+                      // setInputVerifyCode("");
+                      setInputCaptcha("");
+                      // setSendVerifyButtonText("获取验证码");
+                      // openToast({
+                      //   content: "功能停用，如有特殊需要请联系服主",
+                      //   status: "warning",
+                      // });
+                    }}
+                  >
+                    {userInfo.tel ? "换绑" : "点击绑定"}
+                  </Button>
+                </Flex>
+              </Flex>
+
+              <Divider />
 
               <Flex whiteSpace="nowrap">
                 <Text w="50px" textAlign="right">
@@ -776,12 +773,12 @@ export default function UserProfilePage() {
                       setCaptchaImageUrl(await fetchCaptcha());
                       bindEmailOnopen();
                       setInputAccount("");
-                      setInputVerifyCode("");
+                      // setInputVerifyCode("");
                       setInputCaptcha("");
-                      setSendVerifyButtonText("获取验证码");
+                      // setSendVerifyButtonText("获取验证码");
                     }}
                   >
-                    {userInfo.email ? "换绑" : "点击绑定（非必要）"}
+                    {userInfo.email ? "换绑" : "点击绑定"}
                   </Button>
                 </Flex>
               </Flex>
@@ -810,7 +807,7 @@ export default function UserProfilePage() {
                       setDisableVerifyQQ(false);
                     }}
                   >
-                    {userInfo.qq ? "换绑" : "点击绑定（非必要）"}
+                    {userInfo.qq ? "换绑" : "点击绑定"}
                   </Button>
                 </Flex>
               </Flex>
