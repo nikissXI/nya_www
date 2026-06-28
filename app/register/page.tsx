@@ -29,7 +29,7 @@ import { setAuthToken } from "@/store/authKey";
 interface RegisterReqBody {
   verifyType: string; // 注册类型：tel或email
   account: string; // 手机或邮箱
-  verify_code: string; // 手机验证码
+  // verify_code: string; // 手机验证码
   username: string; // 登陆用户名
   password: string; // 登陆密码sha256
   uuid: string; // 表单uuid
@@ -47,15 +47,15 @@ export default function Page() {
   const { fetchCaptcha } = useCaptcha();
   const [captchaImageUrl, setCaptchaImageUrl] = useState("");
 
-  const [sendVerifyButtonText, setSendVerifyButtonText] =
-    useState("获取验证码");
+  // const [sendVerifyButtonText, setSendVerifyButtonText] =
+  //   useState("获取验证码");
 
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   // 填写的表单数据
   const [verifyType, setVerifyType] = useState("email");
   const [inputAccount, setInputAccount] = useState("");
-  const [inputVerifyCode, setInputVerifyCode] = useState("");
+  // const [inputVerifyCode, setInputVerifyCode] = useState("");
   const [inputUsername, setInputUsername] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputPassword2, setInputPassword2] = useState("");
@@ -113,10 +113,15 @@ export default function Page() {
       return;
     }
 
+    if (verifyType === "email" && !validateEmail(inputAccount)) {
+      openToast({ content: `请正确填写邮箱地址`, status: "warning" });
+      return;
+    }
+
     const req_data: RegisterReqBody = {
       verifyType: verifyType,
       account: inputAccount,
-      verify_code: inputVerifyCode,
+      // verify_code: inputVerifyCode,
       username: inputUsername,
       password: getHash(inputPassword),
       uuid: uuid,
@@ -152,61 +157,61 @@ export default function Page() {
     }
   };
 
-  const sendSMS = async (tel: string) => {
-    if (!validateTel(tel)) {
-      openToast({ content: `请正确填写手机号`, status: "warning" });
-      return;
-    }
+  // const sendSMS = async (tel: string) => {
+  //   if (!validateTel(tel)) {
+  //     openToast({ content: `请正确填写手机号`, status: "warning" });
+  //     return;
+  //   }
 
-    const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 1) {
-        openToast({ content: "该手机号已被注册", status: "warning" });
-      } else {
-        const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.code === 0) {
-            openToast({ content: data.msg, status: "success" });
-            setSendVerifyButtonText("验证码已发");
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-          }
-        }
-      }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
-    }
-  };
+  //   const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
+  //   if (resp.ok) {
+  //     const data = await resp.json();
+  //     if (data.code === 1) {
+  //       openToast({ content: "该手机号已被注册", status: "warning" });
+  //     } else {
+  //       const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
+  //       if (resp.ok) {
+  //         const data = await resp.json();
+  //         if (data.code === 0) {
+  //           openToast({ content: data.msg, status: "success" });
+  //           setSendVerifyButtonText("验证码已发");
+  //         } else {
+  //           openToast({ content: data.msg, status: "warning" });
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
+  //   }
+  // };
 
-  const sendEmail = async (email: string) => {
-    if (!validateEmail(email)) {
-      openToast({ content: `请正确填写电子邮箱`, status: "warning" });
-      return;
-    }
+  // const sendEmail = async (email: string) => {
+  //   if (!validateEmail(email)) {
+  //     openToast({ content: `请正确填写电子邮箱`, status: "warning" });
+  //     return;
+  //   }
 
-    const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 1) {
-        openToast({ content: "该电子邮箱已被注册", status: "warning" });
-      } else {
-        const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.code === 0) {
-            openToast({ content: data.msg, status: "success" });
-            setSendVerifyButtonText("验证码已发");
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-          }
-        }
-      }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
-    }
-  };
+  //   const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
+  //   if (resp.ok) {
+  //     const data = await resp.json();
+  //     if (data.code === 1) {
+  //       openToast({ content: "该电子邮箱已被注册", status: "warning" });
+  //     } else {
+  //       const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
+  //       if (resp.ok) {
+  //         const data = await resp.json();
+  //         if (data.code === 0) {
+  //           openToast({ content: data.msg, status: "success" });
+  //           setSendVerifyButtonText("验证码已发");
+  //         } else {
+  //           openToast({ content: data.msg, status: "warning" });
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
+  //   }
+  // };
   return (
     <Center>
       <VStack
@@ -223,22 +228,22 @@ export default function Page() {
             value={verifyType}
             onChange={(value) => {
               setInputAccount("");
-              setSendVerifyButtonText("获取验证码");
+              // setSendVerifyButtonText("获取验证码");
               setVerifyType(value);
             }}
           >
             <Stack spacing={3} direction="row">
-              <Radio value="email">电子邮箱</Radio>
+              <Radio value="email">邮箱</Radio>
               <Radio value="tel">手机</Radio>
             </Stack>
           </RadioGroup>
         </Flex>
 
-        {verifyType === "email" ? (
-          <Text>本日注册量突然暴增导致邮箱限额了，如果邮箱验证码发送失败请先用手机注册，明天再绑定邮箱</Text>
+        {/* {verifyType === "email" ? (
+          <Text>请正确填写电子邮箱，否则影响</Text>
         ) : (
           <Text>建议使用电子邮箱，忘记密码无法通过手机号找回</Text>
-        )}
+        )} */}
 
         <Input
           type="text"
@@ -247,7 +252,7 @@ export default function Page() {
           placeholder={verifyType === "tel" ? "请输入手机号" : "请输入电子邮箱"}
         />
 
-        <Flex display={verifyType === "tel" ? "none" : "flex"}>
+        {/* <Flex display={verifyType === "tel" ? "none" : "flex"}>
           <Input
             type="number"
             value={inputVerifyCode}
@@ -268,7 +273,7 @@ export default function Page() {
           >
             {sendVerifyButtonText}
           </Button>
-        </Flex>
+        </Flex> */}
 
         <Box>
           <Input
