@@ -111,6 +111,7 @@ const DocumentPage = () => {
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
+  const [showMSI, setShowMSI] = useState(false);
 
   const GenConfFile = (conf_text: string) => {
     try {
@@ -473,10 +474,7 @@ const DocumentPage = () => {
                     </Text>
 
                     <Box borderWidth={5} borderColor="white" w="min">
-                      <QRCodeSVG
-                        size={256}
-                        value={confText as string}
-                      />
+                      <QRCodeSVG size={256} value={confText as string} />
                     </Box>
                   </TabPanel>
 
@@ -523,30 +521,18 @@ const DocumentPage = () => {
               <SelectNode />
 
               <Text mt={5}>
-                ② 下载并安装WG客户端，如果双击无法安装，看这个
+                ② 下载并安装WG客户端，如果双击无法安装，
                 <Link
                   ml={1}
                   color="#7dd4ff"
                   href="https://zhuanlan.zhihu.com/p/589250265"
                   target="_blank"
                 >
-                  点我跳转
+                  点我查看解决方法
                 </Link>
                 <br />
                 如果文件下载失败，就加Q群1047464328，群文件有
-                <br />
-                <HighLight>如果连接隧道报错，可以加Q群找群主问问</HighLight>
               </Text>
-
-              {/* <Button
-                size="sm"
-                mx={2}
-                onClick={() => {
-                  window.open("/apks/wireguard-amd64-1.1.msi", "_blank");
-                }}
-              >
-                点击下载安装包(新)
-              </Button> */}
 
               <Button
                 size="sm"
@@ -568,18 +554,40 @@ const DocumentPage = () => {
                 ④ 跟着下图操作完成隧道导入，看红字就行
                 <br />
                 默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建
-                {/* <br />
-                如果无法连接并且电脑安装过vmvare，就下载这个bat文件，
-                <Text
-                  as="span"
-                  color="#7dfffe"
-                  onClick={() => {
-                    window.open("/apks/修复VM错误.bat", "_blank");
-                  }}
-                >
-                  点击下载
-                </Text>
-                ，然后右键“以管理员身份运行”修复 */}
+                <Flex alignItems="center" mt={1}>
+                  &emsp;<HighLight>点连接后出现“隧道错误”的处理方法</HighLight>
+                  <Text
+                    ml={2}
+                    as="span"
+                    color="#7dfffe"
+                    size="sm"
+                    onClick={() => setShowMSI(!showMSI)}
+                  >
+                    {showMSI ? "点击收起" : "点击查看"}
+                  </Text>
+                </Flex>
+                <Collapse in={showMSI}>
+                  <Text fontSize="sm">
+                    <Text
+                      as="span"
+                      fontSize="sm"
+                      color="#7dfffe"
+                      onClick={() => {
+                        window.open("/apks/修复VM错误.bat", "_blank");
+                      }}
+                    >
+                      点击下载bat修复文件
+                    </Text>
+                    ，然后右键“以管理员身份运行”修复。如果还是不行，就按下图指引“网络重置”试试
+                  </Text>
+                  <Image
+                    src="/images/wg/network_reset.png"
+                    alt="network_reset"
+                    borderRadius="md"
+                    maxW="500px"
+                    mb={10}
+                  />
+                </Collapse>
               </Text>
               <Image
                 src="/images/wg/win_msi.jpg"
