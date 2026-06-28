@@ -32,7 +32,6 @@ interface UserInfo {
   sponsorship: number;
   node_alias: string;
   ip: string;
-  last_connect_timestamp: number;
 }
 // 登录后，用户访问房间列表拉取的房间信息
 interface Member {
