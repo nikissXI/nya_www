@@ -249,7 +249,7 @@ const DocumentPage = () => {
         使用喵服联机的玩家都要注册账号，并跟着教程安装WG客户端、导入隧道
       </Text>
 
-      <Text>
+      <Text my={2}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         手机、电脑都能安装WG客户端，要安装在运行游戏的设备上
       </Text>
