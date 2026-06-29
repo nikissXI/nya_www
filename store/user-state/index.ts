@@ -342,7 +342,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         if (net === null) return 0;
 
         const statusUrl = `https://${ping_host}/ping`;
-        const node = get().nodeMap.get(node_alias);
+        // const node = get().nodeMap.get(node_alias);
         // console.debug(node);
         // 单次ping请求的辅助函数
         const singlePing = async (first: boolean = false): Promise<number> => {
@@ -395,13 +395,19 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // 连续串行请求两次
           const delay1 = await singlePing(true);
           const delay2 = await singlePing();
+
           // 并行请求两次
           // const [delay1, delay2] = await Promise.all([
           //   singlePing(),
           //   singlePing(true),
           // ]);
           // 选择最低延迟
-          const minDelay = Math.min(delay1, delay2);
+          let minDelay = Math.min(delay1, delay2);
+
+          if (minDelay === 0 || minDelay === 999) {
+            const retryDelay = await singlePing();
+            minDelay = Math.min(minDelay, retryDelay);
+          }
 
           set(
             produce((draft) => {
