@@ -124,7 +124,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={RiAccessibilityLine} />
-            <HighLight>专用节点需要每个账号单独赞助才能解锁</HighLight>
+            <HighLight>注意：如果使用专用节点，每个账号都要单独赞助</HighLight>
           </ListItem>
 
           <ListItem textAlign="left">
