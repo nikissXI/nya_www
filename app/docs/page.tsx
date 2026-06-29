@@ -254,6 +254,11 @@ const DocumentPage = () => {
         手机、电脑都能安装WG客户端，要安装在运行游戏的设备上
       </Text>
 
+      <Text>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        底层是Linux的设备也能接入，如Steam Deck掌机，教程自己查询或联系服主
+      </Text>
+
       <Box mt={5} display={tunnelName === undefined ? "hidden" : "block"}>
         {/* <Heading size="md" pb={2} color="#00ff17">
           2. WG下载和隧道导入
