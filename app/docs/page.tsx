@@ -88,7 +88,7 @@ const DocumentPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (confText) {
+    if (userInfo) {
       getConfKey();
       setGoToDoc(false);
     } else {
