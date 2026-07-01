@@ -458,7 +458,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <br />
                     多线 - 首选，适合中国大陆任意网络
                     <br />
-                    电信 - 适合中国电信用户（不懂就别选，小心卡出屎）
+                    电信 - 适合中国电信用户，不懂就别选，小心卡出屎
                     <br />
                     跨境 - 适合跨中国大陆（即国内和国外）联机，港澳台也算“国外”
                     <br />
@@ -470,9 +470,9 @@ export const ServerNodeListModal: React.FC = () => {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     负载值解读：
                     <br />
-                    负载越低节点越流畅，负载高就会导致联机卡顿
+                    即节点承受能力，使用的人越多负载越高，80％以上时联机容易卡顿
                     <br />
-                    追求稳定可选择赞助解锁金色的专用节点（用的人少）
+                    追求稳定可以考虑赞助，解锁专用节点，这些节点用的人少
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -482,7 +482,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <br />
                     网络延迟越低越好，如果不是延迟敏感游戏不必追求低延迟
                     <br />
-                    一般主机延迟越低联机体验越好，实际游戏联机延迟是主机与客机延迟的总和
+                    延迟越低联机体验越好，实际游戏联机延迟是主机与客机延迟的总和
                   </Text>
                 </ListItem>
                 <ListItem>
