@@ -366,7 +366,7 @@ export default function Page() {
             onClick={() => {
               if (onlineStatus === "离线") {
                 openToast({
-                  content: "WG客户端未连接",
+                  content: "WG未连接，首次使用请看教程",
                   status: "warning",
                 });
                 return;
@@ -384,7 +384,7 @@ export default function Page() {
             onClick={() => {
               if (onlineStatus === "离线") {
                 openToast({
-                  content: "WG客户端未连接",
+                  content: "WG未连接，首次使用请看教程",
                   status: "warning",
                 });
                 return;
@@ -743,7 +743,7 @@ export default function Page() {
 
           {onlineStatus === "离线" && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
-              WG客户端下载和教程👉
+              WG下载和联机教程👉
               <Button
                 variant="link"
                 bg="transparent"
