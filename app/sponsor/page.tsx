@@ -190,7 +190,7 @@ const Page = () => {
                     mr={2}
                   >
                     {userInfo
-                      ? `UID：${userInfo.uid}`
+                      ? `您的UID是 ${userInfo.uid}`
                       : `（请先登录查看您的UID）`}
                   </Text>
 
