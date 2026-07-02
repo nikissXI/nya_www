@@ -112,7 +112,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            如果需要独享联机节点，可以联系服主进行定制（不低于100元/月）
+            如果需要独享联机节点，可以联系服主进行定制，最低80元/月
           </ListItem>
 
           <ListItem textAlign="left">
@@ -129,12 +129,12 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={RiVipCrownFill} />
-            赞助可获得专属铭牌，并且累计赞助10元解锁专用节点（其中跨境节点需要20元）
+            赞助可获得专属铭牌，累计赞助10元解锁专用节点（跨境节点需要20元）
           </ListItem>
 
           <ListItem textAlign="left">
             <ListIcon as={IoChatboxEllipsesOutline} />
-            赞助金额累计不低于10元可联系服主获取喵服使用相关问题的技术支持
+            赞助金额累计不低于10元可联系服主获取一对一技术支持
             <br />
             <Text textAlign="center">
               <Icon as={FaWeixin} />
