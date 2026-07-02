@@ -14,7 +14,7 @@ export default function Page() {
   const highlights = [
     {
       title: "免费无广",
-      description: "多个免费节点直接使用，无任何广告",
+      description: "多个节点免费使用，无任何广告",
       icon: "✨",
     },
     {
@@ -23,8 +23,8 @@ export default function Page() {
       icon: "📱",
     },
     {
-      title: "全球可用",
-      description: "全球任意地区均可使用，打破地域限制",
+      title: "跨境无忧",
+      description: "设有跨境专线，国内外稳定联机",
       icon: "🌍",
     },
   ];
@@ -52,7 +52,7 @@ export default function Page() {
         my={3}
       />
       <Heading as="h1" size="lg" fontWeight="bold">
-        喵服 - 异地联机解决方案
+        喵服 - 连接异地的彼此
       </Heading>
 
       {/* 平台亮点 */}
