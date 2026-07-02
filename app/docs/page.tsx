@@ -672,7 +672,7 @@ const DocumentPage = () => {
             </Box>
           </Button>
         </Flex>
-        &emsp;WG隧道打开还是离线👉
+        &emsp;如果WG隧道打开还是离线👉
         <Button
           variant="link"
           bg="transparent"
@@ -681,6 +681,7 @@ const DocumentPage = () => {
         >
           点我排查
         </Button>
+        喵服网页关闭不影响联机，网页只负责创建和加入房间，WG客户端保持连接就行
       </Box>
 
       <Box id="games" mt={5}>
