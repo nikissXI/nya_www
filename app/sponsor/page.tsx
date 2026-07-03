@@ -118,18 +118,17 @@ const Page = () => {
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
-              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用
+              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用，联机房间玩家栏显示赞助铭牌
             </HighLight>
           </ListItem>
 
           <ListItem textAlign="left">
             <ListIcon as={RiAccessibilityLine} />
-            <HighLight>注意：如果使用专用节点，每个账号都要单独赞助</HighLight>
-          </ListItem>
-
-          <ListItem textAlign="left">
-            <ListIcon as={RiVipCrownFill} />
-            赞助可获得专属铭牌，累计赞助10元解锁专用节点（跨境节点需要20元）
+            赞助专用节点满10元解锁，跨境节点满20元解锁。
+            <HighLight>
+              如果使用专用节点，每个账号都要单独赞助，简单理解就是按人头收费。
+            </HighLight>
+            鉴于按人头收费不方便流动玩家，赞助者可提出转移用户的赞助金额，2元/次
           </ListItem>
 
           <ListItem textAlign="left">
