@@ -526,7 +526,9 @@ const DocumentPage = () => {
               <SelectNode />
 
               <Text mt={5}>
-                ② 下载并安装WG客户端，如果双击无法安装，
+                ②
+                下载并安装WG客户端，如果下载失败，加Q群924644467，群文件有
+                {/* ，如果双击无法安装，
                 <Link
                   ml={1}
                   color="#7dd4ff"
@@ -535,15 +537,14 @@ const DocumentPage = () => {
                 >
                   点我查看解决方法
                 </Link>
-                <br />
-                如果文件下载失败，就加Q群924644467，群文件有
+                <br /> */}
               </Text>
 
               <Button
                 size="sm"
                 mx={2}
                 onClick={() => {
-                  window.open("/apks/wireguard-amd64-0.5.3.msi", "_blank");
+                  window.open("/apks/wg客户端，解压后双击运行.zip", "_blank");
                 }}
               >
                 点击下载安装包
@@ -558,7 +559,7 @@ const DocumentPage = () => {
               <Text mt={5}>
                 ④ 跟着下图操作完成隧道导入，看红字就行
                 <br />
-                默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建
+                {/* 默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建 */}
                 <Flex alignItems="center" mt={1}>
                   &emsp;<HighLight>点连接后出现“隧道错误”的处理方法</HighLight>
                   <Text
@@ -571,29 +572,30 @@ const DocumentPage = () => {
                     {showMSI ? "点击收起" : "点击查看"}
                   </Text>
                 </Flex>
-                <Collapse in={showMSI}>
-                  <Text fontSize="sm">
-                    <Text
-                      as="span"
-                      fontSize="sm"
-                      color="#7dfffe"
-                      onClick={() => {
-                        window.open("/apks/右键以管理员身份运行.bat", "_blank");
-                      }}
-                    >
-                      点击下载bat修复文件
-                    </Text>
-                    ，然后右键“以管理员身份运行”修复。如果还是不行，就按下图指引“网络重置”试试
-                  </Text>
-                  <Image
-                    src="/images/wg/network_reset.png"
-                    alt="network_reset"
-                    borderRadius="md"
-                    maxW="500px"
-                    mb={10}
-                  />
-                </Collapse>
               </Text>
+              <Collapse in={showMSI}>
+                <Text fontSize="sm">
+                  <Text
+                    as="span"
+                    fontSize="sm"
+                    color="#7dfffe"
+                    onClick={() => {
+                      window.open("/apks/右键以管理员身份运行.bat", "_blank");
+                    }}
+                  >
+                    点击下载bat修复文件
+                  </Text>
+                  ，然后右键“以管理员身份运行”修复。如果还是不行，就按下图指引“网络重置”试试
+                </Text>
+                <Image
+                  src="/images/wg/network_reset.png"
+                  alt="network_reset"
+                  borderRadius="md"
+                  maxW="500px"
+                  mb={10}
+                />
+              </Collapse>
+
               <Image
                 src="/images/wg/win_msi.jpg"
                 alt="win_msi"
@@ -681,8 +683,9 @@ const DocumentPage = () => {
         >
           点我排查
         </Button>
-        
-        <Text>喵服网页关闭不影响联机，网页只负责创建和加入房间，WG客户端保持连接就行</Text>
+        <Text>
+          喵服网页关闭不影响联机，网页只负责创建和加入房间，WG客户端保持连接就行
+        </Text>
       </Box>
 
       <Box id="games" mt={5}>
