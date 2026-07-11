@@ -34,6 +34,7 @@ const formatDate = (rawTs: number, short: boolean = false): string => {
 };
 
 const carouselMessages = [
+  "赞助专用节点现在仅需房主赞助",
   "杀戮尖塔联机有专用节点STS",
   "节点增删情况会通过公告告知",
   "不建议用喵服玩MC，联机会卡",

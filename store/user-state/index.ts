@@ -45,6 +45,7 @@ interface RoomInfo {
   user_ip: string;
   hoster_ip: string;
   members: Member[];
+  room_max: number;
   room_passwd: string;
 }
 // 登录后，拉取的节点信息

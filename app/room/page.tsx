@@ -548,7 +548,7 @@ export default function Page() {
           </Button>
 
           <Text fontSize="lg" fontWeight="bold" ml={2} mr={3}>
-            {roomData?.members.length}/8
+            {roomData?.members.length}/{roomData?.room_max}
           </Text>
 
           <Button
