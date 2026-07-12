@@ -364,13 +364,13 @@ export default function Page() {
             fontSize="25px"
             disabled={!canCreate}
             onClick={() => {
-              if (onlineStatus === "离线") {
-                openToast({
-                  content: "WG未连接，首次使用请看教程",
-                  status: "warning",
-                });
-                return;
-              }
+              // if (onlineStatus === "离线") {
+              //   openToast({
+              //     content: "WG未连接，首次使用请看教程",
+              //     status: "warning",
+              //   });
+              //   return;
+              // }
 
               handleCreateRoom();
             }}
@@ -382,13 +382,13 @@ export default function Page() {
             h="50px"
             fontSize="25px"
             onClick={() => {
-              if (onlineStatus === "离线") {
-                openToast({
-                  content: "WG未连接，首次使用请看教程",
-                  status: "warning",
-                });
-                return;
-              }
+              // if (onlineStatus === "离线") {
+              //   openToast({
+              //     content: "WG未连接，首次使用请看教程",
+              //     status: "warning",
+              //   });
+              //   return;
+              // }
 
               joinOnOpen();
               setHideJoinPassInput(true);
