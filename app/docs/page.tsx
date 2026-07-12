@@ -526,8 +526,7 @@ const DocumentPage = () => {
               <SelectNode />
 
               <Text mt={5}>
-                ②
-                下载并安装WG客户端，如果下载失败，加Q群924644467，群文件有
+                ② 下载并安装WG客户端，如果下载失败，加Q群924644467，群文件有
                 {/* ，如果双击无法安装，
                 <Link
                   ml={1}
@@ -647,7 +646,7 @@ const DocumentPage = () => {
       </Box>
 
       <Box mt={5}>
-        ⑤ WG隧道打开后<HighLight>等5秒</HighLight>点刷新，在线就可以了
+        ⑤ WG隧道打开后<HighLight>等5秒</HighLight>点刷新，在线就是连上了
         <Flex align="center">
           &emsp;
           <Text
@@ -691,9 +690,10 @@ const DocumentPage = () => {
       <Box id="games" mt={5}>
         <Text>
           ⑥
-          在下方列表中的游戏就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台。
+          玩家都在同一个联机房间后，请查阅下方列表，有收录就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台。
           <HighLight>点击游戏名阅读联机操作指导</HighLight>
-          ，没有的游戏请自行尝试或加群1047464328找群(即服主)询问
+          <br />
+          没有的游戏请自行尝试或加群1047464328找群(即服主)询问，如果是支持填IP加入的游戏那就100%支持，搜索加入的不好说
         </Text>
         <Box>
           <Input
