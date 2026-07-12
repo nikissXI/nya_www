@@ -55,11 +55,11 @@ const carouselMessages = [
 ];
 
 const carouselMessagesVip = [
+  "赞助节点房间，最大人数看赞助金额",
   "关闭浏览器不影响联机，WG不关即可",
   "联机时使用该页面上显示的联机IP",
   "房间里任意玩家都可以当主机",
   "如果校园网联机体验不佳，换流量试试",
-  "联机有任何问题都可以联系服主",
 ];
 
 export default function Page() {
