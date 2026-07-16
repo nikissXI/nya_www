@@ -246,6 +246,11 @@ const DocumentPage = () => {
 
       <Text my={2}>
         <Icon as={MdTipsAndUpdates} mr={2} />
+        禁止使用喵服进行Minecraft联机，发现则封号处理
+      </Text>
+
+      <Text my={2}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
         使用喵服联机的玩家都要注册账号，并跟着教程安装WG客户端、导入隧道
       </Text>
 
@@ -691,9 +696,9 @@ const DocumentPage = () => {
         <Text>
           ⑥
           玩家都在同一个联机房间后，请查阅下方列表，有收录就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台。
-          <HighLight>点击游戏名阅读联机操作指导</HighLight>
           <br />
-          没有的游戏请自行尝试或加群1047464328找群(即服主)询问，如果是支持填IP加入的游戏那就100%支持，搜索加入的不好说
+          没有的游戏请自行尝试或加群1047464328找群(即服主)询问，如果是支持填IP加入的游戏那就100%支持，搜索加入的不好说。
+          <HighLight>点击游戏名阅读联机操作指导</HighLight>
         </Text>
         <Box>
           <Input
