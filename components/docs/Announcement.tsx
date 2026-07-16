@@ -37,8 +37,6 @@ const carouselMessages = [
   "赞助专用节点现在仅需房主赞助",
   "杀戮尖塔联机有专用节点STS",
   "喵服禁止MC联机，发现就封号",
-  "切换节点后，要使用对应隧道",
-  "节点增删情况会通过公告告知",
 ];
 
 export const AnnouncementsModal = ({}) => {
@@ -54,7 +52,7 @@ export const AnnouncementsModal = ({}) => {
       setCarouselIndex(
         (prevIndex) => (prevIndex + 1) % carouselMessages.length,
       );
-    }, 8000);
+    }, 5000);
 
     // 清理定时器
     return () => clearInterval(interval);
