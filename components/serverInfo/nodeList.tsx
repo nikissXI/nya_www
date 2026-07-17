@@ -490,7 +490,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     带宽选择：
                     <br />
-                    不同游戏所需带宽不一样，卡牌类游戏0.3M带8个人也完全足够，大多游戏两三个人的时候0.8M完全足够
+                    不同游戏所需带宽不一样，卡牌类游戏0.3M带8个人也完全足够，闯关、经营类0.6M带3到4人没问题，大多游戏两三个人的时候0.8M完全足够
                   </Text>
                 </ListItem>
               </List>
