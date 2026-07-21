@@ -21,7 +21,7 @@ export default function Page() {
       <Text textAlign="center">喵服关联QQ群：1074963191</Text>
 
       <Text textAlign="center">
-        联机流量不一定100%能走喵服，如果使用喵服后还是觉得卡顿，可以加群找服主问问
+        该游戏联机功能做的很屎，需要低网络延迟否则很卡，而且其中一个人卡其他人跟着卡。更多问题请加Q群问。服主不解决游戏里的联机和mod问题，因为不玩这游戏。
       </Text>
 
       <Divider my={5} />
