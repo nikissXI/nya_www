@@ -32,7 +32,7 @@ export default function Page() {
 
       <Text mt={3}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        如果用喵服，端游和端游联机，或端游和手游联机，需要装联机mod
+        如果用喵服，某一位是端游则需要装联机mod（创意工坊里找的，换其他的也可以）
         <Link
           ml={1}
           color="#7dd4ff"
@@ -42,7 +42,7 @@ export default function Page() {
           点我下载
         </Link>
         <br />
-        装联机mod后，手游需要进游戏设置把本地联机补丁关掉（如下图）
+        装联机mod后，手游需要进游戏设置把本地联机补丁关掉（如下图）。如果全部人都是手游，不需要另外装mod，直接游戏里填IP加入就行（手游内置联机mod并默认开启）。
       </Text>
 
       <Image
