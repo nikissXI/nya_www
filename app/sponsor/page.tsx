@@ -120,7 +120,7 @@ const Page = () => {
             <HighLight>
               赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用。
             </HighLight>
-            赞助专用节点满10元解锁，跨境节点满20元解锁
+            赞助专用节点满10元解锁，跨境节点满20元解锁。当然我不可能包一辈子能用，人终有一死
           </ListItem>
 
           <ListItem textAlign="left">
@@ -136,7 +136,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={IoChatboxEllipsesOutline} />
-            赞助金额累计不低于10元可联系服主获取一对一技术支持
+            赞助金额累计不低于20元可联系服主获取一对一技术支持
             <br />
             <Text textAlign="center">
               <Icon as={FaWeixin} />
