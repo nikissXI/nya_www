@@ -244,7 +244,7 @@ const DocumentPage = () => {
         如果你是第一次用组网软件，需要点耐心和细心看完教程
       </Heading>
 
-      <Text my={2}>
+      <Text my={2} fontWeight="bold">
         <Icon as={MdTipsAndUpdates} mr={2} />
         禁止使用喵服进行Minecraft联机，发现则封号处理
       </Text>
@@ -560,23 +560,21 @@ const DocumentPage = () => {
               </Box>
               {DownloadButton()}
 
-              <Text mt={5}>
-                ④ 跟着下图操作完成隧道导入，看红字就行
-                <br />
-                {/* 默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建 */}
-                <Flex alignItems="center" mt={1}>
-                  &emsp;<HighLight>点连接后出现“隧道错误”的处理方法</HighLight>
-                  <Text
-                    ml={2}
-                    as="span"
-                    color="#7dfffe"
-                    size="sm"
-                    onClick={() => setShowMSI(!showMSI)}
-                  >
-                    {showMSI ? "点击收起" : "点击查看"}
-                  </Text>
-                </Flex>
-              </Text>
+              <Text mt={5}>④ 跟着下图操作完成隧道导入，看红字就行</Text>
+              {/* 默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建 */}
+              <Flex alignItems="center" mt={1}>
+                &emsp;<HighLight>点连接后出现“隧道错误”的处理方法</HighLight>
+                <Text
+                  ml={2}
+                  as="span"
+                  color="#7dfffe"
+                  size="sm"
+                  onClick={() => setShowMSI(!showMSI)}
+                >
+                  {showMSI ? "点击收起" : "点击查看"}
+                </Text>
+              </Flex>
+
               <Collapse in={showMSI}>
                 <Text fontSize="sm">
                   <Text
