@@ -32,7 +32,7 @@ export default function Page() {
 
       <Text mt={3}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        如果用喵服，某一位是端游则需要装联机mod（创意工坊里找的，换其他的也可以）
+        如果用喵服，某一位是端游则需要装联机mod（创意工坊里找的DirectConnectIP，换其他的也可以）
         <Link
           ml={1}
           color="#7dd4ff"
