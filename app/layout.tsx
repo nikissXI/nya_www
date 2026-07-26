@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import Frame from "@/components/Frame";
-import React from "react";
+
 import { Box, ChakraProvider } from "@chakra-ui/react";
+import Frame from "@/components/Frame";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "喵~服远程联机平台",
-  description: "全平台支持的局域网游戏联机平台",
+  description: "全平台局域网游戏联机平台",
 };
 
 export default function RootLayout({

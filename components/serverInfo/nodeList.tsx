@@ -31,24 +31,22 @@ import { MdOutlineSignalCellularAlt } from "react-icons/md";
 import { FaServer } from "react-icons/fa6";
 import { motion } from "framer-motion";
 
-// 负载等级判断函数
-function getNetBadgeProps(net: number) {
-  if (net <= 50) return { colorScheme: "green" };
-  if (net <= 85) return { colorScheme: "yellow" };
-  return { colorScheme: "red" };
+function getNetColor(net: number) {
+  if (net <= 60) return "green.400";
+  if (net <= 85) return "yellow.400";
+  return "red.400";
 }
 
-function getDelayBadgeProps(delay: number) {
-  if (delay < 60) return { colorScheme: "green" };
-  else if (delay < 120) return { colorScheme: "yellow" };
-  else return { colorScheme: "red" };
+function getNetText(net: number) {
+  if (net <= 60) return "空闲";
+  if (net <= 85) return "正常";
+  return "拥挤";
 }
 
-function getNetTypeBadgeProps(netType: string) {
-  if (netType === "多线") return { colorScheme: "orange" };
-  else if (netType === "电信") return { colorScheme: "blue" };
-  else if (netType === "跨境") return { colorScheme: "yellow" };
-  else return { colorScheme: "pink" };
+function getDelayColor(delay: number): string {
+  if (delay < 60) return "green.400";
+  if (delay < 120) return "yellow.400";
+  return "red.400";
 }
 
 const spin = keyframes`
@@ -199,14 +197,7 @@ const ServerNodeItem: React.FC<{
                   <Text
                     fontSize="lg"
                     fontWeight="bold"
-                    color={
-                      getDelayBadgeProps(node.delay).colorScheme === "green"
-                        ? "green.400"
-                        : getDelayBadgeProps(node.delay).colorScheme ===
-                            "yellow"
-                          ? "yellow.400"
-                          : "red.400"
-                    }
+                    color={getDelayColor(node.delay)}
                   >
                     {node.delay}ms
                   </Text>
@@ -235,17 +226,12 @@ const ServerNodeItem: React.FC<{
             {node.net !== null && (
               <Box>
                 <Text
-                  fontSize="lg"
+                  // fontSize="lg"
                   fontWeight="bold"
-                  color={
-                    getNetBadgeProps(node.net).colorScheme === "green"
-                      ? "green.400"
-                      : getNetBadgeProps(node.net).colorScheme === "yellow"
-                        ? "yellow.400"
-                        : "red.400"
-                  }
+                  color={getNetColor(node.net)}
                 >
-                  {node.net}%
+                  {/* {node.net}% */}
+                  {getNetText(node.net)}
                 </Text>
               </Box>
             )}
@@ -458,7 +444,7 @@ export const ServerNodeListModal: React.FC = () => {
                     <br />
                     多线 - 首选，适合中国大陆任意网络，不含港澳台
                     <br />
-                    电信 - 适合中国电信用户，不论主客机，其他运营商容易丢包卡顿
+                    电信 - 适合主客机都是中国电信的用户，其他运营商联机容易卡顿
                     <br />
                     跨境 - 适合跨中国大陆，即国内和国外联机，港澳台也算“国外”
                     <br />
@@ -468,11 +454,10 @@ export const ServerNodeListModal: React.FC = () => {
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
-                    负载值解读：
+                    负载解读：
                     <br />
-                    即节点承受能力，使用的人越多负载越高，80％以上时联机容易卡顿
-                    <br />
-                    追求稳定可以考虑赞助，解锁专用节点，这些节点用的人少
+                    显示拥挤时联机容易卡顿。
+                    追求稳定建议使用赞助专用节点，用的人少基本不挤
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -480,9 +465,8 @@ export const ServerNodeListModal: React.FC = () => {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     延迟说明：
                     <br />
-                    网络延迟越低越好，如果不是延迟敏感游戏不必追求低延迟
-                    <br />
-                    延迟越低联机体验越好，实际游戏联机延迟是主机与客机延迟的总和
+                    网络延迟越低越好，如果不是延迟敏感游戏不必追求低延迟。
+                    实际联机延迟=主机延迟+客机延迟
                   </Text>
                 </ListItem>
                 <ListItem>
