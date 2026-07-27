@@ -39,7 +39,7 @@ function getNetColor(net: number) {
 
 function getNetText(net: number) {
   if (net <= 60) return "空闲";
-  if (net <= 85) return "正常";
+  if (net <= 85) return "一般";
   return "拥挤";
 }
 
