@@ -63,7 +63,7 @@ export const AnnouncementsModal = ({}) => {
     <Box textAlign="center">
       <Box mx={5} mb={3} fontWeight="bold">
         <Text color="#ffca3d" size="sm">
-          {serverData?.carouselMsg[carouselIndex]}
+          {serverData?.carouselMsg && serverData?.carouselMsg[carouselIndex]}
         </Text>
 
         <Flex justify="center" align="center" wrap="wrap">
