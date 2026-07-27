@@ -33,12 +33,6 @@ const formatDate = (rawTs: number, short: boolean = false): string => {
   else return `${year}年${month}月${date}日 ${hours}:${minutes}`;
 };
 
-// const carouselMessages = [
-//   "杀戮尖塔联机有专用节点STS",
-//   "喵服禁止玩MC，发现就封号",
-//   "切换节点后，要使用对应隧道",
-// ];
-
 export const AnnouncementsModal = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -57,7 +51,7 @@ export const AnnouncementsModal = ({}) => {
 
     // 清理定时器
     return () => clearInterval(interval);
-  }, []);
+  }, [serverData?.carouselMsg]);
 
   return (
     <Box textAlign="center">

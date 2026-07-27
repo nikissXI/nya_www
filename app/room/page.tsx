@@ -63,19 +63,6 @@ export default function Page() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const [carouselIndex, setCarouselIndex] = useState(0);
-
-  // 轮播效果：每5秒更换一条消息
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCarouselIndex(
-        (prevIndex) => (prevIndex + 1) % carouselMessages.length,
-      );
-    }, 8000);
-
-    // 清理定时器
-    return () => clearInterval(interval);
-  }, []);
 
   const {
     isOpen: joinIsOpen,
@@ -114,6 +101,18 @@ export default function Page() {
       getRoomData();
     }
   }, [userInfo?.node_alias, getRoomData]);
+
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCarouselIndex(
+        (prevIndex) => (prevIndex + 1) % carouselMessages.length,
+      );
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // 通用请求函数，自动管理 loading 和错误处理
   const requestRoomApi = useCallback(
