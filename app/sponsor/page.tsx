@@ -112,7 +112,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            如果需要独享联机节点，可以联系服主进行定制，最低60元/月
+            如果需要独享联机节点，可以联系服主进行定制，最低60元/月，定制节点房间最大人数不限制
           </ListItem>
 
           <ListItem textAlign="left">
@@ -125,7 +125,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={RiAccessibilityLine} />
-            赞助节点的房间人数随着房主的赞助金额增加而增加，并且多个赞助者在同一房间可叠加，最大8
+            赞助节点的房间人数随着房主的赞助金额增加而增加，并且多个赞助者在同一房间可叠加，最大16
             <br />
             计算公式：房间最大人数 = 累计赞助费用 // 节点解锁费用 + 1
             <br />
