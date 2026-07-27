@@ -44,13 +44,16 @@ export default function Page() {
         <br />
         装联机mod后，手游需要进游戏设置把本地联机补丁关掉（如下图）。如果全部人都是手游，不需要另外装mod，直接游戏里填IP加入就行（手游内置联机mod并默认开启）。
       </Text>
-      <Text>如果你脑子比较好用，你可以尝试理解一下为什么要装联机mod：手游是内置了一个不知道什么名字的联机mod，而电脑默认是没内置的，所以电脑原版是无法通过IP加入游戏，所以需要另外装个一个联机mod实现通过IP加入游戏。但因为手游内置的跟电脑另外安装的联机mod不一样，所以需要把手游内置的联机mod关掉并安装跟电脑那边一样的联机mod。而手游跟手游不需要另外装联机mod是因为内置的联机mod一样</Text>
 
       <Image
         maxW="400px"
         src="/images/slayTheSpire/slayTheSpire_2.jpg"
         alt="slayTheSpire_2"
       />
+      <Text>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        如果你脑子比较好用，你可以尝试理解一下为什么要装联机mod：手游是内置了一个不知道什么名字的联机mod，而电脑默认是没内置的，所以电脑原版是无法通过IP加入游戏，所以需要另外装个一个联机mod实现通过IP加入游戏。但因为手游内置的跟电脑另外安装的联机mod不一样，所以需要把手游内置的联机mod关掉并安装跟电脑那边一样的联机mod。而手游跟手游不需要另外装联机mod是因为内置的联机mod一样
+      </Text>
 
       <Text mt={3}>
         <Icon as={MdTipsAndUpdates} mr={2} />
