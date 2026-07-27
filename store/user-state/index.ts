@@ -18,10 +18,11 @@ interface AnnouncementItem {
   content: string;
 }
 interface ServerData {
-  viewCount: number | null;
-  userCount: number | null;
-  relateGroup: GroupItem[] | null;
-  announcements: AnnouncementItem[] | null;
+  viewCount: number;
+  userCount: number;
+  relateGroup: GroupItem[];
+  carouselMsg: string[];
+  announcements: AnnouncementItem[];
 }
 interface UserInfo {
   uid: number;
