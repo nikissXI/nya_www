@@ -16,7 +16,7 @@ export default function Page() {
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        端游目前不能与手游联机
+        端游目前不能与手游联机，手游苹果和安卓可以联机
       </Text>
 
       <Divider my={5} />
@@ -50,12 +50,17 @@ export default function Page() {
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        玩家都处于同个联机房间并在线后，使用离线模式，主机创建多人游戏，客机搜索房间加入即可
+        玩家都处于同个联机房间并在线后，主机创建多人游戏，客机搜索房间加入即可
       </Text>
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         如果客机加入时提示“这个服务器仅允许在相同局域网的玩家连接”，主机重开游戏再让客机加入，这是游戏Bug
+      </Text>
+
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        如果搜不到游戏并且你的游戏能调出控制台，也可以用端游的命令使用IP加入游戏
       </Text>
 
       <Divider my={5} />
