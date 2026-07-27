@@ -44,3 +44,15 @@ export const copyText = async (text: string) => {
     }
   } catch (err) {}
 };
+
+export const getNetColor = (net: number) => {
+  if (net <= 60) return "green.400";
+  if (net <= 85) return "yellow.400";
+  return "red.400";
+};
+
+export const getNetText = (net: number) => {
+  if (net <= 60) return "空闲";
+  if (net <= 85) return "一般";
+  return "拥挤";
+};

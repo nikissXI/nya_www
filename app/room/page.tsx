@@ -27,7 +27,7 @@ import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
 import { useUserStateStore } from "@/store/user-state";
 import { getAuthToken } from "@/store/authKey";
-import { copyText, isInteger } from "@/utils/strings";
+import { copyText, getNetColor, getNetText, isInteger } from "@/utils/strings";
 import { IoIosExit } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
@@ -608,15 +608,10 @@ export default function Page() {
                         as="span"
                         ml={1}
                         fontWeight="bold"
-                        color={
-                          nodeNetLoad >= 85
-                            ? "#ff4444"
-                            : nodeNetLoad >= 50
-                              ? "#ffa524"
-                              : "#3fdb1d"
-                        }
+                        color={getNetColor(nodeNetLoad)}
                       >
-                        {nodeNetLoad}%
+                        {/* {nodeNetLoad}% */}
+                        {getNetText(nodeNetLoad)}
                       </Text>
                     </Text>
                   ) : (

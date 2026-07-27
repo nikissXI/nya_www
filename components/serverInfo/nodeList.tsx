@@ -30,18 +30,9 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { MdOutlineSignalCellularAlt } from "react-icons/md";
 import { FaServer } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { getNetColor, getNetText } from "@/utils/strings";
 
-function getNetColor(net: number) {
-  if (net <= 60) return "green.400";
-  if (net <= 85) return "yellow.400";
-  return "red.400";
-}
 
-function getNetText(net: number) {
-  if (net <= 60) return "空闲";
-  if (net <= 85) return "一般";
-  return "拥挤";
-}
 
 function getDelayColor(delay: number): string {
   if (delay < 60) return "green.400";
