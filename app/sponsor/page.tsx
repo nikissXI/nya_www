@@ -118,7 +118,7 @@ const Page = () => {
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
-              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用。
+              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用，仅需房主赞助。
             </HighLight>
             赞助专用节点满10元解锁，跨境节点满20元解锁。当然我不可能包一辈子能用，人终有一死
           </ListItem>
