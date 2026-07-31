@@ -112,7 +112,7 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            如果需要独享联机节点，可以联系服主进行定制，最低60元/月，定制节点房间最大人数为99
+            如果需要独享联机节点，可以联系服主进行定制，最低50元/月，定制节点房间最大人数为99
           </ListItem>
 
           <ListItem textAlign="left">
