@@ -97,8 +97,9 @@ interface ILoginStateSlice {
   // 节点列表
   nodeMap: Map<string, NodeInfo>;
   getNodeList: () => Promise<void>;
-  nodeReady: boolean;
-  setNodeReady: (ready: boolean) => void;
+
+  selectedNode: string | undefined;
+  setSelectedNode: (node_alias: string) => void;
 
   needShowReget: boolean;
   setNeedShowReget: () => void;
@@ -486,19 +487,18 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             status: "error",
           });
         } finally {
-          get().setNodeReady(true);
-          openToast({
-            content: "节点列表已刷新",
-            status: "success",
-          });
+          // openToast({
+          //   content: "节点列表已刷新",
+          //   status: "success",
+          // });
           performance.clearResourceTimings();
         }
       },
-      nodeReady: false,
-      setNodeReady: (ready: boolean) => {
+      selectedNode: undefined,
+      setSelectedNode: (node_alias: string) => {
         set(
           produce((draft) => {
-            draft.nodeReady = ready;
+            draft.selectedNode = node_alias;
           }),
         );
       },
@@ -516,6 +516,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       // 节点选择
       showNodeListModal: false,
       setNodeListModal: () => {
+        const now_node_alias = get().userInfo?.node_alias;
+        if (now_node_alias) {
+          get().setSelectedNode(now_node_alias);
+        }
         set(
           produce((draft) => {
             // 如果窗口就是打开并获取了新隧道就弹出提示
@@ -539,6 +543,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               draft.selectNodeLock = true;
             }),
           );
+
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const params = manual ? `?node_alias=${node_alias}` : ``;
           const resp = await fetch(`${apiUrl}/selectNode` + params, {

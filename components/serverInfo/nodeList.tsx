@@ -32,8 +32,6 @@ import { FaServer } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { getNetColor, getNetText } from "@/utils/strings";
 
-
-
 function getDelayColor(delay: number): string {
   if (delay < 60) return "green.400";
   if (delay < 120) return "yellow.400";
@@ -122,7 +120,6 @@ const ServerNodeItem: React.FC<{
             });
             return;
           }
-
           selectNode(node.alias, true);
         }}
         _hover={{
@@ -235,13 +232,12 @@ const ServerNodeItem: React.FC<{
 
 export const ServerNodeListModal: React.FC = () => {
   const {
-    nodeReady,
     getNodeList,
     nodeMap,
     showNodeListModal,
     setNodeListModal,
     userInfo,
-    setNodeReady,
+    selectedNode,
   } = useUserStateStore();
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
@@ -251,26 +247,45 @@ export const ServerNodeListModal: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterBy, setFilterBy] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  // const nodeListRef = useRef<HTMLDivElement>(null);
 
   // 处理节点数据
   const nodes = nodeMap ? Array.from(nodeMap.values()) : [];
   const filteredNodes = filterNodes(nodes, filterBy, searchTerm);
-  const sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
+  let sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
 
-  // 自动滚动到选中节点
-  useEffect(() => {
-    if (showNodeListModal && nodeReady && userInfo?.node_alias) {
-      const selectedNodeId = userInfo.node_alias;
-      setTimeout(() => {
-        const nodeElement = document.getElementById(selectedNodeId);
-        if (nodeElement) {
-          nodeElement.scrollIntoView({ behavior: "smooth", block: "center" });
-          setNodeReady(false);
-        }
-      }, 100); // 延迟执行，确保DOM已经渲染完成
+  // 如果已有选中节点，将其放到列表第一位（在每次打开列表时置顶）
+  if (selectedNode) {
+    const idx = sortedNodes.findIndex((n) => n.alias === selectedNode);
+    if (idx > -1) {
+      const [selectedNode] = sortedNodes.splice(idx, 1);
+      sortedNodes.unshift(selectedNode);
     }
-  }, [showNodeListModal, nodeReady, userInfo?.node_alias, setNodeReady]);
+  }
+
+  // useEffect(() => {
+  //   console.log("here");
+  //   if (nodeFixed) {
+  //     const idx = sortedNodes.findIndex((n) => n.alias === userInfo?.node_alias);
+  //     if (idx > -1) {
+  //       const [selectedNode] = sortedNodes.splice(idx, 1);
+  //       sortedNodes.unshift(selectedNode);
+  //     }
+  //   }
+  // }, [userInfo?.node_alias, nodeFixed]);
+
+  // // 自动滚动到选中节点
+  // useEffect(() => {
+  //   if (showNodeListModal && nodeFixed && userInfo?.node_alias) {
+  //     const selectedNodeId = userInfo.node_alias;
+  //     setTimeout(() => {
+  //       const nodeElement = document.getElementById(selectedNodeId);
+  //       if (nodeElement) {
+  //         nodeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+  //         setNodeFixed(false);
+  //       }
+  //     }, 100); // 延迟执行，确保DOM已经渲染完成
+  //   }
+  // }, [showNodeListModal, nodeFixed, userInfo?.node_alias, setNodeFixed]);
 
   // 获取所有网络类型
   const netTypes = [

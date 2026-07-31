@@ -109,7 +109,7 @@ export default function Page() {
       setCarouselIndex(
         (prevIndex) => (prevIndex + 1) % carouselMessages.length,
       );
-    }, 8000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);
@@ -636,13 +636,7 @@ export default function Page() {
                     <Box
                       w={`${Math.min(nodeNetLoad, 100)}%`}
                       h="100%"
-                      bg={
-                        nodeNetLoad > 80
-                          ? "#ff4444"
-                          : nodeNetLoad > 50
-                            ? "#ffa524"
-                            : "#3fdb1d"
-                      }
+                      bg={getNetColor(nodeNetLoad)}
                       borderRadius="full"
                       transition="width 0.3s ease"
                     />
