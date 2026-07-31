@@ -19,12 +19,13 @@ export default function Page() {
     },
     {
       title: "多端支持",
-      description: "支持安卓/苹果/电脑，支持跨平台联机",
+      description: "支持安卓/苹果/电脑跨平台联机",
       icon: "📱",
     },
     {
-      title: "跨境无忧",
-      description: "设有跨境专线，国内外稳定联机",
+      title: "全球可用",
+      // description: "设有跨境专线，国内外稳定联机",
+      description: "多地设有节点，国内外均可使用",
       icon: "🌍",
     },
   ];
