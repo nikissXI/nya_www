@@ -16,7 +16,7 @@ export default function Page() {
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        端游目前不能与手游联机，手游苹果和安卓可以联机
+        端游目前不能与手游联机
       </Text>
 
       <Divider my={5} />
@@ -40,7 +40,11 @@ export default function Page() {
         如果仍然搜不到，主机关闭系统防火墙后再试
       </Text>
 
-      <Image src="/images/doNotStarve/doNotStarve_lan.webp" maxW="400px" alt="lan" />
+      <Image
+        src="/images/doNotStarve/doNotStarve_lan.webp"
+        maxW="400px"
+        alt="lan"
+      />
 
       <Divider my={5} />
 
@@ -51,6 +55,11 @@ export default function Page() {
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         玩家都处于同个联机房间并在线后，主机创建多人游戏，客机搜索房间加入即可
+      </Text>
+
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        手游苹果和安卓可以联机，但需要两边都用离线模式（都是在线模式不确定是否可以），而且苹果不能做客机（就是无法加入游戏）
       </Text>
 
       <Text my={1}>
