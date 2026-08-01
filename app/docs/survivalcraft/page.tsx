@@ -1,7 +1,6 @@
 "use client";
 
 import { Icon, Divider, Text, Image, Heading } from "@chakra-ui/react";
-import { Button } from "@/components/universal/button";
 import DocFlex from "@/components/docs/DocFlex";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -9,10 +8,6 @@ import { MdTipsAndUpdates } from "react-icons/md";
 export default function Page() {
   return (
     <DocFlex>
-      <Heading my={3} size="md" textAlign="center">
-        教程仍未完善，欢迎加群补充
-      </Heading>
-
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         喵服关联QQ群：1092247198
@@ -25,7 +20,7 @@ export default function Page() {
 
       <Image
         maxW="400px"
-        src="/images/survivalcraft/survivalcraft_1.jpg"
+        src="/images/survivalcraft/survivalcraft_1.webp"
         alt="survivalcraft_1"
       />
 
@@ -35,7 +30,7 @@ export default function Page() {
       </Text>
       <Image
         maxW="400px"
-        src="/images/survivalcraft/survivalcraft_2.jpg"
+        src="/images/survivalcraft/survivalcraft_2.webp"
         alt="survivalcraft_2"
       />
       <Divider my={5} />

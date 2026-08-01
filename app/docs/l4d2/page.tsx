@@ -84,8 +84,8 @@ export default function Page() {
         建议到创意工坊把这个mod打上，能一定程度上避免兼容性问题导致无法加入。
       </Text>
       <Image
-        src="/images/l4d2/l4d2_关闭一致性检查.webp"
-        alt="l4d2_关闭一致性检查"
+        src="/images/l4d2/l4d2_5.webp"
+        alt="l4d2_5"
       />
 
       <Divider my={5} />
