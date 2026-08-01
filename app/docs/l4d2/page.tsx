@@ -53,15 +53,15 @@ export default function Page() {
       <Text mt={3}>
         玩家都处于同个联机房间并在线后，主机进游戏点“与好友一起玩游戏”
       </Text>
-      <Image maxW="500px" src="/images/l4d2/l4d2_1.jpg" alt="l4d2_1" />
+      <Image maxW="500px" src="/images/l4d2/l4d2_1.webp" alt="l4d2_1" />
 
       <Text mt={3}>选“创建新战役大厅”</Text>
-      <Image maxW="500px" src="/images/l4d2/l4d2_2.jpg" alt="l4d2_2" />
+      <Image maxW="500px" src="/images/l4d2/l4d2_2.webp" alt="l4d2_2" />
 
       <Text mt={3}>
         服务器类型选“本地服务器”，然后直接开始游戏，注意是开始游戏进到地图里！需要主机已经在地图里客机才能加入
       </Text>
-      <Image maxW="500px" src="/images/l4d2/l4d2_3.jpg" alt="l4d2_3" />
+      <Image maxW="500px" src="/images/l4d2/l4d2_3.webp" alt="l4d2_3" />
 
       <Heading mt={5} size="lg" textAlign="center">
         客机操作指引
@@ -78,13 +78,13 @@ export default function Page() {
         <br />
         如果是其他报错就是游戏问题，跟喵服无关，自行解决
       </Text>
-      <Image maxW="500px" src="/images/l4d2/l4d2_4.jpg" alt="l4d2_4" />
+      <Image maxW="500px" src="/images/l4d2/l4d2_4.webp" alt="l4d2_4" />
 
       <Text mt={3}>
         建议到创意工坊把这个mod打上，能一定程度上避免兼容性问题导致无法加入。
       </Text>
       <Image
-        src="/images/l4d2/l4d2_关闭一致性检查.jpg"
+        src="/images/l4d2/l4d2_关闭一致性检查.webp"
         alt="l4d2_关闭一致性检查"
       />
 

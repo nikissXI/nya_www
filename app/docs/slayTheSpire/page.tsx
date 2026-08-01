@@ -46,8 +46,8 @@ export default function Page() {
       </Text>
 
       <Image
-        maxW="400px"
-        src="/images/slayTheSpire/slayTheSpire_2.jpg"
+        maxW="800px"
+        src="/images/slayTheSpire/slayTheSpire_2.webp"
         alt="slayTheSpire_2"
       />
       <Text>
@@ -61,8 +61,8 @@ export default function Page() {
       </Text>
 
       <Image
-        maxW="400px"
-        src="/images/slayTheSpire/slayTheSpire_1.jpg"
+        maxW="500px"
+        src="/images/slayTheSpire/slayTheSpire_1.webp"
         alt="slayTheSpire_1"
       />
 

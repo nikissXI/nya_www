@@ -158,7 +158,6 @@ const Page = () => {
           查看收款码
         </Button>
 
-        {/* 收款码模态框 */}
         <Modal isOpen={isModalOpen} onClose={closeModal} size="lg">
           <ModalOverlay />
           <ModalContent bg="#202e4fe0" color="white" mx={5} py={5}>
@@ -237,13 +236,12 @@ const Page = () => {
                 </Text>
               </Box>
 
-              {/* 收款二维码 */}
               <SimpleGrid columns={2} spacing={4} justifyContent="center">
                 <Box textAlign="center">
                   <Text mb={1}>支付宝</Text>
                   <Image
                     w="250px"
-                    src="/images/sponsor/支付宝收款.jpg"
+                    src="/images/sponsor/支付宝收款.webp"
                     alt="支付宝收款"
                   />
                 </Box>
@@ -251,7 +249,7 @@ const Page = () => {
                   <Text mb={1}>微信</Text>
                   <Image
                     w="250px"
-                    src="/images/sponsor/微信收款.jpg"
+                    src="/images/sponsor/微信收款.webp"
                     alt="微信收款"
                   />
                 </Box>

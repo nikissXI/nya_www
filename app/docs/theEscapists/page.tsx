@@ -70,11 +70,6 @@ export default function AndroidPage0() {
         linkUrl="https://www.bilibili.com/video/BV13xijemE3L/"
       />
 
-      {/* <Image
-        h="5rem"
-        src="/images/theEscapists/theEscapists_lan_error.jpg"
-        alt="theEscapists_lan_error"
-      /> */}
       <List spacing={2}>
         {TextList.map((reason, index) => (
           <ListItem key={index} textAlign="left">
@@ -126,13 +121,6 @@ export default function AndroidPage0() {
         <Heading size="md">方式二（QQ群操作）</Heading>
         加入QQ群961793250，在群里发命令“搜索”，如要搜索100.64.0.1房间，就发“搜索100.64.0.1”，机器人会给对应提示
       </Box>
-
-      {/* 
-        <Image
-          h="5rem"
-          src="/images/theEscapists/theEscapists_session_error.jpg"
-          alt="theEscapists_session_error"
-        /> */}
 
       <Divider my={5} />
 

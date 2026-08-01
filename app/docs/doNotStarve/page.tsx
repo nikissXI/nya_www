@@ -40,7 +40,7 @@ export default function Page() {
         如果仍然搜不到，主机关闭系统防火墙后再试
       </Text>
 
-      <Image src="/images/doNotStarve/lan.png" maxW="400px" alt="lan" />
+      <Image src="/images/doNotStarve/doNotStarve_lan.webp" maxW="400px" alt="lan" />
 
       <Divider my={5} />
 

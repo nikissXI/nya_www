@@ -41,7 +41,7 @@ export default function RootLayout({
             width="100%"
             height="105px"
             zIndex={99}
-            backgroundImage="url('/images/head_bg.png')"
+            backgroundImage="url('/images/head_bg.webp')"
             backgroundRepeat="repeat-x"
             backgroundSize="auto"
           />

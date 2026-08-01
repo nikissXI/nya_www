@@ -47,7 +47,7 @@ export default function Page() {
 
       {/* Hero 区域 */}
       <Image
-        src="/images/logo.png"
+        src="/images/logo.webp"
         alt="logo"
         maxH={{ base: "120px", md: "160px" }}
         my={3}

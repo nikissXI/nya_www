@@ -387,7 +387,7 @@ const DocumentPage = () => {
                   <Image
                     mx={1}
                     maxH="1.5rem"
-                    src="/images/wg/android_switch.jpg"
+                    src="/images/wg/android_switch.webp"
                     alt="android_switch"
                   />
                 </Flex>
@@ -411,7 +411,7 @@ const DocumentPage = () => {
                   关闭方法：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
                 </Text>
                 <Image
-                  src="/images/wg/xiaomi.jpg"
+                  src="/images/wg/xiaomi.webp"
                   alt="xiaomi"
                   borderRadius="md"
                 />
@@ -433,7 +433,7 @@ const DocumentPage = () => {
                 https://nodewu.com/iosid/
                 <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
                 <Image
-                  src="/images/wg/app_store.jpg"
+                  src="/images/wg/app_store.webp"
                   alt="app_store"
                   borderRadius="md"
                   w="100%"
@@ -516,7 +516,7 @@ const DocumentPage = () => {
                   <Image
                     mx={1}
                     maxH="1.5rem"
-                    src="/images/wg/iOS_switch.jpg"
+                    src="/images/wg/iOS_switch.webp"
                     alt="iOS_switch"
                   />
                 </Flex>
@@ -590,7 +590,7 @@ const DocumentPage = () => {
                   ，然后右键“以管理员身份运行”修复。如果还是不行，就按下图指引“网络重置”试试
                 </Text>
                 <Image
-                  src="/images/wg/network_reset.png"
+                  src="/images/wg/network_reset.webp"
                   alt="network_reset"
                   borderRadius="md"
                   maxW="500px"
@@ -599,7 +599,7 @@ const DocumentPage = () => {
               </Collapse>
 
               <Image
-                src="/images/wg/win_msi.jpg"
+                src="/images/wg/win_msi.webp"
                 alt="win_msi"
                 borderRadius="md"
                 w="100%"
@@ -622,7 +622,7 @@ const DocumentPage = () => {
                 https://nodewu.com/iosid/
                 <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
                 <Image
-                  src="/images/wg/app_store_mac.jpg"
+                  src="/images/wg/app_store_mac.webp"
                   alt="app_store_mac"
                   borderRadius="md"
                   w="100%"
@@ -636,7 +636,7 @@ const DocumentPage = () => {
               <Box mt={5}>
                 <Text>④ 运行WG，跟着下图操作完成隧道导入，看红字就行</Text>
                 <Image
-                  src="/images/wg/mac.jpg"
+                  src="/images/wg/mac.webp"
                   alt="mac"
                   borderRadius="md"
                   w="100%"

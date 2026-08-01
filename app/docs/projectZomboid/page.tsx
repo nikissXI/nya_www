@@ -19,7 +19,7 @@ export default function AndroidPage0() {
       </Text>
 
       <Image
-        src="/images/projectZomboid/projectZomboid.jpg"
+        src="/images/projectZomboid/projectZomboid.webp"
         alt="projectZomboid"
       />
 

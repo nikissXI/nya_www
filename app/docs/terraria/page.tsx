@@ -50,21 +50,21 @@ export default function Page() {
 
       <Text mt={3}>下方用安卓国际版演示，其他平台的类似（自己摸索一下）</Text>
 
-      <Image src="/images/terraria/terraria_1.jpg" alt="terraria_1" />
+      <Image src="/images/terraria/terraria_1.webp" alt="terraria_1" />
 
       <Heading size="lg" textAlign="center" mt={3}>
         主机操作步骤
       </Heading>
 
-      <Image src="/images/terraria/terraria_3.jpg" alt="terraria_3" />
+      <Image src="/images/terraria/terraria_3.webp" alt="terraria_3" />
 
       <Heading size="lg" textAlign="center" mt={5}>
         客机操作步骤
       </Heading>
 
-      <Image src="/images/terraria/terraria_2.jpg" alt="terraria_2" />
+      <Image src="/images/terraria/terraria_2.webp" alt="terraria_2" />
 
-      <Image src="/images/terraria/terraria_4.jpg" alt="terraria_4" />
+      <Image src="/images/terraria/terraria_4.webp" alt="terraria_4" />
 
       <Divider my={5} />
 

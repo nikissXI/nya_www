@@ -146,19 +146,6 @@ export default function Page() {
 
       <Divider my={5} />
 
-      {/* <Text>
-          iPhone玩家如果联机失败，检查星露谷是否有无线数据的权限（在设置里看，如下图），如果没有就无法联机（iPad没有这个，但也有这种问题）。一般第一次打开游戏会有个网络权限申请弹框，如果没有的话自己捣鼓一下怎么开吧，属于游戏问题，没正确申请联网权限。
-        </Text>
-
-        <Image
-          src="/images/stardewValley/星露谷ios网络权限.png"
-          alt="星露谷ios网络权限"
-        /> 
-
-        <Text>
-          如果出现无法移动的情况（这是游戏bug），让其他人随便送个东西给卡住的人（送东西流程：左右拇指将画面最大化，物品栏点个物品对着卡住的人连点几下就可以送东西，卡住的人收礼就可以行动了
-        </Text> */}
-
       <Box>
         下图是移动端1.6解锁联机模式的方法：点主界面右下角的语言按钮，把语言切换到English，主界面logo有4片树叶，图里用红圈圈起来的，按顺序点击4个位置的树叶：
         <Flex>
@@ -175,8 +162,8 @@ export default function Page() {
       </Box>
 
       <Image
-        src="/images/stardewValley/星露谷1.6.X移动端解锁联机模式方法.jpg"
-        alt="星露谷1.6.X移动端解锁联机模式方法"
+        src="/images/stardewValley/stardewValley_1.webp"
+        alt="stardewValley_1"
       />
 
       <Divider my={5} />
