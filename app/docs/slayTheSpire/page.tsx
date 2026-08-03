@@ -22,7 +22,7 @@ export default function Page() {
 
       <Text mt={3}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        该游戏联机建议使用节点STS，专门为这游戏开的
+        该游戏联机建议使用节点STS，专门为这游戏开的。但更建议使用联机大厅mod，可以直接跨端联机，就不需要用喵服了，mod群文件有。
       </Text>
 
       <Text mt={3}>
