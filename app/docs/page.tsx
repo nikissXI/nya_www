@@ -58,6 +58,7 @@ const articles: Article[] = [
   { path: "/docs/terraria", title: "泰拉瑞亚（全平台）" },
   { path: "/docs/l4d2", title: "求生之路2（PC）" },
   { path: "/docs/mindustry", title: "像素工厂（全平台）" },
+  { path: "/docs/ark", title: "方舟：生存进化（PC、安卓）" },
   // { path: "/docs/minecraft", title: "我的世界（全平台）" },
   { path: "/docs/survivalcraft", title: "生存战争（全平台）" },
   { path: "/docs/wizardOfLegend", title: "传说法师手游（安卓、iOS）" },
