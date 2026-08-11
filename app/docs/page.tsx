@@ -562,9 +562,24 @@ const DocumentPage = () => {
               {DownloadButton()}
 
               <Text mt={5}>④ 跟着下图操作完成隧道导入，看红字就行</Text>
-              {/* 默认不创建桌面快捷方式，如果需要自己去系统开始菜单里找到WG手动创建 */}
-              <Flex alignItems="center" mt={1}>
-                &emsp;<HighLight>点连接后出现“隧道错误”的处理方法</HighLight>
+
+              <Image
+                src="/images/wg/win_msi.webp"
+                alt="win_msi"
+                borderRadius="md"
+                w="100%"
+                maxW="500px"
+              />
+
+              <Flex alignItems="center" my={1}>
+                <HighLight>
+                  点连接如果出现“The system cannot find the file
+                  specified”，检查wireguard的路径是否含有中文
+                </HighLight>
+              </Flex>
+
+              <Flex alignItems="center" my={1}>
+                <HighLight>点连接如果出现“隧道错误”的处理方法</HighLight>
                 <Text
                   ml={2}
                   as="span"
@@ -598,14 +613,6 @@ const DocumentPage = () => {
                   mb={10}
                 />
               </Collapse>
-
-              <Image
-                src="/images/wg/win_msi.webp"
-                alt="win_msi"
-                borderRadius="md"
-                w="100%"
-                maxW="500px"
-              />
             </TabPanel>
 
             {/* MAC */}
