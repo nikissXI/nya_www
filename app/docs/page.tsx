@@ -252,17 +252,19 @@ const DocumentPage = () => {
 
       <Text my={2}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        使用喵服联机的玩家都要注册账号，并跟着教程安装WG客户端、导入隧道
+        使用喵服联机的玩家
+        <Text as="span" color="#00ff17">
+          都要注册账号
+        </Text>
+        ，并跟着教程安装WG客户端、导入隧道
       </Text>
 
       <Text my={2}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        手机、电脑都能安装WG客户端，要安装在运行游戏的设备上
-      </Text>
-
-      <Text>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        底层是Linux的设备也能接入，如Steam Deck掌机，教程自己查询或联系服主
+        WG客户端要安装在运行游戏的设备上，
+        <Text as="span" color="#00ff17">
+          不兼容鸿蒙6
+        </Text>
       </Text>
 
       <Box mt={5} display={tunnelName === undefined ? "hidden" : "block"}>
@@ -277,47 +279,35 @@ const DocumentPage = () => {
 
           <TabList
             mt={1}
-            display="inline-flex" // 改为 inline-flex
-            alignItems="center" // 确保标签对齐
-            maxW="fit-content" // 限制宽度
+            flexWrap="wrap"
+            gap={{ base: 1.5, md: 2 }} // 移动端间距小一点
+            p={1}
           >
-            <Tab
-              py={1}
-              fontWeight="bolder"
-              _selected={{ color: "white", bg: "blue.600" }}
-            >
-              安卓
-            </Tab>
-            <Tab
-              py={1}
-              fontWeight="bolder"
-              _selected={{ color: "white", bg: "blue.600" }}
-            >
-              苹果
-            </Tab>
-            <Tab
-              py={1}
-              fontWeight="bolder"
-              _selected={{ color: "white", bg: "blue.600" }}
-            >
-              Windows
-            </Tab>
-            <Tab
-              py={1}
-              fontWeight="bolder"
-              _selected={{ color: "white", bg: "blue.600" }}
-            >
-              Mac
-            </Tab>
+            {["安卓", "苹果", "Windows", "Mac", "SteamDeck", "Linux"].map(
+              (label) => (
+                <Tab
+                  key={label}
+                  py={1.5}
+                  px={{ base: 3, md: 5 }}
+                  fontWeight="bold"
+                  fontSize={{ base: "sm", md: "md" }} // 响应式字体
+                  borderRadius="lg"
+                  _selected={{
+                    color: "white",
+                    bg: "blue.600",
+                    boxShadow: "md", // 阴影增强选中效果
+                  }}
+                  transition="all 0.2s"
+                >
+                  {label}
+                </Tab>
+              ),
+            )}
           </TabList>
 
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={2}>
-              {/* <HighLight>
-                注意！WG不兼容鸿蒙6系统，不过可以联系服主了解其他联机方式
-              </HighLight> */}
-
               <SelectNode />
 
               <Text mt={5}>
@@ -650,6 +640,73 @@ const DocumentPage = () => {
                   w="100%"
                   maxW="500px"
                 />
+              </Box>
+            </TabPanel>
+
+            {/* SteamDeck */}
+            <TabPanel px={0} pb={1} pt={2}>
+              <SelectNode />
+
+              <Box mt={5}>
+                ② 安装喵服Decky插件（插件由网友开发）
+                <br />
+                <Button
+                  size="sm"
+                  mx={2}
+                  onClick={() => {
+                    window.open("/apks/NyaFuWG.zip", "_blank");
+                  }}
+                >
+                  点击下载插件
+                </Button>
+                <br />
+                在Steam Deck的游戏模式打开右侧快捷菜单，进入 Decky
+                插件面板，打开 `NyaFu WG`
+              </Box>
+
+              <Box mt={5}>③ 下载隧道文件，文件名为“{tunnelName}.conf”</Box>
+              {DownloadButton()}
+
+              <Box mt={5}>
+                <Text>
+                  ④ 回到插件，点击“更新隧道配置”，找到“{tunnelName}
+                  .conf”，点击“导入此配置”，最后点击“连接喵服”
+                </Text>
+              </Box>
+            </TabPanel>
+
+            {/* Linux */}
+            <TabPanel px={0} pb={1} pt={2}>
+              <SelectNode />
+
+              <Box mt={5}>
+                <Text>
+                  ② 看WG官方文档安装客户端，或者问deepseek
+                  <br />
+                  <Link
+                    ml={1}
+                    color="#7dd4ff"
+                    href="https://www.wireguard.com/install/"
+                    target="_blank"
+                  >
+                    点击跳转WG官方文档（需要翻墙）
+                  </Link>
+                </Text>
+
+                <Box mt={5}>③ 下载隧道文件，文件名为“{tunnelName}.conf”</Box>
+                {DownloadButton()}
+
+                <Box mt={5}>
+                  <Text>
+                    ④ 在命令行打开隧道文件的目录
+                    <br />
+                    启动执行 “wg-quick up ./
+                    {tunnelName}.conf”
+                    <br />
+                    关闭执行 “wg-quick down ./
+                    {tunnelName}.conf”
+                  </Text>
+                </Box>
               </Box>
             </TabPanel>
           </TabPanels>
