@@ -292,7 +292,7 @@ export default function Page() {
 
   function getColor(latency: number) {
     if (latency > 100) return "#ffa524";
-    else if (latency > 0) return "#3fdb1d";
+    else if (latency > 0) return "#2eff00";
     else return "#ff3b3b";
   }
 
@@ -493,7 +493,7 @@ export default function Page() {
                   ml="auto"
                   bg="transparent"
                   fontWeight="bold"
-                  color={item.status === "在线" ? "#3fdb1d" : "#ff4444"}
+                  color={item.status === "在线" ? "#2eff00" : "#ff4444"}
                 >
                   {item.status}
                 </Tag>
@@ -663,7 +663,7 @@ export default function Page() {
               p={0}
               mr={1}
               fontWeight="bold"
-              color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
+              color={onlineStatus === "在线" ? "#2eff00" : "#ff0000"}
             >
               {onlineStatus === "在线" ? "在线" : "WG未连接!!"}
             </Text>
