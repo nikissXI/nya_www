@@ -52,7 +52,7 @@ export default function Page() {
         my={3}
       />
       <Heading as="h1" size="lg" fontWeight="bold">
-        喵服 - 连接异地的彼此
+        一个可能适合你的联机平台
       </Heading>
 
       {/* 平台亮点 */}

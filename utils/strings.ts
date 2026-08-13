@@ -46,9 +46,9 @@ export const copyText = async (text: string) => {
 };
 
 export const getNetColor = (net: number) => {
-  if (net <= 60) return "green.400";
-  if (net <= 85) return "yellow.400";
-  return "red.400";
+  if (net <= 60) return "#46ff93";
+  if (net <= 85) return "#ffb12c";
+  return "#ff4141";
 };
 
 export const getNetText = (net: number) => {

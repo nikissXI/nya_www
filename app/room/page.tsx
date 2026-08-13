@@ -726,7 +726,7 @@ export default function Page() {
             roomData?.members.length === 1 &&
             roomRole === "hoster" && (
               <Text color="#ffca3d" size="sm" textAlign="center">
-                邀请你的联机伙伴加入房间才能联机
+                联机的玩家都要注册喵服账号并安装WG
               </Text>
             )}
 

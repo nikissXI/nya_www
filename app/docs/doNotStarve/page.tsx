@@ -41,9 +41,9 @@ export default function Page() {
       </Text>
 
       <Image
-        src="/images/doNotStarve/doNotStarve_lan.webp"
+        src="/images/doNotStarve/doNotStarve_1.webp"
         maxW="400px"
-        alt="lan"
+        alt="doNotStarve_1"
       />
 
       <Divider my={5} />
@@ -64,13 +64,13 @@ export default function Page() {
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        如果客机加入时提示“这个服务器仅允许在相同局域网的玩家连接”，主机重开游戏再让客机加入，这是游戏Bug
+        如果客机加入时提示“这个服务器仅允许在相同局域网的玩家连接”，重开游戏再尝试加入，这是游戏Bug
       </Text>
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        如果搜不到游戏并且你的游戏能调出控制台，也可以用端游的命令使用IP加入游戏
-      </Text>
+      <Image
+        src="/images/doNotStarve/doNotStarve_2.webp"
+        maxW="400px"
+        alt="doNotStarve_2"
+      />
 
       <Divider my={5} />
 

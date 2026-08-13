@@ -371,18 +371,15 @@ const DocumentPage = () => {
                 &emsp;导入的隧道名称应是 “{tunnelName}”
               </Text>
 
-              <Box mt={5}>
-                ④ 打开隧道开关，就连上喵服了
-                <Flex>
-                  &emsp;开关长这样=&gt;
-                  <Image
-                    mx={1}
-                    maxH="1.5rem"
-                    src="/images/wg/android_switch.webp"
-                    alt="android_switch"
-                  />
-                </Flex>
-              </Box>
+              <Flex mt={5}>
+                ④ 打开隧道开关 =&gt;
+                <Image
+                  mx={1}
+                  maxH="1.5rem"
+                  src="/images/wg/android_switch.webp"
+                  alt="android_switch"
+                />
+              </Flex>
               <Flex alignItems="center" mt={1}>
                 &emsp;<HighLight>小米/红米设备要改个设置</HighLight>
                 <Text
@@ -500,21 +497,18 @@ const DocumentPage = () => {
                 </TabPanels>
               </Tabs>
 
-              <Box mt={5}>
-                ④ 打开隧道开关，就连上喵服了
-                <Flex ml={4}>
-                  开关长这样=&gt;
-                  <Image
-                    mx={1}
-                    maxH="1.5rem"
-                    src="/images/wg/iOS_switch.webp"
-                    alt="iOS_switch"
-                  />
-                </Flex>
-                <Text fontSize="sm">
-                  如果出现DBS解析失败，并重新打开几次都不行，就换个网络再试
-                </Text>
-              </Box>
+              <Flex mt={5}>
+                ④ 打开隧道开关 =&gt;
+                <Image
+                  mx={1}
+                  maxH="1.5rem"
+                  src="/images/wg/iOS_switch.webp"
+                  alt="iOS_switch"
+                />
+              </Flex>
+              <Text fontSize="sm">
+                如果出现DBS解析失败，并重新打开几次都不行，就换个网络再试
+              </Text>
             </TabPanel>
 
             {/* windows */}
