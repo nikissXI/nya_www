@@ -11,7 +11,6 @@ import {
   ModalFooter,
   ModalBody,
   Collapse,
-  Center,
   List,
   ListItem,
   ListIcon,
@@ -21,7 +20,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -30,13 +29,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { MdOutlineSignalCellularAlt } from "react-icons/md";
 import { FaServer } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import { getNetColor, getNetText } from "@/utils/strings";
-
-function getDelayColor(delay: number): string {
-  if (delay < 60) return "green.400";
-  if (delay < 120) return "yellow.400";
-  return "red.400";
-}
+import { getNetColor, getNetText, getDelayColor } from "@/utils/strings";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -414,7 +407,7 @@ export const ServerNodeListModal: React.FC = () => {
             </SimpleGrid>
 
             <Text fontSize="sm" textAlign="center">
-              点击选择联机节点，不会选看讲解
+              点击选择联机节点
               <Button
                 ml={1}
                 color="#7dd4ff"
@@ -423,7 +416,7 @@ export const ServerNodeListModal: React.FC = () => {
                 variant="link"
                 fontSize="sm"
               >
-                {isExpanded ? "收起讲解" : "查看讲解"}
+                {isExpanded ? "再点一次收起" : "不会选点我"}
               </Button>
             </Text>
 

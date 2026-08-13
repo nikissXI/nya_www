@@ -1,6 +1,11 @@
 import hash from "hash.js";
 import dayjs from "dayjs";
 import { openToast } from "@/components/universal/toast";
+import {
+  RiSignalCellular3Fill,
+  RiSignalCellular2Fill,
+  RiSignalCellular1Fill,
+} from "react-icons/ri";
 
 export function getHash(contentStr: string): string {
   return hash.sha256().update(contentStr).digest("hex");
@@ -45,14 +50,35 @@ export const copyText = async (text: string) => {
   } catch (err) {}
 };
 
+const GOOD = "#00e63a";
+const SOSO = "#ffb12c";
+const BAD = "#ff3737";
+
 export const getNetColor = (net: number) => {
-  if (net <= 60) return "#46ff93";
-  if (net <= 85) return "#ffb12c";
-  return "#ff4141";
+  if (net <= 60) return GOOD;
+  if (net <= 85) return SOSO;
+  return BAD;
 };
 
 export const getNetText = (net: number) => {
   if (net <= 60) return "空闲";
   if (net <= 85) return "一般";
   return "拥挤";
+};
+
+export const getDelayColor = (delay: number) => {
+  if (delay < 60) return GOOD;
+  if (delay < 120) return SOSO;
+  return BAD;
+};
+
+export const getDelayIcon = (delay: number) => {
+  if (delay < 60) return <RiSignalCellular3Fill size={20} />;
+  if (delay < 120) return <RiSignalCellular2Fill size={20} />;
+  return <RiSignalCellular1Fill size={20} />;
+};
+
+export const getStatusColor = (online: boolean) => {
+  if (online) return GOOD;
+  return BAD;
 };

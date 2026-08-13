@@ -115,7 +115,7 @@ interface ILoginStateSlice {
   confText: string | undefined;
   latency: number | undefined;
   nodeNetLoad: number;
-  onlineStatus: "在线" | "离线";
+  isOnline: boolean;
 
   // 刷新房间信息冷却
   disableFlush: boolean;
@@ -590,7 +590,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       confText: undefined,
       latency: undefined,
       nodeNetLoad: -1,
-      onlineStatus: "离线",
+      isOnline: false,
 
       // 刷新房间信息冷却
       disableFlush: false,
@@ -655,7 +655,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // 在线状态
           set(
             produce((draft) => {
-              draft.onlineStatus = is_online ? "在线" : "离线";
+              draft.isOnline = is_online;
             }),
           );
           const node_alias = get().userInfo?.node_alias;
@@ -665,7 +665,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             if (pingHost) {
               const delay = await get().getNodeLatency(node_alias, pingHost);
 
-              if (get().onlineStatus === "在线" && delay === 0)
+              if (get().isOnline && delay === 0)
                 openToast({
                   content: "检测延迟故障，请联系服主处理",
                   status: "error",
@@ -704,6 +704,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           );
 
           get().setRoomData(roomData);
+
+          // if (get().selectNode !== data.selected_node) {
+          //   get().selectNode(data.selected_node, false);
+          // }
 
           openToast({ content: `刷新成功`, status: "success" });
         } catch (error) {

@@ -23,11 +23,19 @@ import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
 import { IoReloadCircle } from "react-icons/io5";
-import { GiNetworkBars } from "react-icons/gi";
 import { TbReload } from "react-icons/tb";
 import { useUserStateStore } from "@/store/user-state";
 import { getAuthToken } from "@/store/authKey";
-import { copyText, getNetColor, getNetText, isInteger } from "@/utils/strings";
+import {
+  copyText,
+  getNetColor,
+  getNetText,
+  isInteger,
+  getStatusColor,
+  getDelayIcon,
+  getDelayColor,
+} from "@/utils/strings";
+import { RiSignalCellularOffLine } from "react-icons/ri";
 import { IoIosExit } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { NoticeText } from "@/components/universal/Notice";
@@ -87,7 +95,7 @@ export default function Page() {
     setRoomData,
     roomRole,
     latency,
-    onlineStatus,
+    isOnline,
     rotate,
     disableFlush,
     setShowLoginModal,
@@ -290,12 +298,6 @@ export default function Page() {
     [requestRoomApi, getRoomData],
   );
 
-  function getColor(latency: number) {
-    if (latency > 100) return "#ffa524";
-    else if (latency > 0) return "#2eff00";
-    else return "#ff3b3b";
-  }
-
   const handleSetPassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
       handleSetRoomPasswd(inputPasswd);
@@ -358,14 +360,6 @@ export default function Page() {
             h="50px"
             fontSize="25px"
             onClick={() => {
-              // if (onlineStatus === "离线") {
-              //   openToast({
-              //     content: "WG未连接，首次使用请看教程",
-              //     status: "warning",
-              //   });
-              //   return;
-              // }
-
               handleCreateRoom();
             }}
           >
@@ -376,14 +370,6 @@ export default function Page() {
             h="50px"
             fontSize="25px"
             onClick={() => {
-              // if (onlineStatus === "离线") {
-              //   openToast({
-              //     content: "WG未连接，首次使用请看教程",
-              //     status: "warning",
-              //   });
-              //   return;
-              // }
-
               joinOnOpen();
               setHideJoinPassInput(true);
               setInputRoomId("");
@@ -493,7 +479,7 @@ export default function Page() {
                   ml="auto"
                   bg="transparent"
                   fontWeight="bold"
-                  color={item.status === "在线" ? "#2eff00" : "#ff4444"}
+                  color={getStatusColor(item.status === "在线")}
                 >
                   {item.status}
                 </Tag>
@@ -610,7 +596,6 @@ export default function Page() {
                         fontWeight="bold"
                         color={getNetColor(nodeNetLoad)}
                       >
-                        {/* {nodeNetLoad}% */}
                         {getNetText(nodeNetLoad)}
                       </Text>
                     </Text>
@@ -657,22 +642,25 @@ export default function Page() {
           )}
 
           <OfflineReasons />
-          <Flex align="center" mt={1}>
+
+          <Flex align="center" mt={1} gap={2}>
             <Text
               fontSize={18}
-              p={0}
-              mr={1}
               fontWeight="bold"
-              color={onlineStatus === "在线" ? "#2eff00" : "#ff0000"}
+              color={getStatusColor(isOnline)}
             >
-              {onlineStatus === "在线" ? "在线" : "WG未连接!!"}
+              {isOnline ? "在线" : "WG未连接"}
             </Text>
 
-            {onlineStatus === "在线" && latency && (
-              <Flex align="center">
-                <GiNetworkBars size={20} color={getColor(latency)} />
-                <Box ml={1}>{latency}ms</Box>
+            {isOnline && latency ? (
+              <Flex align="center" color={getDelayColor(latency)}>
+                {getDelayIcon(latency)}
+                <Text as="span" fontWeight="bold">
+                  {latency}ms
+                </Text>
               </Flex>
+            ) : (
+              <RiSignalCellularOffLine size={20} />
             )}
 
             <Button
@@ -683,7 +671,6 @@ export default function Page() {
               onClick={() => {
                 getRoomData(false);
               }}
-              ml={1}
               color="#7dd4ff"
             >
               <Text>刷新</Text>
@@ -722,15 +709,15 @@ export default function Page() {
             </Text>
           )}
 
-          {onlineStatus === "在线" &&
+          {/* {isOnline &&
             roomData?.members.length === 1 &&
             roomRole === "hoster" && (
               <Text color="#ffca3d" size="sm" textAlign="center">
                 联机的玩家都要注册喵服账号并安装WG
               </Text>
-            )}
+            )} */}
 
-          {onlineStatus === "离线" && (
+          {isOnline === false && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
               WG下载和联机教程👉
               <Button
@@ -756,13 +743,13 @@ export default function Page() {
             </Text>
           )}
 
-          {onlineStatus === "在线" &&
+          {isOnline &&
             roomRole !== "none" &&
             (userInfo?.sponsorship > 10
               ? carouselMessagesVip[carouselIndex]
               : carouselMessages[carouselIndex])}
 
-          {onlineStatus === "在线" && (
+          {isOnline && (
             <Text size="sm" textAlign="center" mb={2}>
               复习联机教程
               <Button

@@ -31,6 +31,7 @@ import { MdTipsAndUpdates } from "react-icons/md";
 import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
 import OfflineReasons from "@/components/docs/OfflineReasons";
+import { getStatusColor } from "@/utils/strings";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
@@ -79,7 +80,7 @@ const DocumentPage = () => {
     setNodeListModal,
     tunnelName,
     getRoomData,
-    onlineStatus,
+    isOnline,
     rotate,
     disableFlush,
     confText,
@@ -714,9 +715,9 @@ const DocumentPage = () => {
           <Text
             mr={1}
             fontWeight="bold"
-            color={onlineStatus === "在线" ? "#3fdb1d" : "#ff0000"}
+            color={getStatusColor(isOnline)}
           >
-            {onlineStatus}
+            {isOnline ? "在线" : "WG未连接"}
           </Text>
           <Button
             bg="transparent"
