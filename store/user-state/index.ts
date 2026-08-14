@@ -660,12 +660,37 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               draft.isOnline = is_online;
             }),
           );
-          const node_alias = get().userInfo?.node_alias;
-          const pingHost = get().pingHost;
 
-          if (is_online && pingHost && node_alias) {
+          const roomData = data.data as RoomInfo;
+
+          let roomRole: string = "none";
+          if (roomData) {
+            roomRole =
+              roomData.user_ip === roomData.hoster_ip ? "hoster" : "member";
+          }
+          set(
+            produce((draft) => {
+              draft.roomRole = roomRole;
+              draft.nodeNetLoad = data.node_net_load;
+            }),
+          );
+
+          get().setRoomData(roomData);
+
+          const pingHost = get().pingHost;
+          const lastSelectedNode = get().selectedNode;
+          const nowSelectedNode = data.selected_node;
+
+          if (lastSelectedNode && lastSelectedNode !== nowSelectedNode) {
+            get().selectNode(nowSelectedNode, false);
+          }
+
+          if (is_online && pingHost && nowSelectedNode) {
             if (pingHost) {
-              const delay = await get().getNodeLatency(node_alias, pingHost);
+              const delay = await get().getNodeLatency(
+                nowSelectedNode,
+                pingHost,
+              );
 
               if (get().isOnline && delay === 0)
                 openToast({
@@ -689,26 +714,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               content: "离线无法联机，不会用就看联机教程",
               status: "warning",
             });
-          }
-
-          const roomData = data.data as RoomInfo;
-
-          let roomRole: string = "none";
-          if (roomData) {
-            roomRole =
-              roomData.user_ip === roomData.hoster_ip ? "hoster" : "member";
-          }
-          set(
-            produce((draft) => {
-              draft.roomRole = roomRole;
-              draft.nodeNetLoad = data.node_net_load;
-            }),
-          );
-
-          get().setRoomData(roomData);
-
-          if (get().selectNode !== data.selected_node) {
-            get().selectNode(data.selected_node, false);
           }
 
           openToast({ content: `刷新成功`, status: "success" });
