@@ -10,11 +10,14 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
+build/
+dist/
 
-# production
-/build
+# PM2 日志
+logs/
+*.log
 
 # misc
 .DS_Store
