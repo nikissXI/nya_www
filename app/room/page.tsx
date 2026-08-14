@@ -652,7 +652,7 @@ export default function Page() {
               {isOnline ? "在线" : "WG未连接"}
             </Text>
 
-            {isOnline && latency ? (
+            {isOnline && latency !== undefined ? (
               <Flex align="center" color={getDelayColor(latency)}>
                 {getDelayIcon(latency)}
                 <Text as="span" fontWeight="bold">

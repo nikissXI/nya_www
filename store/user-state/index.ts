@@ -211,7 +211,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             openToast({ content: data.msg, status: "warning" });
           }
         } catch (error) {
-          openToast({ content: "服务异常，请联系服主处理", status: "error" });
+          // openToast({ content: "服务异常，请联系服主处理", status: "error" });
+          window.location.reload();
         } finally {
         }
       },
@@ -575,7 +576,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             openToast({ content: data.msg, status: "warning" });
           }
         } catch (error) {
-          openToast({ content: "服务异常，请联系服主处理", status: "error" });
+          // openToast({ content: "服务异常，请联系服主处理", status: "error" });
+          window.location.reload();
         } finally {
           set(
             produce((draft) => {
@@ -705,16 +707,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           get().setRoomData(roomData);
 
-          // if (get().selectNode !== data.selected_node) {
-          //   get().selectNode(data.selected_node, false);
-          // }
+          if (get().selectNode !== data.selected_node) {
+            get().selectNode(data.selected_node, false);
+          }
 
           openToast({ content: `刷新成功`, status: "success" });
         } catch (error) {
-          openToast({
-            content: "出错！不要使用百度浏览器",
-            status: "error",
-          });
+          // openToast({
+          //   content: "出错！不要使用百度浏览器",
+          //   status: "error",
+          // });
+          window.location.reload();
         } finally {
           set(
             produce((draft) => {
