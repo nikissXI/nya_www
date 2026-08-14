@@ -31,21 +31,31 @@ echo -e "${YELLOW}🔨 Building Next.js application...${NC}"
 pnpm build
 
 # ===== 4. 检查构建产物 =====
-if [ ! -f ".next/standalone/server.js" ]; then
-    echo -e "${RED}❌ Build failed! .next/standalone/server.js not found.${NC}"
+# 注意：next build 默认会清空整个输出目录（cleanDistDir: true，含 standalone），
+# 所以把构建输出放到独立的 build/（见 next.config.mjs 的 distDir: 'build'），
+# 绝不直接写进正在被 pm2 使用的 .next/，否则构建期间网站会全部 400。
+if [ ! -f "build/standalone/server.js" ]; then
+    echo -e "${RED}❌ Build failed! build/standalone/server.js not found.${NC}"
     exit 1
 fi
 
 # ===== 5. 复制静态文件到 standalone 产物（失败即中止，避免新进程缺静态资源） =====
 echo -e "${YELLOW}📁 Copying static files...${NC}"
-rm -rf .next/standalone/public
-cp -r public .next/standalone/public
-cp -r .next/static .next/standalone/.next/static
+rm -rf build/standalone/public
+cp -r public build/standalone/public
+cp -r build/static build/standalone/.next/static
 
 # ===== 6. 确保 PM2 日志目录存在 =====
 mkdir -p logs
 
-# ===== 7. 零停机重载 =====
+# ===== 7. 原子切换发布目录（同文件系统内 mv 是原子操作，秒级完成） =====
+echo -e "${YELLOW}🔄 Switching release directory (build/ -> .next)...${NC}"
+rm -rf .next-old
+if [ -d .next ]; then mv .next .next-old; fi
+mv build .next
+rm -rf .next-old
+
+# ===== 8. 零停机重载 =====
 # 零停机原理：cluster 模式下 `pm2 reload` 本身就是滚动重载——
 # pm2 会逐个实例优雅重启（先起新进程、确认就绪后再杀旧进程），
 # 期间服务不中断，无需手动指定实例序号。
@@ -57,7 +67,7 @@ else
     pm2 start ecosystem.config.js
 fi
 
-# ===== 8. 保存配置 =====
+# ===== 9. 保存配置 =====
 pm2 save
 
 echo -e "${GREEN}✅ Deployment completed successfully!${NC}"
