@@ -10,7 +10,7 @@ module.exports = {
     exec_mode: 'cluster',        // 集群模式
     
     // ===== 零停机核心配置 =====
-    wait_ready: true,            // 等待 'ready' 信号
+    // wait_ready: true,            // 等待 'ready' 信号
     listen_timeout: 10000,       // 10 秒内没收到 ready 就认为失败
     kill_timeout: 5000,          // 强制杀死前等待 5 秒
     
