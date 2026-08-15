@@ -523,13 +523,14 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       // 节点选择
       showNodeListModal: false,
       setNodeListModal: () => {
-        const now_node_alias = get().userNodeInfo?.node_alias;
-        if (now_node_alias) {
+        if (get().userNodeInfo) {
+          console.log("get in", get().userNodeInfo?.node_alias);
           set(
             produce((draft) => {
-              draft.lastSelectedNode = now_node_alias;
+              draft.lastSelectedNode = get().userNodeInfo?.node_alias;
             }),
           );
+          console.log(get().lastSelectedNode);
         }
         set(
           produce((draft) => {
@@ -570,6 +571,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const data = await resp.json();
           if (data.code === 0) {
             const userNodeInfo: UserNodeInfo = data.node_info;
+            console.log(userNodeInfo)
             set(
               produce((draft) => {
                 draft.userNodeInfo = userNodeInfo;
@@ -682,7 +684,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const pingHost = get().userNodeInfo?.ping_host;
           const lastSelectedNode = get().lastSelectedNode;
           const nowSelectedNode = data.selected_node;
-
+          console.log(lastSelectedNode);
           if (lastSelectedNode && lastSelectedNode !== nowSelectedNode) {
             get().selectNode(nowSelectedNode, false);
           }
