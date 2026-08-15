@@ -282,7 +282,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               }),
             );
             // 如果没选节点就弹出节点列表
-            if (data.node_info) {
+            if (data.user_wg_info) {
               const userWgInfo: UserWgInfo = data.user_wg_info;
               set(
                 produce((draft) => {
