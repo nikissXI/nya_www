@@ -79,7 +79,7 @@ const ServerNodeItem: React.FC<{
   node: NodeInfo;
   selected: boolean;
 }> = ({ node, selected }) => {
-  const { selectNode, userNodeInfo, selectNodeLock } = useUserStateStore();
+  const { selectNode, userWgInfo, selectNodeLock } = useUserStateStore();
 
   return (
     <motion.div
@@ -106,7 +106,7 @@ const ServerNodeItem: React.FC<{
         }
         onClick={async () => {
           if (node.net === null || selectNodeLock === true) return;
-          if (node.alias === userNodeInfo?.node_alias) {
+          if (node.alias === userWgInfo?.node_alias) {
             openToast({
               content: "已经在使用该节点",
               status: "info",
@@ -229,7 +229,7 @@ export const ServerNodeListModal: React.FC = () => {
     nodeMap,
     showNodeListModal,
     setNodeListModal,
-    userNodeInfo,
+    userWgInfo,
     lastSelectedNode,
   } = useUserStateStore();
 
@@ -265,7 +265,7 @@ export const ServerNodeListModal: React.FC = () => {
     <Modal
       isOpen={showNodeListModal}
       onClose={setNodeListModal}
-      closeOnOverlayClick={userNodeInfo?.node_alias ? true : false}
+      closeOnOverlayClick={userWgInfo?.node_alias ? true : false}
       isCentered
     >
       <ModalOverlay />
@@ -468,7 +468,7 @@ export const ServerNodeListModal: React.FC = () => {
                   <ServerNodeItem
                     key={node.alias}
                     node={node}
-                    selected={userNodeInfo?.node_alias === node.alias}
+                    selected={userWgInfo?.node_alias === node.alias}
                   />
                 ))
               ) : (
@@ -500,7 +500,7 @@ export const ServerNodeListModal: React.FC = () => {
               <Button
                 size="sm"
                 onClick={() => {
-                  if (!userNodeInfo?.node_alias) {
+                  if (!userWgInfo?.node_alias) {
                     openToast({
                       content:
                         "选择节点后才能关闭，如果没有合适的节点，先随便选一个",

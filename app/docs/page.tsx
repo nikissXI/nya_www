@@ -77,7 +77,7 @@ const DocumentPage = () => {
     confKey,
     getConfKey,
     userInfo,
-    userNodeInfo,
+    userWgInfo,
     setNodeListModal,
     getRoomData,
     isOnline,
@@ -124,7 +124,7 @@ const DocumentPage = () => {
       // 创建临时a标签并触发点击
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${userNodeInfo?.tunnel_name}.conf`;
+      a.download = `${userWgInfo?.tunnel_name}.conf`;
       a.style.display = "none";
       document.body.appendChild(a);
       a.click();
@@ -184,7 +184,7 @@ const DocumentPage = () => {
         <Text>
           ① 当前选择的是&ensp;
           <Text as="span" fontWeight="bold">
-            {userNodeInfo?.node_alias}
+            {userWgInfo?.node_alias}
           </Text>
           &ensp;节点
         </Text>
@@ -196,7 +196,7 @@ const DocumentPage = () => {
         <Text>
           <Icon as={MdTipsAndUpdates} mr={2} />
           <HighLight fontSize="sm">
-            后续步骤导入或下载的是{userNodeInfo?.node_alias}
+            后续步骤导入或下载的是{userWgInfo?.node_alias}
             节点的隧道，如果切换了新节点，要来这导入新节点的隧道
           </HighLight>
         </Text>
@@ -216,13 +216,13 @@ const DocumentPage = () => {
         size="sm"
         onClick={() => {
           if (!isIOS) {
-            if (userNodeInfo) GenConfFile(userNodeInfo.conf_text);
+            if (userWgInfo) GenConfFile(userWgInfo.conf_text);
             return;
           }
 
           const isSafari = navigator.userAgent.includes("Safari");
           if (isSafari) {
-            if (userNodeInfo) GenConfFile(userNodeInfo.conf_text);
+            if (userWgInfo) GenConfFile(userWgInfo.conf_text);
           } else {
             openToast({
               content: "请在Safari中打开网站下载",
@@ -232,7 +232,7 @@ const DocumentPage = () => {
         }}
         isDisabled={userInfo ? false : true}
       >
-        点击下载{userNodeInfo?.node_alias}隧道文件
+        点击下载{userWgInfo?.node_alias}隧道文件
       </Button>
     );
   };
@@ -267,7 +267,7 @@ const DocumentPage = () => {
         </Text>
       </Text>
 
-      <Box mt={5} display={userNodeInfo === undefined ? "hidden" : "block"}>
+      <Box mt={5} display={userWgInfo === undefined ? "hidden" : "block"}>
         {/* <Heading size="md" pb={2} color="#00ff17">
           2. WG下载和隧道导入
         </Heading>*/}
@@ -368,7 +368,7 @@ const DocumentPage = () => {
               <Text>
                 &emsp;然后运行WG点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入
                 <br />
-                &emsp;导入的隧道名称应是 “{userNodeInfo?.tunnel_name}”
+                &emsp;导入的隧道名称应是 “{userWgInfo?.tunnel_name}”
               </Text>
 
               <Flex mt={5}>
@@ -468,12 +468,12 @@ const DocumentPage = () => {
 
                     <Text>
                       ③ 打开WG，点右上角+号，扫描二维码，隧道名称写&ensp;
-                      {userNodeInfo?.tunnel_name}
+                      {userWgInfo?.tunnel_name}
                     </Text>
 
                     <Box borderWidth={5} borderColor="white" w="min">
-                      {userNodeInfo && (
-                        <QRCodeSVG size={256} value={userNodeInfo.conf_text} />
+                      {userWgInfo && (
+                        <QRCodeSVG size={256} value={userWgInfo.conf_text} />
                       )}
                     </Box>
                   </TabPanel>
@@ -490,7 +490,7 @@ const DocumentPage = () => {
 
                     <Text pt={1}>
                       打开浏览器的下载任务列表，点击文件“
-                      {userNodeInfo?.tunnel_name}
+                      {userWgInfo?.tunnel_name}
                       .conf”，然后点左下角发送到WG
                       <br />
                       或者，到WG里导入配置也行
@@ -542,7 +542,7 @@ const DocumentPage = () => {
               </Button>
 
               <Box mt={5}>
-                ③ 下载隧道文件，文件名为“{userNodeInfo?.tunnel_name}
+                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}
                 .conf”
               </Box>
               {DownloadButton()}
@@ -625,7 +625,7 @@ const DocumentPage = () => {
               </Box>
 
               <Box mt={5}>
-                ③ 下载隧道文件，文件名为“{userNodeInfo?.tunnel_name}.conf”
+                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
               {DownloadButton()}
 
@@ -663,14 +663,14 @@ const DocumentPage = () => {
               </Box>
 
               <Box mt={5}>
-                ③ 下载隧道文件，文件名为“{userNodeInfo?.tunnel_name}.conf”
+                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
               {DownloadButton()}
 
               <Box mt={5}>
                 <Text>
                   ④ 回到插件，点击“更新隧道配置”，找到“
-                  {userNodeInfo?.tunnel_name}
+                  {userWgInfo?.tunnel_name}
                   .conf”，点击“导入此配置”，最后点击“连接喵服”
                 </Text>
               </Box>
@@ -695,7 +695,7 @@ const DocumentPage = () => {
                 </Text>
 
                 <Box mt={5}>
-                  ③ 下载隧道文件，文件名为“{userNodeInfo?.tunnel_name}.conf”
+                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
                 </Box>
                 {DownloadButton()}
 
@@ -704,10 +704,10 @@ const DocumentPage = () => {
                     ④ 在命令行打开隧道文件的目录
                     <br />
                     启动执行 “wg-quick up ./
-                    {userNodeInfo?.tunnel_name}.conf”
+                    {userWgInfo?.tunnel_name}.conf”
                     <br />
                     关闭执行 “wg-quick down ./
-                    {userNodeInfo?.tunnel_name}.conf”
+                    {userWgInfo?.tunnel_name}.conf”
                   </Text>
                 </Box>
               </Box>

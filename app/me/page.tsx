@@ -44,7 +44,7 @@ export default function UserProfilePage() {
     uuid,
     getUserInfo,
     userInfo,
-    userNodeInfo,
+    userWgInfo,
     logout,
     setShowLoginModal,
   } = useUserStateStore();
@@ -823,7 +823,7 @@ export default function UserProfilePage() {
                 <Text w="50px" textAlign="right">
                   IP:
                 </Text>
-                <Text ml={3}>{userNodeInfo?.user_ip}</Text>
+                <Text ml={3}>{userWgInfo?.user_ip}</Text>
               </Flex>
 
               {userInfo.sponsorship && (

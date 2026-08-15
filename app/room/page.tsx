@@ -18,6 +18,7 @@ import {
   useDisclosure,
   Flex,
   Tag,
+  Badge,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -90,7 +91,7 @@ export default function Page() {
   const [inputPasswd, setInputPasswd] = useState("");
   const {
     userInfo,
-    userNodeInfo,
+    userWgInfo,
     roomData,
     getRoomData,
     setRoomData,
@@ -106,10 +107,10 @@ export default function Page() {
   } = useUserStateStore();
 
   useEffect(() => {
-    if (userNodeInfo?.node_alias && roomData === undefined) {
+    if (userWgInfo?.node_alias && roomData === undefined) {
       getRoomData();
     }
-  }, [userNodeInfo?.node_alias, roomData, getRoomData]);
+  }, [userWgInfo?.node_alias, roomData, getRoomData]);
 
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -310,7 +311,7 @@ export default function Page() {
     }
   };
 
-  function standbyPage() {
+  const standbyPage = () => {
     return (
       <Box textAlign="center">
         <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
@@ -382,9 +383,9 @@ export default function Page() {
         </VStack>
       </Box>
     );
-  }
+  };
 
-  function joinedPage() {
+  const joinedPage = () => {
     return (
       <Box textAlign="center">
         <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
@@ -419,47 +420,6 @@ export default function Page() {
         </Modal>
 
         <VStack>
-          {/* {roomRole === "hoster" && (
-            <HStack justify="center" spacing={0} mt={2}>
-              <Text fontWeight="bold">允许直接加入</Text>
-              {roomData?.room_passwd ? <FaTimes /> : <FaCheck />}
-
-              <Switch
-                px={2}
-                size="md"
-                colorScheme="green"
-                isChecked={roomData?.room_passwd ? false : true}
-                onChange={() => {
-                  // 已设置密码就清空密码
-                  if (roomData?.room_passwd) {
-                    setInputPasswd("");
-                    handleSetRoomPasswd("");
-                  } else {
-                    setInputPasswd(
-                      roomData?.room_passwd ? roomData?.room_passwd : "",
-                    );
-                    setPassOnOpen();
-                  }
-                }}
-              />
-
-              <Button
-                variant="link"
-                bg="transparent"
-                hidden={roomData?.room_passwd ? false : true}
-                onClick={() => {
-                  setInputPasswd(
-                    roomData?.room_passwd ? roomData?.room_passwd : "",
-                  );
-                  setPassOnOpen();
-                }}
-                isDisabled={roomData?.room_passwd ? false : true}
-              >
-                <Text>查看房间密码</Text>
-              </Button>
-            </HStack>
-          )} */}
-
           {roomData?.members.map((item, index) => (
             <Box
               w="300px"
@@ -468,7 +428,7 @@ export default function Page() {
               p={1}
               borderRadius={12}
               borderColor={
-                item.ip === userNodeInfo?.user_ip ? "#6db4ff" : "transparent"
+                item.ip === userWgInfo?.user_ip ? "#6db4ff" : "transparent"
               }
               borderWidth={3}
             >
@@ -518,13 +478,15 @@ export default function Page() {
             </Box>
           ))}
 
-          {isOnline &&
-            roomData?.members.length === 1 &&
-            roomRole === "hoster" && (
-              <Text color="#ffca3d" size="sm" textAlign="center">
-                邀请其他玩家加入房间才能联机
-              </Text>
-            )}
+          {roomData?.members.length === 1 && roomRole === "hoster" && (
+            <Text color="#ffca3d" size="sm" textAlign="center">
+              邀请其他玩家加入房间才能联机
+            </Text>
+          )}
+
+          {roomData?.members.length === 1 &&
+            roomRole === "hoster" &&
+            nodeWarning()}
         </VStack>
 
         <HStack justify="center">
@@ -563,7 +525,22 @@ export default function Page() {
         )}
       </Box>
     );
-  }
+  };
+
+  const nodeWarning = () => {
+    return null;
+    // if (userWgInfo?.net_type == "电信") {
+    //   <Text color="#ffca3d" size="sm" textAlign="center">
+    //     你选的是电信线路节点，只建议所有用户都是用中国电信或流量的时候使用
+    //   </Text>;
+    // } else if (userWgInfo?.net_type == "境外") {
+    //   <Text color="#ffca3d" size="sm" textAlign="center">
+    //     你选的是境外线路节点，中国大陆用户会不稳定或无法连接
+    //   </Text>;
+    // } else {
+    //   return null;
+    // }
+  };
 
   return (
     <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
@@ -584,7 +561,7 @@ export default function Page() {
         </VStack>
       ) : (
         <>
-          {userNodeInfo?.node_alias && (
+          {userWgInfo?.node_alias && (
             <Flex
               align="center"
               justify="space-between"
@@ -592,53 +569,59 @@ export default function Page() {
               boxShadow="sm"
               mb={1}
               bg="rgba(75, 127, 187, 0.38)"
-              p={3}
+              px={2.5}
+              py={1.5}
               w="100%"
               maxW="300px"
             >
               <Flex direction="column" flex="1" mr={3}>
-                <Flex align="center" mb={1}>
-                  {nodeNetLoad !== -1 ? (
-                    <Text fontWeight="medium" fontSize="sm">
-                      负载
-                      <Text
-                        as="span"
-                        ml={1}
-                        fontWeight="bold"
-                        color={getNetColor(nodeNetLoad)}
-                      >
-                        {getNetText(nodeNetLoad)}
-                      </Text>
-                    </Text>
-                  ) : (
-                    <Text fontWeight="bold" fontSize="md" color="#ff5333">
-                      节点故障
-                    </Text>
-                  )}
-
+                <Flex align="center">
+                  <Badge colorScheme="orange" fontSize="xs">
+                    {userWgInfo.net_type}
+                  </Badge>
+                  <Badge colorScheme="teal" fontSize="xs" mx={1}>
+                    {userWgInfo.bandwidth}M
+                  </Badge>
                   <Text as="span" fontWeight="bold" mx="auto">
-                    {userNodeInfo?.node_alias}
+                    {userWgInfo?.node_alias}
                   </Text>
                 </Flex>
 
-                {nodeNetLoad !== -1 && (
-                  <Box
-                    w="100%"
-                    h="6px"
-                    bg="rgba(255, 255, 255, 0.2)"
-                    borderRadius="full"
-                    overflow="hidden"
-                  >
+                {nodeNetLoad !== -1 ? (
+                  <Flex align="center" gap={2}>
+                    <Text
+                      fontSize="sm"
+                      as="span"
+                      fontWeight="bold"
+                      color={getNetColor(nodeNetLoad)}
+                      flexShrink={0} // 👈 关键：防止文字被压缩
+                      whiteSpace="nowrap" // 👈 保险：强制不换行
+                    >
+                      {getNetText(nodeNetLoad)}
+                    </Text>
                     <Box
-                      w={`${Math.min(nodeNetLoad, 100)}%`}
-                      h="100%"
-                      bg={getNetColor(nodeNetLoad)}
+                      w="100%"
+                      h="6px"
+                      bg="rgba(255, 255, 255, 0.2)"
                       borderRadius="full"
-                      transition="width 0.3s ease"
-                    />
-                  </Box>
+                      overflow="hidden"
+                    >
+                      <Box
+                        w={`${Math.min(nodeNetLoad, 100)}%`}
+                        h="100%"
+                        bg={getNetColor(nodeNetLoad)}
+                        borderRadius="full"
+                        transition="width 0.3s ease"
+                      />
+                    </Box>
+                  </Flex>
+                ) : (
+                  <Text fontWeight="bold" fontSize="sm" color="#ff5333">
+                    节点故障
+                  </Text>
                 )}
               </Flex>
+
               <Button
                 rounded="md"
                 onClick={setNodeListModal}

@@ -33,12 +33,14 @@ interface UserInfo {
   sponsorship: number;
 }
 
-interface UserNodeInfo {
+interface UserWgInfo {
   node_alias: string;
   tunnel_name: string;
   conf_text: string;
   ping_host: string;
   user_ip: string;
+  net_type: string;
+  bandwidth: number;
 }
 
 // 登录后，用户访问房间列表拉取的房间信息
@@ -88,7 +90,7 @@ interface ILoginStateSlice {
   loginLoading: boolean;
   // 获取用户信息
   userInfo: UserInfo | undefined;
-  userNodeInfo: UserNodeInfo | undefined;
+  userWgInfo: UserWgInfo | undefined;
   getUserInfo: () => Promise<void>;
   // 退出登录
   logout: () => void;
@@ -130,7 +132,7 @@ interface ILoginStateSlice {
   // 房间数据
   roomData: RoomInfo | undefined;
   setRoomData: (roomData: RoomInfo | undefined) => void;
-  getRoomData: (manual?: boolean) => Promise<void>;
+  getRoomData: (auto?: boolean) => Promise<void>;
 
   showRegetModal: boolean;
   setShowRegetModal: () => void;
@@ -225,7 +227,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       loginLoading: true,
       // 获取用户信息
       userInfo: undefined,
-      userNodeInfo: undefined,
+      userWgInfo: undefined,
       getUserInfo: async () => {
         set(
           produce((draft) => {
@@ -281,10 +283,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             );
             // 如果没选节点就弹出节点列表
             if (data.node_info) {
-              const userNodeInfo: UserNodeInfo = data.node_info;
+              const userWgInfo: UserWgInfo = data.user_wg_info;
               set(
                 produce((draft) => {
-                  draft.userNodeInfo = userNodeInfo;
+                  draft.userWgInfo = userWgInfo;
                 }),
               );
             } else {
@@ -329,7 +331,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             draft.uuid = uuidv4();
             localStorage.setItem("uuid", draft.uuid);
             draft.userInfo = undefined;
-            draft.userNodeInfo = undefined;
+            draft.userWgInfo = undefined;
             draft.roomRole = "none";
             draft.roomData = undefined;
             draft.latency = undefined;
@@ -347,8 +349,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         if (net === null) return 0;
 
         const statusUrl = `https://${ping_host}/ping`;
-        // const node = get().nodeMap.get(node_alias);
-        // console.debug(node);
         // 单次ping请求的辅助函数
         const singlePing = async (first: boolean = false): Promise<number> => {
           try {
@@ -400,12 +400,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // 连续串行请求两次
           const delay1 = await singlePing(true);
           const delay2 = await singlePing();
-
-          // 并行请求两次
-          // const [delay1, delay2] = await Promise.all([
-          //   singlePing(),
-          //   singlePing(true),
-          // ]);
           // 选择最低延迟
           let minDelay = Math.min(delay1, delay2);
 
@@ -458,6 +452,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       // 节点列表
+      selectedNode_net_type: undefined,
+      selectedNode_bandwidth: undefined,
       nodeMap: new Map<string, any>(),
 
       getNodeList: async () => {
@@ -513,10 +509,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       // 节点选择
       showNodeListModal: false,
       setNodeListModal: () => {
-        if (get().userNodeInfo) {
+        if (get().userWgInfo) {
           set(
             produce((draft) => {
-              draft.lastSelectedNode = get().userNodeInfo?.node_alias;
+              draft.lastSelectedNode = get().userWgInfo?.node_alias;
             }),
           );
         }
@@ -558,10 +554,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           const data = await resp.json();
           if (data.code === 0) {
-            const userNodeInfo: UserNodeInfo = data.node_info;
+            const userWgInfo: UserWgInfo = data.user_wg_info;
             set(
               produce((draft) => {
-                draft.userNodeInfo = userNodeInfo;
+                draft.userWgInfo = userWgInfo;
               }),
             );
             //手动选择的才弹窗
@@ -600,9 +596,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }),
         );
       },
-      getRoomData: async (passLock: boolean = true) => {
+      getRoomData: async (auto: boolean = true) => {
         try {
-          if (!passLock) {
+          if (!auto) {
             if (get().disableFlush === true) return;
 
             // 设置定时器，3秒后重新启用按钮
@@ -653,12 +649,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           );
 
           const roomData = data.data as RoomInfo;
+          const pingHost = get().userWgInfo?.ping_host;
+          const lastSelectedNode = get().lastSelectedNode;
+          const nowSelectedNode = data.selected_node;
 
           let roomRole: string = "none";
           if (roomData) {
             roomRole =
               roomData.user_ip === roomData.hoster_ip ? "hoster" : "member";
           }
+
           set(
             produce((draft) => {
               draft.roomRole = roomRole;
@@ -668,9 +668,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           get().setRoomData(roomData);
 
-          const pingHost = get().userNodeInfo?.ping_host;
-          const lastSelectedNode = get().lastSelectedNode;
-          const nowSelectedNode = data.selected_node;
           if (lastSelectedNode && lastSelectedNode !== nowSelectedNode) {
             get().selectNode(nowSelectedNode, false);
           }
@@ -701,7 +698,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             });
           }
 
-          openToast({ content: `刷新成功`, status: "success" });
+          if (!auto) openToast({ content: `刷新成功`, status: "success" });
         } catch (error) {
           // openToast({
           //   content: "出错！不要使用百度浏览器",

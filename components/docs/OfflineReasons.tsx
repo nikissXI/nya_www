@@ -15,11 +15,11 @@ import { useUserStateStore } from "@/store/user-state";
 import { MdTipsAndUpdates } from "react-icons/md";
 
 const OfflineReasons = () => {
-  const { showOfflineReasonsModal, setOfflineReasonsModal, userNodeInfo } =
+  const { showOfflineReasonsModal, setOfflineReasonsModal, userWgInfo } =
     useUserStateStore();
 
   const OfflineReasons = [
-    `隧道名称是否为${userNodeInfo?.tunnel_name}，如果不是，到教程导入正确隧道`,
+    `隧道名称是否为${userWgInfo?.tunnel_name}，如果不是，到教程导入正确隧道`,
     "隧道必须是自己账号的！不能用其他人给的conf_key/二维码/隧道文件",
     "部分学校的校园网会拦截WG流量，试试流量上网可进行验证",
     "跨境联机要使用跨境线路的节点，其他节点跨境即使能连上过几天也会被GFW封禁",
