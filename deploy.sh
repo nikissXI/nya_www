@@ -45,6 +45,13 @@ cp -r .next/standalone release-new
 cp -r public release-new/public
 cp -r .next/static release-new/.next/static
 
+# 组装后自检：server.js、.next/server（页面路由）、.next/static（前端资源）必须齐全，否则中止
+if [ ! -f release-new/server.js ] || [ ! -d release-new/.next/server ] || [ ! -d release-new/.next/static ]; then
+    echo -e "${RED}❌ release 目录不完整（缺 server.js / .next/server / .next/static）！"
+    echo -e "   请确认 pnpm build 真的产出了 standalone，并检查磁盘空间。${NC}"
+    exit 1
+fi
+
 # ===== 6. 确保 PM2 日志目录存在 =====
 mkdir -p logs
 
@@ -70,7 +77,15 @@ fi
 # ===== 9. 保存配置 =====
 pm2 save
 
+# ===== 10. 健康检查 =====
+echo -e "${YELLOW}🧪 Health check...${NC}"
+sleep 2
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/ 2>/dev/null || echo "000")
+echo -e "GET http://localhost:3000/ -> HTTP ${HTTP_CODE}（期望 200）"
+if [ "$HTTP_CODE" != "200" ]; then
+    echo -e "${RED}⚠️  首页返回 ${HTTP_CODE}，部署可能未成功。请查看：pm2 logs nya-www --lines 50 --nostream${NC}"
+fi
+
 echo -e "${GREEN}✅ Deployment completed successfully!${NC}"
-echo -e "${GREEN}🌐 Service running on http://localhost:3000${NC}"
 
 pm2 status
