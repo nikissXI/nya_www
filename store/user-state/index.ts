@@ -685,6 +685,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             get().selectNode(nowSelectedNode, false);
           }
 
+          console.log("is_online: ", is_online);
+          console.log("pingHost: ", pingHost);
+          console.log("nowSelectedNode: ", nowSelectedNode);
           if (is_online && pingHost && nowSelectedNode) {
             if (pingHost) {
               const delay = await get().getNodeLatency(
