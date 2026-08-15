@@ -3,7 +3,9 @@ module.exports = {
     name: 'nya-www',
     
     // ===== 关键：指向 standalone 的入口 =====
-    script: './.next/standalone/server.js',
+    // 线上服务器跑在 release/（由 deploy.sh 组装 .next/standalone + 静态资源后原子切换），
+    // 这样 next build 清空 .next 时不会影响正在运行的进程。
+    script: './release/server.js',
     cwd: __dirname,              // 固定工作目录，避免从其他目录启动时路径解析错误
     
     // ===== 集群模式配置 =====

@@ -2,11 +2,9 @@
 const nextConfig = {
   // ===== 开启 standalone 模式（核心） =====
   output: 'standalone',
-  // ===== 关键：构建到独立目录 =====
-  // next build 默认会清空整个输出目录（cleanDistDir: true，含 standalone），
-  // 若直接用 .next，正在运行的 pm2 服务器文件会被删掉，构建期间网站全部 400。
-  // 构建产物先落在 build/，由 deploy.sh 在构建完成后用 mv 原子切换到 .next/。
-  distDir: 'build',
+  // 说明：这里不要用 distDir: 'build'。
+  // next build 会默认清空 .next（cleanDistDir: true），但线上服务器跑在 release/（由 deploy.sh 组装），
+  // 所以 .next 被清空不影响线上；且默认 .next 的 standalone 布局固定（server.js 平铺 + .next/ 在其内），最可靠。
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },

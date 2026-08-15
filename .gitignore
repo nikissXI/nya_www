@@ -19,6 +19,11 @@ dist/
 logs/
 *.log
 
+# 发布目录（deploy.sh 原子切换）
+release/
+release-new/
+release-old/
+
 # misc
 .DS_Store
 *.pem
