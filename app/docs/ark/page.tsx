@@ -19,7 +19,7 @@ export default function Page() {
 
       <Text mt={3}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        玩家都处于同个联机房间并在线后，主机按下图创建游戏
+        玩家都处于同个联机房间并在线后，主机按下图创建游戏，创建完成后要保持在游戏里，否则客机无法加入
       </Text>
 
       <Image maxW="800px" src="/images/ark/ark_1.webp" alt="ark_1" />
@@ -29,6 +29,11 @@ export default function Page() {
         客机打开控制台，使用命令加入游戏“admincheat open
         主机的喵服IP”，比如主机的喵服IP是100.64.0.1，那就写“admincheat open
         100.64.0.1”
+      </Text>
+
+      <Text mt={3}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        如果客机加入出现连接超时，客机自己开个主机房间，然后再退出来，进单机再输入一次代码就能进了
       </Text>
 
       <Divider my={5} />
