@@ -6,7 +6,6 @@
     "dev": "node server.mjs",
     "build": "next build",
     "start": "next start",
-    "deploy": "./deploy.sh",
     "test": "next start",
     "lint": "next lint"
   },

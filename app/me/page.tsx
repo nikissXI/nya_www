@@ -40,8 +40,14 @@ import SponsorTag from "@/components/universal/SponsorTag";
 export default function UserProfilePage() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { uuid, getUserInfo, userInfo, logout, setShowLoginModal } =
-    useUserStateStore();
+  const {
+    uuid,
+    getUserInfo,
+    userInfo,
+    userNodeInfo,
+    logout,
+    setShowLoginModal,
+  } = useUserStateStore();
 
   // 修改用户名
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
@@ -817,7 +823,7 @@ export default function UserProfilePage() {
                 <Text w="50px" textAlign="right">
                   IP:
                 </Text>
-                <Text ml={3}>{userInfo.ip}</Text>
+                <Text ml={3}>{userNodeInfo?.user_ip}</Text>
               </Flex>
 
               {userInfo.sponsorship && (

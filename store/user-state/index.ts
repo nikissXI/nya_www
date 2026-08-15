@@ -31,9 +31,16 @@ interface UserInfo {
   email: string;
   qq: string;
   sponsorship: number;
-  node_alias: string;
-  ip: string;
 }
+
+interface UserNodeInfo {
+  node_alias: string;
+  tunnel_name: string;
+  conf_text: string;
+  ping_host: string;
+  user_ip: string;
+}
+
 // 登录后，用户访问房间列表拉取的房间信息
 interface Member {
   username: string;
@@ -81,6 +88,7 @@ interface ILoginStateSlice {
   loginLoading: boolean;
   // 获取用户信息
   userInfo: UserInfo | undefined;
+  userNodeInfo: UserNodeInfo | undefined;
   getUserInfo: () => Promise<void>;
   // 退出登录
   logout: () => void;
@@ -98,8 +106,7 @@ interface ILoginStateSlice {
   nodeMap: Map<string, NodeInfo>;
   getNodeList: () => Promise<void>;
 
-  selectedNode: string | undefined;
-  setSelectedNode: (node_alias: string) => void;
+  lastSelectedNode: string | undefined;
 
   needShowReget: boolean;
   setNeedShowReget: () => void;
@@ -110,9 +117,6 @@ interface ILoginStateSlice {
   selectNode: (node_alias: string, manual: boolean) => void;
   selectNodeLock: boolean;
 
-  pingHost: string | undefined;
-  tunnelName: string | undefined;
-  confText: string | undefined;
   latency: number | undefined;
   nodeNetLoad: number;
   isOnline: boolean;
@@ -231,6 +235,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       loginLoading: true,
       // 获取用户信息
       userInfo: undefined,
+      userNodeInfo: undefined,
       getUserInfo: async () => {
         set(
           produce((draft) => {
@@ -274,19 +279,27 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             const data = await resp.json();
 
             // IP变更弹窗
-            if (data.data.reget_ip) {
+            if (data.reget_ip) {
               get().setNeedShowReget();
             }
 
-            const userInfo: UserInfo = data.data;
+            const userInfo: UserInfo = data.user_info;
             set(
               produce((draft) => {
                 draft.userInfo = userInfo;
               }),
             );
             // 如果没选节点就弹出节点列表
-            if (!userInfo.node_alias) get().setNodeListModal();
-            else get().selectNode(userInfo.node_alias, false);
+            if (data.node_info) {
+              const userNodeInfo: UserNodeInfo = data.node_info;
+              set(
+                produce((draft) => {
+                  draft.userNodeInfo = userNodeInfo;
+                }),
+              );
+            } else {
+              get().setNodeListModal();
+            }
           } catch (error) {
             if (error instanceof Error) {
               if (error.message === "登陆凭证失效") {
@@ -326,11 +339,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             draft.uuid = uuidv4();
             localStorage.setItem("uuid", draft.uuid);
             draft.userInfo = undefined;
+            draft.userNodeInfo = undefined;
             draft.roomRole = "none";
             draft.roomData = undefined;
             draft.latency = undefined;
             draft.nodeNetLoad = -1;
-            draft.confText = undefined;
           }),
         );
       },
@@ -495,14 +508,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           performance.clearResourceTimings();
         }
       },
-      selectedNode: undefined,
-      setSelectedNode: (node_alias: string) => {
-        set(
-          produce((draft) => {
-            draft.selectedNode = node_alias;
-          }),
-        );
-      },
+      lastSelectedNode: undefined,
 
       // 是否需要显示重新导入弹窗
       needShowReget: false,
@@ -517,9 +523,13 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       // 节点选择
       showNodeListModal: false,
       setNodeListModal: () => {
-        const now_node_alias = get().userInfo?.node_alias;
+        const now_node_alias = get().userNodeInfo?.node_alias;
         if (now_node_alias) {
-          get().setSelectedNode(now_node_alias);
+          set(
+            produce((draft) => {
+              draft.lastSelectedNode = now_node_alias;
+            }),
+          );
         }
         set(
           produce((draft) => {
@@ -559,15 +569,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           }
           const data = await resp.json();
           if (data.code === 0) {
+            const userNodeInfo: UserNodeInfo = data.node_info;
             set(
               produce((draft) => {
-                if (draft?.userInfo) {
-                  // 更新用户选择的节点
-                  draft.userInfo.node_alias = node_alias;
-                  draft.tunnelName = data.tunnel_name;
-                  draft.pingHost = data.ping_host;
-                  draft.confText = data.conf_text;
-                }
+                draft.userNodeInfo = userNodeInfo;
               }),
             );
             //手动选择的才弹窗
@@ -587,9 +592,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      pingHost: undefined,
-      tunnelName: undefined,
-      confText: undefined,
       latency: undefined,
       nodeNetLoad: -1,
       isOnline: false,
@@ -677,36 +679,29 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           get().setRoomData(roomData);
 
-          const pingHost = get().pingHost;
-          const lastSelectedNode = get().selectedNode;
+          const pingHost = get().userNodeInfo?.ping_host;
+          const lastSelectedNode = get().lastSelectedNode;
           const nowSelectedNode = data.selected_node;
 
           if (lastSelectedNode && lastSelectedNode !== nowSelectedNode) {
             get().selectNode(nowSelectedNode, false);
           }
 
-          console.log("is_online: ", is_online);
           console.log("pingHost: ", pingHost);
-          console.log("nowSelectedNode: ", nowSelectedNode);
           if (is_online && pingHost && nowSelectedNode) {
-            if (pingHost) {
-              const delay = await get().getNodeLatency(
-                nowSelectedNode,
-                pingHost,
-              );
+            const delay = await get().getNodeLatency(nowSelectedNode, pingHost);
 
-              if (get().isOnline && delay === 0)
-                openToast({
-                  content: "检测延迟故障，请联系服主处理",
-                  status: "error",
-                });
+            if (get().isOnline && delay === 0)
+              openToast({
+                content: "检测延迟故障，请联系服主处理",
+                status: "error",
+              });
 
-              set(
-                produce((draft) => {
-                  draft.latency = delay;
-                }),
-              );
-            }
+            set(
+              produce((draft) => {
+                draft.latency = delay;
+              }),
+            );
           } else {
             set(
               produce((draft) => {

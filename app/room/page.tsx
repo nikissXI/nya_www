@@ -90,6 +90,7 @@ export default function Page() {
   const [inputPasswd, setInputPasswd] = useState("");
   const {
     userInfo,
+    userNodeInfo,
     roomData,
     getRoomData,
     setRoomData,
@@ -105,10 +106,10 @@ export default function Page() {
   } = useUserStateStore();
 
   useEffect(() => {
-    if (userInfo?.node_alias) {
+    if (userNodeInfo) {
       getRoomData();
     }
-  }, [userInfo?.node_alias, getRoomData]);
+  }, [userNodeInfo, getRoomData]);
 
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -466,7 +467,7 @@ export default function Page() {
               bg="rgb(75 127 187 / 38%)"
               p={1}
               borderRadius={12}
-              borderColor={item.ip === userInfo?.ip ? "#6db4ff" : "transparent"}
+              borderColor={item.ip === userNodeInfo?.user_ip ? "#6db4ff" : "transparent"}
               borderWidth={3}
             >
               <Flex>
@@ -573,7 +574,7 @@ export default function Page() {
         </VStack>
       ) : (
         <>
-          {userInfo?.node_alias && (
+          {userNodeInfo?.node_alias && (
             <Flex
               align="center"
               justify="space-between"
@@ -606,7 +607,7 @@ export default function Page() {
                   )}
 
                   <Text as="span" fontWeight="bold" mx="auto">
-                    {userInfo?.node_alias}
+                    {userNodeInfo?.node_alias}
                   </Text>
                 </Flex>
 

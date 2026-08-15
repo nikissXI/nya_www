@@ -79,7 +79,7 @@ const ServerNodeItem: React.FC<{
   node: NodeInfo;
   selected: boolean;
 }> = ({ node, selected }) => {
-  const { selectNode, userInfo, selectNodeLock } = useUserStateStore();
+  const { selectNode, userNodeInfo, selectNodeLock } = useUserStateStore();
 
   return (
     <motion.div
@@ -106,7 +106,7 @@ const ServerNodeItem: React.FC<{
         }
         onClick={async () => {
           if (node.net === null || selectNodeLock === true) return;
-          if (node.alias === userInfo?.node_alias) {
+          if (node.alias === userNodeInfo?.node_alias) {
             openToast({
               content: "已经在使用该节点",
               status: "info",
@@ -229,8 +229,8 @@ export const ServerNodeListModal: React.FC = () => {
     nodeMap,
     showNodeListModal,
     setNodeListModal,
-    userInfo,
-    selectedNode,
+    userNodeInfo,
+    lastSelectedNode,
   } = useUserStateStore();
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
@@ -247,38 +247,13 @@ export const ServerNodeListModal: React.FC = () => {
   let sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
 
   // 如果已有选中节点，将其放到列表第一位（在每次打开列表时置顶）
-  if (selectedNode) {
-    const idx = sortedNodes.findIndex((n) => n.alias === selectedNode);
+  if (lastSelectedNode) {
+    const idx = sortedNodes.findIndex((n) => n.alias === lastSelectedNode);
     if (idx > -1) {
-      const [selectedNode] = sortedNodes.splice(idx, 1);
-      sortedNodes.unshift(selectedNode);
+      const [lastSelectedNode] = sortedNodes.splice(idx, 1);
+      sortedNodes.unshift(lastSelectedNode);
     }
   }
-
-  // useEffect(() => {
-  //   console.log("here");
-  //   if (nodeFixed) {
-  //     const idx = sortedNodes.findIndex((n) => n.alias === userInfo?.node_alias);
-  //     if (idx > -1) {
-  //       const [selectedNode] = sortedNodes.splice(idx, 1);
-  //       sortedNodes.unshift(selectedNode);
-  //     }
-  //   }
-  // }, [userInfo?.node_alias, nodeFixed]);
-
-  // // 自动滚动到选中节点
-  // useEffect(() => {
-  //   if (showNodeListModal && nodeFixed && userInfo?.node_alias) {
-  //     const selectedNodeId = userInfo.node_alias;
-  //     setTimeout(() => {
-  //       const nodeElement = document.getElementById(selectedNodeId);
-  //       if (nodeElement) {
-  //         nodeElement.scrollIntoView({ behavior: "smooth", block: "center" });
-  //         setNodeFixed(false);
-  //       }
-  //     }, 100); // 延迟执行，确保DOM已经渲染完成
-  //   }
-  // }, [showNodeListModal, nodeFixed, userInfo?.node_alias, setNodeFixed]);
 
   // 获取所有网络类型
   const netTypes = [
@@ -290,7 +265,7 @@ export const ServerNodeListModal: React.FC = () => {
     <Modal
       isOpen={showNodeListModal}
       onClose={setNodeListModal}
-      closeOnOverlayClick={userInfo?.node_alias ? true : false}
+      closeOnOverlayClick={userNodeInfo?.node_alias ? true : false}
       isCentered
     >
       <ModalOverlay />
@@ -493,7 +468,7 @@ export const ServerNodeListModal: React.FC = () => {
                   <ServerNodeItem
                     key={node.alias}
                     node={node}
-                    selected={userInfo?.node_alias === node.alias}
+                    selected={userNodeInfo?.node_alias === node.alias}
                   />
                 ))
               ) : (
@@ -525,7 +500,7 @@ export const ServerNodeListModal: React.FC = () => {
               <Button
                 size="sm"
                 onClick={() => {
-                  if (!userInfo?.node_alias) {
+                  if (!userNodeInfo?.node_alias) {
                     openToast({
                       content:
                         "选择节点后才能关闭，如果没有合适的节点，先随便选一个",
