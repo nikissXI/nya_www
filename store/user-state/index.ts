@@ -156,17 +156,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         // url中存在邀请码参数，则存入
         if (inviteCode) {
           localStorage.setItem("inviteCode", inviteCode);
-          console.log(`从邀请码url中获取邀请码: ${inviteCode}`);
         }
-        // else {
-        //   // url中不存在邀请码参数，则从localStorage中获取
-        //   inviteCode = localStorage.getItem("inviteCode");
-        //   if (inviteCode) {
-        //     console.log(`从邀请码localStorage中获取邀请码: ${inviteCode}`);
-        //   } else {
-        //     console.log("邀请码不存在");
-        //   }
-        // }
       },
 
       // 网站访问数据和关联群
@@ -524,13 +514,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       showNodeListModal: false,
       setNodeListModal: () => {
         if (get().userNodeInfo) {
-          console.log("get in", get().userNodeInfo?.node_alias);
           set(
             produce((draft) => {
               draft.lastSelectedNode = get().userNodeInfo?.node_alias;
             }),
           );
-          console.log(get().lastSelectedNode);
         }
         set(
           produce((draft) => {
@@ -571,7 +559,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const data = await resp.json();
           if (data.code === 0) {
             const userNodeInfo: UserNodeInfo = data.node_info;
-            console.log(userNodeInfo)
             set(
               produce((draft) => {
                 draft.userNodeInfo = userNodeInfo;
@@ -684,12 +671,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const pingHost = get().userNodeInfo?.ping_host;
           const lastSelectedNode = get().lastSelectedNode;
           const nowSelectedNode = data.selected_node;
-          console.log(lastSelectedNode);
           if (lastSelectedNode && lastSelectedNode !== nowSelectedNode) {
             get().selectNode(nowSelectedNode, false);
           }
 
-          console.log("pingHost: ", pingHost);
           if (is_online && pingHost && nowSelectedNode) {
             const delay = await get().getNodeLatency(nowSelectedNode, pingHost);
 

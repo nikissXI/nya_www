@@ -106,10 +106,10 @@ export default function Page() {
   } = useUserStateStore();
 
   useEffect(() => {
-    if (userNodeInfo?.node_alias) {
+    if (userNodeInfo?.node_alias && roomData === undefined) {
       getRoomData();
     }
-  }, [userNodeInfo?.node_alias, getRoomData]);
+  }, [userNodeInfo?.node_alias, roomData, getRoomData]);
 
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -467,7 +467,9 @@ export default function Page() {
               bg="rgb(75 127 187 / 38%)"
               p={1}
               borderRadius={12}
-              borderColor={item.ip === userNodeInfo?.user_ip ? "#6db4ff" : "transparent"}
+              borderColor={
+                item.ip === userNodeInfo?.user_ip ? "#6db4ff" : "transparent"
+              }
               borderWidth={3}
             >
               <Flex>
@@ -515,6 +517,14 @@ export default function Page() {
               </Flex>
             </Box>
           ))}
+
+          {isOnline &&
+            roomData?.members.length === 1 &&
+            roomRole === "hoster" && (
+              <Text color="#ffca3d" size="sm" textAlign="center">
+                邀请其他玩家加入房间才能联机
+              </Text>
+            )}
         </VStack>
 
         <HStack justify="center">
@@ -709,14 +719,6 @@ export default function Page() {
               )}
             </Text>
           )}
-
-          {/* {isOnline &&
-            roomData?.members.length === 1 &&
-            roomRole === "hoster" && (
-              <Text color="#ffca3d" size="sm" textAlign="center">
-                联机的玩家都要注册喵服账号并安装WG
-              </Text>
-            )} */}
 
           {isOnline === false && (
             <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
