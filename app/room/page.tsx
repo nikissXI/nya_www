@@ -106,10 +106,10 @@ export default function Page() {
   } = useUserStateStore();
 
   useEffect(() => {
-    if (userNodeInfo) {
+    if (userNodeInfo?.node_alias) {
       getRoomData();
     }
-  }, [userNodeInfo, getRoomData]);
+  }, [userNodeInfo?.node_alias, getRoomData]);
 
   const [carouselIndex, setCarouselIndex] = useState(0);
 
