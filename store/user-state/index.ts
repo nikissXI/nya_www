@@ -108,7 +108,7 @@ interface ILoginStateSlice {
   nodeMap: Map<string, NodeInfo>;
   getNodeList: () => Promise<void>;
 
-  lastSelectedNode: string | undefined;
+  fixedNode: string | undefined;
 
   needShowReget: boolean;
   setNeedShowReget: () => void;
@@ -494,7 +494,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           performance.clearResourceTimings();
         }
       },
-      lastSelectedNode: undefined,
+      fixedNode: undefined,
 
       // 是否需要显示重新导入弹窗
       needShowReget: false,
@@ -512,7 +512,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         if (get().userWgInfo) {
           set(
             produce((draft) => {
-              draft.lastSelectedNode = get().userWgInfo?.node_alias;
+              draft.fixedNode = get().userWgInfo?.node_alias;
             }),
           );
         }
@@ -651,7 +651,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           const roomData = data.data as RoomInfo;
           const pingHost = get().userWgInfo?.ping_host;
-          const lastSelectedNode = get().lastSelectedNode;
+          const lastSelectedNode = get().userWgInfo?.node_alias;
           const nowSelectedNode = data.selected_node;
 
           let roomRole: string = "none";

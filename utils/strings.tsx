@@ -1,5 +1,4 @@
 import hash from "hash.js";
-import dayjs from "dayjs";
 import { openToast } from "@/components/universal/toast";
 import {
   RiSignalCellular3Fill,

@@ -230,7 +230,7 @@ export const ServerNodeListModal: React.FC = () => {
     showNodeListModal,
     setNodeListModal,
     userWgInfo,
-    lastSelectedNode,
+    fixedNode,
   } = useUserStateStore();
 
   const [disableGetNodeList, setDisableGetNodeList] = useState(false);
@@ -247,11 +247,11 @@ export const ServerNodeListModal: React.FC = () => {
   let sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
 
   // 如果已有选中节点，将其放到列表第一位（在每次打开列表时置顶）
-  if (lastSelectedNode) {
-    const idx = sortedNodes.findIndex((n) => n.alias === lastSelectedNode);
+  if (fixedNode) {
+    const idx = sortedNodes.findIndex((n) => n.alias === fixedNode);
     if (idx > -1) {
-      const [lastSelectedNode] = sortedNodes.splice(idx, 1);
-      sortedNodes.unshift(lastSelectedNode);
+      const [fixedNode] = sortedNodes.splice(idx, 1);
+      sortedNodes.unshift(fixedNode);
     }
   }
 
