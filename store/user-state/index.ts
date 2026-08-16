@@ -558,6 +558,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set(
               produce((draft) => {
                 draft.userWgInfo = userWgInfo;
+                draft.roomData = undefined;
               }),
             );
             //手动选择的才弹窗
@@ -674,12 +675,14 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           if (is_online && pingHost && nowSelectedNode) {
             const delay = await get().getNodeLatency(nowSelectedNode, pingHost);
-
-            if (get().isOnline && delay === 0)
+            if (get().isOnline && delay === 0) {
               openToast({
                 content: "检测延迟故障，请联系服主处理",
                 status: "error",
               });
+            } else {
+              if (!auto) openToast({ content: `刷新成功`, status: "success" });
+            }
 
             set(
               produce((draft) => {
@@ -697,8 +700,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               status: "warning",
             });
           }
-
-          if (!auto) openToast({ content: `刷新成功`, status: "success" });
         } catch (error) {
           // openToast({
           //   content: "出错！不要使用百度浏览器",
