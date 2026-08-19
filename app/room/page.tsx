@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import {
   Box,
   Text,
@@ -19,6 +19,7 @@ import {
   Flex,
   Tag,
   Badge,
+  Stack,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -55,22 +56,28 @@ interface HandleRoomResponse {
   [key: string]: any;
 }
 
-// 轮播消息数组
-const carouselMessages = [
+// 抽取常量到组件外部，避免每次渲染重新创建
+const CAROUSEL_MESSAGES = [
   "关闭浏览器不影响联机，WG不关即可",
   "联机时使用该页面上显示的联机IP",
   "房间里任意玩家都可以当主机",
 ];
 
-const carouselMessagesVip = [
+const CAROUSEL_MESSAGES_VIP = [
   "关闭浏览器不影响联机，WG不关即可",
   "联机时使用该页面上显示的联机IP",
   "房间里任意玩家都可以当主机",
 ];
+
+// 抽取角色常量
+const ROLE_HOSTER = "hoster";
+const ROLE_NONE = "none";
 
 export default function Page() {
   const router = useRouter();
 
+  // 使用 useRef 作为并发请求锁，解决 useState 异步更新导致的竞态问题
+  const isRequesting = useRef(false);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -94,7 +101,7 @@ export default function Page() {
     userWgInfo,
     roomData,
     getRoomData,
-    setRoomData,
+    setRoomPassword,
     roomRole,
     latency,
     isOnline,
@@ -107,39 +114,45 @@ export default function Page() {
   } = useUserStateStore();
 
   useEffect(() => {
+    // 当节点存在，且还没有房间数据时，自动拉取
     if (userWgInfo?.node_alias && roomData === undefined) {
       getRoomData();
     }
   }, [userWgInfo?.node_alias, roomData, getRoomData]);
 
+  // 轮播图索引
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCarouselIndex(
-        (prevIndex) => (prevIndex + 1) % carouselMessages.length,
+        (prevIndex) => (prevIndex + 1) % CAROUSEL_MESSAGES.length,
       );
     }, 6000);
-
     return () => clearInterval(interval);
   }, []);
 
-  // 通用请求函数，自动管理 loading 和错误处理
+  // 判断是否为 VIP 用户（赞助 > 10）
+  const isVip = useMemo(
+    () => (userInfo?.sponsorship || 0) > 10,
+    [userInfo?.sponsorship],
+  );
+
+  // 通用请求函数：使用 useRef 锁，避免 useCallback 依赖 loading 状态导致频繁重建
   const requestRoomApi = useCallback(
     async (
       endpoint: string,
       params: Record<string, string> = {},
     ): Promise<HandleRoomResponse> => {
-      if (loading) {
+      if (isRequesting.current) {
         throw new Error("请不要点太快");
       }
+      isRequesting.current = true;
       setLoading(true);
 
       try {
         const urlParams = new URLSearchParams(params);
-        const url = `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/${endpoint}?${urlParams.toString()}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}?${urlParams.toString()}`;
 
         const resp = await fetch(url, {
           method: "GET",
@@ -161,9 +174,10 @@ export default function Page() {
         return data;
       } finally {
         setLoading(false);
+        isRequesting.current = false;
       }
     },
-    [loading],
+    [], // 无依赖，保持完全稳定
   );
 
   // 设置房间密码
@@ -176,13 +190,10 @@ export default function Page() {
 
         if (data.code === 0) {
           if (roomData) {
-            setRoomData({
-              ...roomData,
-              room_passwd: newPasswd,
-            });
+            setRoomPassword(newPasswd);
           }
           openToast({ content: data.msg, status: "success" });
-          if (setPassIsOpen) setPassOnClose();
+          setPassOnClose();
         } else {
           openToast({ content: data.msg, status: "warning" });
         }
@@ -190,7 +201,7 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [requestRoomApi, roomData, setRoomData, setPassIsOpen, setPassOnClose],
+    [requestRoomApi, roomData, setRoomPassword, setPassOnClose],
   );
 
   // 创建房间
@@ -210,11 +221,28 @@ export default function Page() {
     }
   }, [requestRoomApi, getRoomData]);
 
-  // 关闭房间
+  // 关闭房间（房主）
   const handleCloseRoom = useCallback(async () => {
     try {
       const data = await requestRoomApi("handleRoom", {
         handleType: "closeRoom",
+        value: "",
+      });
+      if (data.code === 0) {
+        getRoomData();
+      } else {
+        openToast({ content: data.msg, status: "error" });
+      }
+    } catch (err) {
+      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
+    }
+  }, [requestRoomApi, getRoomData]);
+
+  // 退出房间（成员）
+  const handleExitRoom = useCallback(async () => {
+    try {
+      const data = await requestRoomApi("handleRoom", {
+        handleType: "exitRoom",
         value: "",
       });
       if (data.code === 0) {
@@ -260,27 +288,10 @@ export default function Page() {
         openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
     },
-    [requestRoomApi, getRoomData, joinOnClose, setHideJoinPassInput],
+    [requestRoomApi, getRoomData, joinOnClose],
   );
 
-  // 退出房间
-  const handleExitRoom = useCallback(async () => {
-    try {
-      const data = await requestRoomApi("handleRoom", {
-        handleType: "exitRoom",
-        value: "",
-      });
-      if (data.code === 0) {
-        getRoomData();
-      } else {
-        openToast({ content: data.msg, status: "error" });
-      }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  }, [requestRoomApi, getRoomData]);
-
-  // 删除成员
+  // 踢出成员
   const handleDelMember = useCallback(
     async (delIp: string) => {
       try {
@@ -300,247 +311,245 @@ export default function Page() {
     [requestRoomApi, getRoomData],
   );
 
+  // 键盘事件处理
   const handleSetPassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
       handleSetRoomPasswd(inputPasswd);
     }
   };
+
   const handleJoinRoomEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
       handleJoinRoom(inputRoomId, inputPasswd);
     }
   };
 
-  const standbyPage = () => {
+  // 节点警告文案（根据网络类型）
+  const nodeWarningText = useMemo(() => {
+    const netType = userWgInfo?.net_type;
+    if (netType === "电信") {
+      return "你选的是电信线路节点，只建议所有用户都是用中国电信或流量的时候使用";
+    } else if (netType === "境外") {
+      return "你选的是境外线路节点，中国大陆用户会不稳定或无法连接";
+    }
+    return null;
+  }, [userWgInfo?.net_type]);
+
+  const nodeWarningElement = useMemo(() => {
+    if (!nodeWarningText) return null;
     return (
-      <Box textAlign="center">
-        <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
-          <ModalOverlay />
-          <ModalContent bgColor="#002f5c">
-            <ModalHeader>加入房间</ModalHeader>
-
-            <ModalCloseButton />
-
-            <ModalBody onKeyDown={handleJoinRoomEnter}>
-              <Input
-                type="text"
-                placeholder="请输入房间号"
-                value={inputRoomId}
-                onChange={(e) => {
-                  setInputRoomId(e.target.value);
-                  setHideJoinPassInput(true);
-                }}
-              />
-
-              <Input
-                mt={3}
-                type="text"
-                placeholder="请输入房间密码"
-                value={inputPasswd}
-                onChange={(e) => {
-                  setInputPasswd(e.target.value);
-                }}
-                hidden={hideJoinPassInput}
-              />
-            </ModalBody>
-
-            <ModalFooter>
-              <Button
-                bgColor="#007bc0"
-                onClick={() => {
-                  handleJoinRoom(inputRoomId, inputPasswd);
-                }}
-              >
-                加入
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
-        <VStack spacing={6} mt={3}>
-          <Button
-            h="50px"
-            fontSize="25px"
-            onClick={() => {
-              handleCreateRoom();
-            }}
-          >
-            创建房间
-          </Button>
-
-          <Button
-            h="50px"
-            fontSize="25px"
-            onClick={() => {
-              joinOnOpen();
-              setHideJoinPassInput(true);
-              setInputRoomId("");
-              setInputPasswd("");
-            }}
-          >
-            加入房间
-          </Button>
-        </VStack>
-      </Box>
+      <Text color="#ffca3d" size="sm" textAlign="center" mx={5}>
+        {nodeWarningText}
+      </Text>
     );
-  };
+  }, [nodeWarningText]);
 
-  const joinedPage = () => {
-    return (
-      <Box textAlign="center">
-        <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
-          <ModalOverlay />
-          <ModalContent bgColor="#002f5c">
-            <ModalHeader>设置加入房间的密码</ModalHeader>
-
-            <ModalCloseButton />
-
-            <ModalBody onKeyDown={handleSetPassEnter}>
-              <Input
-                type="text"
-                placeholder="请输入房间密码"
-                value={inputPasswd}
-                onChange={(e) => setInputPasswd(e.target.value)}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <Button bgColor="#be2b2b" onClick={() => handleSetRoomPasswd("")}>
-                清除密码
-              </Button>
-
-              <Button
-                ml={3}
-                bgColor="#007bc0"
-                onClick={() => handleSetRoomPasswd(inputPasswd)}
-              >
-                更新密码
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
-        <VStack>
-          {roomData?.members.map((item, index) => (
-            <Box
-              w="300px"
-              key={item.ip}
-              bg="rgb(75 127 187 / 38%)"
-              p={1}
-              borderRadius={12}
-              borderColor={
-                item.ip === userWgInfo?.user_ip ? "#6db4ff" : "transparent"
-              }
-              borderWidth={3}
+  // 待加入页面（未进房间）
+  const standbyPage = () => (
+    <Box textAlign="center">
+      <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
+        <ModalOverlay />
+        <ModalContent bgColor="#002f5c">
+          <ModalHeader>加入房间</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody onKeyDown={handleJoinRoomEnter}>
+            <Input
+              type="text"
+              placeholder="请输入房间号"
+              value={inputRoomId}
+              onChange={(e) => {
+                setInputRoomId(e.target.value);
+                setHideJoinPassInput(true);
+              }}
+            />
+            <Input
+              mt={3}
+              type="text"
+              placeholder="请输入房间密码"
+              value={inputPasswd}
+              onChange={(e) => {
+                setInputPasswd(e.target.value);
+              }}
+              hidden={hideJoinPassInput}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              bgColor="#007bc0"
+              onClick={() => {
+                handleJoinRoom(inputRoomId, inputPasswd);
+              }}
             >
-              <Flex>
-                <Text fontWeight="bold" fontSize="1.1rem" ml={2} color="white">
-                  {item.username}
-                </Text>
+              加入
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
-                <Tag
-                  size="md"
-                  ml="auto"
-                  bg="transparent"
-                  fontWeight="bold"
-                  color={getStatusColor(item.status === "在线")}
-                >
-                  {item.status}
-                </Tag>
-              </Flex>
+      <VStack spacing={6} mt={3}>
+        <Button
+          h="50px"
+          fontSize="25px"
+          onClick={() => {
+            handleCreateRoom();
+          }}
+        >
+          创建房间
+        </Button>
 
-              <Flex mt={1}>
-                <Tag
-                  onClick={() => {
-                    copyText(item.ip);
-                  }}
-                  color="white"
-                  bg="transparent"
-                >
-                  联机ip {item.ip}
-                </Tag>
+        <Button
+          h="50px"
+          fontSize="25px"
+          onClick={() => {
+            joinOnOpen();
+            setHideJoinPassInput(true);
+            setInputRoomId("");
+            setInputPasswd("");
+          }}
+        >
+          加入房间
+        </Button>
+      </VStack>
+    </Box>
+  );
 
-                {item.sponsorship > 0 && (
-                  <SponsorTag amount={item.sponsorship} />
-                )}
+  // 已加入页面
+  const joinedPage = () => (
+    <Box textAlign="center">
+      <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
+        <ModalOverlay />
+        <ModalContent bgColor="#002f5c">
+          <ModalHeader>设置加入房间的密码</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody onKeyDown={handleSetPassEnter}>
+            <Input
+              type="text"
+              placeholder="请输入房间密码"
+              value={inputPasswd}
+              onChange={(e) => setInputPasswd(e.target.value)}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button bgColor="#be2b2b" onClick={() => handleSetRoomPasswd("")}>
+              清除密码
+            </Button>
+            <Button
+              ml={3}
+              bgColor="#007bc0"
+              onClick={() => handleSetRoomPasswd(inputPasswd)}
+            >
+              更新密码
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
-                {roomRole === "hoster" && item.ip !== roomData.hoster_ip && (
-                  <Tag
-                    ml="auto"
-                    color="white"
-                    bg="#be1c1c"
-                    onClick={() => handleDelMember(item.ip)}
-                    cursor="pointer"
-                  >
-                    踢出
-                  </Tag>
-                )}
-              </Flex>
-            </Box>
-          ))}
-
-          {roomData?.members.length === 1 && roomRole === "hoster" && (
-            <Text color="#ffca3d" size="sm" textAlign="center">
-              邀请其他玩家加入房间才能联机
-            </Text>
-          )}
-
-          {roomData?.members.length === 1 &&
-            roomRole === "hoster" &&
-            nodeWarning()}
-        </VStack>
-
-        <HStack justify="center">
-          <Button
-            px={0}
-            size="lg"
-            bg="transparent"
-            onClick={roomRole === "hoster" ? handleCloseRoom : handleExitRoom}
-          >
-            {roomRole === "hoster" ? "关闭房间" : "退出房间"}
-            <IoIosExit size={30} color="#ff4444" />
-          </Button>
-
-          <Text fontSize="lg" fontWeight="bold" ml={2} mr={3}>
-            {roomData?.members.length}/{roomData?.room_max}
-          </Text>
-
-          <Button
-            px={0}
-            size="lg"
-            bg="transparent"
-            disabled={disableFlush}
-            onClick={() => {
-              getRoomData(false);
-            }}
-          >
-            刷新房间
-            <IoReloadCircle size={26} color="#35c535" />
-          </Button>
-        </HStack>
-
-        {roomData?.room_max && roomData.room_max < 8 && (
-          <Text fontSize="sm" color="#ffca3d">
-            房间最大人数计算请看赞助页面说明
+      <VStack>
+        {roomData?.members.length === 1 && roomRole === ROLE_HOSTER && (
+          <Text color="#ffca3d" size="sm" textAlign="center">
+            所有玩家都要注册喵服并安装WG
+            <br />
+            然后邀请他们加入房间才能联机
           </Text>
         )}
-      </Box>
-    );
-  };
 
-  const nodeWarning = () => {
-    return null;
-    // if (userWgInfo?.net_type == "电信") {
-    //   <Text color="#ffca3d" size="sm" textAlign="center">
-    //     你选的是电信线路节点，只建议所有用户都是用中国电信或流量的时候使用
-    //   </Text>;
-    // } else if (userWgInfo?.net_type == "境外") {
-    //   <Text color="#ffca3d" size="sm" textAlign="center">
-    //     你选的是境外线路节点，中国大陆用户会不稳定或无法连接
-    //   </Text>;
-    // } else {
-    //   return null;
-    // }
-  };
+        {roomData?.members.map((item) => (
+          <Box
+            w="300px"
+            key={item.ip}
+            bg="rgb(75 127 187 / 38%)"
+            p={1}
+            borderRadius={12}
+            borderColor={
+              item.ip === userWgInfo?.user_ip ? "#6db4ff" : "transparent"
+            }
+            borderWidth={3}
+          >
+            <Flex>
+              <Text fontWeight="bold" fontSize="1.1rem" ml={2} color="white">
+                {item.username}
+              </Text>
+              <Tag
+                size="md"
+                ml="auto"
+                bg="transparent"
+                fontWeight="bold"
+                color={getStatusColor(item.status === "在线")}
+              >
+                {item.status}
+              </Tag>
+            </Flex>
+
+            <Flex mt={1}>
+              <Tag
+                onClick={() => {
+                  copyText(item.ip);
+                }}
+                color="white"
+                bg="transparent"
+                cursor="pointer"
+              >
+                联机ip {item.ip}
+              </Tag>
+
+              {item.sponsorship > 0 && <SponsorTag amount={item.sponsorship} />}
+
+              {roomRole === ROLE_HOSTER && item.ip !== roomData.hoster_ip && (
+                <Tag
+                  ml="auto"
+                  color="white"
+                  bg="#be1c1c"
+                  onClick={() => handleDelMember(item.ip)}
+                  cursor="pointer"
+                >
+                  踢出
+                </Tag>
+              )}
+            </Flex>
+          </Box>
+        ))}
+
+        {roomData?.members.length === 1 &&
+          roomRole === ROLE_HOSTER &&
+          nodeWarningElement}
+      </VStack>
+
+      <HStack justify="center">
+        <Button
+          px={0}
+          size="lg"
+          bg="transparent"
+          onClick={roomRole === ROLE_HOSTER ? handleCloseRoom : handleExitRoom}
+        >
+          {roomRole === ROLE_HOSTER ? "关闭房间" : "退出房间"}
+          <IoIosExit size={30} color="#ff4444" />
+        </Button>
+
+        <Text fontSize="lg" fontWeight="bold" ml={2} mr={3}>
+          {roomData?.members.length}/{roomData?.room_max}
+        </Text>
+
+        <Button
+          px={0}
+          size="lg"
+          bg="transparent"
+          disabled={disableFlush}
+          onClick={() => {
+            getRoomData(false);
+          }}
+        >
+          刷新房间
+          <IoReloadCircle size={26} color="#35c535" />
+        </Button>
+      </HStack>
+
+      {roomData?.room_max && roomData.room_max < 8 && (
+        <Text fontSize="sm" color="#ffca3d">
+          房间最大人数计算请看赞助页面说明
+        </Text>
+      )}
+    </Box>
+  );
 
   return (
     <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
@@ -561,130 +570,157 @@ export default function Page() {
         </VStack>
       ) : (
         <>
-          {userWgInfo?.node_alias && (
-            <Flex
-              align="center"
-              justify="space-between"
-              borderRadius="md"
-              boxShadow="sm"
-              mb={1}
-              bg="rgba(75, 127, 187, 0.38)"
-              px={2.5}
-              py={1.5}
-              w="100%"
-              maxW="300px"
-            >
-              <Flex direction="column" flex="1" mr={3}>
-                <Flex align="center">
-                  <Badge colorScheme="orange" fontSize="xs">
+          {userWgInfo?.node_alias && roomData !== undefined && (
+            <>
+              <Flex
+                align="center"
+                justify="space-between"
+                borderRadius="lg"
+                boxShadow="sm"
+                mb={2}
+                bg="rgba(75, 127, 187, 0.38)"
+                backdropFilter="blur(4px)"
+                border="1px solid"
+                borderColor="rgba(75, 127, 187, 0.2)"
+                px={3}
+                py={2}
+                w="100%"
+                maxW="320px"
+              >
+                <Stack spacing={1} w="44px" flexShrink={0}>
+                  <Badge
+                    colorScheme="orange"
+                    fontSize="xs"
+                    textAlign="center"
+                    px={1}
+                  >
                     {userWgInfo.net_type}
                   </Badge>
-                  <Badge colorScheme="teal" fontSize="xs" mx={1}>
+                  <Badge
+                    colorScheme="teal"
+                    fontSize="xs"
+                    textAlign="center"
+                    px={1}
+                  >
                     {userWgInfo.bandwidth}M
                   </Badge>
-                  <Text as="span" fontWeight="bold" mx="auto">
+                </Stack>
+
+                <Flex
+                  flex="1"
+                  alignItems="center"
+                  justifyContent="center"
+                  gap={2}
+                  minW={0}
+                  px={2}
+                >
+                  <Text
+                    fontWeight="bold"
+                    fontSize="20px"
+                    isTruncated
+                    title={userWgInfo?.node_alias}
+                    color="white"
+                    letterSpacing="-0.3px"
+                  >
                     {userWgInfo?.node_alias}
                   </Text>
-                </Flex>
 
-                {nodeNetLoad !== -1 ? (
-                  <Flex align="center" gap={2}>
+                  <Flex
+                    alignItems="center"
+                    gap={1.5}
+                    flexShrink={0}
+                    bg="rgba(0,0,0,0.04)"
+                    px={1.5}
+                    py={0.5}
+                    borderRadius="full"
+                  >
+                    <Box
+                      w="7px"
+                      h="7px"
+                      borderRadius="full"
+                      bg={getNetColor(nodeNetLoad)}
+                      boxShadow="0 0 4px rgba(0,0,0,0.1)"
+                    />
                     <Text
-                      fontSize="sm"
-                      as="span"
-                      fontWeight="bold"
-                      color={getNetColor(nodeNetLoad)}
-                      flexShrink={0} // 👈 关键：防止文字被压缩
-                      whiteSpace="nowrap" // 👈 保险：强制不换行
+                      fontSize="xs"
+                      fontWeight="medium"
+                      color="white"
+                      whiteSpace="nowrap"
                     >
                       {getNetText(nodeNetLoad)}
                     </Text>
-                    <Box
-                      w="100%"
-                      h="6px"
-                      bg="rgba(255, 255, 255, 0.2)"
-                      borderRadius="full"
-                      overflow="hidden"
-                    >
-                      <Box
-                        w={`${Math.min(nodeNetLoad, 100)}%`}
-                        h="100%"
-                        bg={getNetColor(nodeNetLoad)}
-                        borderRadius="full"
-                        transition="width 0.3s ease"
-                      />
-                    </Box>
                   </Flex>
-                ) : (
-                  <Text fontWeight="bold" fontSize="sm" color="#ff5333">
-                    节点故障
-                  </Text>
-                )}
+                </Flex>
+
+                <Button
+                  rounded="full"
+                  onClick={setNodeListModal}
+                  size="sm"
+                  bg="linear-gradient(135deg, #007bc0, #005a9e)"
+                  color="white"
+                  fontWeight="medium"
+                  px={3}
+                  flexShrink={0}
+                >
+                  切换节点
+                </Button>
               </Flex>
 
-              <Button
-                rounded="md"
-                onClick={setNodeListModal}
-                size="sm"
-                bgColor="#007bc0"
-                _hover={{ bgColor: "#005a9e" }}
-                color="white"
-              >
-                切换节点
-              </Button>
-            </Flex>
+              <Flex align="center" mt={1} gap={2}>
+                <Text
+                  fontSize={18}
+                  fontWeight="bold"
+                  color={getStatusColor(isOnline)}
+                >
+                  {isOnline ? "在线" : "WG未连接"}
+                </Text>
+
+                {isOnline && latency !== undefined ? (
+                  <Flex align="center" color={getDelayColor(latency)}>
+                    {getDelayIcon(latency)}
+                    <Text as="span" fontWeight="bold">
+                      {latency}ms
+                    </Text>
+                  </Flex>
+                ) : (
+                  <RiSignalCellularOffLine size={20} />
+                )}
+
+                <Button
+                  bg="transparent"
+                  h={5}
+                  px={0}
+                  disabled={disableFlush}
+                  onClick={() => {
+                    getRoomData(false);
+                  }}
+                  color="#7dd4ff"
+                >
+                  <Text>刷新</Text>
+                  <Box
+                    animation={rotate ? `${spin} 1s linear infinite` : "none"}
+                  >
+                    <TbReload size={18} />
+                  </Box>
+                </Button>
+              </Flex>
+            </>
           )}
 
           <OfflineReasons />
 
-          <Flex align="center" mt={1} gap={2}>
-            <Text
-              fontSize={18}
-              fontWeight="bold"
-              color={getStatusColor(isOnline)}
-            >
-              {isOnline ? "在线" : "WG未连接"}
-            </Text>
-
-            {isOnline && latency !== undefined ? (
-              <Flex align="center" color={getDelayColor(latency)}>
-                {getDelayIcon(latency)}
-                <Text as="span" fontWeight="bold">
-                  {latency}ms
-                </Text>
-              </Flex>
-            ) : (
-              <RiSignalCellularOffLine size={20} />
-            )}
-
-            <Button
-              bg="transparent"
-              h={5}
-              px={0}
-              disabled={disableFlush}
-              onClick={() => {
-                getRoomData(false);
-              }}
-              color="#7dd4ff"
-            >
-              <Text>刷新</Text>
-              <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
-                <TbReload size={18} />
-              </Box>
-            </Button>
-          </Flex>
-
-          {roomRole !== "none" && (
+          {roomRole !== ROLE_NONE && (
             <Text fontSize={18} fontWeight="bold" mr={3}>
               <Text
                 as="span"
                 onClick={() => {
                   if (roomData?.room_id) copyText(roomData.room_id.toString());
                 }}
+                cursor="pointer"
               >
                 房间号&ensp;{roomData?.room_id}
               </Text>
-              {roomRole === "hoster" && (
+              {roomRole === ROLE_HOSTER && (
                 <Button
                   ml={2}
                   color="#7dd4ff"
@@ -730,10 +766,10 @@ export default function Page() {
           )}
 
           {isOnline &&
-            roomRole !== "none" &&
-            (userInfo?.sponsorship > 10
-              ? carouselMessagesVip[carouselIndex]
-              : carouselMessages[carouselIndex])}
+            roomRole !== ROLE_NONE &&
+            (isVip
+              ? CAROUSEL_MESSAGES_VIP[carouselIndex]
+              : CAROUSEL_MESSAGES[carouselIndex])}
 
           {isOnline && (
             <Text size="sm" textAlign="center" mb={2}>
@@ -744,7 +780,6 @@ export default function Page() {
                 color="#7dd4ff"
                 onClick={() => {
                   router.push(`/docs`);
-                  //#games
                 }}
               >
                 👉点我查看
@@ -752,7 +787,7 @@ export default function Page() {
             </Text>
           )}
 
-          {roomRole === "none" ? standbyPage() : joinedPage()}
+          {roomRole === ROLE_NONE ? standbyPage() : joinedPage()}
         </>
       )}
     </Flex>

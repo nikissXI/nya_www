@@ -54,12 +54,14 @@ const SOSO = "#ffb12c";
 const BAD = "#ff3737";
 
 export const getNetColor = (net: number) => {
+  if (net == -1) return BAD;
   if (net <= 60) return GOOD;
   if (net <= 85) return SOSO;
   return BAD;
 };
 
 export const getNetText = (net: number) => {
+  if (net == -1) return "故障";
   if (net <= 60) return "空闲";
   if (net <= 85) return "一般";
   return "拥挤";

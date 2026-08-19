@@ -729,7 +729,7 @@ const DocumentPage = () => {
             px={0}
             disabled={disableFlush}
             onClick={() => {
-              getRoomData(false);
+              getRoomData(true);
             }}
             ml={1}
             color="#7dd4ff"

@@ -105,7 +105,7 @@ const ServerNodeItem: React.FC<{
             : "0 2px 4px rgba(0, 0, 0, 0.1)"
         }
         onClick={async () => {
-          if (node.net === null || selectNodeLock === true) return;
+          if (node.net === -1 || selectNodeLock === true) return;
           if (node.alias === userWgInfo?.node_alias) {
             openToast({
               content: "已经在使用该节点",
@@ -136,7 +136,7 @@ const ServerNodeItem: React.FC<{
               >
                 {node.alias}
               </Text>
-              {node.net !== null ? (
+              {node.net !== -1 ? (
                 <>
                   <Badge colorScheme="orange" fontSize="xs">
                     {node.net_type}
@@ -152,7 +152,7 @@ const ServerNodeItem: React.FC<{
                 </>
               ) : (
                 <Badge colorScheme="gray" fontSize="xs">
-                  故障
+                  节点故障，稍等或更换节点
                 </Badge>
               )}
             </Flex>
@@ -162,7 +162,7 @@ const ServerNodeItem: React.FC<{
         <SimpleGrid
           columns={2}
           spacing={4}
-          display={node.net !== null ? "grid" : "none"}
+          display={node.net !== -1 ? "grid" : "none"}
           mt={1}
         >
           <Box textAlign="center">
@@ -172,7 +172,7 @@ const ServerNodeItem: React.FC<{
                 延迟
               </Text>
             </Flex>
-            {node.net !== null &&
+            {node.net !== -1 &&
               (node.delay !== undefined ? (
                 <Box>
                   <Text
@@ -204,14 +204,9 @@ const ServerNodeItem: React.FC<{
                 负载
               </Text>
             </Flex>
-            {node.net !== null && (
+            {node.net !== -1 && (
               <Box>
-                <Text
-                  // fontSize="lg"
-                  fontWeight="bold"
-                  color={getNetColor(node.net)}
-                >
-                  {/* {node.net}% */}
+                <Text fontWeight="bold" color={getNetColor(node.net)}>
                   {getNetText(node.net)}
                 </Text>
               </Box>
@@ -225,6 +220,7 @@ const ServerNodeItem: React.FC<{
 
 export const ServerNodeListModal: React.FC = () => {
   const {
+    getNodeListLock,
     getNodeList,
     nodeMap,
     showNodeListModal,
@@ -233,7 +229,6 @@ export const ServerNodeListModal: React.FC = () => {
     fixedNode,
   } = useUserStateStore();
 
-  const [disableGetNodeList, setDisableGetNodeList] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
   const [sortBy, setSortBy] = useState("delay");
@@ -265,7 +260,7 @@ export const ServerNodeListModal: React.FC = () => {
     <Modal
       isOpen={showNodeListModal}
       onClose={setNodeListModal}
-      closeOnOverlayClick={userWgInfo?.node_alias ? true : false}
+      closeOnOverlayClick={userWgInfo ? true : false}
       isCentered
     >
       <ModalOverlay />
@@ -482,25 +477,18 @@ export const ServerNodeListModal: React.FC = () => {
               <Button
                 size="sm"
                 onClick={async () => {
-                  if (disableGetNodeList === true) return;
-
-                  setDisableGetNodeList(true);
-                  setTimeout(() => {
-                    setDisableGetNodeList(false);
-                  }, 3000);
-
                   await getNodeList();
                 }}
-                disabled={disableGetNodeList}
+                disabled={getNodeListLock}
                 flex="1"
               >
-                刷新列表
+                {getNodeListLock ? "正在加载" : "刷新列表"}
               </Button>
 
               <Button
                 size="sm"
                 onClick={() => {
-                  if (!userWgInfo?.node_alias) {
+                  if (!userWgInfo) {
                     openToast({
                       content:
                         "选择节点后才能关闭，如果没有合适的节点，先随便选一个",
