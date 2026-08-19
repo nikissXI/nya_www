@@ -616,7 +616,7 @@ export default function Page() {
                 >
                   <Text
                     fontWeight="bold"
-                    fontSize="20px"
+                    fontSize="lg"
                     isTruncated
                     title={userWgInfo?.node_alias}
                     color="white"
@@ -627,16 +627,15 @@ export default function Page() {
 
                   <Flex
                     alignItems="center"
-                    gap={1.5}
+                    gap={1}
                     flexShrink={0}
                     bg="rgba(0,0,0,0.04)"
-                    px={1.5}
-                    py={0.5}
+                    mx={1}
                     borderRadius="full"
                   >
                     <Box
-                      w="7px"
-                      h="7px"
+                      w="10px"
+                      h="10px"
                       borderRadius="full"
                       bg={getNetColor(nodeNetLoad)}
                       boxShadow="0 0 4px rgba(0,0,0,0.1)"

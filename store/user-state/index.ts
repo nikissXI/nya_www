@@ -106,9 +106,8 @@ interface ILoginStateSlice {
   // 节点列表
   getNodeListLock: boolean;
   nodeMap: Map<string, NodeInfo>;
-  getNodeList: () => Promise<void>;
-
   fixedNode: string | undefined;
+  getNodeList: () => Promise<void>;
 
   needShowReget: boolean;
 
@@ -375,9 +374,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
       getNodeListLock: false,
       nodeMap: new Map<string, any>(),
+      fixedNode: undefined,
       getNodeList: async () => {
         if (get().getNodeListLock) return;
         set({ getNodeListLock: true });
+
+        const nowUserWgInfo = get().userWgInfo;
+        if (nowUserWgInfo) {
+          set({ fixedNode: nowUserWgInfo.node_alias });
+        }
 
         try {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -406,7 +411,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      fixedNode: undefined,
       needShowReget: false,
 
       showNodeListModal: false,
@@ -419,9 +423,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         if (currentShow && state.needShowReget) {
           updates.showRegetModal = true;
           updates.needShowReget = false;
-        }
-        if (state.userWgInfo?.node_alias) {
-          updates.fixedNode = state.userWgInfo.node_alias;
         }
         set(updates);
         if (!currentShow) {
