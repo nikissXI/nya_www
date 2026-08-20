@@ -7,6 +7,7 @@ const rootDir = fileURLToPath(new URL(".", import.meta.url));
 export default defineConfig({
   plugins: [react()],
   server: {
+    allowedHosts: ['nya.nikiss.top'],
     host: "127.0.0.1",
     port: 3000,
   },
