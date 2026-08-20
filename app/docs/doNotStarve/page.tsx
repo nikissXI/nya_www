@@ -22,6 +22,32 @@ export default function Page() {
       <Divider my={5} />
 
       <Heading size="lg" mb={3}>
+        手游联机
+      </Heading>
+
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        玩家都处于同个联机房间并在线后，主机创建多人游戏，客机搜索房间加入即可
+      </Text>
+
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        手游苹果和安卓可以联机，但需要两边都用离线模式（都是在线模式不确定是否可以），而且苹果不能做客机（就是无法加入游戏）
+      </Text>
+
+      <Text my={1}>
+        <Icon as={MdTipsAndUpdates} mr={2} />
+        如果加入时提示“这个服务器仅允许在相同局域网的玩家连接”，重开游戏再尝试加入（主机和客机都重开试试看，还不确定是哪边的问题）
+      </Text>
+      <Image
+        src="/images/doNotStarve/doNotStarve_2.webp"
+        maxW="400px"
+        alt="doNotStarve_2"
+      />
+
+      <Divider my={5} />
+
+      <Heading size="lg" mb={3}>
         端游联机
       </Heading>
 
@@ -44,32 +70,6 @@ export default function Page() {
         src="/images/doNotStarve/doNotStarve_1.webp"
         maxW="400px"
         alt="doNotStarve_1"
-      />
-
-      <Divider my={5} />
-
-      <Heading size="lg" mb={3}>
-        手游联机
-      </Heading>
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        玩家都处于同个联机房间并在线后，主机创建多人游戏，客机搜索房间加入即可
-      </Text>
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        手游苹果和安卓可以联机，但需要两边都用离线模式（都是在线模式不确定是否可以），而且苹果不能做客机（就是无法加入游戏）
-      </Text>
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        如果客机加入时提示“这个服务器仅允许在相同局域网的玩家连接”，重开游戏再尝试加入，这是游戏Bug
-      </Text>
-      <Image
-        src="/images/doNotStarve/doNotStarve_2.webp"
-        maxW="400px"
-        alt="doNotStarve_2"
       />
 
       <Divider my={5} />

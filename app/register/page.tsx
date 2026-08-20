@@ -157,61 +157,6 @@ export default function Page() {
     }
   };
 
-  // const sendSMS = async (tel: string) => {
-  //   if (!validateTel(tel)) {
-  //     openToast({ content: `请正确填写手机号`, status: "warning" });
-  //     return;
-  //   }
-
-  //   const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
-  //   if (resp.ok) {
-  //     const data = await resp.json();
-  //     if (data.code === 1) {
-  //       openToast({ content: "该手机号已被注册", status: "warning" });
-  //     } else {
-  //       const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
-  //       if (resp.ok) {
-  //         const data = await resp.json();
-  //         if (data.code === 0) {
-  //           openToast({ content: data.msg, status: "success" });
-  //           setSendVerifyButtonText("验证码已发");
-  //         } else {
-  //           openToast({ content: data.msg, status: "warning" });
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
-  //   }
-  // };
-
-  // const sendEmail = async (email: string) => {
-  //   if (!validateEmail(email)) {
-  //     openToast({ content: `请正确填写电子邮箱`, status: "warning" });
-  //     return;
-  //   }
-
-  //   const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
-  //   if (resp.ok) {
-  //     const data = await resp.json();
-  //     if (data.code === 1) {
-  //       openToast({ content: "该电子邮箱已被注册", status: "warning" });
-  //     } else {
-  //       const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
-  //       if (resp.ok) {
-  //         const data = await resp.json();
-  //         if (data.code === 0) {
-  //           openToast({ content: data.msg, status: "success" });
-  //           setSendVerifyButtonText("验证码已发");
-  //         } else {
-  //           openToast({ content: data.msg, status: "warning" });
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     openToast({ content: "服务异常，请联系服主处理", status: "error" });
-  //   }
-  // };
   return (
     <Center>
       <VStack
@@ -239,41 +184,12 @@ export default function Page() {
           </RadioGroup>
         </Flex>
 
-        {/* {verifyType === "email" ? (
-          <Text>请正确填写电子邮箱，否则影响</Text>
-        ) : (
-          <Text>建议使用电子邮箱，忘记密码无法通过手机号找回</Text>
-        )} */}
-
         <Input
           type="text"
           value={inputAccount}
           onChange={(e) => setInputAccount(e.target.value)}
           placeholder={verifyType === "tel" ? "请输入手机号" : "请输入邮箱地址"}
         />
-
-        {/* <Flex display={verifyType === "tel" ? "none" : "flex"}>
-          <Input
-            type="number"
-            value={inputVerifyCode}
-            onChange={(e) => setInputVerifyCode(e.target.value)}
-            placeholder="请输入验证码"
-          />
-
-          <Button
-            ml={1}
-            px={6}
-            fontSize="15px"
-            onClick={() => {
-              if (!inputAccount) return;
-
-              if (verifyType === "tel") sendSMS(inputAccount);
-              else sendEmail(inputAccount);
-            }}
-          >
-            {sendVerifyButtonText}
-          </Button>
-        </Flex> */}
 
         <Box>
           <Input
