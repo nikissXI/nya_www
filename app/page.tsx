@@ -1,13 +1,11 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { Flex, Image, Text, Box, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
 import AnnouncementsModal from "@/components/docs/Announcement";
 
 export default function Page() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { userInfo, serverData } = useUserStateStore();
 
   // 平台亮点数据
@@ -88,9 +86,9 @@ export default function Page() {
         py={4}
         onClick={() => {
           if (userInfo) {
-            router.push("/room");
+            navigate("/room");
           } else {
-            router.push("/me");
+            navigate("/me");
           }
         }}
       >

@@ -1,8 +1,6 @@
-"use client";
-
 // import { gotoServerEditor, Inspector } from "react-dev-inspector";
 import { Center, Spinner } from "@chakra-ui/react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import { Header } from "../Navbar/Header";
 import RelateGroups from "../serverInfo/relateGroups";
@@ -20,7 +18,7 @@ export default function Frame({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname(); // 获取当前路径名
+  const { pathname } = useLocation();
   const { loginLoading, getInviteCode } = useUserStateStore();
 
   // 登录加载完成后获取邀请码

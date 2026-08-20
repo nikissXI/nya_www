@@ -1,6 +1,4 @@
-"use client";
-
-import NextLink from "next/link";
+import { Link as RouterLink } from "react-router-dom";
 import { Box, Flex, Text, Link, Center } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
@@ -83,9 +81,9 @@ export function Header({ path }: { path: string }) {
         <Flex as="nav" direction="column" py={10} px={12}>
           {rootGuide.map((item) => (
             <Link
-              as={NextLink}
+              as={RouterLink}
               key={item.path}
-              href={item.path}
+              to={item.path}
               my={3}
               py={2}
               _hover={{ textDecoration: "none" }}

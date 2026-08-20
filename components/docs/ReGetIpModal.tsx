@@ -9,10 +9,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 
 const TunnelUpdateModal = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const [countdown, setCountdown] = useState(5);
   const [canClose, setCanClose] = useState(false);
@@ -58,7 +58,7 @@ const TunnelUpdateModal = () => {
             my={4}
             w="100%"
             onClick={() => {
-              router.push("/docs#download");
+              navigate("/docs#download");
               setShowRegetModal();
             }}
             isDisabled={!canClose}

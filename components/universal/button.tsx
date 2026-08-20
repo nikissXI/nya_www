@@ -1,5 +1,3 @@
-"use client";
-
 import { Button as ChakraButton, ButtonProps } from "@chakra-ui/react";
 
 interface CustomButtonProps extends ButtonProps {

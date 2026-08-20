@@ -1,9 +1,9 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 
 const BackButton = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   return (
     <Button
       colorScheme="transparent"
@@ -14,7 +14,7 @@ const BackButton = () => {
       alignSelf="center"
       px={10}
       onClick={() => {
-        router.back();
+        navigate(-1);
       }}
       sx={{
         border: "none",

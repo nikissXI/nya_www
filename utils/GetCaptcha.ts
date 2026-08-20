@@ -1,11 +1,8 @@
-"use client";
-
 import { useUserStateStore } from "@/store/user-state";
+import { apiUrl } from "@/utils/api";
 import { useCallback } from "react";
 
 const useCaptcha = () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
   const { uuid } = useUserStateStore();
 
   const fetchCaptcha = useCallback(async () => {

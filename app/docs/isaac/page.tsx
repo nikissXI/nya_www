@@ -1,5 +1,3 @@
-"use client";
-
 import { Divider, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import DocFlex from "@/components/docs/DocFlex";

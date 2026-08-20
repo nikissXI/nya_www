@@ -1,22 +1,20 @@
-"use client";
-
 import { Flex, Stack, Text } from "@chakra-ui/react";
 import { FaHome, FaUsers, FaUser } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../universal/button";
 import { useState, useEffect, useCallback } from "react";
 
 export default function Footer({ path }: { path: string }) {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const [activeButton, setActiveButton] = useState<string>("");
 
   const handleButtonClick = useCallback(
     (path: string) => {
-      router.push(path);
+      navigate(path);
       setActiveButton(path);
     },
-    [router]
+    [navigate]
   );
 
   useEffect(() => {

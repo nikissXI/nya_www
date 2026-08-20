@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -95,8 +95,8 @@ export const AnnouncementsModal = ({}) => {
           赞助有专属节点和技术支持
           <Link
             ml={1}
-            as={NextLink}
-            href="/sponsor"
+            as={RouterLink}
+            to="/sponsor"
             color="#7dd4ff"
             _hover={{ textDecoration: "none" }}
           >

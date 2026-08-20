@@ -1,4 +1,3 @@
-"use client";
 
 import { Icon, Divider, Text, Heading } from "@chakra-ui/react";
 import DocFlex from "@/components/docs/DocFlex";

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import {
   Box,
@@ -39,11 +37,12 @@ import {
 } from "@/utils/strings";
 import { RiSignalCellularOffLine } from "react-icons/ri";
 import { IoIosExit } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
 import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
 import OfflineReasons from "@/components/docs/OfflineReasons";
+import { apiUrl } from "@/utils/api";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -74,7 +73,7 @@ const ROLE_HOSTER = "hoster";
 const ROLE_NONE = "none";
 
 export default function Page() {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   // 使用 useRef 作为并发请求锁，解决 useState 异步更新导致的竞态问题
   const isRequesting = useRef(false);
@@ -152,7 +151,7 @@ export default function Page() {
 
       try {
         const urlParams = new URLSearchParams(params);
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}?${urlParams.toString()}`;
+        const url = `${apiUrl}/${endpoint}?${urlParams.toString()}`;
 
         const resp = await fetch(url, {
           method: "GET",
@@ -746,7 +745,7 @@ export default function Page() {
                 bg="transparent"
                 color="#7dd4ff"
                 onClick={() => {
-                  router.push(`/docs`);
+                  navigate(`/docs`);
                 }}
               >
                 点我查看
@@ -778,7 +777,7 @@ export default function Page() {
                 bg="transparent"
                 color="#7dd4ff"
                 onClick={() => {
-                  router.push(`/docs`);
+                  navigate(`/docs`);
                 }}
               >
                 👉点我查看

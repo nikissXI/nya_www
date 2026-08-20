@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/universal/button";
 import {
   Box,
@@ -23,15 +21,16 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { openToast } from "@/components/universal/toast";
-import NextLink from "next/link";
+import { Link as RouterLink } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
 import OfflineReasons from "@/components/docs/OfflineReasons";
-import { getStatusColor } from "@/utils/strings";
+import { getDelayColor, getDelayIcon, getStatusColor } from "@/utils/strings";
+import { RiSignalCellularOffLine } from "react-icons/ri";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
@@ -81,12 +80,13 @@ const DocumentPage = () => {
     setNodeListModal,
     getRoomData,
     isOnline,
+    latency,
     rotate,
     disableFlush,
     setOfflineReasonsModal,
   } = useUserStateStore();
 
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userInfo) {
@@ -95,9 +95,9 @@ const DocumentPage = () => {
     } else {
       setGoToDoc(true);
       openToast({ content: "请登陆后再访问教程", status: "info" });
-      router.push("/me");
+      navigate("/me");
     }
-  }, [userInfo, getConfKey, router, setGoToDoc]);
+  }, [userInfo, getConfKey, navigate, setGoToDoc]);
 
   const handleCopyLink = async (confKey: string) => {
     try {
@@ -519,16 +519,6 @@ const DocumentPage = () => {
 
               <Text mt={5}>
                 ② 下载并安装WG客户端，如果下载失败，加Q群924644467，群文件有
-                {/* ，如果双击无法安装，
-                <Link
-                  ml={1}
-                  color="#7dd4ff"
-                  href="https://zhuanlan.zhihu.com/p/589250265"
-                  target="_blank"
-                >
-                  点我查看解决方法
-                </Link>
-                <br /> */}
               </Text>
 
               <Button
@@ -718,20 +708,33 @@ const DocumentPage = () => {
 
       <Box mt={5}>
         ⑤ WG隧道打开后<HighLight>等5秒</HighLight>点刷新，在线就是连上了
-        <Flex align="center">
+        <Flex align="center" mt={1} gap={2}>
           &emsp;
-          <Text mr={1} fontWeight="bold" color={getStatusColor(isOnline)}>
+          <Text
+            fontSize={18}
+            fontWeight="bold"
+            color={getStatusColor(isOnline)}
+          >
             {isOnline ? "在线" : "WG未连接"}
           </Text>
+          {isOnline && latency !== undefined ? (
+            <Flex align="center" color={getDelayColor(latency)}>
+              {getDelayIcon(latency)}
+              <Text as="span" fontWeight="bold">
+                {latency}ms
+              </Text>
+            </Flex>
+          ) : (
+            <RiSignalCellularOffLine size={20} />
+          )}
           <Button
             bg="transparent"
             h={5}
             px={0}
             disabled={disableFlush}
             onClick={() => {
-              getRoomData(true);
+              getRoomData(false);
             }}
-            ml={1}
             color="#7dd4ff"
           >
             <Text>刷新</Text>
@@ -775,8 +778,8 @@ const DocumentPage = () => {
                 <ListItem key={article.path} my={1}>
                   <Link
                     fontSize="md"
-                    as={NextLink}
-                    href={article.path}
+                    as={RouterLink}
+                    to={article.path}
                     color="#7dfffe"
                     _hover={{ textDecoration: "none" }}
                   >
@@ -793,7 +796,7 @@ const DocumentPage = () => {
         <Button
           bgColor="#b23333"
           onClick={() => {
-            router.push(`/room`);
+            navigate(`/room`);
           }}
           my={6}
           w="10rem"

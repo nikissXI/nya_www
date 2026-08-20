@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "../universal/button";
 import {
   Modal,
@@ -18,13 +16,14 @@ import {
   Image,
   Radio,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { useUserStateStore } from "@/store/user-state";
 import { useEffect, useState } from "react";
 import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "../universal/toast";
 import { getHash, validateTel, validateEmail } from "@/utils/strings";
 import { setAuthToken } from "@/store/authKey";
+import { apiUrl } from "@/utils/api";
 
 interface LoginReqBody {
   account: string; // 手机或邮箱
@@ -34,8 +33,7 @@ interface LoginReqBody {
 }
 
 export function LoginModal() {
-  const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const navigate = useNavigate();
 
   const {
     userInfo,
@@ -117,7 +115,7 @@ export function LoginModal() {
         getUserInfo();
         setShowLoginModal();
         if (goToDoc === true) {
-          router.push("/docs");
+          navigate("/docs");
         }
       } else {
         openToast({ content: data.msg, status: "warning" });
@@ -192,7 +190,7 @@ export function LoginModal() {
                 bgColor="transparent"
                 fontSize="sm"
                 onClick={() => {
-                  router.push("/forgetPass");
+                  navigate("/forgetPass");
                   setShowLoginModal();
                 }}
               >
@@ -247,7 +245,7 @@ export function LoginModal() {
                 bgColor="transparent"
                 onClick={() => {
                   setShowLoginModal();
-                  router.push("/register");
+                  navigate("/register");
                 }}
               >
                 点我注册

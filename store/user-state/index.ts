@@ -6,6 +6,7 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
+import { apiUrl } from "@/utils/api";
 
 interface GroupItem {
   name: string;
@@ -168,7 +169,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       serverData: undefined,
       getServerData: async () => {
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/serverData`);
           if (!resp.ok) throw new Error("请求出错");
           const data = await resp.json();
@@ -182,7 +182,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       confKey: null,
       getConfKey: async () => {
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
             method: "GET",
             headers: { Authorization: `Bearer ${getAuthToken()}` },
@@ -223,7 +222,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         if (getAuthToken()) {
           try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
             const resp = await fetch(`${apiUrl}/userInfo`, {
               method: "GET",
               headers: { Authorization: `Bearer ${getAuthToken()}` },
@@ -385,7 +383,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
 
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/nodeList`);
           if (!resp.ok) throw new Error("请求出错");
           const nodes: NodeInfo[] = await resp.json();
@@ -435,7 +432,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         try {
           set({ selectNodeLock: true });
 
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const params = manual ? `?node_alias=${node_alias}` : ``;
           const resp = await fetch(`${apiUrl}/selectNode` + params, {
             method: "GET",
@@ -489,7 +485,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           set({ rotate: true });
 
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           const resp = await fetch(`${apiUrl}/getRoom`, {
             method: "GET",
             headers: { Authorization: `Bearer ${getAuthToken()}` },

@@ -1,4 +1,3 @@
-"use client";
 
 import {
   Flex,
@@ -27,9 +26,9 @@ import {
 import DocFlex from "@/components/docs/DocFlex";
 import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
+import { apiUrl } from "@/utils/api";
 
 export default function Page() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { userInfo, setShowLoginModal } = useUserStateStore();
   const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");

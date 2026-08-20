@@ -1,5 +1,3 @@
-"use client";
-
 import { Icon, Divider, Text, Image, Link } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import DocLink from "@/components/docs/DocLink";
@@ -32,7 +30,7 @@ export default function Page() {
 
       <Text mt={3}>
         <Icon as={MdTipsAndUpdates} mr={2} />
-        如果用喵服，某一位是端游则需要装联机mod（创意工坊里找的DirectConnectIP，换其他的也可以）
+        如果用喵服，PC端默认是不支持用IP联机的，需要装联机补丁mod，网站提供的这个大概率不兼容新版本了，可以在创意工坊里找其他能用的，支持用IP加入游戏就行
         <Link
           ml={1}
           color="#7dd4ff"
@@ -42,7 +40,7 @@ export default function Page() {
           点我下载
         </Link>
         <br />
-        装联机mod后，手游需要进游戏设置把本地联机补丁关掉（如下图）。如果全部人都是手游，不需要另外装mod，直接游戏里填IP加入就行（手游内置联机mod并默认开启）。
+        如果全部人都是手游，不需要另外装mod，直接游戏里填IP加入就行（手游内置联机mod并默认开启）。如果某个人是PC，那手游的玩家都要进游戏设置把本地联机补丁关掉（如下图），再安装跟PC一样的联机补丁mod
       </Text>
 
       <Image

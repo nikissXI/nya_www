@@ -1,4 +1,3 @@
-"use client";
 import {
   Heading,
   Box,
@@ -20,9 +19,9 @@ import { MdTipsAndUpdates } from "react-icons/md";
 import BackButton from "@/components/docs/BackButton";
 import DocFlex from "@/components/docs/DocFlex";
 import DocLink from "@/components/docs/DocLink";
+import { apiUrl } from "@/utils/api";
 
 export default function AndroidPage0() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { userInfo, setShowLoginModal } = useUserStateStore();
   const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");

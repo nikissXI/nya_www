@@ -1,4 +1,3 @@
-"use client";
 
 import { Icon, Divider, Text, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";

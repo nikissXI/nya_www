@@ -1,5 +1,3 @@
-"use client";
-
 import { Heading, Divider, Text, Image, Icon } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -39,6 +37,7 @@ import {
   RiAccessibilityLine,
 } from "react-icons/ri";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { apiUrl } from "@/utils/api";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
@@ -66,7 +65,7 @@ const Page = () => {
   useEffect(() => {
     async function fetchSponsors() {
       try {
-        const res = await fetch("https://nyaapi.nikiss.top/sponsorList");
+        const res = await fetch(`${apiUrl}/sponsorList`);
         if (!res.ok) {
           throw new Error(`请求失败，状态码：${res.status}`);
         }

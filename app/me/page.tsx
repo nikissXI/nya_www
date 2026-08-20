@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Box,
   Tooltip,
@@ -31,15 +29,15 @@ import {
 } from "@/utils/strings";
 import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
 import { PiCoffeeBold } from "react-icons/pi";
 import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
+import { apiUrl } from "@/utils/api";
 
 export default function UserProfilePage() {
-  const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const navigate = useNavigate();
   const {
     uuid,
     getUserInfo,
@@ -638,7 +636,7 @@ export default function UserProfilePage() {
                 bgColor="transparent"
                 onClick={() => {
                   changePassOnClose();
-                  router.push("/forgetPass");
+                  navigate("/forgetPass");
                 }}
               >
                 忘记密码

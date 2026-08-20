@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import {
   Text,
@@ -20,8 +18,9 @@ import {
   validateTel,
   validateEmail,
 } from "@/utils/strings";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { setAuthToken } from "@/store/authKey";
+import { apiUrl } from "@/utils/api";
 
 interface ResetReqBody {
   verifyType: string; // 注册类型：qq或tel
@@ -33,8 +32,7 @@ interface ResetReqBody {
 }
 
 export default function Page() {
-  const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const navigate = useNavigate();
 
   const { uuid, getUserInfo } = useUserStateStore();
 
@@ -123,7 +121,7 @@ export default function Page() {
         });
         setAuthToken(data.token);
         getUserInfo();
-        router.push("/me");
+        navigate("/me");
       } else {
         openToast({ content: data.msg, status: "warning" });
         setCaptchaImageUrl(await fetchCaptcha());

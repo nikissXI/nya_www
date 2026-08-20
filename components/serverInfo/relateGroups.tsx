@@ -1,5 +1,3 @@
-"use client";
-
 import { Center, Box, Flex } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
 import { useEffect } from "react";
