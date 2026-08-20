@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nya 后台管理</title>
+    <style>
+        /* 全局样式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: #f5f7fb;
+            color: #1e293b;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 头部 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 12px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .auth-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .auth-area input[type="password"] {
+            padding: 8px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 220px;
+            transition: border-color 0.2s;
+        }
+
+        .auth-area input[type="password"]:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .auth-area button {
+            padding: 8px 20px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .auth-area button:hover {
+            background: #4f46e5;
+        }
+
+        .auth-status {
+            font-size: 13px;
+            color: #22c55e;
+            font-weight: 500;
+        }
+
+        .auth-status.error {
+            color: #ef4444;
+        }
+
+        /* 选项卡导航 */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .tab-btn.active {
+            background: #eef2ff;
+            color: #4f46e5;
+            box-shadow: 0 0 0 1px #c7d2fe;
+        }
+
+        /* 面板 */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0.4;
+                transform: translateY(6px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 8px 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0f172a;
+        }
+
+        .card-title .badge {
+            font-size: 12px;
+            background: #e2e8f0;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        /* 统计卡片网格 */
+        .stats-grid {
+            display: grid;
+            /* 5 项统计始终在一行排列，方便手机端查看 */
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .stat-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 6px 3px;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .stat-item .label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .stat-item .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2px;
+        }
+
+        /* 节点卡片 */
+        .node-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .node-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .node-card:hover {
+            border-color: #6366f1;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+        }
+
+        .node-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .node-name-sponsor {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+
+        .node-name-sponsor strong {
+            font-size: 16px;
+            color: #0f172a;
+        }
+
+        /* 赞助节点名称显示为金色 */
+        .node-name-sponsor-gold {
+            color: #ff8400 !important;
+        }
+
+        .node-net-type {
+            font-size: 12px;
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 1px 8px;
+            border-radius: 20px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* 私有节点标签 */
+        .node-private-tag {
+            font-size: 12px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 1px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .node-desc {
+            font-size: 13px;
+            color: #64748b;
+            word-break: break-word;
+        }
+
+        .node-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .node-stat {
+            background: white;
+            border: 1px solid #f1f5f9;
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .node-stat-label {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 2px;
+        }
+
+        .node-stat-value {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* 负载颜色分级: <=60 绿, <=85 黄, 其他红 */
+        .load-green {
+            color: #16a34a;
+        }
+
+        .load-yellow {
+            color: #d97706;
+        }
+
+        .load-red {
+            color: #dc2626;
+        }
+
+        /* 节点离线负载灰色 */
+        .load-offline {
+            color: #94a3b8;
+        }
+
+        /* 表格 */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 8px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #fafbff;
+        }
+
+        /* 表单 */
+        .form-group {
+            margin: 6px 0px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        .msg-box {
+            margin-top: 12px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            /* 保留换行符，使接口返回的多行文本正常换行 */
+            white-space: pre-line;
+            position: relative;
+        }
+
+        .msg-text {
+            display: block;
+        }
+
+        .msg-close {
+            /* 固定定位在消息框右上角，叠在内容上，不随内容高度移动 */
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+            font-size: 24px;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.5;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .msg-close:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        /* 预格式化结果块：等宽字体、保留空格/换行、可滚动，用于流量查询等大段文本 */
+        .msg-pre {
+            margin: 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre;
+            overflow: auto;
+            max-height: 320px;
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .msg-box.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .msg-box.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .msg-box.info {
+            display: block;
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* 公告列表条目 */
+        .ann-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .ann-content {
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        /* 操作按钮固定右侧、纵向排列，不受公告内容影响 */
+        .ann-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .flex-between {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* 在 flex-between 行内时，去掉 card-title 的底部外边距，避免标题被顶偏 */
+        .flex-between .card-title {
+            margin-bottom: 0;
+        }
+
+        .mt-2 {
+            margin-top: 12px;
+        }
+
+        .mb-2 {
+            margin-bottom: 12px;
+        }
+
+        .gap-2 {
+            gap: 8px;
+        }
+
+        .badge-online {
+            background: #22c55e;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-offline {
+            background: #94a3b8;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* 模态框 (用于编辑节点) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(2px);
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 560px;
+            width: 100%;
+            padding: 28px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #94a3b8;
+            line-height: 1;
+        }
+
+        .modal .modal-close:hover {
+            color: #0f172a;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .auth-area {
+                flex-wrap: wrap;
+            }
+
+            .auth-area input[type="password"] {
+                width: 100%;
+            }
+
+            .tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding: 8px 12px;
+                gap: 4px;
+            }
+
+            .tab-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .stats-grid {
+                gap: 3px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🖥️ Nya 管理后台</h1>
+            <div class="auth-area">
+                <input type="password" id="apiKeyInput" placeholder="输入 API Key (Bearer Token)"
+                    value="">
+                <button id="authBtn" class="btn btn-primary">验证</button>
+                <span id="authStatus" class="auth-status">未验证</span>
+            </div>
+        </div>
+
+        <!-- 选项卡 -->
+        <div class="tabs" id="tabNav">
+            <button class="tab-btn active" data-tab="dashboard">📊 仪表盘</button>
+            <button class="tab-btn" data-tab="users">👤 用户管理</button>
+            <button class="tab-btn" data-tab="announcements">📢 公告管理</button>
+            <button class="tab-btn" data-tab="carousel">🔄 轮播消息</button>
+            <button class="tab-btn" data-tab="other">⚙️ 其他</button>
+        </div>
+
+        <!-- 面板：仪表盘 -->
+        <div id="panel-dashboard" class="tab-panel active">
+            <div class="card">
+                <div class="flex-between">
+                    <div class="card-title">系统状态 <span class="badge" id="statusTime"></span>
+                        <button class="btn btn-primary" id="refreshStatusBtn"
+                            style="margin-left:auto;">🔄 刷新状态</button>
+                    </div>
+                </div>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-item">
+                        <div class="label">CPU</div>
+                        <div class="value" id="statCpu">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="label">RAM</div>
+                        <div class="value" id="statRam">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="label">当前在线</div>
+                        <div class="value" id="statNowOnline">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="label">本日注册</div>
+                        <div class="value" id="statRegister">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="label">最大在线</div>
+                        <div class="value" id="statMaxOnline">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="flex-between">
+                    <div class="card-title">节点列表</div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <label for="nodeSortSelect" style="font-size:13px;color:#64748b;">排序</label>
+                        <select id="nodeSortSelect"
+                            style="padding:6px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;background:white;color:#334155;">
+                            <option value="net" selected>负载</option>
+                            <option value="alias">名称</option>
+                            <option value="onlines">在线</option>
+                        </select>
+                        <button class="btn btn-success" id="toggleAddNodeBtn">➕ 添加节点</button>
+                    </div>
+                </div>
+
+                <!-- 添加节点表单 (点击按钮展开) -->
+                <div id="addNodeFormWrap" style="display:none;">
+                    <form id="addNodeForm" style="margin-top:16px;">
+                        <div class="form-row">
+                            <div class="form-group"><label>节点别名 *</label><input name="node_alias"
+                                    placeholder="广州A" value="广州A" required></div>
+                            <div class="form-group"><label>Ping域名 *</label><input name="ping_host"
+                                    placeholder="nya-guangzhou-a.nikiss.top"
+                                    value="nya-guangzhou-a.nikiss.top" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>WG对端 *</label><input name="endpoint"
+                                    placeholder="nya-guangzhou-a.nikiss.top:10000"
+                                    value="nya-guangzhou-a.nikiss.top:10000" required></div>
+                            <div class="form-group"><label>线路类型 *</label><input name="net_type"
+                                    placeholder="多线/跨境/境外" value="多线" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>节点描述</label><input name="node_desc"
+                                    placeholder="仅赞助可建房"></div>
+                            <div class="form-group"><label>用户最大速率 (Mbps) *</label><input
+                                    name="bandwidth" type="number" step="0.1" value="0.8" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>最大上行带宽 (Mbps) *</label><input
+                                    name="max_mbps" type="number" value="5" required></div>
+                            <div class="form-group"><label>所需赞助金额 *</label><input name="sponsor"
+                                    type="number" value="0" required></div>
+                        </div>
+                        <div class="form-group"><label>私有节点 (uid列表, 逗号分隔, 空为公用)</label><input
+                                name="private" placeholder="如: 1,2,3  或留空"></div>
+                        <button type="submit" class="btn btn-success">➕ 添加节点</button>
+                        <div id="addNodeMsg" class="msg-box"></div>
+                    </form>
+                </div>
+
+                <div class="node-grid" id="nodeGrid">
+                    <p style="color:#94a3b8;">暂无数据</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 面板：用户管理 -->
+        <div id="panel-users" class="tab-panel">
+            <div class="card">
+                <div class="card-title">用户操作</div>
+                <div
+                    style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
+                    <!-- 赞助修改 -->
+                    <div class="card"
+                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
+                        <h4>💰 赞助修改</h4>
+                        <form id="zanzhuForm" style="margin-top:8px;">
+                            <div class="form-group"><label>UID</label><input name="uid"
+                                    type="number" placeholder="用户ID" required></div>
+                            <div class="form-row" style="grid-template-columns:1fr 1fr;">
+                                <div class="form-group"><label>操作符 (+/-/=)</label>
+                                    <select name="operator">
+                                        <option value="+">+</option>
+                                        <option value="-">-</option>
+                                        <option value="=">=</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>金额</label><input name="money"
+                                        type="number" step="10" placeholder="数额" required></div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm">修改</button>
+                            <div class="msg-box" id="zanzhuResult"></div>
+                        </form>
+                    </div>
+                    <!-- 查绑 -->
+                    <div class="card" style="box-shadow:none;border:1px solid #e2e8f0;padding:8px;">
+                        <h4>🔍 查绑</h4>
+                        <form id="chabangForm" style="margin-top:8px;">
+                            <div class="form-group"><label>类型</label>
+                                <select name="keyword_type">
+                                    <option value="uid">uid</option>
+                                    <option value="ip">ip</option>
+                                    <option value="tel">tel</option>
+                                    <option value="email">email</option>
+                                    <option value="qq">qq</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>关键词</label><input name="keyword"
+                                    placeholder="输入值" required></div>
+                            <button type="submit" class="btn btn-primary btn-sm">查询</button>
+                            <div class="msg-box" id="chabangResult"></div>
+                        </form>
+                    </div>
+                    <!-- 流量查询 -->
+                    <div class="card"
+                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
+                        <h4>📊 流量查询</h4>
+                        <form id="trafficForm" style="margin-top:8px;">
+                            <div class="form-group"><label>类型</label>
+                                <select name="keyword_type">
+                                    <option value="uid">uid</option>
+                                    <option value="tel">tel</option>
+                                    <option value="email">email</option>
+                                    <option value="qq">qq</option>
+                                    <option value="ip">ip</option>
+                                    <option value="node">node</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>关键词</label><input name="keyword"
+                                    placeholder="输入值" required></div>
+                            <button type="submit" class="btn btn-primary btn-sm">查询</button>
+                            <div class="msg-box" id="trafficResult"></div>
+                        </form>
+                    </div>
+                    <!-- 修改密码 -->
+                    <div class="card"
+                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
+                        <h4>🔑 修改密码</h4>
+                        <form id="updatePasswdForm" style="margin-top:8px;">
+                            <div class="form-group"><label>UID</label><input name="uid"
+                                    type="number" placeholder="用户ID" required></div>
+                            <div class="form-group"><label>新密码</label><input name="password"
+                                    type="text" placeholder="密码" required></div>
+                            <button type="submit" class="btn btn-primary btn-sm">修改</button>
+                            <div class="msg-box" id="updatePasswdResult"></div>
+                        </form>
+                    </div>
+                    <!-- 解绑IP -->
+                    <div class="card"
+                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
+                        <h4>🔓 解绑IP</h4>
+                        <form id="jiebangForm" style="margin-top:8px;">
+                            <div class="form-group"><label>IP</label><input name="ip"
+                                    placeholder="10.0.0.x" required></div>
+                            <button type="submit" class="btn btn-primary btn-sm">解绑</button>
+                            <div class="msg-box" id="jiebangResult"></div>
+                        </form>
+                    </div>
+                    <!-- 封禁/解禁 -->
+                    <div class="card"
+                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
+                        <h4>⛔ 封禁/解禁</h4>
+                        <form id="banForm" style="margin-top:8px;">
+                            <div class="form-group"><label>UID</label><input name="uid"
+                                    type="number" placeholder="用户ID" required></div>
+                            <div class="form-group"><label>封禁原因 (空则解禁)</label><input
+                                    name="ban_reason" placeholder="输入原因或留空"></div>
+                            <button type="submit" class="btn btn-danger btn-sm">提交</button>
+                            <div class="msg-box" id="banResult"></div>
+                        </form>
+                    </div>
+                    <!-- 注销账号 -->
+                    <div class="card"
+                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
+                        <h4>🗑️ 注销账号</h4>
+                        <form id="zhuxiaoForm" style="margin-top:8px;">
+                            <div class="form-group"><label>类型</label>
+                                <select name="keyword_type">
+                                    <option value="uid">uid</option>
+                                    <option value="tel">tel</option>
+                                    <option value="email">email</option>
+                                    <option value="qq">qq</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>关键词</label><input name="keyword"
+                                    placeholder="输入值" required></div>
+                            <button type="submit" class="btn btn-danger btn-sm">注销</button>
+                            <div class="msg-box" id="zhuxiaoResult"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 面板：公告管理 -->
+        <div id="panel-announcements" class="tab-panel">
+            <div class="card">
+                <div class="flex-between">
+                    <div class="card-title">添加公告</div>
+                </div>
+                <form id="addAnnouncementForm">
+                    <div class="form-group"><textarea name="content" rows="3" placeholder="输入公告"
+                            required></textarea></div>
+                    <button type="submit" class="btn btn-success">➕ 添加</button>
+                    <div id="addAnnouncementMsg" class="msg-box"></div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-title">现有公告</div>
+                <div id="announcementList">
+                    <p style="color:#94a3b8;">暂无公告</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 面板：轮播消息 -->
+        <div id="panel-carousel" class="tab-panel">
+            <div class="card">
+                <div class="card-title">修改轮播消息</div>
+                <form id="carouselForm">
+                    <div class="form-group"><label>每条消息占一行</label><textarea name="carousel_msg"
+                            rows="5" placeholder="消息1&#10;消息2&#10;消息3" required></textarea></div>
+                    <button type="submit" class="btn btn-primary">更新</button>
+                    <div id="carouselMsg" class="msg-box"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 面板：其他 -->
+        <div id="panel-other" class="tab-panel">
+            <div class="card">
+                <div class="card-title">其他工具</div>
+                <div
+                    style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+                    <div>
+                        <h4>🔍 检查MC</h4>
+                        <form id="checkMCForm">
+                            <div class="form-group"><label>地址 (ip:port)</label><input name="addr"
+                                    placeholder="10.0.0.1:25565" required></div>
+                            <div class="form-group"><label>类型</label><input name="mc_type"
+                                    placeholder="java / bedrock" required></div>
+                            <button type="submit" class="btn btn-primary btn-sm">检查</button>
+                            <div class="msg-box" id="checkMCResult"></div>
+                        </form>
+                    </div>
+                    <div>
+                        <h4>📄 配置获取</h4>
+                        <form id="confGetForm">
+                            <div class="form-group"><label>IP</label><input name="ip"
+                                    placeholder="10.0.0.x" required></div>
+                            <button type="submit" class="btn btn-primary btn-sm">获取配置</button>
+                            <div class="msg-box" id="confGetResult"></div>
+                        </form>
+                    </div>
+                    <div>
+                        <h4>🔄 更新关联群</h4>
+                        <button class="btn btn-primary" id="updateRelateGroupBtn">执行更新</button>
+                        <div class="msg-box" id="updateRelateGroupResult"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模态框：编辑节点 -->
+        <div class="modal-overlay" id="editNodeModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>✏️ 编辑节点</h3>
+                    <button class="modal-close" id="closeEditModal">&times;</button>
+                </div>
+                <form id="editNodeForm">
+                    <input type="hidden" name="node_alias">
+                    <div class="form-row">
+                        <div class="form-group"><label>Ping 域名</label><input name="ping_host"
+                                required></div>
+                        <div class="form-group"><label>Endpoint</label><input name="endpoint"
+                                required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>线路类型</label><input name="net_type" required>
+                        </div>
+                        <div class="form-group"><label>节点描述</label><input name="node_desc">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>用户最大速率 (Mbps)</label><input name="bandwidth"
+                                type="number" step="0.1" required></div>
+                        <div class="form-group"><label>最大上行带宽 (Mbps)</label><input name="max_mbps"
+                                type="number" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>所需赞助金额</label><input name="sponsor"
+                                type="number" required></div>
+                        <div class="form-group"><label>私有 (uid列表, 逗号分隔)</label><input name="private"
+                                placeholder="留空为公用"></div>
+                    </div>
+                    <div
+                        style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px;">
+                        <button type="button" class="btn btn-danger" id="editModalDeleteBtn">🗑️
+                            删除</button>
+                        <div style="display:flex;gap:12px;">
+                            <button type="submit" class="btn btn-primary">💾 保存</button>
+                            <button type="button" class="btn btn-outline"
+                                id="cancelEditBtn">取消</button>
+                        </div>
+                    </div>
+                    <div id="editNodeMsg" class="msg-box"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 模态框：编辑公告 -->
+        <div class="modal-overlay" id="editAnnouncementModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>✏️ 编辑公告</h3>
+                    <button class="modal-close" id="closeEditAnnouncementModal">&times;</button>
+                </div>
+                <form id="editAnnouncementForm">
+                    <div class="form-group"><textarea name="content" rows="4" required></textarea>
+                    </div>
+                    <div style="display:flex;gap:12px;margin-top:8px;">
+                        <button type="submit" class="btn btn-primary">💾 保存修改</button>
+                        <button type="button" class="btn btn-outline"
+                            id="cancelEditAnnouncementBtn">取消</button>
+                    </div>
+                    <div id="editAnnouncementMsg" class="msg-box"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            // ---- 全局状态 ----
+            const API_BASE = 'https://nyaapi.nikiss.top/server';
+            let apiKey = '';
+            let isAuthed = false;
+            let currentNodes = []; // 缓存节点列表 (用于编辑)
+            let announcements = []; // 缓存公告列表
+            let editingAnnouncementIndex = null; // 正在编辑的公告索引
+
+            // DOM 元素
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            const authBtn = document.getElementById('authBtn');
+            const authStatus = document.getElementById('authStatus');
+
+            // ---- 辅助函数 ----
+            function getHeaders() {
+                return {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                };
+            }
+
+            // 去掉消息开头的图标字符（如 ✅❌📊📄）
+            function stripLeadingIcon(msg) {
+                return String(msg).replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B50}]+/u, '');
+            }
+
+            // HTML 转义，避免直接注入 innerHTML 造成 XSS
+            function escapeHtml(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            // 渲染结果消息：无图标前缀、不自动消失、带 × 关闭按钮
+            function renderMsg(element, msg, type = 'success') {
+                element.innerHTML = `<span class="msg-text">${escapeHtml(stripLeadingIcon(msg))}</span>` +
+                    `<button type="button" class="msg-close" title="关闭">&times;</button>`;
+                element.className = `msg-box ${type}`;
+                element.style.display = 'block';
+                const closeBtn = element.querySelector('.msg-close');
+                if (closeBtn) {
+                    closeBtn.onclick = function () {
+                        element.style.display = 'none';
+                        element.className = 'msg-box';
+                    };
+                }
+            }
+
+            function showMsg(element, msg, type = 'success') {
+                renderMsg(element, msg, type);
+            }
+
+            function showMsgPermanent(element, msg, type = 'success') {
+                renderMsg(element, msg, type);
+            }
+
+            // 渲染预格式化结果（等宽字体、保留空格/换行、可滚动），用于流量查询等大段文本
+            function showPreMsg(element, text, type = 'success') {
+                element.innerHTML = `<pre class="msg-pre">${escapeHtml(text)}</pre>` +
+                    `<button type="button" class="msg-close" title="关闭">&times;</button>`;
+                element.className = `msg-box ${type}`;
+                element.style.display = 'block';
+                const closeBtn = element.querySelector('.msg-close');
+                if (closeBtn) {
+                    closeBtn.onclick = function () {
+                        element.style.display = 'none';
+                        element.className = 'msg-box';
+                    };
+                }
+            }
+
+            function hideMsg(element) {
+                element.style.display = 'none';
+                element.className = 'msg-box';
+                clearTimeout(element._timer);
+            }
+
+            function parsePrivate(privateStr) {
+                if (!privateStr || privateStr.trim() === '') return null;
+                const parts = privateStr.split(',').map(s => s.trim()).filter(s => s !== '');
+                if (parts.length === 0) return null;
+                const nums = parts.map(Number).filter(n => !isNaN(n) && n > 0);
+                return nums.length ? nums : null;
+            }
+
+            function formatPrivate(privateArr) {
+                if (!privateArr || privateArr.length === 0) return '公用';
+                return privateArr.join(', ');
+            }
+
+            // 通用fetch封装
+            async function apiFetch(path, options = {}) {
+                if (!apiKey) {
+                    throw new Error('请先验证');
+                }
+                const url = path.startsWith('http') ? path : API_BASE + path;
+                console.log(url)
+                const res = await fetch(url, {
+                    ...options,
+                    headers: {
+                        ...getHeaders(),
+                        ...(options.headers || {}),
+                    },
+                });
+                if (!res.ok) {
+                    let errMsg = `HTTP ${res.status}`;
+                    try {
+                        const data = await res.json();
+                        if (data && data.msg) errMsg = data.msg;
+                    } catch (_) { }
+                    throw new Error(errMsg);
+                }
+                const json = await res.json();
+                return json;
+            }
+
+            // ---- 验证 ----
+            function doAuth() {
+                const key = apiKeyInput.value.trim();
+                if (!key) {
+                    authStatus.textContent = '请输入 API Key';
+                    authStatus.className = 'auth-status error';
+                    return;
+                }
+                apiKey = key;
+                // 简单测试 /status 接口
+                apiFetch('/status')
+                    .then(data => {
+                        if (data.code === 0) {
+                            isAuthed = true;
+                            // 验证成功后保存 API Key，刷新后自动登录
+                            localStorage.setItem('nya_admin_apikey', apiKey);
+                            authStatus.textContent = '✅ 已验证';
+                            authStatus.className = 'auth-status';
+                            // 验证成功后隐藏 API Key 输入框，按钮切换为注销
+                            apiKeyInput.style.display = 'none';
+                            authBtn.textContent = '注销';
+                            authBtn.className = 'btn btn-danger';
+                            // 自动刷新数据
+                            // 复用 /status 已返回的 data 渲染仪表盘、公告和轮播，避免重复请求
+                            loadDashboard(data);
+                            loadAnnouncements(data);
+                            loadCarousel(data);
+                        } else {
+                            authStatus.textContent = '❌ 验证失败: ' + (data.msg || '未知错误');
+                            authStatus.className = 'auth-status error';
+                            isAuthed = false;
+                        }
+                    })
+                    .catch(err => {
+                        authStatus.textContent = '❌ 验证失败: ' + err.message;
+                        authStatus.className = 'auth-status error';
+                        isAuthed = false;
+                    });
+            }
+
+            // 注销：清空状态并恢复登录界面
+            function doLogout() {
+                apiKey = '';
+                isAuthed = false;
+                localStorage.removeItem('nya_admin_apikey');
+                apiKeyInput.value = '';
+                apiKeyInput.style.display = '';
+                authBtn.textContent = '验证';
+                authBtn.className = 'btn btn-primary';
+                authStatus.textContent = '未验证';
+                authStatus.className = 'auth-status';
+                // 清空已加载的数据
+                document.getElementById('statCpu').textContent = '-';
+                document.getElementById('statRam').textContent = '-';
+                document.getElementById('statNowOnline').textContent = '-';
+                document.getElementById('statRegister').textContent = '-';
+                document.getElementById('statMaxOnline').textContent = '-';
+                document.getElementById('nodeGrid').innerHTML = '<p style="color:#94a3b8;">暂无数据</p>';
+                document.getElementById('announcementList').innerHTML = '<p style="color:#94a3b8;">暂无公告</p>';
+                document.querySelector('#carouselForm textarea').value = '';
+            }
+
+            authBtn.addEventListener('click', function () {
+                if (isAuthed) {
+                    doLogout();
+                } else {
+                    doAuth();
+                }
+            });
+            apiKeyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') doAuth(); });
+
+            // ---- 选项卡切换 ----
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const panels = {
+                dashboard: document.getElementById('panel-dashboard'),
+                users: document.getElementById('panel-users'),
+                announcements: document.getElementById('panel-announcements'),
+                carousel: document.getElementById('panel-carousel'),
+                other: document.getElementById('panel-other'),
+            };
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const tab = this.dataset.tab;
+                    Object.keys(panels).forEach(key => {
+                        panels[key].classList.toggle('active', key === tab);
+                    });
+                    // 切换到某些面板时刷新数据
+                    if (tab === 'dashboard') loadDashboard();
+                    if (tab === 'announcements') loadAnnouncements();
+                    if (tab === 'carousel') loadCarousel();
+                });
+            });
+
+            // ---- 节点排序与渲染 ----
+            function getNodeSortKey() {
+                const sel = document.getElementById('nodeSortSelect');
+                return sel ? sel.value : 'net';
+            }
+
+            // 按当前选择的排序方式排序节点列表
+            function sortNodes(list) {
+                const key = getNodeSortKey();
+                const arr = [...list];
+                if (key === 'alias') {
+                    arr.sort((a, b) => (a.node_alias || '').localeCompare(b.node_alias || '', 'zh-CN'));
+                } else if (key === 'onlines') {
+                    arr.sort((a, b) => (b.onlines || 0) - (a.onlines || 0));
+                } else { // 默认按负载，高负载在前
+                    arr.sort((a, b) => (b.net || 0) - (a.net || 0));
+                }
+                return arr;
+            }
+
+            // 渲染节点卡片列表（先排序再渲染）
+            function renderNodes(nodes) {
+                const sorted = sortNodes(nodes);
+                const grid = document.getElementById('nodeGrid');
+                if (sorted.length === 0) {
+                    grid.innerHTML = '<p style="color:#94a3b8;">暂无节点</p>';
+                    return;
+                }
+                let html = '';
+                sorted.forEach(node => {
+                    const onlines = node.onlines || 0;
+                    const net = node.net || 0;
+                    const sponsor = node.sponsor || 0;
+                    const alias = node.node_alias;
+                    const isPrivate = Array.isArray(node.private) && node.private.length > 0;
+                    // net 为 -1 表示节点离线
+                    const isOffline = net === -1;
+                    // 负载颜色分级: <=60 绿, <=85 黄, 其他红; 离线用灰色
+                    let loadClass = 'load-green';
+                    if (isOffline) loadClass = 'load-offline';
+                    else if (net > 85) loadClass = 'load-red';
+                    else if (net > 60) loadClass = 'load-yellow';
+                    const loadText = isOffline ? '离线' : net + '%';
+                    const bw = node.bandwidth != null ? node.bandwidth + 'M' : '-';
+                    const maxM = node.max_mbps != null ? node.max_mbps + 'M' : '-';
+                    html += `<div class="node-card" onclick="openEditModal('${alias}')" title="点击编辑节点">
+                        <div class="node-card-header">
+                            <div class="node-name-sponsor">
+                                <strong class="${sponsor > 0 ? 'node-name-sponsor-gold' : ''}">${alias}</strong>
+                                <span class="node-net-type">${node.net_type || ''}</span>
+                                ${isPrivate ? '<span class="node-private-tag">私有</span>' : ''}
+                                ${node.node_desc ? `<span class="node-desc">${node.node_desc}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="node-stats">
+                            <div class="node-stat"><span class="node-stat-label">在线</span><span class="node-stat-value">${onlines}</span></div>
+                            <div class="node-stat"><span class="node-stat-label">负载</span><span class="node-stat-value ${loadClass}">${loadText}</span></div>
+                            <div class="node-stat"><span class="node-stat-label">带宽</span><span class="node-stat-value">${bw}</span></div>
+                            <div class="node-stat"><span class="node-stat-label">最大上行</span><span class="node-stat-value">${maxM}</span></div>
+                        </div>
+                    </div>`;
+                });
+                grid.innerHTML = html;
+            }
+
+            // ---- 仪表盘 ----
+            async function loadDashboard(data) {
+                if (!isAuthed) return;
+                try {
+                    // 未传入 data 时（手动刷新/切换选项卡/增删改节点等场景）才重新请求 /status
+                    if (!data) {
+                        data = await apiFetch('/status');
+                    }
+                    if (data.code !== 0) {
+                        showMsgPermanent(document.getElementById('statusTime'), '加载失败: ' + data.msg, 'error');
+                        return;
+                    }
+                    const d = data.data;
+                    document.getElementById('statCpu').textContent = d.cpu + '%';
+                    document.getElementById('statRam').textContent = d.ram + '%';
+                    document.getElementById('statNowOnline').textContent = d.now_online || 0;
+                    document.getElementById('statRegister').textContent = d.register_count || 0;
+                    document.getElementById('statMaxOnline').textContent = d.max_online || 0;
+                    document.getElementById('statusTime').textContent = new Date().toLocaleTimeString();
+
+                    // 节点卡片
+                    const nodes = d.nodes || [];
+                    currentNodes = nodes;
+                    renderNodes(nodes);
+                } catch (err) {
+                    showMsgPermanent(document.getElementById('statusTime'), '加载状态失败: ' + err.message, 'error');
+                }
+            }
+
+            document.getElementById('refreshStatusBtn').addEventListener('click', () => loadDashboard());
+
+            // 切换节点排序：使用缓存的节点列表重新渲染，不额外请求接口
+            document.getElementById('nodeSortSelect').addEventListener('change', function () {
+                if (isAuthed && currentNodes) {
+                    renderNodes(currentNodes);
+                }
+            });
+
+            // 添加节点表单 展开/收起
+            document.getElementById('toggleAddNodeBtn').addEventListener('click', function () {
+                const wrap = document.getElementById('addNodeFormWrap');
+                const isHidden = wrap.style.display === 'none';
+                wrap.style.display = isHidden ? 'block' : 'none';
+                this.textContent = isHidden ? '✖ 收起表单' : '➕ 添加节点';
+            });
+
+            // ---- 节点管理 (添加/修改/删除) ----
+            // 添加节点
+            document.getElementById('addNodeForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const body = {
+                    node_alias: formData.get('node_alias').trim(),
+                    ping_host: formData.get('ping_host').trim(),
+                    endpoint: formData.get('endpoint').trim(),
+                    net_type: formData.get('net_type').trim(),
+                    node_desc: formData.get('node_desc').trim(),
+                    bandwidth: parseFloat(formData.get('bandwidth')),
+                    max_mbps: parseInt(formData.get('max_mbps')),
+                    sponsor: parseInt(formData.get('sponsor')),
+                    private: parsePrivate(formData.get('private')),
+                };
+                const msgBox = document.getElementById('addNodeMsg');
+                try {
+                    const res = await apiFetch('/addNode', {
+                        method: 'POST',
+                        body: JSON.stringify(body),
+                    });
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                        this.reset();
+                        // 添加成功后收起表单
+                        document.getElementById('addNodeFormWrap').style.display = 'none';
+                        document.getElementById('toggleAddNodeBtn').textContent = '➕ 添加节点';
+                        loadDashboard();
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 删除节点
+            window.deleteNode = async function (nodeAlias) {
+                if (!confirm(`确定要删除节点 "${nodeAlias}" 吗？此操作不可撤销！`)) return;
+                try {
+                    const res = await apiFetch('/delNode', {
+                        method: 'POST',
+                        body: JSON.stringify({ node_alias: nodeAlias }),
+                    });
+                    if (res.code === 0) {
+                        alert('✅ ' + res.msg);
+                        loadDashboard();
+                    } else {
+                        alert('❌ ' + res.msg);
+                    }
+                } catch (err) {
+                    alert('❌ 请求失败: ' + err.message);
+                }
+            };
+
+            // 编辑节点 - 打开模态框
+            window.openEditModal = function (nodeAlias) {
+                if (!isAuthed) return;
+                // 从currentNodes中查找
+                const node = currentNodes.find(n => n.node_alias === nodeAlias);
+                if (!node) {
+                    alert('节点数据未加载，请先刷新仪表盘');
+                    return;
+                }
+                const modal = document.getElementById('editNodeModal');
+                const form = document.getElementById('editNodeForm');
+                form.elements['node_alias'].value = node.node_alias;
+                form.elements['ping_host'].value = node.ping_host || '';
+                form.elements['endpoint'].value = node.endpoint || '';
+                form.elements['net_type'].value = node.net_type || '';
+                form.elements['node_desc'].value = node.node_desc || '';
+                form.elements['bandwidth'].value = node.bandwidth || '';
+                form.elements['max_mbps'].value = node.max_mbps || '';
+                form.elements['sponsor'].value = node.sponsor || 0;
+                form.elements['private'].value = node.private ? node.private.join(', ') : '';
+                hideMsg(document.getElementById('editNodeMsg'));
+                modal.classList.add('active');
+            };
+
+            document.getElementById('closeEditModal').addEventListener('click', function () {
+                document.getElementById('editNodeModal').classList.remove('active');
+            });
+            document.getElementById('cancelEditBtn').addEventListener('click', function () {
+                document.getElementById('editNodeModal').classList.remove('active');
+            });
+            // 模态框内的删除按钮
+            document.getElementById('editModalDeleteBtn').addEventListener('click', function () {
+                const alias = document.getElementById('editNodeForm').elements['node_alias'].value;
+                if (!alias) return;
+                document.getElementById('editNodeModal').classList.remove('active');
+                deleteNode(alias);
+            });
+            // 点击蒙版关闭
+            document.getElementById('editNodeModal').addEventListener('click', function (e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // 提交编辑
+            document.getElementById('editNodeForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const body = {
+                    node_alias: formData.get('node_alias').trim(),
+                    ping_host: formData.get('ping_host').trim(),
+                    endpoint: formData.get('endpoint').trim(),
+                    net_type: formData.get('net_type').trim(),
+                    node_desc: formData.get('node_desc').trim(),
+                    bandwidth: parseFloat(formData.get('bandwidth')),
+                    max_mbps: parseInt(formData.get('max_mbps')),
+                    sponsor: parseInt(formData.get('sponsor')),
+                    private: parsePrivate(formData.get('private')),
+                };
+                const msgBox = document.getElementById('editNodeMsg');
+                try {
+                    const res = await apiFetch('/modifyNode', {
+                        method: 'POST',
+                        body: JSON.stringify(body),
+                    });
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                        document.getElementById('editNodeModal').classList.remove('active');
+                        loadDashboard();
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // ---- 用户管理 ----
+            // 查绑
+            document.getElementById('chabangForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const type = this.elements['keyword_type'].value;
+                const keyword = this.elements['keyword'].value.trim();
+                if (!keyword) return;
+                const msgBox = document.getElementById('chabangResult');
+                try {
+                    const res = await apiFetch(`/chabang?keyword_type=${encodeURIComponent(type)}&keyword=${encodeURIComponent(keyword)}`);
+                    if (res.code === 0) {
+                        showMsgPermanent(msgBox, res.msg, 'info');
+                    } else {
+                        showMsgPermanent(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsgPermanent(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 流量
+            document.getElementById('trafficForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const type = this.elements['keyword_type'].value;
+                const keyword = this.elements['keyword'].value.trim();
+                if (!keyword) return;
+                const msgBox = document.getElementById('trafficResult');
+                try {
+                    const res = await apiFetch(`/liuliang?keyword_type=${encodeURIComponent(type)}&keyword=${encodeURIComponent(keyword)}`);
+                    if (res.code === 0) {
+                        // 流量报告是大段等宽文本，用可滚动的 pre 块展示，保留对齐
+                        showPreMsg(msgBox, res.msg, 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 注销
+            document.getElementById('zhuxiaoForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const type = this.elements['keyword_type'].value;
+                const keyword = this.elements['keyword'].value.trim();
+                if (!keyword) return;
+                if (!confirm(`确认注销 ${type}=${keyword} ？`)) return;
+                const msgBox = document.getElementById('zhuxiaoResult');
+                try {
+                    const res = await apiFetch(`/zhuxiao?keyword_type=${encodeURIComponent(type)}&keyword=${encodeURIComponent(keyword)}`);
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 解绑
+            document.getElementById('jiebangForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const ip = this.elements['ip'].value.trim();
+                if (!ip) return;
+                if (!confirm(`确认解绑 IP ${ip} ？`)) return;
+                const msgBox = document.getElementById('jiebangResult');
+                try {
+                    const res = await apiFetch(`/jiebang?ip=${encodeURIComponent(ip)}`);
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 赞助
+            document.getElementById('zanzhuForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const uid = parseInt(this.elements['uid'].value);
+                const operator = this.elements['operator'].value;
+                const money = parseInt(this.elements['money'].value);
+                if (!uid || isNaN(money)) return;
+                const msgBox = document.getElementById('zanzhuResult');
+                try {
+                    const res = await apiFetch(`/zanzhu?uid=${uid}&operator=${encodeURIComponent(operator)}&money=${money}`);
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 修改密码
+            document.getElementById('updatePasswdForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const uid = parseInt(this.elements['uid'].value);
+                const password = this.elements['password'].value.trim();
+                if (!uid || !password) return;
+                const msgBox = document.getElementById('updatePasswdResult');
+                try {
+                    const res = await apiFetch(`/updatePasswd?uid=${uid}&password=${encodeURIComponent(password)}`);
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 封禁
+            document.getElementById('banForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const uid = parseInt(this.elements['uid'].value);
+                const ban_reason = this.elements['ban_reason'].value.trim();
+                if (!uid) return;
+                const msgBox = document.getElementById('banResult');
+                try {
+                    const res = await apiFetch(`/updateBanReason?uid=${uid}&ban_reason=${encodeURIComponent(ban_reason)}`);
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // ---- 公告管理 ----
+            async function loadAnnouncements(data) {
+                if (!isAuthed) return;
+                try {
+                    // 未传入 data 时（切换选项卡等场景）才重新请求 /status
+                    if (!data) {
+                        data = await apiFetch('/status');
+                    }
+                    if (data.code !== 0) return;
+                    // 公告数据源: /status 返回的 data.data.announcements
+                    const list = (data.data && data.data.announcements) || [];
+                    announcements = list;
+                    const container = document.getElementById('announcementList');
+                    if (list.length === 0) {
+                        container.innerHTML = '<p style="color:#94a3b8;">暂无公告</p>';
+                    } else {
+                        let html = '';
+                        list.forEach((item, idx) => {
+                            const time = new Date(item.timestamp).toLocaleString();
+                            html += `<div class="ann-item">
+                                <div class="ann-content"><strong>#${idx}</strong> ${item.content} <span style="color:#94a3b8;font-size:12px;">${time}</span></div>
+                                <div class="ann-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="editAnnouncement(${idx})">编辑</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${idx})">删除</button>
+                                </div>
+                            </div>`;
+                        });
+                        container.innerHTML = html;
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            // 添加公告
+            document.getElementById('addAnnouncementForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const content = this.elements['content'].value.trim();
+                if (!content) return;
+                const msgBox = document.getElementById('addAnnouncementMsg');
+                try {
+                    const res = await apiFetch('/addAnnouncement', {
+                        method: 'POST',
+                        body: JSON.stringify({ content }),
+                    });
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                        // 重新从服务器获取最新公告列表
+                        loadAnnouncements();
+                        this.reset();
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 删除公告
+            window.deleteAnnouncement = async function (index) {
+                if (!confirm(`确定删除公告 #${index} ？`)) return;
+                try {
+                    const res = await apiFetch('/delAnnouncement', {
+                        method: 'POST',
+                        body: JSON.stringify({ index }),
+                    });
+                    if (res.code === 0) {
+                        alert('✅ ' + res.msg);
+                        announcements.splice(index, 1);
+                        loadAnnouncements();
+                    } else {
+                        alert('❌ ' + res.msg);
+                    }
+                } catch (err) {
+                    alert('❌ 请求失败: ' + err.message);
+                }
+            };
+
+            // 编辑公告 (使用页面内模态框，避免依赖浏览器原生 prompt)
+            window.editAnnouncement = function (index) {
+                if (!isAuthed) return;
+                const item = announcements[index];
+                if (!item) {
+                    alert('公告数据未加载，请刷新公告列表');
+                    return;
+                }
+                editingAnnouncementIndex = index;
+                const form = document.getElementById('editAnnouncementForm');
+                form.elements['content'].value = item.content || '';
+                hideMsg(document.getElementById('editAnnouncementMsg'));
+                document.getElementById('editAnnouncementModal').classList.add('active');
+            };
+
+            // 提交编辑公告
+            document.getElementById('editAnnouncementForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const index = editingAnnouncementIndex;
+                const content = this.elements['content'].value.trim();
+                if (index === null || !content) return;
+                const msgBox = document.getElementById('editAnnouncementMsg');
+                try {
+                    const res = await apiFetch('/modifyAnnouncement', {
+                        method: 'POST',
+                        body: JSON.stringify({ index, content }),
+                    });
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                        editingAnnouncementIndex = null;
+                        setTimeout(() => {
+                            document.getElementById('editAnnouncementModal').classList.remove('active');
+                            loadAnnouncements();
+                        }, 500);
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 关闭编辑公告模态框
+            document.getElementById('closeEditAnnouncementModal').addEventListener('click', function () {
+                document.getElementById('editAnnouncementModal').classList.remove('active');
+            });
+            document.getElementById('cancelEditAnnouncementBtn').addEventListener('click', function () {
+                document.getElementById('editAnnouncementModal').classList.remove('active');
+            });
+            document.getElementById('editAnnouncementModal').addEventListener('click', function (e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // ---- 轮播消息 ----
+            async function loadCarousel(data) {
+                if (!isAuthed) return;
+                try {
+                    // 未传入 data 时（切换选项卡等场景）才重新请求 /status
+                    if (!data) {
+                        data = await apiFetch('/status');
+                    }
+                    if (data.code !== 0) return;
+                    // 轮播数据源: /status 返回的 data.data.carouselMsg
+                    const list = (data.data && data.data.carouselMsg) || [];
+                    const textarea = document.querySelector('#carouselForm textarea');
+                    textarea.value = list.join('\n');
+                } catch (_) { }
+            }
+
+            document.getElementById('carouselForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const raw = this.elements['carousel_msg'].value;
+                const lines = raw.split('\n').map(s => s.trim()).filter(s => s !== '');
+                if (lines.length === 0) {
+                    alert('至少输入一条消息');
+                    return;
+                }
+                const msgBox = document.getElementById('carouselMsg');
+                try {
+                    const res = await apiFetch('/modifyCarouselMsg', {
+                        method: 'POST',
+                        body: JSON.stringify({ carousel_msg: lines }),
+                    });
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                        // 保存成功后重新从服务器加载最新轮播
+                        loadCarousel();
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // ---- 其他 ----
+            // 检查MC
+            document.getElementById('checkMCForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const addr = this.elements['addr'].value.trim();
+                const mc_type = this.elements['mc_type'].value.trim();
+                if (!addr || !mc_type) return;
+                const msgBox = document.getElementById('checkMCResult');
+                try {
+                    const res = await apiFetch(`/checkMC?addr=${encodeURIComponent(addr)}&mc_type=${encodeURIComponent(mc_type)}`);
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 配置获取
+            document.getElementById('confGetForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const ip = this.elements['ip'].value.trim();
+                if (!ip) return;
+                const msgBox = document.getElementById('confGetResult');
+                try {
+                    const res = await apiFetch(`/confGet?ip=${encodeURIComponent(ip)}`);
+                    if (res.code === 0) {
+                        showMsgPermanent(msgBox, '📄 ' + res.msg, 'info');
+                    } else {
+                        showMsgPermanent(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsgPermanent(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 更新关联群
+            document.getElementById('updateRelateGroupBtn').addEventListener('click', async function () {
+                const msgBox = document.getElementById('updateRelateGroupResult');
+                try {
+                    const res = await apiFetch('/updateRelateGroup');
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ 更新成功', 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + (res.msg || '未知错误'), 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // ---- 初始化 ----
+            // 尝试从 localStorage 恢复 apiKey
+            const savedKey = localStorage.getItem('nya_admin_apikey');
+            if (savedKey) {
+                apiKeyInput.value = savedKey;
+                doAuth();
+            }
+
+            // 保存 key 的时机已在 doAuth 验证成功回调内处理
+
+            // 暴露openEditModal到全局
+            window.openEditModal = openEditModal;
+        })();
+    </script>
+</body>
+
+</html>
