@@ -190,6 +190,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const data = await resp.json();
           if (data.code === 0) {
             set({ confKey: data.key });
+            openToast({ content: "key激活成功", status: "success" });
           } else {
             openToast({ content: data.msg, status: "warning" });
           }
