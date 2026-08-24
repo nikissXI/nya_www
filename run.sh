@@ -10,4 +10,4 @@ git pull --rebase
 echo "Installing dependencies and building the project..."
 pnpm install
 pnpm build
-pnpm start
+# pnpm start
