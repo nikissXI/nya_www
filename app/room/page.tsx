@@ -62,12 +62,6 @@ const CAROUSEL_MESSAGES = [
   "房间里任意玩家都可以当主机",
 ];
 
-const CAROUSEL_MESSAGES_VIP = [
-  "关闭浏览器不影响联机，WG不关即可",
-  "联机时使用该页面上显示的联机IP",
-  "房间里任意玩家都可以当主机",
-];
-
 // 抽取角色常量
 const ROLE_HOSTER = "hoster";
 const ROLE_NONE = "none";
@@ -77,7 +71,6 @@ export default function Page() {
 
   // 使用 useRef 作为并发请求锁，解决 useState 异步更新导致的竞态问题
   const isRequesting = useRef(false);
-  const [loading, setLoading] = useState(false);
 
   const {
     isOpen: joinIsOpen,
@@ -147,7 +140,6 @@ export default function Page() {
         throw new Error("请不要点太快");
       }
       isRequesting.current = true;
-      setLoading(true);
 
       try {
         const urlParams = new URLSearchParams(params);
@@ -172,7 +164,6 @@ export default function Page() {
 
         return data;
       } finally {
-        setLoading(false);
         isRequesting.current = false;
       }
     },
@@ -765,9 +756,7 @@ export default function Page() {
 
           {isOnline &&
             roomRole !== ROLE_NONE &&
-            (isVip
-              ? CAROUSEL_MESSAGES_VIP[carouselIndex]
-              : CAROUSEL_MESSAGES[carouselIndex])}
+            CAROUSEL_MESSAGES[carouselIndex]}
 
           {isOnline && (
             <Text size="sm" textAlign="center" mb={2}>
