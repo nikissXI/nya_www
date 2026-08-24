@@ -116,6 +116,10 @@ export default function Page() {
       return;
     }
 
+    const inviteCode = (localStorage.getItem("inviteCode") || "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toLowerCase();
+
     const req_data: RegisterReqBody = {
       verifyType: verifyType,
       account: inputAccount,
@@ -124,8 +128,8 @@ export default function Page() {
       password: getHash(inputPassword),
       uuid: uuid,
       captcha_code: inputCaptcha.toLowerCase(),
-      ...(localStorage.getItem("inviteCode") && {
-        invite_code: localStorage.getItem("inviteCode") as string,
+      ...(inviteCode && {
+        invite_code: inviteCode,
       }),
     };
 
