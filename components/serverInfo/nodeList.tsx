@@ -36,13 +36,20 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-// 排序函数
+// 修改 sortNodes 函数，增加离线节点置底逻辑
 function sortNodes(
   nodes: NodeInfo[],
   sortBy: string,
   sortOrder: "asc" | "desc",
 ) {
-  return [...nodes].sort((a, b) => {
+  const sorted = [...nodes].sort((a, b) => {
+    // 离线节点（net === -1）始终排在后面
+    const aOffline = a.net === -1;
+    const bOffline = b.net === -1;
+    if (aOffline && !bOffline) return 1;
+    if (!aOffline && bOffline) return -1;
+
+    // 在线节点按规则排序
     if (sortBy === "delay") {
       if (a.delay === undefined) return 1;
       if (b.delay === undefined) return -1;
@@ -62,6 +69,7 @@ function sortNodes(
     }
     return 0;
   });
+  return sorted;
 }
 
 // 筛选函数
@@ -94,11 +102,20 @@ const ServerNodeItem: React.FC<{
         borderRadius="lg"
         border={selected ? "2px solid" : "1px solid rgba(255, 255, 255, 0.1)"}
         bgColor={
-          selected ? "rgba(255, 137, 0, 0.2)" : "rgba(255, 255, 255, 0.05)"
+          node.net === -1
+            ? "rgba(255, 255, 255, 0.02)"
+            : selected
+              ? "rgba(255, 137, 0, 0.2)"
+              : "rgba(255, 255, 255, 0.05)"
         }
         borderColor={
-          selected ? "rgba(255, 117, 12, 0.6)" : "rgba(255, 255, 255, 0.1)"
+          node.net === -1
+            ? "rgba(255, 255, 255, 0.05)"
+            : selected
+              ? "rgba(255, 117, 12, 0.6)"
+              : "rgba(255, 255, 255, 0.1)"
         }
+        opacity={node.net === -1 ? 0.5 : 1}
         boxShadow={
           selected
             ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"

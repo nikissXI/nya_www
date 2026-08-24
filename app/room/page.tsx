@@ -269,7 +269,7 @@ export default function Page() {
           getRoomData();
           joinOnClose();
         } else {
-          if (data.msg === "加入该房间需要密码") {
+          if (data.msg.includes("密码")) {
             setHideJoinPassInput(false);
           }
           openToast({ content: data.msg, status: "warning" });
@@ -533,7 +533,7 @@ export default function Page() {
         </Button>
       </HStack>
 
-      {roomData?.room_max && roomData.room_max < 8 && (
+      {roomData && roomData?.room_max < 8 && (
         <Text fontSize="sm" color="#ffca3d">
           房间最大人数计算请看赞助页面说明
         </Text>
