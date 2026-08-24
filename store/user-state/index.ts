@@ -115,7 +115,7 @@ interface ILoginStateSlice {
   // 节点选择
   showNodeListModal: boolean;
   setNodeListModal: () => void;
-  selectNode: (node_alias: string, manual: boolean) => void;
+  selectNode: (node_alias: string) => void;
   selectNodeLock: boolean;
 
   latency: number | undefined;
@@ -428,15 +428,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       selectNodeLock: false,
-      selectNode: async (node_alias: string, manual: boolean) => {
+      selectNode: async (node_alias: string) => {
         try {
           set({ selectNodeLock: true });
 
-          const params = manual ? `?node_alias=${node_alias}` : ``;
-          const resp = await fetch(`${apiUrl}/selectNode` + params, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${getAuthToken()}` },
-          });
+          const resp = await fetch(
+            `${apiUrl}/selectNode?node_alias=${node_alias}`,
+            {
+              method: "GET",
+              headers: { Authorization: `Bearer ${getAuthToken()}` },
+            },
+          );
           if (!resp.ok) throw new Error("请求出错");
           const data = await resp.json();
           if (data.code === 0) {
@@ -445,7 +447,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               userWgInfo,
               roomData: undefined, // 切换节点后清空房间数据，触发重新获取
             });
-            if (manual) openToast({ content: data.msg, status: "success" });
+            openToast({ content: data.msg, status: "success" });
           } else {
             openToast({ content: data.msg, status: "warning" });
           }

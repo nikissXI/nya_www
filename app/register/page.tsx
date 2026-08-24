@@ -33,7 +33,7 @@ interface RegisterReqBody {
   password: string; // 登陆密码sha256
   uuid: string; // 表单uuid
   captcha_code: string; // 表单图片验证码
-  invite_code: string; // 邀请码
+  invite_code?: string; // 邀请码
 }
 
 export default function Page() {
@@ -124,7 +124,9 @@ export default function Page() {
       password: getHash(inputPassword),
       uuid: uuid,
       captcha_code: inputCaptcha.toLowerCase(),
-      invite_code: localStorage.getItem("inviteCode") || "",
+      ...(localStorage.getItem("inviteCode") && {
+        invite_code: localStorage.getItem("inviteCode") as string,
+      }),
     };
 
     const resp = await fetch(`${apiUrl}/register`, {

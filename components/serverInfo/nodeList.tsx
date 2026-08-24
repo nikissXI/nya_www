@@ -113,7 +113,7 @@ const ServerNodeItem: React.FC<{
             });
             return;
           }
-          selectNode(node.alias, true);
+          selectNode(node.alias);
         }}
         _hover={{
           bgColor: selected
