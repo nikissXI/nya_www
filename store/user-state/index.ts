@@ -80,7 +80,7 @@ interface ILoginStateSlice {
 
   // 用于导入隧道的key
   confKey: string | null;
-  getConfKey: () => void;
+  getConfKey: (manual?: boolean) => void;
 
   // 是否下次登录跳转到教程问答区
   goToDoc: boolean;
@@ -180,7 +180,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       confKey: null,
-      getConfKey: async () => {
+      getConfKey: async (manual: boolean = false) => {
         try {
           const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
             method: "GET",
@@ -190,7 +190,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           const data = await resp.json();
           if (data.code === 0) {
             set({ confKey: data.key });
-            openToast({ content: "key激活成功", status: "success" });
+            if (manual)
+              openToast({ content: "key激活成功", status: "success" });
           } else {
             openToast({ content: data.msg, status: "warning" });
           }

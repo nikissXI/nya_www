@@ -349,7 +349,7 @@ const DocumentPage = () => {
                   as="span"
                   color="#7dfffe"
                   onClick={() => {
-                    getConfKey();
+                    getConfKey(true);
                   }}
                 >
                   key失效点我
