@@ -106,7 +106,7 @@ const Page = () => {
         <List spacing={2}>
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            喵服由服主一人运营，赞助将帮助喵服持续提供及优化联机服务
+            喵服由服主一人运营，不图盈利，整着玩，APP已经在开发了
           </ListItem>
 
           <ListItem textAlign="left">
@@ -127,7 +127,7 @@ const Page = () => {
             赞助节点的房间人数随着房主的赞助金额增加而增加，并且多个赞助者在同一房间可叠加
             <br />
             计算公式：房间最大人数 = 累计赞助费用 // 节点解锁费用 + 1
-            （最大值16）
+            <HighLight>（最多16人）</HighLight>
             <br />
             <HighLight>
               如：10元解锁的节点，累计赞助10元时房间最大人数为2，满20元时为3。可以简单理解为每多10元多1人。20元解锁的节点则累计赞助20元时为2，满40元时为3

@@ -533,9 +533,9 @@ export default function Page() {
         </Button>
       </HStack>
 
-      {roomData && roomData?.room_max < 8 && (
+      {roomData && roomData?.room_max === 2 && (
         <Text fontSize="sm" color="#ffca3d">
-          房间最大人数计算请看赞助页面说明
+          如需增加房间人数请看赞助页面说明
         </Text>
       )}
     </Box>
