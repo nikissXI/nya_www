@@ -111,15 +111,15 @@ const Page = () => {
 
           <ListItem textAlign="left">
             <ListIcon as={FaCode} />
-            如果需要独享联机节点，可以联系服主进行定制，最低50元/月，定制节点房间人数无上限
+            如果需要独享节点，可以联系服主进行定制，最低50元/月，定制节点房间人数无上限
           </ListItem>
 
           <ListItem textAlign="left">
             <ListIcon as={RiMoneyCnyBoxLine} />
             <HighLight>
-              赞助记录永久有效并可累计，解锁的专用节点不限期不限次使用，仅需房主赞助。
+              赞助记录永久有效并可累计，解锁的赞助节点不限期不限次使用，仅需房主赞助。
             </HighLight>
-            赞助专用节点满10元解锁，跨境节点满20元解锁。当然我不可能包一辈子能用，人终有一死
+            赞助节点满10元解锁，跨境节点满20元解锁。当然我不可能包一辈子能用，人终有一死
           </ListItem>
 
           <ListItem textAlign="left">
