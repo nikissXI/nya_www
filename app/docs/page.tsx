@@ -60,7 +60,6 @@ const articles: Article[] = [
   { path: "/docs/ark", title: "方舟：生存进化（PC、安卓）" },
   { path: "/docs/mindustry", title: "像素工厂（全平台）" },
   { path: "/docs/isaac", title: "以撒的结合（PC）" },
-  // { path: "/docs/minecraft", title: "我的世界（全平台）" },
   { path: "/docs/survivalcraft", title: "生存战争（全平台）" },
   { path: "/docs/wizardOfLegend", title: "传说法师手游（安卓、iOS）" },
   { path: "/docs/overcooked", title: "胡闹厨房（PC）" },
