@@ -18,8 +18,8 @@ export default function AndroidPage0() {
       </Text>
 
       <Image
-        src="/images/projectZomboid/projectZomboid.webp"
-        alt="projectZomboid"
+        src="/images/projectZomboid/projectZomboid_1.webp"
+        alt="projectZomboid_1"
       />
 
       <Divider my={5} />
