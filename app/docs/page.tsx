@@ -423,8 +423,7 @@ const DocumentPage = () => {
                   src="/images/wg/app_store.webp"
                   alt="app_store"
                   borderRadius="md"
-                  w="100%"
-                  maxW="300px"
+                  w="300px"
                 />
               </Box>
 
@@ -542,8 +541,7 @@ const DocumentPage = () => {
                 src="/images/wg/win_msi.webp"
                 alt="win_msi"
                 borderRadius="md"
-                w="100%"
-                maxW="500px"
+                w="500px"
               />
 
               <Flex alignItems="center" my={1}>
@@ -584,7 +582,7 @@ const DocumentPage = () => {
                   src="/images/wg/network_reset.webp"
                   alt="network_reset"
                   borderRadius="md"
-                  maxW="500px"
+                  w="500px"
                   mb={10}
                 />
               </Collapse>
@@ -608,8 +606,7 @@ const DocumentPage = () => {
                   src="/images/wg/app_store_mac.webp"
                   alt="app_store_mac"
                   borderRadius="md"
-                  w="100%"
-                  maxW="300px"
+                  w="300px"
                 />
               </Box>
 
@@ -624,8 +621,7 @@ const DocumentPage = () => {
                   src="/images/wg/mac.webp"
                   alt="mac"
                   borderRadius="md"
-                  w="100%"
-                  maxW="500px"
+                  w="500px"
                 />
               </Box>
             </TabPanel>
@@ -771,7 +767,7 @@ const DocumentPage = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             mt={2}
           />
-          <Box maxHeight="240px" overflowY="auto">
+          <Box maxHeight="200px" overflowY="auto">
             <List>
               {filteredArticles.map((article) => (
                 <ListItem key={article.path} my={1}>

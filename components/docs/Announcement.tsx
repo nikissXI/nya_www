@@ -69,7 +69,7 @@ export const AnnouncementsModal = ({}) => {
           ) : serverData.announcements &&
             serverData.announcements.length > 0 ? (
             <Text noOfLines={1}>
-              节点公告&ensp;
+              喵服公告&ensp;
               {formatDate(serverData.announcements[0].timestamp, true)}
             </Text>
           ) : (
@@ -90,19 +90,6 @@ export const AnnouncementsModal = ({}) => {
               </Text>
             )}
         </Flex>
-
-        <Text>
-          赞助有专属节点和技术支持
-          <Link
-            ml={1}
-            as={RouterLink}
-            to="/sponsor"
-            color="#7dd4ff"
-            _hover={{ textDecoration: "none" }}
-          >
-            点击赞助
-          </Link>
-        </Text>
       </Box>
 
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>

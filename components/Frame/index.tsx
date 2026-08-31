@@ -3,7 +3,7 @@ import { Center, Spinner } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import { Header } from "../Navbar/Header";
-import RelateGroups from "../serverInfo/relateGroups";
+import SideBar from "../serverInfo/sideBar";
 import Toaster from "../universal/Toaster";
 import { useUserStateStore } from "@/store/user-state";
 import Footer from "../Navbar/Footer";
@@ -60,7 +60,7 @@ export default function Frame({
         <Footer path={pathname} />
 
         {/* 群号 */}
-        <RelateGroups />
+        <SideBar />
       </Flex>
     </>
   );

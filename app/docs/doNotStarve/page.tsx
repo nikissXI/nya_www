@@ -39,7 +39,7 @@ export default function Page() {
       </Text>
       <Image
         src="/images/doNotStarve/doNotStarve_2.webp"
-        maxW="400px"
+        w="400px"
         alt="doNotStarve_2"
       />
 
@@ -66,7 +66,7 @@ export default function Page() {
 
       <Image
         src="/images/doNotStarve/doNotStarve_1.webp"
-        maxW="400px"
+        w="400px"
         alt="doNotStarve_1"
       />
 

@@ -18,6 +18,7 @@ import {
   Tag,
   Badge,
   Stack,
+  Image,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -55,6 +56,97 @@ interface HandleRoomResponse {
   [key: string]: any;
 }
 
+interface GameRoomItem {
+  path: string;
+  title: string;
+  icon: string;
+}
+
+const ROOM_GAME_LIST: GameRoomItem[] = [
+  { path: "/docs", title: "通用联机房", icon: "/images/universal/icon.webp" },
+  {
+    path: "/docs/stardewValley",
+    title: "星露谷物语",
+    icon: "/images/stardewValley/icon.webp",
+  },
+  {
+    path: "/docs/doNotStarve",
+    title: "饥荒联机版",
+    icon: "/images/doNotStarve/icon.webp",
+  },
+  {
+    path: "/docs/slayTheSpire",
+    title: "杀戮尖塔",
+    icon: "/images/slayTheSpire/icon.webp",
+  },
+  {
+    path: "/docs/terraria",
+    title: "泰拉瑞亚",
+    icon: "/images/terraria/icon.webp",
+  },
+  {
+    path: "/docs/theEscapists",
+    title: "逃脱者手游",
+    icon: "/images/theEscapists/icon.webp",
+  },
+  {
+    path: "/docs/mindustry",
+    title: "像素工厂",
+    icon: "/images/mindustry/icon.webp",
+  },
+  {
+    path: "/docs/l4d2",
+    title: "求生之路2",
+    icon: "/images/l4d2/icon.webp",
+  },
+  {
+    path: "/docs/ark",
+    title: "方舟：生存进化",
+    icon: "/images/ark/icon.webp",
+  },
+
+  {
+    path: "/docs/isaac",
+    title: "以撒的结合",
+    icon: "/images/isaac/icon.webp",
+  },
+  {
+    path: "/docs/survivalcraft",
+    title: "生存战争",
+    icon: "/images/survivalcraft/icon.webp",
+  },
+  {
+    path: "/docs/wizardOfLegend",
+    title: "传说法师手游",
+    icon: "/images/wizardOfLegend/icon.webp",
+  },
+  {
+    path: "/docs/overcooked",
+    title: "胡闹厨房",
+    icon: "/images/overcooked/icon.webp",
+  },
+  {
+    path: "/docs/machinesAtWar3",
+    title: "机械战争3",
+    icon: "/images/machinesAtWar3/icon.webp",
+  },
+  {
+    path: "/docs/projectZomboid",
+    title: "僵尸毁灭工程",
+    icon: "/images/projectZomboid/icon.webp",
+  },
+  {
+    path: "/docs/juicyRealm",
+    title: "恶果之地",
+    icon: "/images/juicyRealm/icon.webp",
+  },
+  {
+    path: "/docs/aresVirus2",
+    title: "阿瑞斯病毒2",
+    icon: "/images/aresVirus2/icon.webp",
+  },
+];
+
 // 抽取常量到组件外部，避免每次渲染重新创建
 const CAROUSEL_MESSAGES = [
   "关闭浏览器不影响联机，WG不关即可",
@@ -73,12 +165,6 @@ export default function Page() {
   const isRequesting = useRef(false);
 
   const {
-    isOpen: joinIsOpen,
-    onOpen: joinOnOpen,
-    onClose: joinOnClose,
-  } = useDisclosure();
-
-  const {
     isOpen: setPassIsOpen,
     onOpen: setPassOnOpen,
     onClose: setPassOnClose,
@@ -88,6 +174,7 @@ export default function Page() {
 
   const [inputRoomId, setInputRoomId] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
+  const [gameSearchTerm, setGameSearchTerm] = useState("");
   const {
     userInfo,
     userWgInfo,
@@ -195,21 +282,30 @@ export default function Page() {
   );
 
   // 创建房间
-  const handleCreateRoom = useCallback(async () => {
-    try {
-      const data = await requestRoomApi("handleRoom", {
-        handleType: "createRoom",
-        value: "",
-      });
-      if (data.code === 0) {
-        getRoomData();
-      } else {
-        openToast({ content: data.msg, status: "warning" });
+  const handleCreateRoom = useCallback(
+    async (game?: GameRoomItem) => {
+      try {
+        const data = await requestRoomApi("handleRoom", {
+          handleType: "createRoom",
+          value: "",
+        });
+        if (data.code === 0) {
+          getRoomData();
+          if (game?.path) {
+            navigate(game.path);
+          }
+        } else {
+          if (data.msg.includes("在线")) {
+            getRoomData();
+          }
+          openToast({ content: data.msg, status: "warning" });
+        }
+      } catch (err) {
+        openToast({ content: String(err), status: "error" });
       }
-    } catch (err) {
-      openToast({ content: String(err), status: "error" });
-    }
-  }, [requestRoomApi, getRoomData]);
+    },
+    [requestRoomApi, getRoomData, navigate],
+  );
 
   // 关闭房间（房主）
   const handleCloseRoom = useCallback(async () => {
@@ -267,10 +363,15 @@ export default function Page() {
 
         if (data.code === 0) {
           getRoomData();
-          joinOnClose();
+          setHideJoinPassInput(true);
+          setInputRoomId("");
+          setInputPasswd("");
         } else {
           if (data.msg.includes("密码")) {
             setHideJoinPassInput(false);
+          }
+          if (data.msg.includes("在线")) {
+            getRoomData();
           }
           openToast({ content: data.msg, status: "warning" });
         }
@@ -278,7 +379,7 @@ export default function Page() {
         openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
     },
-    [requestRoomApi, getRoomData, joinOnClose],
+    [requestRoomApi, getRoomData],
   );
 
   // 踢出成员
@@ -334,71 +435,159 @@ export default function Page() {
     );
   }, [nodeWarningText]);
 
+  const filteredRoomGames = useMemo(
+    () =>
+      ROOM_GAME_LIST.filter((game) =>
+        game.title.toLowerCase().includes(gameSearchTerm.toLowerCase()),
+      ),
+    [gameSearchTerm],
+  );
+
   // 待加入页面（未进房间）
   const standbyPage = () => (
-    <Box textAlign="center">
-      <Modal isOpen={joinIsOpen} onClose={joinOnClose}>
-        <ModalOverlay />
-        <ModalContent bgColor="#002f5c">
-          <ModalHeader>加入房间</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody onKeyDown={handleJoinRoomEnter}>
+    <Box textAlign="center" w="100%" maxW="760px">
+      <VStack spacing={1} w="100%">
+        <Box
+          w={{ md: "320px", base: "100%" }}
+          borderRadius="lg"
+          overflow="hidden"
+        >
+          <Flex
+            align="center"
+            justify="space-between"
+            w="100%"
+            px={3}
+            py={3}
+            borderBottom="1px solid rgba(255,255,255,0.08)"
+            bg="rgba(52, 139, 246, 0.18)"
+          >
             <Input
               type="text"
-              placeholder="请输入房间号"
+              placeholder="房间号"
               value={inputRoomId}
               onChange={(e) => {
                 setInputRoomId(e.target.value);
                 setHideJoinPassInput(true);
               }}
+              bg="rgba(0,0,0,0.12)"
+              border="1px solid rgba(255,255,255,0.15)"
+              color="white"
+              _placeholder={{ color: "rgba(255,255,255,0.6)" }}
+              mr={3}
+              onKeyDown={handleJoinRoomEnter}
             />
-            <Input
-              mt={3}
-              type="text"
-              placeholder="请输入房间密码"
-              value={inputPasswd}
-              onChange={(e) => {
-                setInputPasswd(e.target.value);
-              }}
-              hidden={hideJoinPassInput}
-            />
-          </ModalBody>
-          <ModalFooter>
             <Button
-              bgColor="#007bc0"
+              size="sm"
+              minW="60px"
               onClick={() => {
                 handleJoinRoom(inputRoomId, inputPasswd);
               }}
             >
               加入
             </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </Flex>
 
-      <VStack spacing={6} mt={3}>
-        <Button
-          h="50px"
-          fontSize="25px"
-          onClick={() => {
-            handleCreateRoom();
-          }}
-        >
-          创建房间
-        </Button>
+          {!hideJoinPassInput && (
+            <Flex
+              align="center"
+              justify="space-between"
+              w="100%"
+              px={3}
+              py={3}
+              borderBottom="1px solid rgba(255,255,255,0.08)"
+              bg="rgba(75, 127, 187, 0.14)"
+            >
+              <Input
+                type="text"
+                placeholder="请输入房间密码"
+                value={inputPasswd}
+                onChange={(e) => {
+                  setInputPasswd(e.target.value);
+                }}
+                bg="rgba(0,0,0,0.12)"
+                border="1px solid rgba(255,255,255,0.15)"
+                color="white"
+                _placeholder={{ color: "rgba(255,255,255,0.6)" }}
+                onKeyDown={handleJoinRoomEnter}
+              />
+            </Flex>
+          )}
+        </Box>
 
-        <Button
-          h="50px"
-          fontSize="25px"
-          onClick={() => {
-            joinOnOpen();
-            setHideJoinPassInput(true);
-            setInputRoomId("");
-            setInputPasswd("");
-          }}
+        <Box
+          w={{ md: "320px", base: "100%" }}
+          mb={10}
+          borderRadius="lg"
+          overflow="hidden"
+          border="1px solid rgba(255,255,255,0.08)"
+          bg="rgba(52, 139, 246, 0.18)"
         >
-          加入房间
-        </Button>
+          <Flex align="center" justify="space-between" w="100%" px={3} py={3}>
+            <Input
+              value={gameSearchTerm}
+              onChange={(e) => setGameSearchTerm(e.target.value)}
+              placeholder="搜索游戏"
+              bg="rgba(0,0,0,0.12)"
+              border="1px solid rgba(255,255,255,0.15)"
+              color="white"
+              _placeholder={{ color: "rgba(255,255,255,0.6)" }}
+            />
+          </Flex>
+
+          {filteredRoomGames.length === 0 ? (
+            <Flex w="100%" px={3} pb={3} justify="center">
+              <Text color="rgba(255,255,255,0.7)">
+                未找到相关游戏
+                <br />
+                请使用通用联机房
+              </Text>
+            </Flex>
+          ) : (
+            filteredRoomGames.map((game) => (
+              <Flex
+                key={game.path}
+                align="center"
+                justify="space-between"
+                w="100%"
+                px={3}
+                py={3}
+                borderBottom="1px solid rgba(255,255,255,0.08)"
+              >
+                <Flex align="center" minW={0} flex={1} pr={3}>
+                  <Image
+                    src={game.icon}
+                    alt={game.title}
+                    boxSize="42px"
+                    objectFit="cover"
+                    borderRadius="md"
+                    flexShrink={0}
+                    bg="rgba(255,255,255,0.08)"
+                  />
+                  <Text
+                    ml={3}
+                    fontSize="md"
+                    fontWeight="bold"
+                    color="white"
+                    textAlign="left"
+                    isTruncated
+                  >
+                    {game.title}
+                  </Text>
+                </Flex>
+
+                <Button
+                  size="sm"
+                  minW="60px"
+                  onClick={() => {
+                    handleCreateRoom(game);
+                  }}
+                >
+                  创建
+                </Button>
+              </Flex>
+            ))
+          )}
+        </Box>
       </VStack>
     </Box>
   );
@@ -568,8 +757,7 @@ export default function Page() {
                 borderRadius="lg"
                 boxShadow="sm"
                 mb={2}
-                bg="rgba(75, 127, 187, 0.38)"
-                backdropFilter="blur(4px)"
+                bg="rgba(52, 139, 246, 0.18)"
                 border="1px solid"
                 borderColor="rgba(75, 127, 187, 0.2)"
                 px={3}

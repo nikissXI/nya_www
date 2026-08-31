@@ -18,7 +18,7 @@ export default function Page() {
       </Text>
 
       <Image
-        maxW="400px"
+        w="400px"
         src="/images/survivalcraft/survivalcraft_1.webp"
         alt="survivalcraft_1"
       />
@@ -28,7 +28,7 @@ export default function Page() {
         客机点连接服务器，点本地服列表，添加服务器（如下图）,添加后加入即可
       </Text>
       <Image
-        maxW="400px"
+        w="400px"
         src="/images/survivalcraft/survivalcraft_2.webp"
         alt="survivalcraft_2"
       />

@@ -19,7 +19,7 @@ export default function Page() {
       </Text>
 
       <Image
-        maxW="400px"
+        w="400px"
         src="/images/mindustry/mindustry_1.webp"
         alt="mindustry_1"
       />
@@ -29,7 +29,7 @@ export default function Page() {
         客机在加入游戏界面，点添加服务器，把主机的喵服联机IP填上去就行
       </Text>
       <Image
-        maxW="400px"
+        w="400px"
         src="/images/mindustry/mindustry_2.webp"
         alt="mindustry_2"
       />

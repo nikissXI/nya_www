@@ -283,7 +283,7 @@ export const ServerNodeListModal: React.FC = () => {
       <ModalOverlay />
       <ModalContent
         bgColor="#3b4960f1"
-        maxW={{ base: "full", md: "360px" }}
+        w={{ base: "full", md: "360px" }}
         py={4}
       >
         <ModalBody>

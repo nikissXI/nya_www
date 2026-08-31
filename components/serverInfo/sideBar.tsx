@@ -1,8 +1,9 @@
-import { Center, Box, Flex } from "@chakra-ui/react";
+import { Center, Box, Flex, Text, Link } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
 import { useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
-const RelateGroups = () => {
+const SideBar = () => {
   const { getServerData, serverData } = useUserStateStore();
 
   useEffect(() => {
@@ -14,7 +15,7 @@ const RelateGroups = () => {
   return (
     <Box
       as="footer"
-      minW="240px"
+      maxW="200px"
       flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
     >
       <Flex
@@ -39,9 +40,22 @@ const RelateGroups = () => {
               </Center>
             ),
         )}
+
+        <Text>
+          赞助有专属节点和技术支持
+          <Link
+            ml={1}
+            as={RouterLink}
+            to="/sponsor"
+            color="#7dd4ff"
+            _hover={{ textDecoration: "none" }}
+          >
+            点击赞助
+          </Link>
+        </Text>
       </Flex>
     </Box>
   );
 };
 
-export default RelateGroups;
+export default SideBar;

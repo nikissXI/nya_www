@@ -8,28 +8,12 @@ export function Header({ path }: { path: string }) {
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
-    const gameTitles: { [key: string]: string } = {
-      "/room/": "联机房间",
-      "/nya/android": "WG部署教程-安卓",
-      "/nya/ios": "WG部署教程-苹果",
-      "/nya/pc": "WG部署教程-电脑",
-      theEscapists: "逃脱者：困境突围",
-      stardewValley: "星露谷物语",
-      terraria: "泰拉瑞亚",
-      l4d2: "求生之路2",
-      slayTheSpire: "杀戮尖塔",
-      minecraft: "我的世界",
-      wizardOfLegend: "传说法师手游",
-      isaac: "以撒的结合",
-      doNotStarve: "饥荒",
-      mindustry: "像素工厂",
-      machinesAtWar3: "机械战争3",
-      projectZomboid: "僵尸毁灭工程",
-      juicyRealm: "恶果之地",
-      aresVirus2: "阿瑞斯病毒2",
-      overcooked: "胡闹厨房",
-      survivalcraft: "生存战争",
-    };
+    // const gameTitles: { [key: string]: string } = {
+    //   "/room/": "联机房间",
+    //   "/nya/android": "WG部署教程-安卓",
+    //   "/nya/ios": "WG部署教程-苹果",
+    //   "/nya/pc": "WG部署教程-电脑",
+    // };
 
     const titles: { [key: string]: string } = {
       "/": "首页",
@@ -41,21 +25,21 @@ export function Header({ path }: { path: string }) {
       "/room": "联机房间",
     };
 
-    const matchedTitle = Object.keys(gameTitles).find((key) =>
-      path.includes(key)
-    );
-    setTitle(matchedTitle ? gameTitles[matchedTitle] : titles[path]);
+    // const matchedTitle = Object.keys(gameTitles).find((key) =>
+    //   path.includes(key)
+    // );
+    // setTitle(matchedTitle ? gameTitles[matchedTitle] : titles[path]);
+    setTitle(titles[path]);
   }, [path]);
 
   const rootGuide = [
     { name: "首页", path: "/" },
     { name: "联机房间", path: "/room" },
     { name: "我的信息", path: "/me" },
-    // { name: "赞助榜", path: "/sponsor" },
   ];
 
   return (
-    <Box as="header" minW="200px" flex={{ base: "none", md: "1" }}>
+    <Box as="header" maxW="200px" flex={{ base: "none", md: "1" }}>
       <Center
         width="100%"
         color="white"
@@ -78,26 +62,25 @@ export function Header({ path }: { path: string }) {
         top={0}
         position="sticky"
       >
-        <Flex as="nav" direction="column" py={10} px={12}>
+        <Flex as="nav" direction="column" py={10} px={8}>
           {rootGuide.map((item) => (
             <Link
               as={RouterLink}
               key={item.path}
               to={item.path}
               my={3}
-              py={2}
+              py={3}
               _hover={{ textDecoration: "none" }}
               bg={rootPath === item.path ? "#4098f282" : "transparent"}
               rounded={12}
             >
-              <Center>
-                <Text
-                  color={rootPath === item.path ? "white" : "gray.200"}
-                  fontWeight={rootPath === item.path ? "bold" : "normal"}
-                >
-                  {item.name}
-                </Text>
-              </Center>
+              <Text
+                textAlign="center"
+                color={rootPath === item.path ? "white" : "gray.200"}
+                fontWeight={rootPath === item.path ? "bold" : "normal"}
+              >
+                {item.name}
+              </Text>
             </Link>
           ))}
         </Flex>

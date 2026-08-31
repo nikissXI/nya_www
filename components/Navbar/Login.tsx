@@ -134,7 +134,7 @@ export function LoginModal() {
   return (
     <Modal isOpen={showLoginModal} onClose={setShowLoginModal}>
       <ModalOverlay />
-      <ModalContent bgColor="#274161" maxW="320px" mx={3}>
+      <ModalContent bgColor="#274161" w="320px" mx={3}>
         <ModalHeader textAlign="center">登录</ModalHeader>
 
         <ModalCloseButton />

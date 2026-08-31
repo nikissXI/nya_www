@@ -548,7 +548,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set({ latency: undefined });
             if (!auto) {
               openToast({
-                content: "离线无法联机，不会用就看联机教程",
+                content: "刷新成功，你的WG未连接",
                 status: "warning",
               });
             }

@@ -33,7 +33,7 @@ export default function Page() {
         玩家都处于同个联机房间并在线后，主机按下图创建游戏，创建完成后要保持在游戏里，否则客机无法加入
       </Text>
 
-      <Image mb={1} maxW="800px" src="/images/ark/ark_1.webp" alt="ark_1" />
+      <Image mb={1} w="800px" src="/images/ark/ark_1.webp" alt="ark_1" />
 
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
