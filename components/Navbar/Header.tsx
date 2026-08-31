@@ -1,10 +1,17 @@
 import { Link as RouterLink } from "react-router-dom";
 import { Box, Flex, Text, Link, Center } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-
+import { useUserStateStore } from "@/store/user-state";
 export function Header({ path }: { path: string }) {
-  const rootPath = "/" + path.split("/")[1];
+  const { getServerData, serverData } = useUserStateStore();
 
+  useEffect(() => {
+    if (serverData === undefined) {
+      getServerData(); // 只在数据为空时请求
+    }
+  }, [serverData, getServerData]);
+
+  const rootPath = "/" + path.split("/")[1];
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
@@ -39,7 +46,7 @@ export function Header({ path }: { path: string }) {
   ];
 
   return (
-    <Box as="header" maxW="200px" flex={{ base: "none", md: "1" }}>
+    <Box as="header" maxW="220px" flex={{ base: "none", md: "1" }}>
       <Center
         width="100%"
         color="white"

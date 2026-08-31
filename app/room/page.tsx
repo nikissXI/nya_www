@@ -40,7 +40,6 @@ import { RiSignalCellularOffLine } from "react-icons/ri";
 import { IoIosExit } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
-import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
 import OfflineReasons from "@/components/docs/OfflineReasons";
 import { apiUrl } from "@/utils/api";
@@ -147,13 +146,6 @@ const ROOM_GAME_LIST: GameRoomItem[] = [
   },
 ];
 
-// 抽取常量到组件外部，避免每次渲染重新创建
-const CAROUSEL_MESSAGES = [
-  "关闭浏览器不影响联机，WG不关即可",
-  "联机时使用该页面上显示的联机IP",
-  "房间里任意玩家都可以当主机",
-];
-
 // 抽取角色常量
 const ROLE_HOSTER = "hoster";
 const ROLE_NONE = "none";
@@ -190,7 +182,23 @@ export default function Page() {
     setNodeListModal,
     setOfflineReasonsModal,
     nodeNetLoad,
+    serverData,
   } = useUserStateStore();
+
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  // 轮播效果：每6秒更换一条消息
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (serverData?.carouselMsg)
+        setCarouselIndex(
+          (prevIndex) => (prevIndex + 1) % serverData.carouselMsg.length,
+        );
+    }, 6000);
+
+    // 清理定时器
+    return () => clearInterval(interval);
+  }, [serverData?.carouselMsg]);
 
   useEffect(() => {
     // 当节点存在，且还没有房间数据时，自动拉取
@@ -198,18 +206,6 @@ export default function Page() {
       getRoomData();
     }
   }, [userWgInfo?.node_alias, roomData, getRoomData]);
-
-  // 轮播图索引
-  const [carouselIndex, setCarouselIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCarouselIndex(
-        (prevIndex) => (prevIndex + 1) % CAROUSEL_MESSAGES.length,
-      );
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
 
   // 判断是否为 VIP 用户（赞助 > 10）
   const isVip = useMemo(
@@ -516,7 +512,7 @@ export default function Page() {
 
         <Box
           w={{ md: "320px", base: "100%" }}
-          mb={10}
+          mb={{ md: 10, base: 0 }}
           borderRadius="lg"
           overflow="hidden"
           border="1px solid rgba(255,255,255,0.08)"
@@ -732,8 +728,6 @@ export default function Page() {
 
   return (
     <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
-      <AnnouncementsModal />
-
       {!userInfo ? (
         <VStack spacing={3} align="center">
           <Heading size="md">你还没登录呢</Heading>
@@ -749,6 +743,10 @@ export default function Page() {
         </VStack>
       ) : (
         <>
+          <Text color="#ffca3d" mb={2} fontWeight="bold">
+            {serverData?.carouselMsg && serverData?.carouselMsg[carouselIndex]}
+          </Text>
+
           {userWgInfo?.node_alias && roomData !== undefined && (
             <>
               <Flex
@@ -941,10 +939,6 @@ export default function Page() {
               </Button>
             </Text>
           )}
-
-          {isOnline &&
-            roomRole !== ROLE_NONE &&
-            CAROUSEL_MESSAGES[carouselIndex]}
 
           {isOnline && (
             <Text size="sm" textAlign="center" mb={2}>

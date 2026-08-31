@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Flex, Image, Text, Box, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
-import AnnouncementsModal from "@/components/docs/Announcement";
 
 export default function Page() {
   const navigate = useNavigate();
@@ -29,9 +28,6 @@ export default function Page() {
 
   return (
     <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
-      {/* 公告模态框 */}
-      <AnnouncementsModal />
-
       {/* 网站统计信息 */}
       <Flex direction="row" justifyContent="center">
         <Text w="150px" textAlign="center" fontSize="sm">

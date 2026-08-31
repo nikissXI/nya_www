@@ -20,7 +20,6 @@ interface AnnouncementItem {
 interface ServerData {
   viewCount: number;
   userCount: number;
-  relateGroup: GroupItem[];
   carouselMsg: string[];
   announcements: AnnouncementItem[];
 }

@@ -31,8 +31,6 @@ import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
-import { PiCoffeeBold } from "react-icons/pi";
-import AnnouncementsModal from "@/components/docs/Announcement";
 import SponsorTag from "@/components/universal/SponsorTag";
 import { apiUrl } from "@/utils/api";
 
@@ -394,8 +392,6 @@ export default function UserProfilePage() {
 
   return (
     <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
-      <AnnouncementsModal />
-
       <Modal isOpen={bindTELIsOpen} onClose={bindTELOnClose}>
         <ModalOverlay />
         <ModalContent bgColor="#274161" maxW="320px">

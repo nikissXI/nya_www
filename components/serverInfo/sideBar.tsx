@@ -1,59 +1,150 @@
-import { Center, Box, Flex, Text, Link } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  Link,
+  Heading,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  useDisclosure,
+  VStack,
+  Divider,
+} from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
-import { useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
-const SideBar = () => {
-  const { getServerData, serverData } = useUserStateStore();
+const formatDate = (rawTs: number, short: boolean = false): string => {
+  // 支持秒或毫秒
+  const ts = rawTs < 1e12 ? rawTs * 1000 : rawTs;
+  const d = new Date(ts);
 
-  useEffect(() => {
-    if (serverData === undefined) {
-      getServerData(); // 只在数据为空时请求
-    }
-  }, [serverData, getServerData]);
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const date = d.getDate();
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+
+  if (short) return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+  else return `${year}年${month}月${date}日 ${hours}:${minutes}`;
+};
+
+const SideBar = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { serverData } = useUserStateStore();
 
   return (
     <Box
-      as="footer"
-      maxW="200px"
-      flex={{ base: "none", md: "1" }} // 桌面端占据 1/3 宽度
+      as="aside"
+      w={{ base: "80%", md: "200px" }}
+      flex={{ base: "none", md: "0 0 200px" }}
+      mt={{ base: 6, md: 20 }}
+      mb={{ base: "200px", md: 0 }}
+      mx={{ base: "auto", md: 0 }}
     >
       <Flex
-        justifyContent="space-between"
         direction="column"
-        pt={{ base: "5", md: "24" }}
-        pb="100px"
-        top={0}
-        position="sticky"
+        position={{ base: "static", md: "sticky" }}
+        top={{ base: 0, md: 24 }}
+        gap={6}
+        align={{ base: "center", md: "stretch" }}
+        textAlign={{ base: "center", md: "left" }}
       >
-        <Center fontWeight="bold" color="#a8d1ff" my={1} textAlign="center">
-          喵服关联QQ群
-        </Center>
-
-        <Center my={1}>综合服务群&ensp;1047464328</Center>
-        {serverData?.relateGroup?.map(
-          (group, index) =>
-            group.qq !== 1047464328 &&
-            group.qq !== 924644467 && (
-              <Center key={index} my={1}>
-                {group.name}&ensp;{group.qq}
-              </Center>
-            ),
-        )}
-
-        <Text>
-          赞助有专属节点和技术支持
+        <Box w="100%">
+          <Heading as="h3" fontSize="lg" color="#a8d1ff" mb={1}>
+            喵服官方QQ群
+          </Heading>
           <Link
-            ml={1}
+            href="https://qm.qq.com/q/HxnUVAdRa8"
+            target="_blank"
+            _hover={{ textDecoration: "none" }}
+            fontWeight="bold"
+            letterSpacing="0.5px"
+            display="inline-block"
+          >
+            1047464328
+          </Link>
+        </Box>
+
+        <Box w="100%">
+          <Heading as="h3" fontSize="lg" color="#a8d1ff" mb={2}>
+            赞助喵服
+          </Heading>
+          <Text whiteSpace="pre-wrap">
+            解锁专用节点创建房间权限及获得技术支持
+          </Text>
+
+          <Link
+            fontWeight="bold"
             as={RouterLink}
             to="/sponsor"
             color="#7dd4ff"
             _hover={{ textDecoration: "none" }}
+            display="inline-block"
           >
-            点击赞助
+            了解赞助特权
           </Link>
-        </Text>
+        </Box>
+
+        <Box w="100%">
+          <Heading as="h3" fontSize="lg" color="#a8d1ff" mb={1}>
+            喵服公告
+          </Heading>
+
+          {serverData?.announcements && serverData.announcements.length > 0 ? (
+            <>
+              <Text mb={1} fontWeight="bold">
+                {formatDate(serverData.announcements[0].timestamp, true)}更新
+              </Text>
+
+              <Text whiteSpace="pre-wrap" textAlign="left">
+                {serverData.announcements[0].content}
+              </Text>
+
+              <Text
+                fontWeight="bold"
+                color="#7dd4ff"
+                onClick={onOpen}
+                colorScheme="transparent"
+              >
+                查看历史公告
+              </Text>
+            </>
+          ) : (
+            <Text>暂无公告</Text>
+          )}
+        </Box>
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
+        <ModalOverlay />
+        <ModalContent
+          bg="#202e4fe0"
+          color="white"
+          maxH="70%"
+          overflowY="auto"
+          mx={5}
+          py={5}
+        >
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={2}>
+              {serverData?.announcements &&
+                serverData.announcements.map((item, index) => (
+                  <Box key={index} p={1} w="100%">
+                    <Text mb={1} fontWeight="bold" color="#f4d106">
+                      {formatDate(item.timestamp)}
+                    </Text>
+                    <Divider mb={2} />
+                    <Text whiteSpace="pre-wrap">{item.content}</Text>
+                  </Box>
+                ))}
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
