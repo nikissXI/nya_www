@@ -14,16 +14,12 @@ import {
   TextProps,
   Collapse,
   Image,
-  List,
-  ListItem,
-  Input,
   Link,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
 import { useNavigate } from "react-router-dom";
 import { openToast } from "@/components/universal/toast";
-import { Link as RouterLink } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import { TbReload } from "react-icons/tb";
@@ -44,30 +40,6 @@ const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
-
-interface Article {
-  path: string;
-  title: string;
-}
-
-const articles: Article[] = [
-  { path: "/docs/theEscapists", title: "逃脱者手游（安卓、iOS）" },
-  { path: "/docs/stardewValley", title: "星露谷物语（全平台）" },
-  { path: "/docs/doNotStarve", title: "饥荒联机版（全平台）" },
-  { path: "/docs/slayTheSpire", title: "杀戮尖塔（全平台）" },
-  { path: "/docs/terraria", title: "泰拉瑞亚（全平台）" },
-  { path: "/docs/l4d2", title: "求生之路2（PC）" },
-  { path: "/docs/ark", title: "方舟：生存进化（PC、安卓）" },
-  { path: "/docs/mindustry", title: "像素工厂（全平台）" },
-  { path: "/docs/isaac", title: "以撒的结合（PC）" },
-  { path: "/docs/survivalcraft", title: "生存战争（全平台）" },
-  { path: "/docs/wizardOfLegend", title: "传说法师手游（安卓、iOS）" },
-  { path: "/docs/overcooked", title: "胡闹厨房（PC）" },
-  { path: "/docs/machinesAtWar3", title: "机械战争3（全平台）" },
-  { path: "/docs/projectZomboid", title: "僵尸毁灭工程（PC）" },
-  { path: "/docs/juicyRealm", title: "恶果之地（全平台）" },
-  { path: "/docs/aresVirus2", title: "阿瑞斯病毒2（全平台）" },
-];
 
 const DocumentPage = () => {
   const {
@@ -144,36 +116,6 @@ const DocumentPage = () => {
       console.error(error);
     }
   };
-  //////////////////////
-  //////////////////////
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const filteredArticles = articles.filter((article) =>
-    article.title.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
-
-  //////////////////////
-  //////////////////////
-
-  useEffect(() => {
-    const hash = window.location.hash;
-
-    if (hash) {
-      // 设置一个延迟，确保页面加载完成后再执行滚动
-      const timer = setTimeout(() => {
-        const gamesElement = document.getElementById(hash.replace("#", ""));
-        if (gamesElement) {
-          window.scrollTo({
-            top: gamesElement.offsetTop - 150,
-            behavior: "smooth",
-          });
-        }
-      }, 500);
-
-      // 清理定时器
-      return () => clearTimeout(timer);
-    }
-  }, []);
   //////////////////////
   //////////////////////
 
@@ -752,41 +694,6 @@ const DocumentPage = () => {
         </Text>
       </Box>
 
-      <Box id="games" mt={5}>
-        <Text>
-          ⑥
-          玩家都在同一个联机房间后，请查阅下方列表，有收录就是明确支持联机的，游戏名旁边的括号表示支持什么系统平台。
-          <br />
-          没有的游戏请自行尝试或加群1047464328找群(即服主)询问，如果是支持填IP加入的游戏那就100%支持，搜索加入的不好说。
-          <HighLight>点击游戏名阅读联机操作指导</HighLight>
-        </Text>
-        <Box>
-          <Input
-            placeholder="搜索游戏教程"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            mt={2}
-          />
-          <Box maxHeight="200px" overflowY="auto">
-            <List>
-              {filteredArticles.map((article) => (
-                <ListItem key={article.path} my={1}>
-                  <Link
-                    fontSize="md"
-                    as={RouterLink}
-                    to={article.path}
-                    color="#7dfffe"
-                    _hover={{ textDecoration: "none" }}
-                  >
-                    {article.title}
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Box>
-      </Box>
-
       <Center>
         <Button
           bgColor="#b23333"
@@ -799,21 +706,6 @@ const DocumentPage = () => {
           返回联机房间
         </Button>
       </Center>
-
-      {/* {showScroll && (
-        <Button
-          position="fixed"
-          bottom="12vh"
-          right="20px"
-          onClick={scrollToTop}
-          size="sm"
-          fontSize="md"
-          px={2}
-          zIndex={200}
-        >
-          目录
-        </Button>
-      )} */}
     </Box>
   );
 };
