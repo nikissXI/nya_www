@@ -15,6 +15,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
+  HStack,
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
 import { Button } from "@/components/universal/button";
@@ -36,14 +37,8 @@ import { apiUrl } from "@/utils/api";
 
 export default function UserProfilePage() {
   const navigate = useNavigate();
-  const {
-    uuid,
-    getUserInfo,
-    userInfo,
-    userWgInfo,
-    logout,
-    setShowLoginModal,
-  } = useUserStateStore();
+  const { uuid, getUserInfo, userInfo, userWgInfo, logout, setShowLoginModal } =
+    useUserStateStore();
 
   // 修改用户名
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
@@ -834,7 +829,7 @@ export default function UserProfilePage() {
               )}
             </VStack>
 
-            <VStack spacing={5} mt={5}>
+            <HStack spacing={10} mt={5}>
               <Button
                 variant="link"
                 bgColor="transparent"
@@ -858,7 +853,7 @@ export default function UserProfilePage() {
               >
                 退出登录
               </Button>
-            </VStack>
+            </HStack>
           </VStack>
         )}
       </Box>
