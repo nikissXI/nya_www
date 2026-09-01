@@ -99,7 +99,7 @@ const SideBar = () => {
                 {formatDate(serverData.announcements[0].timestamp, true)}更新
               </Text>
 
-              <Text whiteSpace="pre-wrap" textAlign="left">
+              <Text whiteSpace="pre-wrap" textAlign="left" fontSize="sm">
                 {serverData.announcements[0].content}
               </Text>
 
