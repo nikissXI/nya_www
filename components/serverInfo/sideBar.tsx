@@ -50,10 +50,10 @@ const SideBar = () => {
         top={{ base: 0, md: 24 }}
         gap={6}
         align={{ base: "center", md: "stretch" }}
-        textAlign={{ base: "center", md: "left" }}
+        textAlign="left"
       >
         <Box w="100%">
-          <Heading as="h3" fontSize="lg" color="#a8d1ff" mb={1}>
+          <Heading as="h3" fontSize="lg" color="#a8d1ff">
             喵服官方QQ群
           </Heading>
           <Link
@@ -69,7 +69,7 @@ const SideBar = () => {
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize="lg" color="#a8d1ff" mb={2}>
+          <Heading as="h3" fontSize="lg" color="#a8d1ff">
             赞助喵服
           </Heading>
           <Text whiteSpace="pre-wrap">
@@ -89,13 +89,13 @@ const SideBar = () => {
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize="lg" color="#a8d1ff" mb={1}>
+          <Heading as="h3" fontSize="lg" color="#a8d1ff">
             喵服公告
           </Heading>
 
           {serverData?.announcements && serverData.announcements.length > 0 ? (
             <>
-              <Text mb={1} fontWeight="bold">
+              <Text fontWeight="bold" textAlign="left">
                 {formatDate(serverData.announcements[0].timestamp, true)}更新
               </Text>
 
