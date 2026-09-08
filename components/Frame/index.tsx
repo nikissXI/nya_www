@@ -3,7 +3,7 @@ import { Center, Spinner } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import { Header } from "../Navbar/Header";
-import SideBar from "../serverInfo/sideBar";
+import SideBar from "../Navbar/sideBar";
 import Toaster from "../universal/Toaster";
 import { useUserStateStore } from "@/store/user-state";
 import Footer from "../Navbar/Footer";

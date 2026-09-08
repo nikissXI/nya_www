@@ -61,6 +61,11 @@ interface GameRoomItem {
   icon: string;
 }
 
+const getRoomGameName = (game?: GameRoomItem): string => {
+  if (!game || game.path === "/docs") return "";
+  return game.path.replace(/^\/docs\//, "");
+};
+
 const ROOM_GAME_LIST: GameRoomItem[] = [
   { path: "/docs", title: "通用联机房", icon: "/images/universal/icon.webp" },
   {
@@ -167,6 +172,7 @@ export default function Page() {
   const [inputRoomId, setInputRoomId] = useState("");
   const [inputPasswd, setInputPasswd] = useState("");
   const [gameSearchTerm, setGameSearchTerm] = useState("");
+  const [selectedGame, setSelectedGame] = useState<GameRoomItem | null>(null);
   const {
     userInfo,
     userWgInfo,
@@ -207,12 +213,6 @@ export default function Page() {
     }
   }, [userWgInfo?.node_alias, roomData, getRoomData]);
 
-  // 判断是否为 VIP 用户（赞助 > 10）
-  const isVip = useMemo(
-    () => (userInfo?.sponsorship || 0) > 10,
-    [userInfo?.sponsorship],
-  );
-
   // 通用请求函数：使用 useRef 锁，避免 useCallback 依赖 loading 状态导致频繁重建
   const requestRoomApi = useCallback(
     async (
@@ -241,9 +241,7 @@ export default function Page() {
 
         const data: HandleRoomResponse = await resp.json();
 
-        if (data.code === -1) {
-          window.location.reload();
-        }
+        if (data.code === -1) window.location.reload();
 
         return data;
       } finally {
@@ -283,15 +281,13 @@ export default function Page() {
       try {
         const data = await requestRoomApi("handleRoom", {
           handleType: "createRoom",
-          value: "",
+          value: getRoomGameName(game),
         });
         if (data.code === 0) {
+          setSelectedGame(game ?? null);
           getRoomData();
-          if (game?.path) {
-            navigate(game.path);
-          }
         } else {
-          if (data.msg.includes("在线")) {
+          if (isOnline && data.msg.includes("在线后")) {
             getRoomData();
           }
           openToast({ content: data.msg, status: "warning" });
@@ -300,7 +296,7 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [requestRoomApi, getRoomData, navigate],
+    [requestRoomApi, getRoomData, isOnline],
   );
 
   // 关闭房间（房主）
@@ -311,6 +307,7 @@ export default function Page() {
         value: "",
       });
       if (data.code === 0) {
+        setSelectedGame(null);
         getRoomData();
       } else {
         openToast({ content: data.msg, status: "error" });
@@ -328,6 +325,7 @@ export default function Page() {
         value: "",
       });
       if (data.code === 0) {
+        setSelectedGame(null);
         getRoomData();
       } else {
         openToast({ content: data.msg, status: "error" });
@@ -358,6 +356,7 @@ export default function Page() {
         });
 
         if (data.code === 0) {
+          setSelectedGame(null);
           getRoomData();
           setHideJoinPassInput(true);
           setInputRoomId("");
@@ -366,7 +365,7 @@ export default function Page() {
           if (data.msg.includes("密码")) {
             setHideJoinPassInput(false);
           }
-          if (data.msg.includes("在线")) {
+          if (isOnline && data.msg.includes("在线后")) {
             getRoomData();
           }
           openToast({ content: data.msg, status: "warning" });
@@ -375,7 +374,7 @@ export default function Page() {
         openToast({ content: `请求出错: ${String(err)}`, status: "error" });
       }
     },
-    [requestRoomApi, getRoomData],
+    [requestRoomApi, getRoomData, isOnline],
   );
 
   // 踢出成员
@@ -439,22 +438,26 @@ export default function Page() {
     [gameSearchTerm],
   );
 
+  const roomGame = useMemo(
+    () =>
+      selectedGame ??
+      ROOM_GAME_LIST.find(
+        (game) => getRoomGameName(game) === roomData?.room_game,
+      ) ??
+      null,
+    [selectedGame, roomData?.room_game],
+  );
+
   // 待加入页面（未进房间）
   const standbyPage = () => (
-    <Box textAlign="center" w="100%" maxW="760px">
-      <VStack spacing={1} w="100%">
-        <Box
-          w={{ md: "320px", base: "100%" }}
-          borderRadius="lg"
-          overflow="hidden"
-        >
+    <Box textAlign="center" w="320px">
+      <VStack spacing={1}>
+        <Box borderRadius="lg" w="100%" overflow="hidden">
           <Flex
             align="center"
             justify="space-between"
-            w="100%"
             px={3}
             py={3}
-            borderBottom="1px solid rgba(255,255,255,0.08)"
             bg="rgba(52, 139, 246, 0.18)"
           >
             <Input
@@ -487,10 +490,8 @@ export default function Page() {
             <Flex
               align="center"
               justify="space-between"
-              w="100%"
               px={3}
               py={3}
-              borderBottom="1px solid rgba(255,255,255,0.08)"
               bg="rgba(75, 127, 187, 0.14)"
             >
               <Input
@@ -511,7 +512,7 @@ export default function Page() {
         </Box>
 
         <Box
-          w={{ md: "320px", base: "100%" }}
+          w="100%"
           mb={{ md: 10, base: 0 }}
           borderRadius="lg"
           overflow="hidden"
@@ -547,7 +548,6 @@ export default function Page() {
                 w="100%"
                 px={3}
                 py={3}
-                borderBottom="1px solid rgba(255,255,255,0.08)"
               >
                 <Flex align="center" minW={0} flex={1} pr={3}>
                   <Image
@@ -626,6 +626,29 @@ export default function Page() {
             <br />
             然后邀请他们加入房间才能联机
           </Text>
+        )}
+
+        {roomGame && (
+          <HStack spacing={3} justify="center" wrap="wrap" mb={2}>
+            <Button
+              size="sm"
+              onClick={() => {
+                navigate("/docs");
+              }}
+            >
+              WG 安装部署教程
+            </Button>
+            {roomGame.path !== "/docs" && (
+              <Button
+                size="sm"
+                onClick={() => {
+                  navigate(roomGame.path);
+                }}
+              >
+                查看 {roomGame.title} 教程
+              </Button>
+            )}
+          </HStack>
         )}
 
         {roomData?.members.map((item) => (
@@ -841,7 +864,7 @@ export default function Page() {
                 </Button>
               </Flex>
 
-              <Flex align="center" mt={1} gap={2}>
+              <Flex align="center" gap={2}>
                 <Text
                   fontSize={18}
                   fontWeight="bold"

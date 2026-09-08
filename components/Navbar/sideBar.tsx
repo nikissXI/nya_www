@@ -42,41 +42,43 @@ const SideBar = () => {
       flex={{ base: "none", md: "0 0 200px" }}
       mt={{ base: 6, md: 20 }}
       mb={{ base: "200px", md: 0 }}
-      mx={{ base: "auto", md: 0 }}
     >
       <Flex
+        mx={{ base: "auto", md: 3 }}
         direction="column"
         position={{ base: "static", md: "sticky" }}
         top={{ base: 0, md: 24 }}
-        gap={6}
+        gap={{ base: 3, md: 6 }}
         align={{ base: "center", md: "stretch" }}
         textAlign="left"
       >
         <Box w="100%">
-          <Heading as="h3" fontSize="lg" color="#a8d1ff">
+          <Heading as="h3" fontSize={{ base: "md", md: "lg" }} color="#a8d1ff">
             喵服官方QQ群
           </Heading>
           <Link
+            fontSize={{ base: "sm", md: "md" }}
             href="https://qm.qq.com/q/HxnUVAdRa8"
             target="_blank"
             _hover={{ textDecoration: "none" }}
             fontWeight="bold"
             letterSpacing="0.5px"
             display="inline-block"
+            color="#7dd4ff"
           >
             1047464328
           </Link>
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize="lg" color="#a8d1ff">
+          <Heading as="h3" fontSize={{ base: "md", md: "lg" }} color="#a8d1ff">
             赞助喵服
           </Heading>
-          <Text whiteSpace="pre-wrap">
+          <Text fontSize={{ base: "sm", md: "md" }} whiteSpace="pre-wrap">
             解锁专用节点创建房间权限及获得技术支持
           </Text>
-
           <Link
+            fontSize={{ base: "sm", md: "md" }}
             fontWeight="bold"
             as={RouterLink}
             to="/sponsor"
@@ -84,26 +86,35 @@ const SideBar = () => {
             _hover={{ textDecoration: "none" }}
             display="inline-block"
           >
-            了解赞助特权
+            了解赞助方式和特权
           </Link>
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize="lg" color="#a8d1ff">
+          <Heading as="h3" fontSize={{ base: "md", md: "lg" }} color="#a8d1ff">
             喵服公告
           </Heading>
 
           {serverData?.announcements && serverData.announcements.length > 0 ? (
             <>
-              <Text fontWeight="bold" textAlign="left">
+              <Text
+                fontSize={{ base: "sm", md: "md" }}
+                fontWeight="bold"
+                textAlign="left"
+              >
                 {formatDate(serverData.announcements[0].timestamp, true)}更新
               </Text>
 
-              <Text whiteSpace="pre-wrap" textAlign="left" fontSize="sm">
+              <Text
+                fontSize={{ base: "sm", md: "sm" }}
+                whiteSpace="pre-wrap"
+                textAlign="left"
+              >
                 {serverData.announcements[0].content}
               </Text>
 
               <Text
+                fontSize={{ base: "sm", md: "md" }}
                 fontWeight="bold"
                 color="#7dd4ff"
                 onClick={onOpen}
@@ -113,7 +124,7 @@ const SideBar = () => {
               </Text>
             </>
           ) : (
-            <Text>暂无公告</Text>
+            <Text fontSize={{ base: "sm", md: "md" }}>暂无公告</Text>
           )}
         </Box>
       </Flex>

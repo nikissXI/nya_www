@@ -8,11 +8,6 @@ import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
 import { apiUrl } from "@/utils/api";
 
-interface GroupItem {
-  name: string;
-  qq: number;
-}
-
 interface AnnouncementItem {
   timestamp: number;
   content: string;
@@ -55,7 +50,8 @@ interface RoomInfo {
   hoster_ip: string;
   members: Member[];
   room_max: number;
-  room_passwd: string;
+  room_passwd: string | null;
+  room_game: string | null;
 }
 // 登录后，拉取的节点信息
 export interface NodeInfo {
