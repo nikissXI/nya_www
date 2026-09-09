@@ -54,7 +54,7 @@ export function Header({ path }: { path: string }) {
   ];
 
   return (
-    <Box as="header" w="200px" flex={{ base: "none", md: "1" }}>
+    <Box as="header" maxW="200px" flex={{ base: "none", md: "0 0 200px" }}>
       <Center
         width="100%"
         color="white"
