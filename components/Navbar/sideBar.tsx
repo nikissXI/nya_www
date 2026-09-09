@@ -38,11 +38,11 @@ const SideBar = () => {
   return (
     <Box
       as="aside"
-      maxW={{ base: "80%", md: "200px" }}
+      maxW={{ base: "90%", md: "200px" }}
       flex={{ base: "none", md: "0 0 200px" }}
       mt={{ base: 6, md: 20 }}
       mb={{ base: "200px", md: 0 }}
-      mx="auto"
+      mx={{ base: "auto", md: 0 }}
     >
       <Flex
         px={{ base: "auto", md: 3 }}
