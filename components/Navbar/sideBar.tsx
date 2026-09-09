@@ -42,9 +42,10 @@ const SideBar = () => {
       flex={{ base: "none", md: "0 0 200px" }}
       mt={{ base: 6, md: 20 }}
       mb={{ base: "200px", md: 0 }}
+      mx="auto"
     >
       <Flex
-        mx={{ base: "auto", md: 3 }}
+        px={{ base: "auto", md: 3 }}
         direction="column"
         position={{ base: "static", md: "sticky" }}
         top={{ base: 0, md: 24 }}
