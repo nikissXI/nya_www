@@ -392,7 +392,7 @@
 
         /* 表单 */
         .form-group {
-            margin: 6px 0px 0px 0px;
+            margin: 6px 0px;
         }
 
         .form-group label {
@@ -485,7 +485,6 @@
         }
 
         .btn-sm {
-            margin-top: 4px;
             padding: 4px 12px;
             font-size: 12px;
         }
@@ -887,8 +886,7 @@
                         </form>
                     </div>
                     <!-- 查绑 -->
-                    <div class="card"
-                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
+                    <div class="card" style="box-shadow:none;border:1px solid #e2e8f0;padding:8px;">
                         <h4>🔍 查绑</h4>
                         <form id="chabangForm" style="margin-top:8px;">
                             <div class="form-group"><label>类型</label>
@@ -1047,6 +1045,11 @@
                             <button type="submit" class="btn btn-primary btn-sm">获取配置</button>
                             <div class="msg-box" id="confGetResult"></div>
                         </form>
+                    </div>
+                    <div>
+                        <h4>🔄 更新关联群</h4>
+                        <button class="btn btn-primary" id="updateRelateGroupBtn">执行更新</button>
+                        <div class="msg-box" id="updateRelateGroupResult"></div>
                     </div>
                 </div>
             </div>
@@ -1424,8 +1427,9 @@
                         result.innerHTML = '<p style="color:#94a3b8;">暂无历史记录</p>';
                         return;
                     }
-                    result.innerHTML = `<table><thead><tr><th>节点</th><th>记录时间</th><th>负载</th><th>在线人数</th></tr></thead><tbody>${data.data.map(log => `<tr><td>${escapeHtml(log.node_alias)}</td><td>${new Date(log.recorded_at).toLocaleString()}</td><td>${log.net}%</td><td>${log.onlines}</td></tr>`).join('')
-                        }</tbody></table>`;
+                    result.innerHTML = `<table><thead><tr><th>节点</th><th>记录时间</th><th>负载</th><th>在线人数</th></tr></thead><tbody>${
+                        data.data.map(log => `<tr><td>${escapeHtml(log.node_alias)}</td><td>${new Date(log.recorded_at).toLocaleString()}</td><td>${log.net}%</td><td>${log.onlines}</td></tr>`).join('')
+                    }</tbody></table>`;
                 } catch (err) {
                     result.innerHTML = `<p style="color:#dc2626;">加载失败：${escapeHtml(err.message)}</p>`;
                 }
@@ -1955,6 +1959,21 @@
                     }
                 } catch (err) {
                     showMsgPermanent(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 更新关联群
+            document.getElementById('updateRelateGroupBtn').addEventListener('click', async function () {
+                const msgBox = document.getElementById('updateRelateGroupResult');
+                try {
+                    const res = await apiFetch('/updateRelateGroup');
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ 更新成功', 'success');
+                    } else {
+                        showMsg(msgBox, '❌ ' + (res.msg || '未知错误'), 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
                 }
             });
 
