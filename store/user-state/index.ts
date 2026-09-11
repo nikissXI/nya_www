@@ -77,10 +77,6 @@ interface ILoginStateSlice {
   confKey: string | null;
   getConfKey: (manual?: boolean) => void;
 
-  // 是否下次登录跳转到教程问答区
-  goToDoc: boolean;
-  setGoToDoc: (state: boolean) => void;
-
   // 登录加载状态
   loginLoading: boolean;
   // 获取用户信息
@@ -198,9 +194,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           });
         }
       },
-
-      goToDoc: false,
-      setGoToDoc: (goToDocValue: boolean) => set({ goToDoc: goToDocValue }),
 
       loginLoading: true,
       userInfo: undefined,

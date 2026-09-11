@@ -12,7 +12,7 @@ export const NoticeText = () => {
         <Text as="span" color="gold">
           如果网站不能正常加载或功能异常，请更换浏览器试试，以下仅做推荐
           <br />
-          别用百度浏览器！别用百度浏览器！别用百度浏览器！
+          别用百度浏览器！！！！！！
         </Text>
         <br />
         苹果：内置浏览器Safari

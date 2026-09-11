@@ -19,6 +19,9 @@ import {
   Badge,
   Stack,
   Image,
+  Link,
+  Center,
+  Spinner,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -59,6 +62,8 @@ interface GameRoomItem {
   path: string;
   title: string;
   icon: string;
+  qq: string | null;
+  support?: string[];
 }
 
 const getRoomGameName = (game?: GameRoomItem): string => {
@@ -67,93 +72,168 @@ const getRoomGameName = (game?: GameRoomItem): string => {
 };
 
 const ROOM_GAME_LIST: GameRoomItem[] = [
-  { path: "/docs", title: "通用联机房", icon: "/images/universal/icon.webp" },
+  {
+    path: "/docs/universal",
+    title: "通用联机房",
+    icon: "/images/universal/icon.webp",
+    qq: null,
+    support: [
+      "该房间适合任意游戏，只是该房间无特定游戏的联机操作教程",
+      "如果游戏列表没你玩的游戏，且不清楚是否能联机，可以加大群问问",
+      "如果你希望新增某游戏，请加大群联系群主（服主）",
+    ],
+  },
   {
     path: "/docs/stardewValley",
     title: "星露谷物语",
     icon: "/images/stardewValley/icon.webp",
+    qq: "817658554",
+    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
   },
   {
     path: "/docs/doNotStarve",
     title: "饥荒联机版",
     icon: "/images/doNotStarve/icon.webp",
+    qq: "641115719",
+    support: [
+      "离线模式下，支持安卓与苹果联机（需要游戏版本一致），但仅安卓能加入房间",
+      "不支持PC端与移动端联机",
+    ],
   },
   {
     path: "/docs/slayTheSpire",
     title: "杀戮尖塔",
     icon: "/images/slayTheSpire/icon.webp",
+    qq: "698892019",
+    support: [
+      "支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）",
+      "Steam端需要安装IP联机mod才能使用喵服联机，房间内的游戏联机教程有提供",
+    ],
   },
   {
     path: "/docs/terraria",
     title: "泰拉瑞亚",
     icon: "/images/terraria/icon.webp",
+    qq: "976129564",
+    support: [
+      "国际版支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）",
+      "心动代理版仅支持安卓与苹果联机，且不支持与国际版联机",
+    ],
   },
   {
     path: "/docs/theEscapists",
     title: "逃脱者手游",
     icon: "/images/theEscapists/icon.webp",
+    qq: "961793250",
+    support: [
+      "支持安卓与苹果联机（需要游戏版本一致），搜索房间需要创建搜房任务，房间内的游戏联机教程有提供",
+      "不支持PC端与移动端联机",
+    ],
   },
   {
     path: "/docs/mindustry",
     title: "像素工厂",
     icon: "/images/mindustry/icon.webp",
+    qq: "830268831",
+    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
   },
   {
     path: "/docs/l4d2",
     title: "求生之路2",
     icon: "/images/l4d2/icon.webp",
+    qq: "138012638",
+    support: [
+      "正版和盗版都支持，但如果卡Steam验证问题需要自己去解决",
+      "该游戏只有PC端，别问手机能不能玩了",
+    ],
   },
   {
     path: "/docs/ark",
     title: "方舟：生存进化",
     icon: "/images/ark/icon.webp",
+    qq: "1106534252",
+    support: [
+      "手游需要使用“琳星Lin-C”版，否则无法使用IP加入游戏",
+      "不支持PC端与移动端联机",
+    ],
   },
 
   {
     path: "/docs/isaac",
     title: "以撒的结合",
     icon: "/images/isaac/icon.webp",
+    qq: "1074963191",
+    support: [
+      "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道",
+      "不支持PC端与移动端联机",
+    ],
   },
   {
     path: "/docs/survivalcraft",
     title: "生存战争",
     icon: "/images/survivalcraft/icon.webp",
+    qq: "1092247198",
+    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
   },
   {
     path: "/docs/wizardOfLegend",
     title: "传说法师手游",
     icon: "/images/wizardOfLegend/icon.webp",
+    qq: "981286541",
+    support: [
+      "支持安卓与苹果联机，但仅安卓能加入房间",
+      "不支持电脑端，因为电脑端没有联机模式",
+    ],
   },
   {
     path: "/docs/overcooked",
     title: "胡闹厨房",
     icon: "/images/overcooked/icon.webp",
+    qq: null,
+    support: [
+      "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道",
+    ],
   },
   {
     path: "/docs/machinesAtWar3",
     title: "机械战争3",
     icon: "/images/machinesAtWar3/icon.webp",
+    qq: "689358384",
+    support: [
+      "由于该游戏版本众多，只要有联机模式的都支持，如果有疑问加该游戏的QQ群问问",
+    ],
   },
   {
     path: "/docs/projectZomboid",
     title: "僵尸毁灭工程",
     icon: "/images/projectZomboid/icon.webp",
+    qq: null,
+    support: [
+      "正版和盗版都支持，但如果卡Steam验证问题需要自己去解决",
+      "该游戏只有PC端，别问手机能不能玩了",
+    ],
   },
   {
     path: "/docs/juicyRealm",
     title: "恶果之地",
     icon: "/images/juicyRealm/icon.webp",
+    qq: "981282876",
+    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
   },
   {
     path: "/docs/aresVirus2",
     title: "阿瑞斯病毒2",
     icon: "/images/aresVirus2/icon.webp",
+    qq: "966579113",
+    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
   },
 ];
 
 // 抽取角色常量
 const ROLE_HOSTER = "hoster";
 const ROLE_NONE = "none";
+const GENERAL_QQ_GROUP = "1047464328";
+const GENERAL_QQ_GROUP_LINK = "https://qm.qq.com/q/HxnUVAdRa8";
 
 export default function Page() {
   const navigate = useNavigate();
@@ -173,6 +253,7 @@ export default function Page() {
   const [inputPasswd, setInputPasswd] = useState("");
   const [gameSearchTerm, setGameSearchTerm] = useState("");
   const [selectedGame, setSelectedGame] = useState<GameRoomItem | null>(null);
+  const [gameInfo, setGameInfo] = useState<GameRoomItem | null>(null);
   const {
     userInfo,
     userWgInfo,
@@ -241,7 +322,11 @@ export default function Page() {
 
         const data: HandleRoomResponse = await resp.json();
 
+        // 数据异常就刷新
         if (data.code === -1) window.location.reload();
+
+        // 房间操作后滚动到页面顶部
+        if (data.code === 0) window.scrollTo(0, 0);
 
         return data;
       } finally {
@@ -416,7 +501,7 @@ export default function Page() {
     if (netType === "电信") {
       return "你选的是电信线路节点，只建议所有用户都是用中国电信或流量的时候使用";
     } else if (netType === "境外") {
-      return "你选的是境外线路节点，中国大陆用户会不稳定或无法连接";
+      return "你选的是境外线路节点，只建议中国大陆外的用户使用";
     }
     return null;
   }, [userWgInfo?.net_type]);
@@ -424,7 +509,7 @@ export default function Page() {
   const nodeWarningElement = useMemo(() => {
     if (!nodeWarningText) return null;
     return (
-      <Text color="#ffca3d" size="sm" textAlign="center" mx={5}>
+      <Text color="#ffca3d" fontSize="sm" textAlign="center" mx={5}>
         {nodeWarningText}
       </Text>
     );
@@ -452,6 +537,66 @@ export default function Page() {
   const standbyPage = () => (
     <Box textAlign="center" w="320px">
       <VStack spacing={1}>
+        <Button
+          size="sm"
+          my={2}
+          onClick={() => {
+            navigate("/docs");
+          }}
+        >
+          WG配置部署教程
+        </Button>
+
+        <Modal
+          isOpen={gameInfo !== null}
+          onClose={() => setGameInfo(null)}
+          isCentered
+        >
+          <ModalOverlay />
+          <ModalContent bgColor="#002f5c" mx={4}>
+            <ModalHeader>{gameInfo?.title}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              {gameInfo?.qq ? (
+                <Text mb={4}>该游戏的喵服QQ群 {gameInfo.qq}</Text>
+              ) : (
+                <Text mb={4}>
+                  {gameInfo?.title !== "通用联机房" ? (
+                    <>
+                      暂无该游戏的喵服关联群，有问题请加大群：
+                      <Link
+                        ml={1}
+                        href={GENERAL_QQ_GROUP_LINK}
+                        target="_blank"
+                        color="#7dd4ff"
+                      >
+                        {GENERAL_QQ_GROUP}
+                      </Link>
+                    </>
+                  ) : (
+                    <Text>喵服联机大群 {GENERAL_QQ_GROUP}</Text>
+                  )}
+                </Text>
+              )}
+
+              <Text mb={2} fontWeight="bold" color="#a8d1ff">
+                联机支持情况
+              </Text>
+              {gameInfo?.support && gameInfo.support.length > 0 ? (
+                <VStack align="stretch" spacing={2}>
+                  {gameInfo.support.map((item) => (
+                    <Text key={item}>• {item}</Text>
+                  ))}
+                </VStack>
+              ) : (
+                <Text color="gray.300">
+                  具体平台、版本和主机方向请先查看该游戏教程中的说明。
+                </Text>
+              )}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+
         <Box borderRadius="lg" w="100%" overflow="hidden">
           <Flex
             align="center"
@@ -559,16 +704,26 @@ export default function Page() {
                     flexShrink={0}
                     bg="rgba(255,255,255,0.08)"
                   />
-                  <Text
-                    ml={3}
-                    fontSize="md"
-                    fontWeight="bold"
-                    color="white"
-                    textAlign="left"
-                    isTruncated
-                  >
-                    {game.title}
-                  </Text>
+                  <Box ml={3} minW={0} textAlign="left">
+                    <Text
+                      fontSize="md"
+                      fontWeight="bold"
+                      color="white"
+                      isTruncated
+                    >
+                      {game.title}
+                    </Text>
+                    <Button
+                      variant="link"
+                      bg="transparent"
+                      color="#7dd4ff"
+                      fontSize="sm"
+                      fontWeight="normal"
+                      onClick={() => setGameInfo(game)}
+                    >
+                      查看联机支持情况
+                    </Button>
+                  </Box>
                 </Flex>
 
                 <Button
@@ -590,7 +745,7 @@ export default function Page() {
 
   // 已加入页面
   const joinedPage = () => (
-    <Box textAlign="center">
+    <Box textAlign="center" mt={1}>
       <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
         <ModalOverlay />
         <ModalContent bgColor="#002f5c">
@@ -620,35 +775,26 @@ export default function Page() {
       </Modal>
 
       <VStack>
-        {roomData?.members.length === 1 && roomRole === ROLE_HOSTER && (
-          <Text color="#ffca3d" size="sm" textAlign="center">
-            所有玩家都要注册喵服并安装WG
-            <br />
-            然后邀请他们加入房间才能联机
-          </Text>
-        )}
-
         {roomGame && (
-          <HStack spacing={3} justify="center" wrap="wrap" mb={2}>
+          <VStack spacing={3} justify="center" wrap="wrap" my={1}>
             <Button
-              size="sm"
-              onClick={() => {
-                navigate("/docs");
-              }}
+              size={isOnline ? "xs" : "sm"}
+              fontSize={isOnline ? "xs" : "md"}
+              onClick={() => navigate("/docs")}
             >
-              WG 安装部署教程
+              WG安装部署教程
             </Button>
-            {roomGame.path !== "/docs" && (
-              <Button
-                size="sm"
-                onClick={() => {
-                  navigate(roomGame.path);
-                }}
-              >
-                查看 {roomGame.title} 教程
-              </Button>
-            )}
-          </HStack>
+
+            <Button
+              size={isOnline ? "sm" : "xs"}
+              fontSize={isOnline ? "md" : "sm"}
+              onClick={() => navigate(roomGame.path)}
+            >
+              {roomGame.title === "通用联机房"
+                ? `通用游戏联机教程`
+                : `${roomGame.title} 联机教程`}
+            </Button>
+          </VStack>
         )}
 
         {roomData?.members.map((item) => (
@@ -664,11 +810,16 @@ export default function Page() {
             borderWidth={3}
           >
             <Flex>
+              {item.ip === userWgInfo?.user_ip && (
+                <Tag colorScheme="blue" fontWeight="bold" size="md">
+                  你
+                </Tag>
+              )}
               <Text fontWeight="bold" fontSize="1.1rem" ml={2} color="white">
                 {item.username}
               </Text>
+
               <Tag
-                size="md"
                 ml="auto"
                 bg="transparent"
                 fontWeight="bold"
@@ -770,7 +921,7 @@ export default function Page() {
             {serverData?.carouselMsg && serverData?.carouselMsg[carouselIndex]}
           </Text>
 
-          {userWgInfo?.node_alias && roomData !== undefined && (
+          {userWgInfo?.node_alias && roomData !== undefined ? (
             <>
               <Flex
                 align="center"
@@ -851,10 +1002,8 @@ export default function Page() {
                 </Flex>
 
                 <Button
-                  rounded="full"
                   onClick={setNodeListModal}
                   size="sm"
-                  bg="linear-gradient(135deg, #007bc0, #005a9e)"
                   color="white"
                   fontWeight="medium"
                   px={3}
@@ -870,7 +1019,7 @@ export default function Page() {
                   fontWeight="bold"
                   color={getStatusColor(isOnline)}
                 >
-                  {isOnline ? "在线" : "WG未连接"}
+                  {isOnline ? "WG在线" : "WG离线"}
                 </Text>
 
                 {isOnline && latency !== undefined ? (
@@ -903,6 +1052,11 @@ export default function Page() {
                 </Button>
               </Flex>
             </>
+          ) : (
+            <Center my={2}>
+              节点数据加载中
+              <Spinner size="md" />
+            </Center>
           )}
 
           <OfflineReasons />
@@ -938,20 +1092,8 @@ export default function Page() {
           )}
 
           {isOnline === false && (
-            <Text color="#ffca3d" size="sm" textAlign="center" mb={2}>
-              WG下载和联机教程👉
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dd4ff"
-                onClick={() => {
-                  navigate(`/docs`);
-                }}
-              >
-                点我查看
-              </Button>
-              <br />
-              WG隧道打开还是离线👉
+            <Text color="#ffca3d" textAlign="center">
+              WG隧道打开还是未连接？
               <Button
                 variant="link"
                 bg="transparent"
@@ -959,22 +1101,6 @@ export default function Page() {
                 onClick={setOfflineReasonsModal}
               >
                 点我排查
-              </Button>
-            </Text>
-          )}
-
-          {isOnline && (
-            <Text size="sm" textAlign="center" mb={2}>
-              复习联机教程
-              <Button
-                variant="link"
-                bg="transparent"
-                color="#7dd4ff"
-                onClick={() => {
-                  navigate(`/docs`);
-                }}
-              >
-                👉点我查看
               </Button>
             </Text>
           )}

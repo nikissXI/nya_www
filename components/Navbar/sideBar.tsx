@@ -69,6 +69,7 @@ const SideBar = () => {
           >
             1047464328
           </Link>
+          <Text fontSize="sm">各游戏的小群QQ号在对应的联机教程里</Text>
         </Box>
 
         <Box w="100%">

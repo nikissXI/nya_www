@@ -3,7 +3,6 @@ import {
   Box,
   Heading,
   Text,
-  Center,
   Icon,
   Tabs,
   TabList,
@@ -15,8 +14,13 @@ import {
   Collapse,
   Image,
   Link,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
 import { useNavigate } from "react-router-dom";
 import { openToast } from "@/components/universal/toast";
@@ -25,12 +29,12 @@ import { MdTipsAndUpdates } from "react-icons/md";
 import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
 import OfflineReasons from "@/components/docs/OfflineReasons";
-import { getDelayColor, getDelayIcon, getStatusColor } from "@/utils/strings";
-import { RiSignalCellularOffLine } from "react-icons/ri";
+import { getStatusColor } from "@/utils/strings";
+import { NoticeText } from "@/components/universal/Notice";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
-    <Text as="span" color="#00ff17" fontWeight="bold" {...props}>
+    <Text as="span" color="#ffca3d" fontWeight="bold" {...props}>
       {children}
     </Text>
   );
@@ -43,7 +47,6 @@ const spin = keyframes`
 
 const DocumentPage = () => {
   const {
-    setGoToDoc,
     confKey,
     getConfKey,
     userInfo,
@@ -51,24 +54,13 @@ const DocumentPage = () => {
     setNodeListModal,
     getRoomData,
     isOnline,
-    latency,
     rotate,
     disableFlush,
     setOfflineReasonsModal,
+    setShowLoginModal,
   } = useUserStateStore();
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (userInfo) {
-      getConfKey();
-      setGoToDoc(false);
-    } else {
-      setGoToDoc(true);
-      openToast({ content: "请登陆后再访问教程", status: "info" });
-      navigate("/me");
-    }
-  }, [userInfo, getConfKey, navigate, setGoToDoc]);
 
   const handleCopyLink = async (confKey: string) => {
     try {
@@ -179,44 +171,63 @@ const DocumentPage = () => {
   };
 
   return (
-    <Box px={5}>
+    <Box px={{ base: 4, md: 8 }} pb={5}>
       <OfflineReasons />
 
-      <Heading size="md" pb={2} color="#00ff17">
-        如果你是第一次用组网软件，需要点耐心和细心看完教程
-      </Heading>
+      <Alert
+        maxW="900px"
+        mx="auto"
+        mb={5}
+        status="warning"
+        variant="subtle"
+        bg="rgba(52, 139, 246, 0.18)"
+        color="white"
+        borderRadius="lg"
+      >
+        <Box>
+          <Flex align="center" color="#ffca3d">
+            <AlertIcon />
+            <AlertTitle fontSize="md">开始前请注意</AlertTitle>
+          </Flex>
+          <AlertDescription fontSize="sm">
+            <VStack align="stretch" spacing={1} mt={1}>
+              <Text>• 联机的每个玩家都要注册喵服并安装WG</Text>
+              <Text>• WG客户端要安装在运行游戏的设备上</Text>
+              <Text>• 禁止Minecraft联机（定制节点除外）</Text>
+              <Text>• 不兼容华为的鸿蒙6系统</Text>
+            </VStack>
+          </AlertDescription>
+        </Box>
+      </Alert>
 
-      <Text my={2} fontWeight="bold">
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        禁止使用喵服进行Minecraft联机，发现则封号处理
-      </Text>
+      <Box
+        mt={5}
+        maxW="900px"
+        mx="auto"
+        display={userWgInfo === undefined ? "block" : "none"}
+      >
+        <VStack spacing={3} align="center">
+          <Heading size="md">请登录后再访问该页面</Heading>
+          <Button
+            variant="outline"
+            rounded={10}
+            onClick={setShowLoginModal}
+            border={0}
+          >
+            点击登录
+          </Button>
+          <NoticeText />
+        </VStack>
+      </Box>
 
-      <Text my={2}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        使用喵服联机的玩家
-        <Text as="span" color="#00ff17">
-          都要注册账号
-        </Text>
-        ，并跟着教程安装WG客户端、导入隧道
-      </Text>
-
-      <Text my={2}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        WG客户端要安装在运行游戏的设备上，
-        <Text as="span" color="#00ff17">
-          不兼容鸿蒙6
-        </Text>
-      </Text>
-
-      <Box mt={5} display={userWgInfo === undefined ? "hidden" : "block"}>
-        {/* <Heading size="md" pb={2} color="#00ff17">
-          2. WG下载和隧道导入
-        </Heading>*/}
-
+      <Box
+        mt={5}
+        maxW="900px"
+        mx="auto"
+        display={userWgInfo === undefined ? "none" : "block"}
+      >
         <Tabs variant="line">
-          <Heading size="md" color="#00ff17">
-            选择设备类型
-          </Heading>
+          <Heading size="md">点击选择联机的设备类型</Heading>
 
           <TabList
             mt={1}
@@ -255,7 +266,7 @@ const DocumentPage = () => {
                 ② 下载并安装WG客户端
                 <Text
                   as="span"
-                  color="#7dfffe"
+                  color="#7dd4ff"
                   onClick={() => {
                     setAndroidDLWarning(!showAndroidDLWarning);
                   }}
@@ -288,7 +299,7 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7dfffe"
+                  color="#7dd4ff"
                   onClick={() => {
                     getConfKey(true);
                   }}
@@ -321,12 +332,12 @@ const DocumentPage = () => {
                   alt="android_switch"
                 />
               </Flex>
-              <Flex alignItems="center" mt={1}>
-                &emsp;<HighLight>小米/红米设备要改个设置</HighLight>
+              <Flex alignItems="center" mt={1} fontSize="sm">
+                &emsp;<HighLight>注意！小米/红米设备要改个设置</HighLight>
                 <Text
                   ml={2}
                   as="span"
-                  color="#7dfffe"
+                  color="#7dd4ff"
                   size="sm"
                   onClick={() => setShowXM(!showXM)}
                 >
@@ -457,9 +468,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={2}>
               <SelectNode />
 
-              <Text mt={5}>
-                ② 下载并安装WG客户端，如果下载失败，加Q群924644467，群文件有
-              </Text>
+              <Text mt={5}>② 下载并安装WG客户端</Text>
 
               <Button
                 size="sm"
@@ -498,7 +507,7 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7dfffe"
+                  color="#7dd4ff"
                   size="sm"
                   onClick={() => setShowMSI(!showMSI)}
                 >
@@ -511,7 +520,7 @@ const DocumentPage = () => {
                   <Text
                     as="span"
                     fontSize="sm"
-                    color="#7dfffe"
+                    color="#7dd4ff"
                     onClick={() => {
                       window.open("/apks/右键以管理员身份运行.bat", "_blank");
                     }}
@@ -641,71 +650,73 @@ const DocumentPage = () => {
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </Box>
 
-      <Box mt={5}>
-        ⑤ WG隧道打开后<HighLight>等5秒</HighLight>点刷新，在线就是连上了
-        <Flex align="center" mt={1} gap={2}>
-          &emsp;
-          <Text
-            fontSize={18}
-            fontWeight="bold"
-            color={getStatusColor(isOnline)}
-          >
-            {isOnline ? "在线" : "WG未连接"}
+        <Box mt={5} maxW="900px" mx="auto">
+          <Text>
+            ⑤ WG隧道打开后<HighLight>等3秒</HighLight>再点刷新
           </Text>
-          {isOnline && latency !== undefined ? (
-            <Flex align="center" color={getDelayColor(latency)}>
-              {getDelayIcon(latency)}
-              <Text as="span" fontWeight="bold">
-                {latency}ms
-              </Text>
-            </Flex>
-          ) : (
-            <RiSignalCellularOffLine size={20} />
-          )}
-          <Button
-            bg="transparent"
-            h={5}
-            px={0}
-            disabled={disableFlush}
-            onClick={() => {
-              getRoomData(false);
-            }}
-            color="#7dd4ff"
-          >
-            <Text>刷新</Text>
-            <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
-              <TbReload size={18} />
-            </Box>
-          </Button>
-        </Flex>
-        &emsp;如果WG隧道打开还是离线👉
-        <Button
-          variant="link"
-          bg="transparent"
-          color="#7dd4ff"
-          onClick={setOfflineReasonsModal}
-        >
-          点我排查
-        </Button>
-        <Text>
-          喵服网页关闭不影响联机，网页只负责创建和加入房间，WG客户端保持连接就行
-        </Text>
-      </Box>
 
-      <Center>
-        <Button
-          bgColor="#b23333"
-          onClick={() => {
-            navigate(`/room`);
-          }}
-          my={6}
-          w="10rem"
-        >
-          返回联机房间
-        </Button>
-      </Center>
+          <Flex align="center" mt={1} gap={2}>
+            <Text
+              fontSize={18}
+              fontWeight="bold"
+              color={getStatusColor(isOnline)}
+            >
+              &emsp;{isOnline ? "恭喜！WG已成功" : "WG尚未连接"}
+            </Text>
+
+            <Button
+              bg="transparent"
+              h={5}
+              px={0}
+              disabled={disableFlush}
+              onClick={() => {
+                getRoomData(false);
+              }}
+              color="#7dd4ff"
+            >
+              <Text>刷新</Text>
+              <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
+                <TbReload size={18} />
+              </Box>
+            </Button>
+          </Flex>
+
+          {isOnline === false && (
+            <Text>
+              &emsp;隧道打开了还是未连接
+              <Button
+                ml={1}
+                variant="link"
+                bg="transparent"
+                color="#7dd4ff"
+                onClick={setOfflineReasonsModal}
+              >
+                点我排查
+              </Button>
+            </Text>
+          )}
+
+          <Text mt={3}>
+            <HighLight>喵服网页关闭不影响联机</HighLight>
+            ，网页只负责创建和加入房间，WG客户端保持连接就行
+            <br />
+            现在请
+            <Button
+              mx={1}
+              variant="link"
+              bg="transparent"
+              color="#7dd4ff"
+              onClick={() => {
+                navigate("/room");
+              }}
+            >
+              返回联机房间
+            </Button>
+            页面创建或加入房间
+          </Text>
+        </Box>
+      </Box>
     </Box>
   );
 };

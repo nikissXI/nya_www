@@ -1,6 +1,5 @@
 import React from "react";
-import { Flex, Text, Box, Icon, Button } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
+import { Flex, Text, Box, Icon } from "@chakra-ui/react";
 import { MdTipsAndUpdates } from "react-icons/md";
 
 const DocFlex = ({ children }: { children: React.ReactNode }) => {
@@ -12,34 +11,9 @@ const DocFlex = ({ children }: { children: React.ReactNode }) => {
       mb={5}
       mx="5vw"
     >
-      <Box
-        bg="rgba(52, 139, 246, 0.12)"
-        border="1px solid rgba(125, 212, 255, 0.25)"
-        borderRadius="lg"
-        p={4}
-        mb={4}
-      >
-        <Text fontSize="md" as="span" color="#7dd4ff" fontWeight="bold">
-          先看 WG 安装部署教程
-        </Text>
-        <Text mt={2} fontSize="sm" color="white">
-          先完成 WG 客户端安装和隧道导入，再操作具体游戏联机步骤，能更稳定地进入房间。
-        </Text>
-        <Button
-          as={RouterLink}
-          to="/docs"
-          mt={3}
-          size="sm"
-          colorScheme="blue"
-          variant="outline"
-        >
-          前往 WG 安装部署教程
-        </Button>
-      </Box>
-
       <Box fontSize="sm" mb={3}>
         <Text fontSize="md" as="span" color="#ff734f" fontWeight="bold">
-          联机小贴士
+          联机提示
         </Text>
 
         <Text>
@@ -49,14 +23,6 @@ const DocFlex = ({ children }: { children: React.ReactNode }) => {
         <Text>
           <Icon as={MdTipsAndUpdates} mr={2} />
           客机：指联机模式中加入多人游戏的设备
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={2} />
-          同一个联机房间中，任何人都可以做主机
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={2} />
-          游戏中填写IP地址，要使用喵服的联机IP
         </Text>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={2} />

@@ -37,7 +37,6 @@ export function LoginModal() {
 
   const {
     userInfo,
-    goToDoc,
     uuid,
     getUserInfo,
     showLoginModal,
@@ -114,9 +113,6 @@ export function LoginModal() {
         setAuthToken(data.token);
         getUserInfo();
         setShowLoginModal();
-        if (goToDoc === true) {
-          navigate("/docs");
-        }
       } else {
         openToast({ content: data.msg, status: "warning" });
         setCaptchaImageUrl(await fetchCaptcha());
