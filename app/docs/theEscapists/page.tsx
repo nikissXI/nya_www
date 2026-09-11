@@ -17,7 +17,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { getAuthToken } from "@/store/authKey";
 import { MdTipsAndUpdates } from "react-icons/md";
 import BackButton from "@/components/docs/BackButton";
-import DocFlex from "@/components/docs/DocFlex";
+import DocFlex from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import { apiUrl } from "@/utils/api";
 

@@ -1,7 +1,7 @@
 import { Icon, Divider, Text, Image, Link } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import DocLink from "@/components/docs/DocLink";
-import DocFlex from "@/components/docs/DocFlex";
+import DocFlex from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
 

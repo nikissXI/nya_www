@@ -9,12 +9,8 @@ import {
   ModalFooter,
   Input,
   ModalBody,
-  Text,
   Flex,
-  RadioGroup,
-  Stack,
   Image,
-  Radio,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useUserStateStore } from "@/store/user-state";
@@ -32,16 +28,11 @@ interface LoginReqBody {
   captcha_code: string; // 表单图片验证码
 }
 
-export function LoginModal() {
+export default function LoginModal() {
   const navigate = useNavigate();
 
-  const {
-    userInfo,
-    uuid,
-    getUserInfo,
-    showLoginModal,
-    setShowLoginModal,
-  } = useUserStateStore();
+  const { userInfo, uuid, getUserInfo, showLoginModal, setShowLoginModal } =
+    useUserStateStore();
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();

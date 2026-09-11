@@ -2,15 +2,15 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
-import { Header } from "../Navbar/Header";
-import SideBar from "../Navbar/sideBar";
+import Header from "../Navbar/Header";
+import SideBar from "../Navbar/SideBar";
 import Toaster from "../universal/Toaster";
-import { useUserStateStore } from "@/store/user-state";
 import Footer from "../Navbar/Footer";
-import { LoginModal } from "../Navbar/Login";
+import { useUserStateStore } from "@/store/user-state";
+import LoginModal from "../Navbar/Login";
 import { NoticeText } from "../universal/Notice";
 import TunnelUpdateModal from "../docs/ReGetIpModal";
-import { ServerNodeListModal } from "../serverInfo/nodeList";
+import ServerNodeListModal from "../serverInfo/nodeList";
 import { useEffect } from "react";
 
 export default function Frame({

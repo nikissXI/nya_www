@@ -31,7 +31,7 @@ const formatDate = (rawTs: number, short: boolean = false): string => {
   else return `${year}年${month}月${date}日 ${hours}:${minutes}`;
 };
 
-const SideBar = () => {
+export default function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { serverData } = useUserStateStore();
 
@@ -160,6 +160,4 @@ const SideBar = () => {
       </Modal>
     </Box>
   );
-};
-
-export default SideBar;
+}

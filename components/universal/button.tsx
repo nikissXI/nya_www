@@ -5,7 +5,7 @@ interface CustomButtonProps extends ButtonProps {
   bgColor?: string;
   colorScheme?: string;
   color?: string;
-  fontSize?: ButtonProps['fontSize'];
+  fontSize?: ButtonProps["fontSize"];
 }
 export const Button: React.FC<CustomButtonProps> = ({
   children,
@@ -26,7 +26,6 @@ export const Button: React.FC<CustomButtonProps> = ({
       sx={{
         border: "none",
         _hover: {
-          backgroundColor: "none", // 悬停时背景颜色不变
           boxShadow: "none",
           textDecoration: "none", // 悬停时没有效果
         },

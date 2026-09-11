@@ -235,7 +235,7 @@ const ServerNodeItem: React.FC<{
   );
 };
 
-export const ServerNodeListModal: React.FC = () => {
+export default function ServerNodeListModal() {
   const {
     getNodeListLock,
     getNodeList,
@@ -529,4 +529,4 @@ export const ServerNodeListModal: React.FC = () => {
       </ModalContent>
     </Modal>
   );
-};
+}

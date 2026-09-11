@@ -1,10 +1,12 @@
-import React from "react";
 import { Link, Text } from "@chakra-ui/react";
 
-const DocLink: React.FC<{
+export default function DocLink({
+  linkText,
+  linkUrl,
+}: {
   linkText: string;
   linkUrl: string;
-}> = ({ linkText, linkUrl }) => {
+}) {
   return (
     <Text my={3} textAlign="center">
       {linkText}
@@ -13,6 +15,4 @@ const DocLink: React.FC<{
       </Link>
     </Text>
   );
-};
-
-export default DocLink;
+}

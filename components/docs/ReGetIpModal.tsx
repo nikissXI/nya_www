@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -11,7 +11,7 @@ import {
 import { useUserStateStore } from "@/store/user-state";
 import { useNavigate } from "react-router-dom";
 
-const TunnelUpdateModal = () => {
+export default function TunnelUpdateModal() {
   const navigate = useNavigate();
 
   const [countdown, setCountdown] = useState(5);
@@ -69,6 +69,4 @@ const TunnelUpdateModal = () => {
       </ModalContent>
     </Modal>
   );
-};
-
-export default TunnelUpdateModal;
+}

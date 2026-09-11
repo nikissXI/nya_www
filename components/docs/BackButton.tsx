@@ -1,33 +1,19 @@
-import React from "react";
-import { Button } from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/universal/button";
 
-const BackButton = () => {
+export default function BackButton() {
   const navigate = useNavigate();
   return (
-    <Button
-      colorScheme="transparent"
-      variant="solid"
-      color="white"
-      bgColor="#b23333"
-      w="auto"
-      alignSelf="center"
-      px={10}
-      onClick={() => {
-        navigate(-1);
-      }}
-      sx={{
-        border: "none",
-        _hover: {
-          backgroundColor: "none", // 悬停时背景颜色不变
-          boxShadow: "none",
-          textDecoration: "none", // 悬停时没有效果
-        },
-      }}
-    >
-      返回
-    </Button>
+    <Center mt={5}>
+      <Button
+        size="sm"
+        onClick={() => {
+          navigate("/room");
+        }}
+      >
+        返回联机房间
+      </Button>
+    </Center>
   );
-};
-
-export default BackButton;
+}

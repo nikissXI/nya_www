@@ -510,7 +510,13 @@ export default function Page() {
   const nodeWarningElement = useMemo(() => {
     if (!nodeWarningText) return null;
     return (
-      <Text color="#ffca3d" fontSize="sm" textAlign="center" mx={5}>
+      <Text
+        maxW="300px"
+        color="#ffca3d"
+        fontSize="sm"
+        textAlign="center"
+        mx={5}
+      >
         {nodeWarningText}
       </Text>
     );
@@ -539,13 +545,14 @@ export default function Page() {
     <Box textAlign="center" w="320px">
       <VStack spacing={1}>
         <Button
-          size="sm"
+          size={isOnline ? "xs" : "sm"}
+          fontSize={isOnline ? "xs" : "md"}
           my={2}
           onClick={() => {
             navigate("/docs");
           }}
         >
-          WG配置部署教程
+          WG安装部署教程
         </Button>
 
         <Modal
@@ -790,7 +797,22 @@ export default function Page() {
               size={isOnline ? "sm" : "xs"}
               fontSize={isOnline ? "md" : "sm"}
               onClick={() => navigate(roomGame.path)}
+              pl={isOnline ? 0 : 2}
+              pr={2}
             >
+              <Image
+                ml={2}
+                mr={1}
+                src={roomGame.icon}
+                alt={roomGame.title}
+                h="1.6em"
+                w="1.6em"
+                objectFit="cover"
+                borderRadius="md"
+                flexShrink={0}
+                display={isOnline ? "inline" : "none"}
+              />
+
               {roomGame.title === "通用联机房"
                 ? `通用游戏联机教程`
                 : `${roomGame.title} 联机教程`}

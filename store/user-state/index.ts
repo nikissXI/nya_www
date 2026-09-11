@@ -297,7 +297,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               await new Promise((resolve) => setTimeout(resolve, 100));
 
               const entries = performance.getEntriesByName(statusUrl);
-              const lastEntry = entries.at(-1) as
+              const lastEntry = entries[entries.length - 1] as
                 | PerformanceResourceTiming
                 | undefined;
               if (lastEntry) {

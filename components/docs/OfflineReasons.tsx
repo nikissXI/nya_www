@@ -14,7 +14,7 @@ import {
 import { useUserStateStore } from "@/store/user-state";
 import { MdTipsAndUpdates } from "react-icons/md";
 
-const OfflineReasons = () => {
+export default function OfflineReasons() {
   const { showOfflineReasonsModal, setOfflineReasonsModal, userWgInfo } =
     useUserStateStore();
 
@@ -51,5 +51,4 @@ const OfflineReasons = () => {
       </ModalContent>
     </Modal>
   );
-};
-export default OfflineReasons;
+}

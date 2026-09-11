@@ -1,7 +1,7 @@
 import { Heading, Divider, Text, Image, Icon } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";
-import DocFlex from "@/components/docs/DocFlex";
+import DocFlex from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {

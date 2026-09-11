@@ -191,10 +191,22 @@ const DocumentPage = () => {
           </Flex>
           <AlertDescription fontSize="sm">
             <VStack align="stretch" spacing={1} mt={1}>
-              <Text>• 联机的每个玩家都要注册喵服并安装WG</Text>
-              <Text>• WG客户端要安装在运行游戏的设备上</Text>
-              <Text>• 禁止Minecraft联机（定制节点除外）</Text>
-              <Text>• 不兼容华为的鸿蒙6系统</Text>
+              <Text>
+                <Icon as={MdTipsAndUpdates} mr={1} />
+                联机的每个玩家都要注册喵服并安装WG
+              </Text>
+              <Text>
+                <Icon as={MdTipsAndUpdates} mr={1} />
+                WG客户端要安装在运行游戏的设备上
+              </Text>
+              <Text>
+                <Icon as={MdTipsAndUpdates} mr={1} />
+                禁止Minecraft联机（定制节点除外）
+              </Text>
+              <Text>
+                <Icon as={MdTipsAndUpdates} mr={1} />
+                不兼容华为的鸿蒙6系统
+              </Text>
             </VStack>
           </AlertDescription>
         </Box>
@@ -662,7 +674,7 @@ const DocumentPage = () => {
               fontWeight="bold"
               color={getStatusColor(isOnline)}
             >
-              &emsp;{isOnline ? "恭喜！WG已成功" : "WG尚未连接"}
+              &emsp;{isOnline ? "恭喜！WG已连接" : "WG尚未连接"}
             </Text>
 
             <Button
@@ -697,11 +709,11 @@ const DocumentPage = () => {
             </Text>
           )}
 
-          <Text mt={3}>
-            <HighLight>喵服网页关闭不影响联机</HighLight>
+          <Text mt={5}>
+            ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
             ，网页只负责创建和加入房间，WG客户端保持连接就行
             <br />
-            现在请
+            WG部署教程到此结束，请
             <Button
               mx={1}
               variant="link"

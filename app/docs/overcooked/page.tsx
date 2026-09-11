@@ -1,6 +1,6 @@
 
 import { Icon, Divider, Text, Heading } from "@chakra-ui/react";
-import DocFlex from "@/components/docs/DocFlex";
+import DocFlex from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
 

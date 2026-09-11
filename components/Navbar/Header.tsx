@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
 import { useLocation } from "react-router-dom";
 
-export function Header({ path }: { path: string }) {
+export default function Header({ path }: { path: string }) {
   const { pathname } = useLocation();
   // 每次路由变化都滚动到顶部
   useEffect(() => {

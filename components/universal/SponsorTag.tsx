@@ -31,7 +31,7 @@ const gradient = keyframes`
   }
 `;
 
-const SponsorTag: React.FC<SponsorTagProps> = ({ amount }) => {
+export default function SponsorTag({ amount }: { amount: number }) {
   let bg = "#ffd012";
   let color = "white";
   let icon = null;
@@ -72,6 +72,4 @@ const SponsorTag: React.FC<SponsorTagProps> = ({ amount }) => {
       <TagLabel>赞助者</TagLabel>
     </Tag>
   );
-};
-
-export default SponsorTag;
+}
