@@ -1,4 +1,3 @@
-
 import {
   Flex,
   Link,
@@ -136,7 +135,7 @@ export default function Page() {
             </Button>
           </Flex>
         ) : (
-          <Button bgColor="#1d984b" size="sm" onClick={setShowLoginModal}>
+          <Button size="sm" onClick={setShowLoginModal}>
             请登录后再操作，点击登录
           </Button>
         )}
