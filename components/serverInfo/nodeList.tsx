@@ -432,9 +432,7 @@ export default function ServerNodeListModal() {
                     <br />
                     电信 - 适合主客机都是中国电信的用户，其他运营商联机容易卡顿
                     <br />
-                    跨境 - 适合跨中国大陆，即国内和国外联机，港澳台也算“国外”
-                    <br />
-                    境外 - 中国大陆不能用，其他地方都合适，港澳台也合适
+                    跨境 - 适合国内和国外联机，港澳台也算“国外”
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -443,7 +441,7 @@ export default function ServerNodeListModal() {
                     负载解读：
                     <br />
                     显示拥挤时联机容易卡顿。
-                    追求稳定建议使用赞助专用节点，用的人少基本不挤
+                    追求稳定建议使用金色名称节点，用的人少基本不挤
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -460,7 +458,7 @@ export default function ServerNodeListModal() {
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
                     带宽选择：
                     <br />
-                    不同游戏所需带宽不一样，卡牌类游戏0.3M带8个人也完全足够，闯关、经营类0.6M带3到4人没问题，大多游戏两三个人的时候0.8M完全足够
+                    不同游戏所需带宽不一样，对应游戏教程里会给出带宽建议
                   </Text>
                 </ListItem>
               </List>
