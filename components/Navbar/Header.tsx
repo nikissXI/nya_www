@@ -93,6 +93,7 @@ export default function Header({ path }: { path: string }) {
                 textAlign="center"
                 color={rootPath === item.path ? "white" : "gray.200"}
                 fontWeight={rootPath === item.path ? "bold" : "normal"}
+                fontSize="lg"
               >
                 {item.name}
               </Text>

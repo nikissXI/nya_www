@@ -54,7 +54,7 @@ export default function SideBar() {
         textAlign="left"
       >
         <Box w="100%">
-          <Heading as="h3" fontSize={{ base: "md", md: "lg" }} color="#a8d1ff">
+          <Heading as="h3" fontSize={{ base: "lg", md: "xl" }} color="#a8d1ff">
             喵服官方QQ群
           </Heading>
           <Link
@@ -67,13 +67,13 @@ export default function SideBar() {
             display="inline-block"
             color="#7dd4ff"
           >
-            1047464328
+            1047464328（大群）
           </Link>
           <Text fontSize="sm">各游戏的小群QQ号在对应的联机教程里</Text>
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize={{ base: "md", md: "lg" }} color="#a8d1ff">
+          <Heading as="h3" fontSize={{ base: "lg", md: "xl" }} color="#a8d1ff">
             赞助喵服
           </Heading>
           <Text fontSize={{ base: "sm", md: "md" }} whiteSpace="pre-wrap">
@@ -86,14 +86,13 @@ export default function SideBar() {
             to="/sponsor"
             color="#7dd4ff"
             _hover={{ textDecoration: "none" }}
-            display="inline-block"
           >
             了解赞助方式和特权
           </Link>
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize={{ base: "md", md: "lg" }} color="#a8d1ff">
+          <Heading as="h3" fontSize={{ base: "lg", md: "xl" }} color="#a8d1ff">
             喵服公告
           </Heading>
 
@@ -104,26 +103,22 @@ export default function SideBar() {
                 fontWeight="bold"
                 textAlign="left"
               >
-                {formatDate(serverData.announcements[0].timestamp, true)}更新
+                {formatDate(serverData.announcements[0].timestamp, true)}
               </Text>
 
-              <Text
-                fontSize={{ base: "sm", md: "sm" }}
-                whiteSpace="pre-wrap"
-                textAlign="left"
-              >
+              <Text fontSize="sm" whiteSpace="pre-wrap" textAlign="left">
                 {serverData.announcements[0].content}
               </Text>
 
-              <Text
+              <Link
                 fontSize={{ base: "sm", md: "md" }}
                 fontWeight="bold"
-                color="#7dd4ff"
                 onClick={onOpen}
-                colorScheme="transparent"
+                color="#7dd4ff"
+                _hover={{ textDecoration: "none" }}
               >
                 查看历史公告
-              </Text>
+              </Link>
             </>
           ) : (
             <Text fontSize={{ base: "sm", md: "md" }}>暂无公告</Text>
