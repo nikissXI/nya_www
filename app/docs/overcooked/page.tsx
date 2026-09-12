@@ -1,12 +1,12 @@
 
 import { Icon, Divider, Text, Heading } from "@chakra-ui/react";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         玩家都处于同个联机房间并在线后，直接进游戏联机即可，无需另外开加速器
@@ -19,6 +19,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

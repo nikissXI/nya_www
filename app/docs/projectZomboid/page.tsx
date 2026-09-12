@@ -1,12 +1,12 @@
 import { Text, Divider, Icon, Image } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 
 export default function AndroidPage0() {
   return (
-    <DocFlex>
+    <DocBox>
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         喵服关联QQ群：玩家太少，暂时不建群，如果需要建群加服主QQ1299577815
@@ -25,6 +25,6 @@ export default function AndroidPage0() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

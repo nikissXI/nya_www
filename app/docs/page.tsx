@@ -171,24 +171,23 @@ const DocumentPage = () => {
   };
 
   return (
-    <Box px={{ base: 4, md: 8 }} pb={5}>
+    <Box px={{ base: 4, md: 8 }} pb={5} maxW="900px" mx="auto">
       <OfflineReasons />
 
       <Alert
-        maxW="900px"
-        mx="auto"
-        mb={5}
-        status="warning"
+        status="info"
         variant="subtle"
-        bg="rgba(52, 139, 246, 0.18)"
-        color="white"
-        borderRadius="lg"
+        borderRadius="md"
+        mb={5}
+        bg="#dbeafe"
+        color="#17324d"
       >
         <Box>
-          <Flex align="center" color="#ffca3d">
+          <Flex color="#17324d">
             <AlertIcon />
             <AlertTitle fontSize="md">开始前请注意</AlertTitle>
           </Flex>
+
           <AlertDescription fontSize="sm">
             <VStack align="stretch" spacing={1} mt={1}>
               <Text>
@@ -212,12 +211,7 @@ const DocumentPage = () => {
         </Box>
       </Alert>
 
-      <Box
-        mt={5}
-        maxW="900px"
-        mx="auto"
-        display={userWgInfo === undefined ? "block" : "none"}
-      >
+      <Box mt={5} display={userWgInfo === undefined ? "block" : "none"}>
         <VStack spacing={3} align="center">
           <Heading size="md">请登录后再访问该页面</Heading>
           <Button
@@ -232,12 +226,7 @@ const DocumentPage = () => {
         </VStack>
       </Box>
 
-      <Box
-        mt={5}
-        maxW="900px"
-        mx="auto"
-        display={userWgInfo === undefined ? "none" : "block"}
-      >
+      <Box mt={5} display={userWgInfo === undefined ? "none" : "block"}>
         <Tabs variant="line">
           <Heading size="md">点击选择联机的设备类型</Heading>
 
@@ -663,7 +652,7 @@ const DocumentPage = () => {
           </TabPanels>
         </Tabs>
 
-        <Box mt={5} maxW="900px" mx="auto">
+        <Box mt={5}>
           <Text>
             ⑤ WG隧道打开后<HighLight>等3秒</HighLight>再点刷新
           </Text>

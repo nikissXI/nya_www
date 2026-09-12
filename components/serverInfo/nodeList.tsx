@@ -419,7 +419,7 @@ export default function ServerNodeListModal() {
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
                     <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
-                    如需独享节点请联系服主进行定制
+                    如需独享节点（50元起/月）请联系服主
                   </Text>
                 </ListItem>
                 <ListItem>
@@ -440,7 +440,7 @@ export default function ServerNodeListModal() {
                     负载解读：
                     <br />
                     显示拥挤时联机容易卡顿。
-                    追求稳定建议使用金色名称节点，用的人少基本不挤
+                    追求稳定建议使用赞助专用节点，用的人少基本不挤
                   </Text>
                 </ListItem>
                 <ListItem>

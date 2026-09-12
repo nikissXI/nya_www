@@ -1,13 +1,13 @@
 import { Icon, Center, Divider, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <DocLink
         linkText="简略视频演示"
         linkUrl="https://www.bilibili.com/video/BV1FLeJeNEq6/"
@@ -31,6 +31,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

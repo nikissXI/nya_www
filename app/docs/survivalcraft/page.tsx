@@ -1,12 +1,12 @@
 
 import { Icon, Divider, Text, Image, Heading } from "@chakra-ui/react";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <Text my={1}>
         <Icon as={MdTipsAndUpdates} mr={2} />
         喵服关联QQ群：1092247198
@@ -35,6 +35,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

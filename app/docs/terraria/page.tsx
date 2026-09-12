@@ -10,13 +10,13 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <Heading size="lg" textAlign="center">
         手机、平板、Steam通用
       </Heading>
@@ -68,6 +68,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

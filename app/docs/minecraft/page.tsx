@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
 
@@ -27,7 +27,7 @@ export default function Page() {
   ];
 
   return (
-    <DocFlex>
+    <DocBox>
       <Text my={3} fontSize="lg">
         电脑端联机建议用UU加速器(里面有免费组网联机功能)，比喵服更简单易用
         <Link ml={1} color="#7dd4ff" href="https://uu.163.com/" target="_blank">
@@ -66,6 +66,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

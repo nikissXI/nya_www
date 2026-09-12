@@ -1,11 +1,11 @@
 import { Icon, Divider, Text, Image, Link } from "@chakra-ui/react";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <Text textAlign="center" my={1}>
         这里只有手游的联机教程，如果是端游请找服主
       </Text>
@@ -55,6 +55,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

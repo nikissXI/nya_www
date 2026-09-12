@@ -1,12 +1,12 @@
 import { Divider, Text } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <Text mt={3} textAlign="center">
         教程由B站UP主Winters_Stone1制作，请到B站观看视频教程
       </Text>
@@ -25,6 +25,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

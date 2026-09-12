@@ -247,6 +247,11 @@ export default function Page() {
     onOpen: setPassOnOpen,
     onClose: setPassOnClose,
   } = useDisclosure();
+  const {
+    isOpen: isSponsorNoticeOpen,
+    onOpen: openSponsorNotice,
+    onClose: closeSponsorNotice,
+  } = useDisclosure();
 
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
 
@@ -255,6 +260,7 @@ export default function Page() {
   const [gameSearchTerm, setGameSearchTerm] = useState("");
   const [selectedGame, setSelectedGame] = useState<GameRoomItem | null>(null);
   const [gameInfo, setGameInfo] = useState<GameRoomItem | null>(null);
+  const [sponsorNotice, setSponsorNotice] = useState("");
   const {
     userInfo,
     userWgInfo,
@@ -373,7 +379,13 @@ export default function Page() {
           setSelectedGame(game ?? null);
           getRoomData();
         } else {
-          if (isOnline && data.msg.includes("在线后")) {
+          if (data.msg.includes("赞助")) {
+            setSponsorNotice(data.msg);
+            openSponsorNotice();
+            return;
+          }
+
+          if (isOnline && data.msg.includes("再加入")) {
             getRoomData();
           }
           openToast({ content: data.msg, status: "warning" });
@@ -382,7 +394,7 @@ export default function Page() {
         openToast({ content: String(err), status: "error" });
       }
     },
-    [requestRoomApi, getRoomData, isOnline],
+    [requestRoomApi, getRoomData, isOnline, openSponsorNotice],
   );
 
   // 关闭房间（房主）
@@ -451,7 +463,7 @@ export default function Page() {
           if (data.msg.includes("密码")) {
             setHideJoinPassInput(false);
           }
-          if (isOnline && data.msg.includes("在线后")) {
+          if (isOnline && data.msg.includes("再加入")) {
             getRoomData();
           }
           openToast({ content: data.msg, status: "warning" });
@@ -501,7 +513,7 @@ export default function Page() {
     const netType = userWgInfo?.net_type;
     if (netType === "电信") {
       return "你选的是电信线路节点，只建议所有用户都是用中国电信或流量的时候使用";
-    } 
+    }
     // else if (netType === "境外") {
     //   return "你选的是境外线路节点，只建议中国大陆外的用户使用";
     // }
@@ -603,6 +615,34 @@ export default function Page() {
                 </Text>
               )}
             </ModalBody>
+          </ModalContent>
+        </Modal>
+
+        <Modal
+          isOpen={isSponsorNoticeOpen}
+          onClose={closeSponsorNotice}
+          isCentered
+        >
+          <ModalOverlay />
+          <ModalContent bgColor="#202e4f" color="white" mx={4}>
+            <ModalBody>
+              <Text mt={3}>{sponsorNotice}</Text>
+              <Text>注：仅需房主赞助</Text>
+            </ModalBody>
+            <ModalFooter gap={3}>
+              <Button bgColor="transparent" onClick={closeSponsorNotice}>
+                稍后再说
+              </Button>
+              <Button
+                colorScheme="orange"
+                onClick={() => {
+                  closeSponsorNotice();
+                  navigate("/sponsor");
+                }}
+              >
+                前往赞助页面
+              </Button>
+            </ModalFooter>
           </ModalContent>
         </Modal>
 
@@ -916,9 +956,9 @@ export default function Page() {
         </Button>
       </HStack>
 
-      {roomData && roomData?.room_max === 2 && (
-        <Text fontSize="sm" color="#ffca3d">
-          如需增加房间人数请看赞助页面说明
+      {roomRole === ROLE_HOSTER && roomData && roomData?.room_max === 2 && (
+        <Text fontSize="md" color="#ffca3d">
+          如需增加房间人数请叠加赞助金额
         </Text>
       )}
     </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -12,10 +12,6 @@ import {
   Th,
   Tbody,
   Td,
-  TextProps,
-  List,
-  ListItem,
-  ListIcon,
   Icon,
   Modal,
   ModalOverlay,
@@ -25,27 +21,24 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Heading,
+  Alert,
+  AlertIcon,
+  Divider,
+  HStack,
+  Flex,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
 import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
-import { FaCode } from "react-icons/fa";
 import { FaWeixin } from "react-icons/fa";
 import {
-  RiVipCrownFill,
   RiMoneyCnyBoxLine,
   RiAccessibilityLine,
+  RiServerLine,
 } from "react-icons/ri";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { apiUrl } from "@/utils/api";
-
-const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
-  return (
-    <Text as="span" color="#ff734f" fontWeight="bold" {...props}>
-      {children}
-    </Text>
-  );
-};
 
 interface SponsorItem {
   uid: number;
@@ -91,70 +84,90 @@ const Page = () => {
   }, []);
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      textAlign="center"
-      mx={5}
-    >
-      <VStack spacing={3}>
-        <Text fontSize="2xl" fontWeight="bold">
+    <Box maxW="800px" mx="auto" px={{ base: 4, md: 8 }} pb={8}>
+      <VStack spacing={5} align="stretch">
+        <Heading size="lg" textAlign="center">
           感谢赞助者们的支持！
-        </Text>
+        </Heading>
 
-        <List spacing={2}>
-          <ListItem textAlign="left">
-            <ListIcon as={FaCode} />
-            喵服由服主一人运营，不图盈利，整着玩，APP已经在开发了
-          </ListItem>
-
-          <ListItem textAlign="left">
-            <ListIcon as={FaCode} />
-            如果需要独享节点，可以联系服主进行定制，最低50元/月，定制节点房间人数无上限
-          </ListItem>
-
-          <ListItem textAlign="left">
-            <ListIcon as={RiMoneyCnyBoxLine} />
-            <HighLight>
-              赞助记录永久有效并可累计，解锁的赞助节点不限期不限次使用，仅需房主赞助。
-            </HighLight>
-            赞助节点满10元解锁，跨境节点满20元解锁。当然我不可能包一辈子能用，人终有一死
-          </ListItem>
-
-          <ListItem textAlign="left">
-            <ListIcon as={RiAccessibilityLine} />
-            赞助节点的房间人数随着房主的赞助金额增加而增加，并且多个赞助者在同一房间可叠加
-            <br />
-            计算公式：房间最大人数 = 累计赞助费用 // 节点解锁费用 + 1
-            <HighLight>（最多16人）</HighLight>
-            <br />
-            <HighLight>
-              如：10元解锁的节点，累计赞助10元时房间最大人数为2，满20元时为3。可以简单理解为每多10元多1人。20元解锁的节点则累计赞助20元时为2，满40元时为3
-            </HighLight>
-          </ListItem>
-
-          <ListItem textAlign="left">
-            <ListIcon as={IoChatboxEllipsesOutline} />
-            赞助金额累计不低于20元可联系服主获取一对一技术支持
-            <br />
-            <Text textAlign="center">
-              <Icon as={FaWeixin} />
-              ：nikissxi&emsp;
-              <Icon as={FaQq} />
-              ：1299577815
+        <Flex
+          mx="auto"
+          borderRadius="md"
+          borderColor="whiteAlpha.300"
+          align={{ base: "flex-start", md: "center" }}
+          gap={{ base: 2, md: 4 }}
+          flexWrap="wrap"
+        >
+          <Text fontSize="md" fontWeight="bold" whiteSpace="nowrap">
+            联系服主
+          </Text>
+          <Text fontSize="sm">
+            <Icon as={FaWeixin} mx={1} /> nikissxi
+            <Text as="span" mx={3} color="gray.500">
+              |
             </Text>
-          </ListItem>
-        </List>
+            <Icon as={FaQq} mx={1} /> 1299577815
+          </Text>
+        </Flex>
+
+        <Box>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
+            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
+              <HStack mb={2}>
+                <Icon as={RiServerLine} color="#ffca3d" />
+                <Text fontWeight="bold">独享节点</Text>
+              </HStack>
+              <Text fontSize="sm">
+                如需独享节点（50元起/月）可联系服主，定制节点房间人数无上限，仅指定用户可建房
+              </Text>
+            </Box>
+
+            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
+              <HStack mb={2}>
+                <Icon as={RiMoneyCnyBoxLine} color="#ffca3d" />
+                <Text fontWeight="bold">节点解锁</Text>
+              </HStack>
+              <Text fontSize="sm">
+                普通赞助节点累计满 10 元解锁，跨境节点累计满 20
+                元解锁；只要房主赞助即可，成员不需要赞助
+              </Text>
+            </Box>
+
+            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
+              <HStack mb={2}>
+                <Icon as={RiAccessibilityLine} color="#ffca3d" />
+                <Text fontWeight="bold">增加人数</Text>
+              </HStack>
+              <Text fontSize="sm">
+                赞助专用节点房间人数 = 累计赞助金额 // 节点解锁费用 + 1 （最多
+                16 人）
+                <br />
+                简单来说，2人就10元，3人就20元，以此类推（跨境节点金额翻倍）
+                <br />
+                如果房间成员也有赞助，房间人数可累加
+              </Text>
+            </Box>
+
+            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
+              <HStack mb={2}>
+                <Icon as={IoChatboxEllipsesOutline} color="#ffca3d" />
+                <Text fontWeight="bold">技术支持</Text>
+              </HStack>
+              <Text fontSize="sm">
+                累计赞助不少于 20 元，可联系服主获取一对一技术支持
+              </Text>
+            </Box>
+          </SimpleGrid>
+        </Box>
 
         <Button
           colorScheme="orange"
           size="lg"
+          mx="auto"
           onClick={openModal}
-          mt={{ base: 0, md: 4 }}
-          mb={{ base: 2, md: 6 }}
+          mb={2}
         >
-          查看收款码
+          查看收款码并获取 UID
         </Button>
 
         <Modal isOpen={isModalOpen} onClose={closeModal} size="lg">
@@ -222,24 +235,25 @@ const Page = () => {
                   </Button>
                 </Box>
 
-                <Text color="#856404">
+                <Text color="#856404" fontSize="sm">
                   <Text as="span" fontWeight="bold">
                     赞助金额由服主手动录入，就是看到了才更新；
                   </Text>
                   如果催录入、漏了备注、无法备注、无法付款等等，请联系服主
                   <br />
-                  <Icon as={FaWeixin} />
-                  ：nikissxi&emsp;
-                  <Icon as={FaQq} />
-                  ：1299577815
+                  <Icon as={FaWeixin} mx={1} />
+                  nikissxi&emsp;
+                  <Icon as={FaQq} mx={1} />
+                  1299577815
                 </Text>
               </Box>
 
-              <SimpleGrid columns={2} spacing={4} justifyContent="center">
+              <SimpleGrid columns={2} spacing={1}>
                 <Box textAlign="center">
                   <Text mb={1}>支付宝</Text>
                   <Image
-                    w="250px"
+                    w="100%"
+                    maxW="250px"
                     src="/images/sponsor/支付宝收款.webp"
                     alt="支付宝收款"
                   />
@@ -247,7 +261,8 @@ const Page = () => {
                 <Box textAlign="center">
                   <Text mb={1}>微信</Text>
                   <Image
-                    w="250px"
+                    w="100%"
+                    maxW="250px"
                     src="/images/sponsor/微信收款.webp"
                     alt="微信收款"
                   />
@@ -257,10 +272,17 @@ const Page = () => {
           </ModalContent>
         </Modal>
 
-        <Text fontSize="sm">赞助名单，仅列出赞助不低于50元的用户</Text>
+        <Box textAlign="center">
+          <Heading size="md" mb={1}>
+            赞助名单
+          </Heading>
+          <Text fontSize="sm" color="gray.300">
+            仅列出累计赞助不低于 50 元的用户
+          </Text>
+        </Box>
 
-        <TableContainer maxH="360px" overflowY="auto" overflowX="hidden">
-          <Table variant="striped" colorScheme="transparent" w="auto">
+        <TableContainer maxH="360px" overflowY="auto">
+          <Table variant="striped" colorScheme="transparent" w="auto" mx="auto">
             <Thead position="sticky" top={0} bg="#3e4e63">
               <Tr>
                 <Th color="white" fontSize="md" p={3}>

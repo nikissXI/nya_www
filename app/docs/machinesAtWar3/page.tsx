@@ -1,7 +1,7 @@
 import { Text, Divider, List, ListItem, ListIcon } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
@@ -13,7 +13,7 @@ export default function Page() {
   ];
 
   return (
-    <DocFlex>
+    <DocBox>
       <List spacing={2}>
         {TextList.map((reason, index) => (
           <ListItem key={index} textAlign="left">
@@ -26,6 +26,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

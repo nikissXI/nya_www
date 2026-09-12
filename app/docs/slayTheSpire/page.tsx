@@ -1,13 +1,13 @@
 import { Icon, Divider, Text, Image, Link } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import DocLink from "@/components/docs/DocLink";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <DocLink
         linkText="杀戮尖塔2手游移植版获取方式"
         linkUrl="https://space.bilibili.com/116375500/dynamic"
@@ -67,6 +67,6 @@ export default function Page() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

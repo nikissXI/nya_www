@@ -17,7 +17,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { getAuthToken } from "@/store/authKey";
 import { MdTipsAndUpdates } from "react-icons/md";
 import BackButton from "@/components/docs/BackButton";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import { apiUrl } from "@/utils/api";
 
@@ -59,7 +59,7 @@ export default function AndroidPage0() {
   ];
 
   return (
-    <DocFlex>
+    <DocBox>
       <Heading size="lg" textAlign="center">
         仅支持正版逃脱者手游联机
       </Heading>
@@ -124,6 +124,6 @@ export default function AndroidPage0() {
       <Divider my={5} />
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }

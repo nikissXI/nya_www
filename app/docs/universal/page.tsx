@@ -8,12 +8,12 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { MdTipsAndUpdates } from "react-icons/md";
-import DocFlex from "@/components/docs/DocBox";
+import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
   return (
-    <DocFlex>
+    <DocBox>
       <Heading size="lg" textAlign="center">
         通用组网联机教程
       </Heading>
@@ -86,6 +86,6 @@ export default function Page() {
       </List>
 
       <BackButton />
-    </DocFlex>
+    </DocBox>
   );
 }
