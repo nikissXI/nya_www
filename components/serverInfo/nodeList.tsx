@@ -393,7 +393,7 @@ export default function ServerNodeListModal() {
               />
             </SimpleGrid>
 
-            <Text fontSize="sm" textAlign="center">
+            <Text  textAlign="center">
               点击选择联机节点
               <Button
                 ml={1}
@@ -401,7 +401,6 @@ export default function ServerNodeListModal() {
                 bgColor="transparent"
                 onClick={toggleExpanded}
                 variant="link"
-                fontSize="sm"
               >
                 {isExpanded ? "再点一次收起" : "不会选点我"}
               </Button>
