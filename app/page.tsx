@@ -21,7 +21,7 @@ export default function Page() {
     },
     {
       title: "全球可用",
-      description: "多地设有节点，国内外均可使用",
+      description: "国内多地设有节点，跨境也能用",
       icon: "🌍",
     },
   ];
@@ -46,7 +46,7 @@ export default function Page() {
         my={3}
       />
       <Heading as="h1" size="lg" fontWeight="bold">
-        一个可能适合你的联机平台
+        异地组网联机平台
       </Heading>
 
       {/* 平台亮点 */}
