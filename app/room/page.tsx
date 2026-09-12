@@ -501,9 +501,10 @@ export default function Page() {
     const netType = userWgInfo?.net_type;
     if (netType === "电信") {
       return "你选的是电信线路节点，只建议所有用户都是用中国电信或流量的时候使用";
-    } else if (netType === "境外") {
-      return "你选的是境外线路节点，只建议中国大陆外的用户使用";
-    }
+    } 
+    // else if (netType === "境外") {
+    //   return "你选的是境外线路节点，只建议中国大陆外的用户使用";
+    // }
     return null;
   }, [userWgInfo?.net_type]);
 
