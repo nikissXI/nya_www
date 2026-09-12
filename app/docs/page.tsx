@@ -20,7 +20,7 @@ import {
   AlertDescription,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
 import { useNavigate } from "react-router-dom";
 import { openToast } from "@/components/universal/toast";
@@ -61,6 +61,12 @@ const DocumentPage = () => {
   } = useUserStateStore();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo && userWgInfo && !confKey) {
+      getConfKey();
+    }
+  }, [userInfo, userWgInfo, confKey, getConfKey]);
 
   const handleCopyLink = async (confKey: string) => {
     try {
