@@ -17,9 +17,9 @@ export const NoticeText = () => {
         <br />
         苹果：内置浏览器Safari
         <br />
-        安卓：via、夸克
+        安卓：Via、夸克、Edge、QQ
         <br />
-        电脑：谷歌、火狐、edge
+        电脑：谷歌、Edge
         <br />
         仍然无法解决就加Q群1047464328找群主(即服主)
       </Text>
