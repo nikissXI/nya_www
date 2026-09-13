@@ -110,55 +110,37 @@ const Page = () => {
           </Text>
         </Flex>
 
-        <Box>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
-            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-              <HStack mb={2}>
-                <Icon as={RiServerLine} color="#ffca3d" />
-                <Text fontWeight="bold">独享节点</Text>
-              </HStack>
-              <Text fontSize="sm">
-                如需独享节点（50元起/月）可联系服主，定制节点房间人数无上限，仅指定用户可建房
-              </Text>
-            </Box>
+        <VStack maxW="600px" spacing={3} mx="auto">
+          <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
+            <Text fontSize="sm">
+              如需独享节点（50元起/月）可联系服主，定制节点房间人数无上限，仅指定用户可建房
+            </Text>
+          </Box>
 
-            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-              <HStack mb={2}>
-                <Icon as={RiMoneyCnyBoxLine} color="#ffca3d" />
-                <Text fontWeight="bold">节点解锁</Text>
-              </HStack>
-              <Text fontSize="sm">
-                普通赞助节点累计满 10 元解锁，跨境节点累计满 20
-                元解锁；只要房主赞助即可，成员不需要赞助
-              </Text>
-            </Box>
+          <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
+            <Text fontSize="sm">
+              累计赞助不少于 10 元，可联系服主获取一对一技术支持
+            </Text>
+          </Box>
 
-            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-              <HStack mb={2}>
-                <Icon as={RiAccessibilityLine} color="#ffca3d" />
-                <Text fontWeight="bold">增加人数</Text>
-              </HStack>
-              <Text fontSize="sm">
-                赞助专用节点房间人数 = 累计赞助金额 // 节点解锁费用 + 1 （最多
-                16 人）
-                <br />
-                简单来说，2人就10元，3人就20元，以此类推（跨境节点金额翻倍）
-                <br />
-                如果房间成员也有赞助，房间人数可累加
-              </Text>
-            </Box>
-
-            <Box p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-              <HStack mb={2}>
-                <Icon as={IoChatboxEllipsesOutline} color="#ffca3d" />
-                <Text fontWeight="bold">技术支持</Text>
-              </HStack>
-              <Text fontSize="sm">
-                累计赞助不少于 20 元，可联系服主获取一对一技术支持
-              </Text>
-            </Box>
-          </SimpleGrid>
-        </Box>
+          <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
+            <Text fontSize="md" fontWeight="bold" mb={2}>
+              赞助专用节点解锁规则
+            </Text>
+            <Text fontSize="sm">
+              普通节点累计赞助满 <strong>10 元</strong>即可解锁，跨境节点累计赞助满 <strong>20 元</strong>即可解锁
+            </Text>
+            <Text fontSize="sm" mt={2}>
+              <strong>只需要房主赞助，成员无需单独赞助。</strong>房间内成员的赞助也可以计入，累计房间人数
+            </Text>
+            <Text fontSize="sm" mt={2}>
+              房间人数 = 累计赞助金额 ÷ 节点解锁金额 + 1，最多 <strong>16 人</strong>。
+            </Text>
+            <Text fontSize="sm" mt={2} color="#ffca3d">
+              例：普通节点累计 10 元可容纳 2 人，累计 20 元可容纳 3 人；跨境节点所需金额翻倍
+            </Text>
+          </Box>
+        </VStack>
 
         <Button
           colorScheme="orange"
@@ -167,7 +149,7 @@ const Page = () => {
           onClick={openModal}
           mb={2}
         >
-          查看收款码并获取 UID
+          查看收款码
         </Button>
 
         <Modal isOpen={isModalOpen} onClose={closeModal} size="lg">

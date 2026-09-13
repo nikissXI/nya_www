@@ -16,6 +16,7 @@ import {
   useDisclosure,
   Flex,
   Tag,
+  IconButton,
   Badge,
   Stack,
   Image,
@@ -28,6 +29,7 @@ import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
 import { IoReloadCircle } from "react-icons/io5";
 import { TbReload } from "react-icons/tb";
+import { MdContentCopy } from "react-icons/md";
 import { useUserStateStore } from "@/store/user-state";
 import { getAuthToken } from "@/store/authKey";
 import {
@@ -71,7 +73,7 @@ const getRoomGameName = (game?: GameRoomItem): string => {
   return game.path.replace(/^\/docs\//, "");
 };
 
-const ROOM_GAME_LIST: GameRoomItem[] = [
+export const ROOM_GAME_LIST: GameRoomItem[] = [
   {
     path: "/docs/universal",
     title: "通用联机房",
@@ -233,7 +235,7 @@ const ROOM_GAME_LIST: GameRoomItem[] = [
 // 抽取角色常量
 const ROLE_HOSTER = "hoster";
 const ROLE_NONE = "none";
-const GENERAL_QQ_GROUP = "1047464328";
+export const GENERAL_QQ_GROUP = "1047464328";
 const GENERAL_QQ_GROUP_LINK = "https://qm.qq.com/q/HxnUVAdRa8";
 
 export default function Page() {
@@ -385,7 +387,7 @@ export default function Page() {
             return;
           }
 
-          if (isOnline && data.msg.includes("再加入")) {
+          if (isOnline && data.msg.includes("再创建")) {
             getRoomData();
           }
           openToast({ content: data.msg, status: "warning" });
@@ -508,6 +510,18 @@ export default function Page() {
     }
   };
 
+  const handleCopyRoomInfo = async () => {
+    if (!roomData?.room_id || !userWgInfo?.node_alias) return;
+
+    const roomInfo = [
+      `联机节点：${userWgInfo.node_alias}`,
+      `房间号：${roomData.room_id}`,
+      ...(roomData.room_passwd ? [`房间密码：${roomData.room_passwd}`] : []),
+    ].join("\n");
+
+    await copyText(roomInfo);
+  };
+
   // 节点警告文案（根据网络类型）
   const nodeWarningText = useMemo(() => {
     const netType = userWgInfo?.net_type;
@@ -557,17 +571,6 @@ export default function Page() {
   const standbyPage = () => (
     <Box textAlign="center" w="320px">
       <VStack spacing={1}>
-        <Button
-          size={isOnline ? "xs" : "sm"}
-          fontSize={isOnline ? "xs" : "md"}
-          my={2}
-          onClick={() => {
-            navigate("/docs");
-          }}
-        >
-          WG安装部署教程
-        </Button>
-
         <Modal
           isOpen={gameInfo !== null}
           onClose={() => setGameInfo(null)}
@@ -827,14 +830,6 @@ export default function Page() {
         {roomGame && (
           <VStack spacing={3} justify="center" wrap="wrap" my={1}>
             <Button
-              size={isOnline ? "xs" : "sm"}
-              fontSize={isOnline ? "xs" : "md"}
-              onClick={() => navigate("/docs")}
-            >
-              WG安装部署教程
-            </Button>
-
-            <Button
               size={isOnline ? "sm" : "xs"}
               fontSize={isOnline ? "md" : "sm"}
               onClick={() => navigate(roomGame.path)}
@@ -938,7 +933,7 @@ export default function Page() {
           <IoIosExit size={30} color="#ff4444" />
         </Button>
 
-        <Text fontSize="lg" fontWeight="bold" ml={2} mr={3}>
+        <Text fontSize="lg" fontWeight="bold" mx={2}>
           {roomData?.members.length}/{roomData?.room_max}
         </Text>
 
@@ -1126,16 +1121,26 @@ export default function Page() {
           <OfflineReasons />
 
           {roomRole !== ROLE_NONE && (
-            <Text fontSize={18} fontWeight="bold" mr={3}>
-              <Text
-                as="span"
-                onClick={() => {
-                  if (roomData?.room_id) copyText(roomData.room_id.toString());
+            <Flex align="center" justify="center">
+              <IconButton
+                aria-label="复制房间分享信息"
+                title="复制节点、房间号和房间密码"
+                icon={<MdContentCopy />}
+                size="sm"
+                variant="ghost"
+                color="#7dd4ff"
+                onClick={handleCopyRoomInfo}
+                sx={{
+                  _hover: {
+                    textDecoration: "none", // 悬停时没有效果
+                  },
                 }}
-                cursor="pointer"
-              >
-                房间号&ensp;{roomData?.room_id}
+              />
+
+              <Text fontSize={18} fontWeight="bold">
+                房间号{roomData?.room_id}
               </Text>
+
               {roomRole === ROLE_HOSTER && (
                 <Button
                   ml={2}
@@ -1144,7 +1149,7 @@ export default function Page() {
                   bg="transparent"
                   onClick={() => {
                     setInputPasswd(
-                      roomData?.room_passwd ? roomData?.room_passwd : "",
+                      roomData?.room_passwd ? roomData.room_passwd : "",
                     );
                     setPassOnOpen();
                   }}
@@ -1152,7 +1157,7 @@ export default function Page() {
                   设置密码
                 </Button>
               )}
-            </Text>
+            </Flex>
           )}
 
           {isOnline === false && (
@@ -1168,6 +1173,17 @@ export default function Page() {
               </Button>
             </Text>
           )}
+
+          <Button
+            size={isOnline ? "xs" : "sm"}
+            fontSize={isOnline ? "xs" : "md"}
+            my={1}
+            onClick={() => {
+              navigate("/docs");
+            }}
+          >
+            WG安装部署教程
+          </Button>
 
           {roomRole === ROLE_NONE ? standbyPage() : joinedPage()}
         </>

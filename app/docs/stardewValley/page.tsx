@@ -67,7 +67,12 @@ export default function Page() {
   };
 
   return (
-    <DocBox notices={["星露谷支持跨安卓、苹果、电脑联机，但游戏版本必须一致"]}>
+    <DocBox
+      notices={[
+        "手机或平板做主机时，要保持在游戏中，否则客机无法加入或掉线",
+        "星露谷支持跨安卓、苹果、电脑联机，但游戏版本必须一致",
+      ]}
+    >
       <DocLink
         linkText="简略视频演示"
         linkUrl="https://www.bilibili.com/video/BV1U1eGe8Eka/"
