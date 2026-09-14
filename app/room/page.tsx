@@ -631,6 +631,11 @@ export default function Page() {
             <ModalBody>
               <Text mt={3}>{sponsorNotice}</Text>
               <Text>注：仅需房主赞助</Text>
+              {sponsorNotice.includes("10元") ? (
+                <Text color="#ffca3d">赞助专用节点拥挤度低，带宽更大，联机更稳定</Text>
+              ) : (
+                <Text color="#ffca3d">该跨境联机节点支持国内外玩家联机</Text>
+              )}
             </ModalBody>
             <ModalFooter gap={3}>
               <Button bgColor="transparent" onClick={closeSponsorNotice}>
@@ -871,7 +876,7 @@ export default function Page() {
             <Flex>
               {item.ip === userWgInfo?.user_ip && (
                 <Tag colorScheme="blue" fontWeight="bold" size="md">
-                  你
+                  我
                 </Tag>
               )}
               <Text fontWeight="bold" fontSize="1.1rem" ml={2} color="white">
@@ -889,16 +894,29 @@ export default function Page() {
             </Flex>
 
             <Flex mt={1}>
-              <Tag
+              <Flex
                 onClick={() => {
                   copyText(item.ip);
                 }}
-                color="white"
-                bg="transparent"
-                cursor="pointer"
               >
-                联机ip {item.ip}
-              </Tag>
+                <Text mx={1} fontSize="sm" fontWeight="medium">
+                  喵服IP {item.ip}
+                </Text>
+                <IconButton
+                  display="inline-block"
+                  aria-label="复制联机ip"
+                  title="复制联机ip"
+                  icon={<MdContentCopy />}
+                  size="xs"
+                  variant="ghost"
+                  color="#7dd4ff"
+                  sx={{
+                    _hover: {
+                      textDecoration: "none", // 悬停时没有效果
+                    },
+                  }}
+                />
+              </Flex>
 
               {item.sponsorship > 0 && <SponsorTag amount={item.sponsorship} />}
 

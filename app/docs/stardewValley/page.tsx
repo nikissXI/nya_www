@@ -9,6 +9,7 @@ import {
   VStack,
   HStack,
   Badge,
+  Icon,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
@@ -123,30 +124,19 @@ export default function Page() {
 
       <VStack align="stretch" spacing={2} fontSize="sm">
         <Text>
-          <MdTipsAndUpdates
-            style={{ display: "inline", marginRight: "0.4rem" }}
-          />
-          1.
+          <Icon as={MdTipsAndUpdates} mr={1} />
           主机完全退出游戏后重新打开，再重新主持农场；必要时换一个人做主机或新建农场。
         </Text>
         <Text>
-          <MdTipsAndUpdates
-            style={{ display: "inline", marginRight: "0.4rem" }}
-          />
-          2. Windows
+          <Icon as={MdTipsAndUpdates} mr={1} />
           主机检查防火墙是否放行星露谷，仍然无法加入时可暂时关闭防火墙测试。
         </Text>
         <Text>
-          <MdTipsAndUpdates
-            style={{ display: "inline", marginRight: "0.4rem" }}
-          />
-          3. iOS 设备在系统设置中找到星露谷，确认“本地网络”权限已开启。
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          iOS设备在系统设置中找到星露谷，确认“本地网络”权限已开启。
         </Text>
         <Text>
-          <MdTipsAndUpdates
-            style={{ display: "inline", marginRight: "0.4rem" }}
-          />
-          4.
+          <Icon as={MdTipsAndUpdates} mr={1} />
           每位玩家轮流主持一次并查房：谁的农场始终搜不到，问题通常就在谁的设备或游戏设置上。
         </Text>
       </VStack>
