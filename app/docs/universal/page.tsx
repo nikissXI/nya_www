@@ -6,6 +6,7 @@ import {
   Badge,
   Link,
   Icon,
+  Divider,
 } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
@@ -34,10 +35,10 @@ export default function Page() {
             第 1 步 · 主机创建游戏
           </Badge>
           <Text>
-            约定一名玩家作为主机，主机负责进入游戏的联机模式，按游戏提示创建世界或房间。
+            一名玩家作为主机，主机负责进入游戏的联机模式，按游戏提示创建世界或房间
           </Text>
           <Text fontSize="sm" color="gray.300" mt={1}>
-            保持游戏运行，主机把自己的喵服IP和游戏端口告诉客机。
+            保持游戏运行，主机把自己的喵服IP和游戏端口告诉客机
           </Text>
         </Box>
 
@@ -46,10 +47,10 @@ export default function Page() {
             第 2 步 · 客机加入（方式一：IP 直连）
           </Badge>
           <Text>
-            其他玩家作为客机加入，进入游戏的多人或直接连接页面，填写主机的喵服IP和端口。
+            其他玩家作为客机加入，进入游戏的多人或直接连接页面，填写主机的喵服IP和端口
           </Text>
           <Text fontSize="sm" color="gray.300" mt={1}>
-            游戏端口由具体游戏的联机设置决定，如果IP和端口分开填写，就分别填入对应输入框。使用命令加入的游戏，请查找该游戏对应的连接命令。
+            游戏端口由具体游戏的联机设置决定，如果IP和端口分开填写，就分别填入对应输入框。使用命令加入的游戏，请查找该游戏对应的连接命令
           </Text>
         </Box>
 
@@ -59,18 +60,16 @@ export default function Page() {
           </Badge>
           <Text>
             如果游戏只能搜索房间或接受主机邀请，无法直接填写
-            IP，则需要自行确认该游戏是否支持喵服组网。
+            IP，则需要自行确认该游戏是否支持喵服组网
           </Text>
         </Box>
       </VStack>
 
-      <Heading size="md" mt={5} mb={3}>
-        如果联机失败请逐项检查
-      </Heading>
+      <Divider my={5} />
 
-      <Text my={3} fontSize="sm" color="gray.300">
-        以下是常见排查思路，不代表排查完一定能解决
-      </Text>
+      <Heading size="md" mt={5} mb={3}>
+        联机失败常见原因
+      </Heading>
 
       <VStack align="stretch" spacing={2}>
         <Text>
@@ -80,8 +79,7 @@ export default function Page() {
         </Text>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          Windows
-          做主机时，如果客机无法加入，先检查游戏是否被系统防火墙拦截；也可以暂时关闭防火墙测试
+          如果是Windows做主机，试试关闭防火墙
           <Link
             ml={1}
             href="https://zhuanlan.zhihu.com/p/397675766"

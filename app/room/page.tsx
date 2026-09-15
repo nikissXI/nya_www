@@ -91,7 +91,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     title: "星露谷物语",
     icon: "/images/stardewValley/icon.webp",
     qq: "817658554",
-    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
+    support: ["支持安卓、苹果、电脑三端跨平台联机"],
   },
   {
     path: "/docs/doNotStarve",
@@ -99,8 +99,8 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/doNotStarve/icon.webp",
     qq: "641115719",
     support: [
-      "离线模式下，支持安卓与苹果联机（需要游戏版本一致），但仅安卓能加入房间",
-      "不支持PC端与移动端联机",
+      "不支持PC端与移动端联机；安卓可以与苹果联机",
+      "苹果只能做主机，无法搜索房间，除非安装改版饥荒能调出控制台",
     ],
   },
   {
@@ -109,7 +109,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/slayTheSpire/icon.webp",
     qq: "698892019",
     support: [
-      "支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）",
+      "支持安卓、苹果、电脑三端跨平台联机",
       "Steam端需要安装IP联机mod才能使用喵服联机，房间内的游戏联机教程有提供",
     ],
   },
@@ -119,7 +119,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/terraria/icon.webp",
     qq: "976129564",
     support: [
-      "国际版支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）",
+      "国际版支持安卓、苹果、电脑三端跨平台联机",
       "心动代理版仅支持安卓与苹果联机，且不支持与国际版联机",
     ],
   },
@@ -129,8 +129,8 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/theEscapists/icon.webp",
     qq: "961793250",
     support: [
-      "支持安卓与苹果联机（需要游戏版本一致），搜索房间需要创建搜房任务，房间内的游戏联机教程有提供",
-      "仅支持移动端联机",
+      "支持安卓与苹果联机",
+      "不支持PC端逃脱者",
     ],
   },
   {
@@ -138,7 +138,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     title: "像素工厂",
     icon: "/images/mindustry/icon.webp",
     qq: "830268831",
-    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
+    support: ["支持安卓、苹果、电脑三端跨平台联机"],
   },
   {
     path: "/docs/l4d2",
@@ -176,7 +176,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     title: "生存战争",
     icon: "/images/survivalcraft/icon.webp",
     qq: "1092247198",
-    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
+    support: ["支持安卓、苹果、电脑三端跨平台联机"],
   },
   {
     path: "/docs/wizardOfLegend",
@@ -221,14 +221,14 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     title: "恶果之地",
     icon: "/images/juicyRealm/icon.webp",
     qq: "981282876",
-    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
+    support: ["支持安卓、苹果、电脑三端跨平台联机"],
   },
   {
     path: "/docs/aresVirus2",
     title: "阿瑞斯病毒2",
     icon: "/images/aresVirus2/icon.webp",
     qq: "966579113",
-    support: ["支持安卓、苹果、电脑三端跨平台联机（需要游戏版本一致）"],
+    support: ["支持安卓、苹果、电脑三端跨平台联机"],
   },
 ];
 
@@ -632,7 +632,9 @@ export default function Page() {
               <Text mt={3}>{sponsorNotice}</Text>
               <Text>注：仅需房主赞助</Text>
               {sponsorNotice.includes("10元") ? (
-                <Text color="#ffca3d">赞助专用节点拥挤度低，带宽更大，联机更稳定</Text>
+                <Text color="#ffca3d">
+                  赞助专用节点拥挤度低，带宽更大，联机更稳定
+                </Text>
               ) : (
                 <Text color="#ffca3d">该跨境联机节点支持国内外玩家联机</Text>
               )}
