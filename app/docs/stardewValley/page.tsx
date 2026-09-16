@@ -179,7 +179,7 @@ export default function Page() {
         </Text>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          iOS设备在系统设置中找到星露谷，确认“本地网络”权限已开启
+          如果是iOS设备，在系统设置中找到星露谷，确认“本地网络”权限已开启
         </Text>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
