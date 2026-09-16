@@ -1,18 +1,14 @@
 import {
-  Flex,
   Heading,
   Divider,
   Text,
   Image,
-  Input,
   Box,
   VStack,
-  HStack,
   Badge,
   Icon,
   Link,
 } from "@chakra-ui/react";
-import { Button } from "@/components/universal/button";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -93,6 +89,10 @@ export default function Page() {
       </VStack>
 
       <Divider my={5} />
+
+      <Heading size="md" mb={3}>
+        联机失败？按顺序检查
+      </Heading>
 
       <VStack align="stretch" spacing={2}>
         <Text>

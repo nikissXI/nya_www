@@ -120,7 +120,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     qq: "976129564",
     support: [
       "国际版支持安卓、苹果、电脑三端跨平台联机",
-      "心动代理版仅支持安卓与苹果联机，且不支持与国际版联机",
+      "TapTap版仅支持安卓与苹果联机，且不支持与国际版联机",
     ],
   },
   {
@@ -128,10 +128,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     title: "逃脱者手游",
     icon: "/images/theEscapists/icon.webp",
     qq: "961793250",
-    support: [
-      "支持安卓与苹果联机",
-      "不支持PC端逃脱者",
-    ],
+    support: ["支持安卓与苹果联机", "不支持PC端逃脱者"],
   },
   {
     path: "/docs/mindustry",
@@ -902,7 +899,10 @@ export default function Page() {
                 }}
               >
                 <Text mx={1} fontSize="sm" fontWeight="medium">
-                  喵服IP {item.ip}
+                  <Text as="span" color="gray.300" mr={1}>
+                    喵服IP
+                  </Text>
+                  {item.ip}
                 </Text>
                 <IconButton
                   display="inline-block"
