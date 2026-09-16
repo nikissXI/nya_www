@@ -184,7 +184,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/wizardOfLegend/icon.webp",
     qq: "981286541",
     support: [
-      "支持安卓与苹果联机，但仅安卓能加入房间",
+      "支持安卓与苹果联机，但仅安卓能搜索房间",
       "不支持电脑端，因为电脑端没有联机模式",
     ],
   },
