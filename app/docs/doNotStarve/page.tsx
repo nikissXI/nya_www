@@ -101,7 +101,7 @@ export default function Page() {
         联机失败？按顺序检查
       </Heading>
 
-      <VStack align="stretch" spacing={2} fontSize="sm">
+      <VStack align="stretch" spacing={2}>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
           游戏版本和模式（在线/离线）要与主机相同，如果安装了模组注意兼容性

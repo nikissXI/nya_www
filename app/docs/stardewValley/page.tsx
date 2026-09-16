@@ -164,7 +164,7 @@ export default function Page() {
         联机失败？按顺序检查
       </Heading>
 
-      <VStack align="stretch" spacing={2} fontSize="sm">
+      <VStack align="stretch" spacing={2}>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
           如果是Windows做主机，试试关闭防火墙
