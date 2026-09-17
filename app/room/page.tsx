@@ -124,6 +124,26 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     ],
   },
   {
+    path: "/docs/isaac",
+    title: "以撒的结合",
+    icon: "/images/isaac/icon.webp",
+    qq: "1074963191",
+    support: [
+      "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道",
+      "不支持PC端与移动端联机",
+    ],
+  },
+  {
+    path: "/docs/ark",
+    title: "方舟：生存进化",
+    icon: "/images/ark/icon.webp",
+    qq: "1106534252",
+    support: [
+      "手游需要使用“琳星Lin-C”版，否则无法使用IP加入游戏",
+      "不支持PC端与移动端联机",
+    ],
+  },
+  {
     path: "/docs/theEscapists",
     title: "逃脱者手游",
     icon: "/images/theEscapists/icon.webp",
@@ -145,27 +165,6 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     support: [
       "正版和盗版都支持，但如果卡Steam验证问题需要自己去解决",
       "该游戏只有PC端，别问手机能不能玩了",
-    ],
-  },
-  {
-    path: "/docs/ark",
-    title: "方舟：生存进化",
-    icon: "/images/ark/icon.webp",
-    qq: "1106534252",
-    support: [
-      "手游需要使用“琳星Lin-C”版，否则无法使用IP加入游戏",
-      "不支持PC端与移动端联机",
-    ],
-  },
-
-  {
-    path: "/docs/isaac",
-    title: "以撒的结合",
-    icon: "/images/isaac/icon.webp",
-    qq: "1074963191",
-    support: [
-      "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道",
-      "不支持PC端与移动端联机",
     ],
   },
   {
