@@ -93,7 +93,7 @@ export default function SideBar() {
           </Heading>
 
           <Text fontSize="md" whiteSpace="pre-wrap">
-            解锁专用节点创建房间权限及获得技术支持
+            觉得好用的话支持下啦~~
           </Text>
           <Link
             mt="1px"
@@ -104,7 +104,7 @@ export default function SideBar() {
             color="#7dd4ff"
             _hover={{ textDecoration: "none" }}
           >
-            了解赞助方式和特权
+            查看赞助方式和特权
           </Link>
         </Box>
 

@@ -647,7 +647,7 @@ export default function Page() {
                   navigate("/sponsor");
                 }}
               >
-                前往赞助页面
+                查看赞助方式
               </Button>
             </ModalFooter>
           </ModalContent>
@@ -945,7 +945,7 @@ export default function Page() {
       <HStack justify="center">
         <Button
           px={0}
-          size="lg"
+          size="md"
           bg="transparent"
           onClick={roomRole === ROLE_HOSTER ? handleCloseRoom : handleExitRoom}
         >
@@ -959,7 +959,7 @@ export default function Page() {
 
         <Button
           px={0}
-          size="lg"
+          size="md"
           bg="transparent"
           disabled={disableFlush}
           onClick={() => {
@@ -971,11 +971,26 @@ export default function Page() {
         </Button>
       </HStack>
 
-      {roomRole === ROLE_HOSTER && roomData && roomData?.room_max === 2 && (
-        <Text fontSize="md" color="#ffca3d">
-          如需增加房间人数请叠加赞助金额
-        </Text>
-      )}
+      {roomRole === ROLE_HOSTER &&
+        roomData &&
+        roomData?.members.length === 1 && (
+          <>
+            <Text
+              fontSize="sm"
+              color="gray.300"
+              display={{ base: "none", md: "block" }}
+            >
+              如需增加人数请继续赞助，赞助入口在右侧
+            </Text>
+            <Text
+              fontSize="sm"
+              color="gray.300"
+              display={{ base: "block", md: "none" }}
+            >
+              如需增加人数请继续赞助，赞助入口在下方
+            </Text>
+          </>
+        )}
     </Box>
   );
 
