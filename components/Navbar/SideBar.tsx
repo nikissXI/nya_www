@@ -93,7 +93,7 @@ export default function SideBar() {
           </Heading>
 
           <Text fontSize="md" whiteSpace="pre-wrap">
-            觉得好用的话支持下啦~~
+            觉得好用的话支持下啦
           </Text>
           <Link
             mt="1px"
