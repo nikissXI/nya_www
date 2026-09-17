@@ -57,7 +57,7 @@ export default function Page() {
 
       if (resp.ok) {
         const data = await resp.json();
-        setShowText(data.msg || "查房完成，请根据结果继续排查");
+        setShowText(data.msg || "响应结果异常，请联系服主");
       } else {
         setShowText("查房服务暂时不可用，请稍后再试");
       }
@@ -71,7 +71,7 @@ export default function Page() {
   return (
     <DocBox
       notices={[
-        "星露谷支持跨安卓、苹果、电脑联机，需游戏版本一致",
+        "支持跨安卓、苹果、电脑联机，需游戏版本一致",
         "2-3人联机时，建议选择带宽不低于0.5M的联机节点，人更多时选择更大带宽节点",
       ]}
     >

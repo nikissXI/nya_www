@@ -17,7 +17,7 @@ export default function Page() {
   return (
     <DocBox
       notices={[
-        "杀戮尖塔支持端游和手游联机，需游戏版本一致",
+        "支持端游和手游联机，需游戏版本一致",
         "建议选择STS联机节点，8个人联机也够用",
       ]}
     >

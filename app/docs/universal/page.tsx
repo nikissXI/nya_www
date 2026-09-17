@@ -26,9 +26,10 @@ export default function Page() {
         加入的游戏；仅支持搜索或邀请加入的游戏，需要自行确认是否兼容
       </Text>
 
-      <Heading size="md" mb={3}>
+      <Heading size="md" mb={2}>
         联机步骤（就两步）
       </Heading>
+
       <VStack align="stretch" spacing={3}>
         <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
           <Badge colorScheme="blue" mb={1} fontSize="sm">

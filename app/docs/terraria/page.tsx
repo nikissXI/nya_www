@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import DocBox from "@/components/docs/DocBox";
-import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {

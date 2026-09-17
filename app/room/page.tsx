@@ -128,7 +128,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     title: "逃脱者手游",
     icon: "/images/theEscapists/icon.webp",
     qq: "961793250",
-    support: ["支持安卓与苹果联机", "不支持PC端逃脱者"],
+    support: ["支持安卓与苹果联机，需游戏版本一致"],
   },
   {
     path: "/docs/mindustry",
