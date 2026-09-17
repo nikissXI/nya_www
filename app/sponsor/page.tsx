@@ -113,7 +113,7 @@ const Page = () => {
         <VStack maxW="600px" spacing={3} mx="auto">
           <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
             <Text fontSize="sm">
-              如需独享节点（50元起/月）可联系服主，定制节点房间人数无上限，仅指定用户可建房
+              如需定制独享节点（50元起/月）可联系服主，房间人数无上限，仅指定用户可建房
             </Text>
           </Box>
 

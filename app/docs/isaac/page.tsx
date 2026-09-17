@@ -36,6 +36,9 @@ export default function Page() {
       <Text textAlign="center"></Text>
 
       <Text fontSize="md">喵服以撒的结合交流Q群 1074963191</Text>
+      <Text fontSize="sm" color="gray.300" mt={1}>
+        联机有问题或找搭子请加群
+      </Text>
 
       <Divider my={5} />
 

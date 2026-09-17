@@ -23,6 +23,9 @@ export default function Page() {
       ]}
     >
       <Text fontSize="md">喵服泰拉瑞亚交流Q群 976129564</Text>
+      <Text fontSize="sm" color="gray.300" mt={1}>
+        联机有问题或找搭子请加群
+      </Text>
 
       <Divider my={5} />
 

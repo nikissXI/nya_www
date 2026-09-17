@@ -24,6 +24,8 @@ export default function Page() {
       <Text my={3} fontSize="sm" color="gray.300">
         适用范围：支持通过 IP
         加入的游戏；仅支持搜索或邀请加入的游戏，需要自行确认是否兼容
+        <br />
+        有其他联机问题请加Q群1047464328
       </Text>
 
       <Heading size="md" mb={2}>
@@ -75,11 +77,6 @@ export default function Page() {
       <VStack align="stretch" spacing={2}>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          检查主机是否仍在游戏中、IP
-          和端口是否正确，以及游戏版本、模组等是否一致
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
           如果是Windows做主机，试试关闭防火墙
           <Link
             ml={1}
@@ -92,8 +89,8 @@ export default function Page() {
         </Text>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          如果仍然无法加入，请带上游戏名称、主机IP、端口和完整报错，前往喵服官方
-          QQ 群咨询
+          检查主机是否仍在游戏中、IP
+          和端口是否正确，以及游戏版本、模组等是否一致
         </Text>
       </VStack>
 

@@ -124,6 +124,9 @@ export default function Page() {
       <Divider my={5} />
 
       <Text fontSize="md">喵服星露谷物语交流Q群 817658554</Text>
+      <Text fontSize="sm" color="gray.300" mt={1}>
+        联机有问题或找搭子请加群
+      </Text>
 
       <Divider my={5} />
 

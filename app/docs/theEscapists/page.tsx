@@ -68,6 +68,9 @@ export default function AndroidPage0() {
       ]}
     >
       <Text fontSize="md">喵服逃脱者手游交流Q群 961793250</Text>
+      <Text fontSize="sm" color="gray.300" mt={1}>
+        联机有问题或找搭子请加群
+      </Text>
 
       <Divider my={5} />
 
