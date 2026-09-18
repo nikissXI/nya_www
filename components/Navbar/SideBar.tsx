@@ -92,12 +92,9 @@ export default function SideBar() {
             赞助喵服
           </Heading>
 
-          <Text fontSize="md" whiteSpace="pre-wrap">
-            觉得好用的话支持下啦
-          </Text>
+          <Text whiteSpace="pre-wrap">觉得好用的话支持下啦</Text>
           <Link
             mt="1px"
-            fontSize="md"
             fontWeight="bold"
             as={RouterLink}
             to="/sponsor"
@@ -115,7 +112,7 @@ export default function SideBar() {
 
           {serverData?.announcements && serverData.announcements.length > 0 ? (
             <>
-              <Text fontSize="md" fontWeight="bold" textAlign="left">
+              <Text fontWeight="bold" textAlign="left">
                 {formatDate(serverData.announcements[0].timestamp, true)}
               </Text>
 
@@ -125,7 +122,6 @@ export default function SideBar() {
 
               <Link
                 mt="1px"
-                fontSize="md"
                 fontWeight="bold"
                 onClick={onOpen}
                 color="#7dd4ff"
@@ -135,7 +131,7 @@ export default function SideBar() {
               </Link>
             </>
           ) : (
-            <Text fontSize="md">暂无公告</Text>
+            <Text>暂无公告</Text>
           )}
         </Box>
       </Flex>

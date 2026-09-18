@@ -98,7 +98,7 @@ const Page = () => {
           gap={{ base: 2, md: 4 }}
           flexWrap="wrap"
         >
-          <Text fontSize="md" fontWeight="bold" whiteSpace="nowrap">
+          <Text fontWeight="bold" whiteSpace="nowrap">
             联系服主
           </Text>
           <Text fontSize="sm">
@@ -124,20 +124,24 @@ const Page = () => {
           </Box>
 
           <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-            <Text fontSize="md" fontWeight="bold" mb={2}>
+            <Text fontWeight="bold" mb={2}>
               赞助专用节点解锁规则
             </Text>
             <Text fontSize="sm">
-              普通节点累计赞助满 <strong>10 元</strong>即可解锁，跨境节点累计赞助满 <strong>20 元</strong>即可解锁
+              普通节点累计赞助满 <strong>10 元</strong>
+              即可解锁，跨境节点累计赞助满 <strong>20 元</strong>即可解锁
             </Text>
             <Text fontSize="sm" mt={2}>
-              <strong>只需要房主赞助，成员无需单独赞助。</strong>房间内成员的赞助也可以计入，累计房间人数
+              <strong>只需要房主赞助，成员无需单独赞助。</strong>
+              房间内成员的赞助也可以计入，累计房间人数
             </Text>
             <Text fontSize="sm" mt={2}>
-              房间人数 = 累计赞助金额 ÷ 节点解锁金额 + 1，最多 <strong>16 人</strong>。
+              房间人数 = 累计赞助金额 ÷ 节点解锁金额 + 1，最多{" "}
+              <strong>16 人</strong>。
             </Text>
             <Text fontSize="sm" mt={2} color="#ffca3d">
-              例：普通节点累计 10 元可容纳 2 人，累计 20 元可容纳 3 人；跨境节点所需金额翻倍
+              例：普通节点累计 10 元可容纳 2 人，累计 20 元可容纳 3
+              人；跨境节点所需金额翻倍
             </Text>
           </Box>
         </VStack>

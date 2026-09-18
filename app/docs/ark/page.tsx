@@ -24,13 +24,13 @@ export default function Page() {
         "2-3人联机时，建议选择带宽不低于0.5M的联机节点，人更多时选择更大带宽节点",
       ]}
     >
-      <Text fontSize="md">这里只有手游的联机教程，如果是端游请找服主</Text>
+      <Text >这里只有手游的联机教程，如果是端游请找服主</Text>
 
       <Divider my={5} />
 
       <Text textAlign="center"></Text>
 
-      <Text fontSize="md">喵服方舟手游交流Q群 1106534252</Text>
+      <Text >喵服方舟手游交流Q群 1106534252</Text>
       <Text fontSize="sm" color="gray.300" mt={1}>
         联机有问题或找搭子请加群
       </Text>

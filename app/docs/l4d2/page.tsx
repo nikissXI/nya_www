@@ -1,90 +1,187 @@
 import {
-  Flex,
-  Center,
+  Heading,
   Divider,
   Text,
   Image,
+  Box,
+  VStack,
+  Badge,
   Icon,
   Link,
-  Heading,
+  Code,
 } from "@chakra-ui/react";
-import { Button } from "@/components/universal/button";
 import { MdTipsAndUpdates } from "react-icons/md";
 import DocBox from "@/components/docs/DocBox";
-import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
 
 export default function Page() {
   return (
-    <DocBox>
-      <DocLink
-        linkText="简略视频演示"
-        linkUrl="https://www.bilibili.com/video/BV1xHS4Y7Ejz/"
-      />
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        喵服关联QQ群：138012638
-      </Text>
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        联机教程用Steam正版演示，破解版如果联机异常请自行排查
-      </Text>
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        求生之路2的官方直连服务器不是一定卡的，就如登陆steam有时候需要加速器有时候不用
-      </Text>
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        使用喵服联机延迟约为主机和客机各自到节点延迟总和，比如主机到节点延迟30ms，客机到节点延迟50ms，那游戏的实际延迟将至少80ms
+    <DocBox
+      notices={[
+        "正版和盗版都支持，但盗版卡Steam验证自己去解决",
+        "2~3人联机时，建议选择带宽不低于0.8M的联机节点，人更多时选择更大带宽节点",
+      ]}
+    >
+      <Text>喵服求生之路2交流Q群 138012638</Text>
+      <Text fontSize="sm" color="gray.300" mt={1}>
+        联机有问题或找搭子请加群
       </Text>
 
       <Divider my={5} />
 
-      <Heading size="lg" textAlign="center">
-        主机操作指引
+      <Heading size="md">启用游戏控制台</Heading>
+
+      <Text my={1}>
+        进入游戏主界面，点击 <strong>选项 → 键盘/鼠标</strong>
+        ，将“允许使用开发者控制台”设置为启用
+      </Text>
+
+      <Text>
+        在游戏中按 <strong>~</strong> 键（通常在键盘左上角）打开控制台
+      </Text>
+
+      <Divider my={5} />
+
+      <Heading size="md">联机步骤</Heading>
+
+      <Text fontSize="sm" my={1} color="gray.300">
+        教程使用的是Steam正版
+      </Text>
+
+      <VStack align="stretch" spacing={3}>
+        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+          <Badge colorScheme="blue" mb={1}>
+            第 1 步 · 主机
+          </Badge>
+          <Text>
+            一名玩家作为主机，进游戏点{" "}
+            <strong>完成战役 → 与好友一起玩游戏 → 创建新战役大厅</strong>
+          </Text>
+          <Image w="500px" src="/images/l4d2/hoster1.webp" alt="hoster1" />
+
+          <Text mt={3}>
+            服务器类型选 <strong>本地服务器</strong>
+            ，然后直接开始游戏，进到游戏地图里等待
+          </Text>
+          <Image w="500px" src="/images/l4d2/hoster3.webp" alt="hoster3" />
+
+          <Text mt={3}>
+            如果玩第三方地图，打开控制台用命令创建游戏
+            <Code
+              display="block"
+              whiteSpace="pre-wrap"
+              p={1}
+              maxW="300px"
+              borderRadius="md"
+              bg="gray.900"
+              color="cyan.200"
+              fontSize="sm"
+              fontFamily="mono"
+            >
+              map 地图代码 游戏模式
+            </Code>
+            比如 死亡中心-旅馆 合作模式
+            <Code
+              display="block"
+              whiteSpace="pre-wrap"
+              p={1}
+              maxW="300px"
+              borderRadius="md"
+              bg="gray.900"
+              color="cyan.200"
+              fontSize="sm"
+              fontFamily="mono"
+            >
+              map c1m1_hotel coop
+            </Code>
+          </Text>
+          <Text fontSize="sm" color="gray.300" mt={1}>
+            控制台更多命令用法自行网上搜索或问AI
+          </Text>
+        </Box>
+        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+          <Badge colorScheme="blue" mb={1}>
+            第 2 步 · 客机
+          </Badge>
+          <Text>
+            其他玩家作为客机，打开控制台用命令加入游戏
+            <Code
+              display="block"
+              whiteSpace="pre-wrap"
+              p={1}
+              maxW="300px"
+              borderRadius="md"
+              bg="gray.900"
+              color="cyan.200"
+              fontSize="sm"
+              fontFamily="mono"
+            >
+              connect 主机喵服IP
+            </Code>
+            比如主机喵服IP是100.64.0.1
+            <Code
+              display="block"
+              whiteSpace="pre-wrap"
+              p={1}
+              maxW="300px"
+              borderRadius="md"
+              bg="gray.900"
+              color="cyan.200"
+              fontSize="sm"
+              fontFamily="mono"
+            >
+              connect 100.64.0.1
+            </Code>
+          </Text>
+        </Box>
+      </VStack>
+
+      <Divider my={5} />
+
+      <Heading size="md" mb={3}>
+        联机失败？按顺序检查
       </Heading>
 
-      <Text mt={3}>
-        玩家都处于同个联机房间并在线后，主机进游戏点“与好友一起玩游戏”
-      </Text>
-      <Image w="500px" src="/images/l4d2/l4d2_1.webp" alt="l4d2_1" />
+      <VStack align="stretch" spacing={2}>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          加入游戏失败如果是下图错误，让主机关闭防火墙再试
+          <Link
+            ml={1}
+            href="https://zhuanlan.zhihu.com/p/397675766"
+            color="#7dd4ff"
+            target="_blank"
+          >
+            不会关点我
+          </Link>
+          <Image h="150px" src="/images/l4d2/joiner.webp" alt="joiner" />
+        </Text>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          其他加入报错请加群询问（不一定能解决）或自行网上查找解决方法
+        </Text>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          建议到创意工坊把这个mod打上，能一定程度上避免兼容性问题导致无法加入，或自己找其他类似的mod也可以
+          <Image w="500px" src="/images/l4d2/mod.webp" alt="mod" />
+        </Text>
+      </VStack>
 
-      <Text mt={3}>选“创建新战役大厅”</Text>
-      <Image w="500px" src="/images/l4d2/l4d2_2.webp" alt="l4d2_2" />
-
-      <Text mt={3}>
-        服务器类型选“本地服务器”，然后直接开始游戏，注意是开始游戏进到地图里！需要主机已经在地图里客机才能加入
-      </Text>
-      <Image w="500px" src="/images/l4d2/l4d2_3.webp" alt="l4d2_3" />
-
-      <Heading mt={5} size="lg" textAlign="center">
-        客机操作指引
+      <Divider my={5} />
+      <Heading size="md" mb={3}>
+        用喵服后联机还是卡顿？
       </Heading>
 
-      <Text mt={3}>
-        客机按波浪键“~”调出控制台，使用命令“connect
-        主机喵服IP”即可加入，如主机的IP是100.64.0.8，那命令就是“connect
-        100.64.0.8”
-        <br />
-        如果按“~”键没反应，就去游戏设置里，找到“键盘/鼠标”选项，把“允许使用开发者控制台”改为启用
-        <br />
-        下图就是连接失败的报错，这种情况就检查IP是否填对，防火墙是否放通游戏（不会就直接把防火墙关了试试）
-        <br />
-        如果是其他报错就是游戏问题，跟喵服无关，自行解决
-      </Text>
-      <Image w="500px" src="/images/l4d2/l4d2_4.webp" alt="l4d2_4" />
-
-      <Text mt={3}>
-        建议到创意工坊把这个mod打上，能一定程度上避免兼容性问题导致无法加入。
-      </Text>
-      <Image
-        src="/images/l4d2/l4d2_5.webp"
-        alt="l4d2_5"
-      />
+      <VStack align="stretch" spacing={2}>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          比如主机到节点延迟30ms，客机到节点延迟50ms，那游戏的实际延迟将至少80ms
+        </Text>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          如果丧尸一多，主机客机就一起卡，这种情况多半是主机电脑硬件太新，这老游戏对新硬件兼容性不好，可以尝试用服务端开服
+        </Text>
+      </VStack>
 
       <Divider my={5} />
 

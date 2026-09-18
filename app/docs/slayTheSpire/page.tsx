@@ -21,7 +21,7 @@ export default function Page() {
         "建议选择STS联机节点，8个人联机也够用",
       ]}
     >
-      <Text fontSize="md">喵服杀戮尖塔交流Q群 698892019</Text>
+      <Text>喵服杀戮尖塔交流Q群 698892019</Text>
       <Text fontSize="sm" color="gray.300" mt={1}>
         联机有问题或找搭子请加群
       </Text>

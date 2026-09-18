@@ -21,7 +21,7 @@ export default function Page() {
         "2~3人联机时，建议选择带宽不低于0.5M的联机节点，人更多时选择更大带宽节点",
       ]}
     >
-      <Text fontSize="md">喵服像素工厂交流Q群 830268831</Text>
+      <Text>喵服像素工厂交流Q群 830268831</Text>
       <Text fontSize="sm" color="gray.300" mt={1}>
         联机有问题或找搭子请加群
       </Text>
@@ -52,7 +52,6 @@ export default function Page() {
           <Text>
             其他玩家作为客机，在加入游戏界面，点添加服务器，把主机的喵服联机IP填上去就行
           </Text>
-          <Text fontSize="sm" color="gray.300" mt={1}></Text>
           <Image w="400px" src="/images/mindustry/joiner.webp" alt="joiner" />
         </Box>
       </VStack>

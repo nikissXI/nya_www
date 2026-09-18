@@ -22,7 +22,7 @@ export default function Page() {
         "2-3人联机时，建议选择带宽不低于0.6M的联机节点，人更多时选择更大带宽节点",
       ]}
     >
-      <Text fontSize="md">喵服泰拉瑞亚交流Q群 976129564</Text>
+      <Text>喵服泰拉瑞亚交流Q群 976129564</Text>
       <Text fontSize="sm" color="gray.300" mt={1}>
         联机有问题或找搭子请加群
       </Text>
@@ -53,7 +53,6 @@ export default function Page() {
             第 2 步 · 客机
           </Badge>
           <Text>其他玩家作为客机，进到多人模式，看下图操作吧</Text>
-          <Text fontSize="sm" color="gray.300" mt={1}></Text>
           <Image
             mt={1}
             w="400px"

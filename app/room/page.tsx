@@ -163,7 +163,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/l4d2/icon.webp",
     qq: "138012638",
     support: [
-      "正版和盗版都支持，但如果卡Steam验证问题需要自己去解决",
+      "正版和盗版都支持，但盗版卡Steam验证自己去解决",
       "该游戏只有PC端，别问手机能不能玩了",
     ],
   },
