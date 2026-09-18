@@ -54,7 +54,7 @@ export default function Page() {
             第 1 步 · 主机
           </Badge>
           <Text>
-            一名玩家作为主机，进游戏点{" "}
+            一名玩家作为主机，进游戏点
             <strong>完成战役 → 与好友一起玩游戏 → 创建新战役大厅</strong>
           </Text>
           <Image w="500px" src="/images/l4d2/hoster1.webp" alt="hoster1" />

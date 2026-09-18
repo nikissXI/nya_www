@@ -23,29 +23,17 @@ export default function Header({ path }: { path: string }) {
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
-    // const gameTitles: { [key: string]: string } = {
-    //   "/room/": "联机房间",
-    //   "/nya/android": "WG部署教程-安卓",
-    //   "/nya/ios": "WG部署教程-苹果",
-    //   "/nya/pc": "WG部署教程-电脑",
-    // };
-
     const titles: { [key: string]: string } = {
       "/": "首页",
       "/register": "注册",
       "/forgetPass": "忘记密码",
       "/me": "我的信息",
       "/sponsor": "赞助喵服",
-      "/docs": "喵服联机教程",
+      "/docs": "联机教程",
       "/room": "联机房间",
     };
-
-    // const matchedTitle = Object.keys(gameTitles).find((key) =>
-    //   path.includes(key)
-    // );
-    // setTitle(matchedTitle ? gameTitles[matchedTitle] : titles[path]);
-    setTitle(titles[path]);
-  }, [path]);
+    setTitle(titles[rootPath]);
+  }, [rootPath]);
 
   const rootGuide = [
     { name: "首页", path: "/" },
