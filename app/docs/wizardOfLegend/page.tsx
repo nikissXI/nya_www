@@ -1,37 +1,61 @@
-
-import { Icon, Divider, Text, Heading } from "@chakra-ui/react";
-import { Button } from "@/components/universal/button";
+import {
+  Heading,
+  Divider,
+  Text,
+  Image,
+  Box,
+  VStack,
+  Badge,
+  Icon,
+  Link,
+} from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
-import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function Page() {
   return (
-    <DocBox>
-      <Heading size="lg" textAlign="center">
-        仅手游，PC不支持联机
-      </Heading>
-
-      <DocLink
-        linkText="视频演示"
-        linkUrl="https://www.bilibili.com/video/BV1svije6Eda/"
-      />
-
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        喵服关联QQ群：981286541
+    <DocBox
+      notices={[
+        "支持安卓与苹果联机，但仅安卓能搜索房间",
+        "不支持电脑端，因为电脑端没有联机模式",
+        "建议选择带宽不低于0.3M的联机节点",
+      ]}
+    >
+      <Text>喵服传说法师交流Q群 981286541</Text>
+      <Text fontSize="sm" color="gray.300" mt={1}>
+        联机有问题或找搭子请加群
       </Text>
 
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        注意，苹果系统只能作为主机，不能作为客机（即不能搜索房间）
+      <Divider my={5} />
+
+      <Heading size="md">联机步骤</Heading>
+
+      <Text fontSize="sm" my={1} color="gray.300">
+        端游和手游一样，下图用的是安卓版
       </Text>
 
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        玩家都处于同个联机房间并在线后，主机进游戏创建联机房间，创建好后不要切出游戏外，客机进游戏点加入房间搜索即可
-      </Text>
+      <VStack align="stretch" spacing={3}>
+        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+          <Badge colorScheme="blue" mb={1}>
+            第 1 步 · 主机
+          </Badge>
+          <Text>一名玩家作为主机，进游戏创建联机房间，等待另一名玩家加入</Text>
+          <Text fontSize="sm" color="gray.300" mt={1}>
+            游戏必须保持在前台，不能锁屏或切到后台
+          </Text>
+        </Box>
+
+        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+          <Badge colorScheme="blue" mb={1}>
+            第 2 步 · 客机
+          </Badge>
+          <Text>另一名玩家作为客机，进游戏点加入房间搜索即可</Text>
+          <Text fontSize="sm" color="gray.300" mt={1}>
+            苹果系统无法搜索房间，只能做主机
+          </Text>
+        </Box>
+      </VStack>
 
       <Divider my={5} />
 
