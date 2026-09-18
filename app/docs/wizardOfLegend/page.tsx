@@ -2,16 +2,12 @@ import {
   Heading,
   Divider,
   Text,
-  Image,
   Box,
   VStack,
   Badge,
-  Icon,
-  Link,
 } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
-import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function Page() {
   return (
