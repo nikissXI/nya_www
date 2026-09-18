@@ -122,7 +122,7 @@ const DocumentPage = () => {
       <Box mb={1}>
         <Text>
           ① 当前选择的是&ensp;
-          <Text as="span" fontWeight="bold">
+          <Text as="span" color="#ffca3d" fontWeight="bold">
             {userWgInfo?.node_alias}
           </Text>
           &ensp;节点
@@ -135,14 +135,15 @@ const DocumentPage = () => {
         <Text>
           <Icon as={MdTipsAndUpdates} mr={2} />
           <HighLight fontSize="sm">
-            后续步骤导入或下载的是{userWgInfo?.node_alias}
-            节点的隧道，如果切换了新节点，要来这导入新节点的隧道
+            如果切换了新节点，要来这导入新节点的隧道，每个节点有对应的隧道
           </HighLight>
         </Text>
 
         <Text>
           <Icon as={MdTipsAndUpdates} mr={2} />
-          <HighLight fontSize="sm">隧道与账号绑定，不能多个玩家共用</HighLight>
+          <HighLight fontSize="sm">
+            不要导入他人分享的隧道，一人一隧道不能共用
+          </HighLight>
         </Text>
       </Box>
     );
@@ -206,7 +207,7 @@ const DocumentPage = () => {
               </Text>
               <Text>
                 <Icon as={MdTipsAndUpdates} mr={1} />
-                禁止Minecraft联机（定制节点除外）
+                禁止Minecraft联机（独享节点除外）
               </Text>
               <Text>
                 <Icon as={MdTipsAndUpdates} mr={1} />
