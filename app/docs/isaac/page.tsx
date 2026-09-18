@@ -1,13 +1,9 @@
 import {
-  Flex,
   Heading,
   Divider,
   Text,
-  Image,
-  Input,
   Box,
   VStack,
-  HStack,
   Badge,
   Icon,
   Link,
@@ -33,8 +29,6 @@ export default function Page() {
 
       <Divider my={5} />
 
-      <Text textAlign="center"></Text>
-
       <Text>喵服以撒的结合交流Q群 1074963191</Text>
       <Text fontSize="sm" color="gray.300" mt={1}>
         联机有问题或找搭子请加群
@@ -45,7 +39,7 @@ export default function Page() {
       <Heading size="md">联机步骤</Heading>
 
       <Text fontSize="sm" my={1} color="gray.300">
-        简单的说，玩家都连上喵服，直接联机就行
+        简单的说，玩家都连上喵服，直接联机就行，不要开其他加速器
       </Text>
 
       <VStack align="stretch" spacing={3}>
