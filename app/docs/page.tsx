@@ -661,7 +661,7 @@ const DocumentPage = () => {
 
         <Box mt={5}>
           <Text>
-            ⑤ WG隧道打开后<HighLight>等3秒</HighLight>再点刷新
+            ⑤ WG隧道打开后<HighLight>等5秒</HighLight>再点刷新
           </Text>
 
           <Flex align="center" mt={1} gap={2}>

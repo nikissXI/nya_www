@@ -977,14 +977,14 @@ export default function Page() {
               color="gray.300"
               display={{ base: "none", md: "block" }}
             >
-              如需增加人数请继续赞助，赞助入口在右侧
+              如需增加人数请查阅赞助页面，入口在右侧
             </Text>
             <Text
               fontSize="sm"
               color="gray.300"
               display={{ base: "block", md: "none" }}
             >
-              如需增加人数请继续赞助，赞助入口在下方
+              如需增加人数请查阅赞助页面，入口在下方
             </Text>
           </>
         )}
