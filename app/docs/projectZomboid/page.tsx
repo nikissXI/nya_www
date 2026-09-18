@@ -1,26 +1,76 @@
-import { Text, Divider, Icon, Image } from "@chakra-ui/react";
-import { Button } from "@/components/universal/button";
-import { MdTipsAndUpdates } from "react-icons/md";
+import {
+  Heading,
+  Divider,
+  Text,
+  Box,
+  VStack,
+  Badge,
+  Icon,
+  Image,
+  Link,
+} from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
+import { MdTipsAndUpdates } from "react-icons/md";
 
 export default function AndroidPage0() {
   return (
-    <DocBox>
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        喵服关联QQ群：玩家太少，暂时不建群，如果需要建群加服主QQ1299577815
+    <DocBox
+      notices={[
+        "2~3人联机时，建议选择带宽不低于0.5M的联机节点，人更多时选择更大带宽节点",
+      ]}
+    >
+      <Text>该游戏玩家群体太小，没有专门的交流群</Text>
+      <Text fontSize="sm" color="gray.300" mt={1}>
+        联机有问题请去大群找群主
       </Text>
 
-      <Text my={1}>
-        <Icon as={MdTipsAndUpdates} mr={2} />
-        玩家都处于一个联机房间后，主机建立服务器，客机加入服务器，填写的内容看图。如果加入失败，主机关闭防火墙再试
-      </Text>
+      <Divider my={5} />
 
-      <Image
-        src="/images/projectZomboid/projectZomboid_1.webp"
-        alt="projectZomboid_1"
-      />
+      <Heading size="md" mb={2}>
+        联机步骤
+      </Heading>
+
+      <VStack align="stretch" spacing={3}>
+        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+          <Badge colorScheme="blue" mb={1}>
+            第 1 步 · 主机
+          </Badge>
+          <Text>一名玩家作为主机，建立服务器，进到地图里等待</Text>
+        </Box>
+        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+          <Badge colorScheme="blue" mb={1}>
+            第 2 步 · 客机
+          </Badge>
+          <Text>其他玩家作为客机，根据下图指引填写信息加入游戏</Text>
+          <Image src="/images/projectZomboid/hoster.webp" alt="hoster" />
+        </Box>
+      </VStack>
+
+      <Divider my={5} />
+
+      <Heading size="md" mb={3}>
+        联机失败？按顺序检查
+      </Heading>
+
+      <VStack align="stretch" spacing={2}>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          如果是Windows做主机，试试关闭防火墙
+          <Link
+            ml={1}
+            href="https://zhuanlan.zhihu.com/p/397675766"
+            color="#7dd4ff"
+            target="_blank"
+          >
+            不会关点我
+          </Link>
+        </Text>
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
+          如果加入后或规律性闪退、黑屏，请自行检查mod或是游戏bug
+        </Text>
+      </VStack>
 
       <Divider my={5} />
 
