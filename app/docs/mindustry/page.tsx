@@ -39,7 +39,7 @@ export default function Page() {
           <Badge colorScheme="blue" mb={1}>
             第 1 步 · 主机
           </Badge>
-          <Text>一名玩家作为主机，进游戏地图后，打开菜单，创建联机游戏</Text>
+          <Text>一名玩家作为主机，进游戏地图后，打开菜单，创建联机游戏就行</Text>
           <Text fontSize="sm" color="gray.300" mt={1}>
             手机或平板做主机时，游戏必须保持在前台，不能锁屏或切到后台
           </Text>

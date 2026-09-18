@@ -198,9 +198,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     title: "机械战争3",
     icon: "/images/machinesAtWar3/icon.webp",
     qq: "689358384",
-    support: [
-      "由于该游戏版本众多，只要有联机模式的都支持，如果有疑问加该游戏的QQ群问问",
-    ],
+    support: ["有联机模式的基本都支持，苹果系统另说"],
   },
   {
     path: "/docs/projectZomboid",
