@@ -13,7 +13,6 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
-import { useUserStateStore } from "@/store/user-state";
 import { useState } from "react";
 import { getAuthToken } from "@/store/authKey";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -28,7 +27,6 @@ import BackButton from "@/components/docs/BackButton";
 import { apiUrl } from "@/utils/api";
 
 export default function Page() {
-  const { userInfo, setShowLoginModal } = useUserStateStore();
   const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");
   const [isChecking, setIsChecking] = useState(false);
@@ -208,43 +206,39 @@ export default function Page() {
         <Heading size="sm" mb={2} textAlign="center">
           查房工具
         </Heading>
-        {userInfo ? (
-          <Flex gap={2}>
-            <Button
-              size="sm"
-              onClick={() => createTask(inputIp)}
-              isLoading={isChecking}
-              loadingText="检查中"
-              flexShrink={0}
-            >
-              查找
-            </Button>
 
-            <Input
-              size="sm"
-              type="text"
-              value={inputIp}
-              onChange={(e) => {
-                setInputIp(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !isChecking) {
-                  createTask(inputIp);
-                }
-              }}
-              placeholder="填农场主喵服ip，如 100.64.0.1"
-              aria-label="农场主喵服 IP"
-              bg="white"
-              color="#1a202c"
-              borderRadius="md"
-              _placeholder={{ color: "#718096" }}
-            />
-          </Flex>
-        ) : (
-          <Button size="sm" onClick={setShowLoginModal}>
-            请登录后再操作，点击登录
+        <Flex gap={2}>
+          <Button
+            size="sm"
+            onClick={() => createTask(inputIp)}
+            isLoading={isChecking}
+            loadingText="检查中"
+            flexShrink={0}
+          >
+            查找
           </Button>
-        )}
+
+          <Input
+            size="sm"
+            type="text"
+            value={inputIp}
+            onChange={(e) => {
+              setInputIp(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !isChecking) {
+                createTask(inputIp);
+              }
+            }}
+            placeholder="填农场主喵服ip，如 100.64.0.1"
+            aria-label="农场主喵服 IP"
+            bg="white"
+            color="#1a202c"
+            borderRadius="md"
+            _placeholder={{ color: "#718096" }}
+          />
+        </Flex>
+
         {showText && (
           <Text mt={3} color="#ffd648" fontSize="sm" role="status">
             {showText}

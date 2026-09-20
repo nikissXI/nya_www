@@ -97,66 +97,10 @@ export default function AndroidPage0() {
             第 2 步 · 客机
           </Badge>
           <Text>
-            其他玩家作为客机，在下方填写主机的喵服IP创建搜索任务，创建后进游戏，点多人游戏的加入，搜索房间就行
+            其他玩家作为客机，在联机房间界面，创建搜索任务位置，填写主机的喵服IP，创建后进游戏，点多人游戏的加入，搜索房间就行
           </Text>
         </Box>
       </VStack>
-
-      <Box
-        mt={2}
-        p={2}
-        bg="rgba(52, 139, 246, 0.18)"
-        borderRadius="md"
-        maxW="360px"
-      >
-        <Heading size="sm" mb={2} textAlign="center">
-          创建搜索任务（不创建搜不到房间）
-        </Heading>
-        {userInfo ? (
-          <>
-            <Flex gap={2}>
-              <Button
-                size="sm"
-                onClick={() => createTask(inputIp)}
-                isLoading={isChecking}
-                loadingText="创建中"
-                flexShrink={0}
-              >
-                创建
-              </Button>
-
-              <Input
-                size="sm"
-                type="text"
-                value={inputIp}
-                onChange={(e) => {
-                  setInputIp(e.target.value);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !isChecking) {
-                    createTask(inputIp);
-                  }
-                }}
-                placeholder="填主机喵服ip，如 100.64.0.1"
-                aria-label="主机喵服 IP"
-                bg="white"
-                color="#1a202c"
-                borderRadius="md"
-                _placeholder={{ color: "#718096" }}
-              />
-            </Flex>
-          </>
-        ) : (
-          <Button size="sm" onClick={setShowLoginModal}>
-            请登录后再操作，点击登录
-          </Button>
-        )}
-        {showText && (
-          <Text mt={3} color="#ffd648" fontSize="sm" role="status">
-            {showText}
-          </Text>
-        )}
-      </Box>
 
       <Divider my={5} />
 
@@ -167,7 +111,7 @@ export default function AndroidPage0() {
       <VStack align="stretch" spacing={2}>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          测试的逃脱者手游为东品代理的版本，安卓1.3.2，苹果版本1.70.2，如果游戏更新了请联系服主测试
+          联机测试的逃脱者手游为东品代理的版本，安卓1.3.2，苹果版本1.70.2，如果游戏更新了请联系服主测试
         </Text>
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />

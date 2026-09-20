@@ -48,6 +48,7 @@ import { NoticeText } from "@/components/universal/Notice";
 import SponsorTag from "@/components/universal/SponsorTag";
 import OfflineReasons from "@/components/docs/OfflineReasons";
 import { apiUrl } from "@/utils/api";
+import TheEscapistsTool from "@/components/universal/theEscapistsTool";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -854,6 +855,8 @@ export default function Page() {
                 ? `通用游戏联机教程`
                 : `${roomGame.title} 联机教程`}
             </Button>
+
+            {roomGame.title === "逃脱者手游" && <TheEscapistsTool />}
           </VStack>
         )}
 
