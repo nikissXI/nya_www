@@ -81,7 +81,7 @@ export default function TheEscapistsTool() {
       </Flex>
 
       {showText && (
-        <Text mt={3} color="#ffd648" fontSize="sm" role="status">
+        <Text mt={2} color="#ffd648" fontSize="sm" role="status">
           {showText}
         </Text>
       )}
