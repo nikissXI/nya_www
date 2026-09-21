@@ -19,14 +19,13 @@ import {
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
 import { Button } from "@/components/universal/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { openToast } from "@/components/universal/toast";
 import {
   isInteger,
   getHash,
-  validatePassword,
-  validateTel,
-  validateEmail,
+  getErrorMessage,
+  getPasswordAlertText,
 } from "@/utils/strings";
 import { getAuthToken, setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
@@ -47,19 +46,18 @@ export default function UserProfilePage() {
   const modifyUsername = async () => {
     if (!inputUsername) return;
 
-    const req_data = {
-      username: inputUsername,
-    };
-    const resp = await fetch(`${apiUrl}/modifyUsername`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-      body: JSON.stringify(req_data),
-    });
+    try {
+      const resp = await fetch(`${apiUrl}/modifyUsername`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({ username: inputUsername }),
+      });
 
-    if (resp.ok) {
+      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
+
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "修改成功", status: "success" });
@@ -67,8 +65,11 @@ export default function UserProfilePage() {
       } else {
         openToast({ content: data.msg, status: "warning" });
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 
@@ -109,44 +110,46 @@ export default function UserProfilePage() {
       return;
     }
 
-    const resp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 1) {
+    try {
+      const existResp = await fetch(`${apiUrl}/qqExist?qq=${qq}`);
+      if (!existResp.ok) throw new Error("服务异常，请联系服主处理");
+
+      const existData = await existResp.json();
+      if (existData.code === 1) {
         setVerifyQQText("该QQ号已被注册");
-      } else {
-        const resp = await fetch(`${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.code === 0) {
-            setVerifyQQText(data.msg);
-            setDisableVerifyQQ(true);
-          } else {
-            setVerifyQQText(data.msg);
-          }
-        }
+        return;
       }
-    } else {
-      setVerifyQQText("服务异常，请联系服主处理");
+
+      const verifyResp = await fetch(`${apiUrl}/verifyQQ?uuid=${uuid}&qq=${qq}`);
+      if (!verifyResp.ok) throw new Error("服务异常，请联系服主处理");
+
+      const verifyData = await verifyResp.json();
+      setVerifyQQText(verifyData.msg);
+      if (verifyData.code === 0) {
+        setDisableVerifyQQ(true);
+      }
+    } catch (err) {
+      setVerifyQQText(getErrorMessage(err, "服务异常，请联系服主处理"));
     }
   };
 
   const handleBindQQ = async () => {
-    const req_data = {
-      qq: inputAccount,
-      uuid: uuid,
-      captcha_code: inputCaptcha,
-    };
-    const resp = await fetch(`${apiUrl}/bindQQ`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-      body: JSON.stringify(req_data),
-    });
+    try {
+      const resp = await fetch(`${apiUrl}/bindQQ`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({
+          qq: inputAccount,
+          uuid: uuid,
+          captcha_code: inputCaptcha,
+        }),
+      });
 
-    if (resp.ok) {
+      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
+
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "绑定新QQ成功", status: "success" });
@@ -156,8 +159,11 @@ export default function UserProfilePage() {
         openToast({ content: data.msg, status: "warning" });
         setCaptchaImageUrl(await fetchCaptcha());
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 
@@ -203,22 +209,23 @@ export default function UserProfilePage() {
   // };
 
   const handleBindTEL = async () => {
-    const req_data = {
-      tel: inputAccount,
-      // verify_code: inputVerifyCode,
-      uuid: uuid,
-      captcha_code: inputCaptcha,
-    };
-    const resp = await fetch(`${apiUrl}/bindTEL`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-      body: JSON.stringify(req_data),
-    });
+    try {
+      const resp = await fetch(`${apiUrl}/bindTEL`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({
+          tel: inputAccount,
+          // verify_code: inputVerifyCode,
+          uuid: uuid,
+          captcha_code: inputCaptcha,
+        }),
+      });
 
-    if (resp.ok) {
+      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
+
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "绑定新手机成功", status: "success" });
@@ -228,8 +235,11 @@ export default function UserProfilePage() {
         openToast({ content: data.msg, status: "warning" });
         setCaptchaImageUrl(await fetchCaptcha());
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 
@@ -275,33 +285,37 @@ export default function UserProfilePage() {
   // };
 
   const handleBindEmail = async () => {
-    const req_data = {
-      email: inputAccount,
-      // verify_code: inputVerifyCode,
-      uuid: uuid,
-      captcha_code: inputCaptcha,
-    };
-    const resp = await fetch(`${apiUrl}/bindEmail`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-      body: JSON.stringify(req_data),
-    });
+    try {
+      const resp = await fetch(`${apiUrl}/bindEmail`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({
+          email: inputAccount,
+          // verify_code: inputVerifyCode,
+          uuid: uuid,
+          captcha_code: inputCaptcha,
+        }),
+      });
 
-    if (resp.ok) {
+      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
+
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "绑定新电子邮箱成功", status: "success" });
         getUserInfo();
-        bindTELOnClose();
+        bindEmailOnClose();
       } else {
         openToast({ content: data.msg, status: "warning" });
         setCaptchaImageUrl(await fetchCaptcha());
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 
@@ -324,17 +338,13 @@ export default function UserProfilePage() {
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   const checkPassword = (pass1: string, pass2: string) => {
-    if (pass1 && pass2 && pass1 !== pass2) {
-      setPasswordAlertText("两次输入的密码不一致");
-      return;
-    }
-
-    if (pass1 && !validatePassword(pass1)) {
-      setPasswordAlertText("不低于8位，包含数字和字母");
-      return;
-    }
-    setPasswordAlertText("");
+    setPasswordAlertText(getPasswordAlertText(pass1, pass2));
   };
+
+  // 用户信息更新后（改绑/修改昵称等）同步输入框
+  useEffect(() => {
+    setInputUsername(userInfo?.username);
+  }, [userInfo?.username]);
 
   const handleChangePass = async () => {
     if (passwordAlertText) {
@@ -350,20 +360,21 @@ export default function UserProfilePage() {
       return;
     }
 
-    const req_data = {
-      password: getHash(inputPassword0),
-      newPassword: getHash(inputPassword),
-    };
-    const resp = await fetch(`${apiUrl}/changePassword`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-      body: JSON.stringify(req_data),
-    });
+    try {
+      const resp = await fetch(`${apiUrl}/changePassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({
+          password: getHash(inputPassword0),
+          newPassword: getHash(inputPassword),
+        }),
+      });
 
-    if (resp.ok) {
+      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
+
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "修改密码成功", status: "success" });
@@ -372,8 +383,11 @@ export default function UserProfilePage() {
       } else {
         openToast({ content: data.msg, status: "warning" });
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 

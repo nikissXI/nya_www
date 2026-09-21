@@ -14,7 +14,8 @@ import { useUserStateStore } from "@/store/user-state";
 import { Button } from "@/components/universal/button";
 import {
   getHash,
-  validatePassword,
+  getErrorMessage,
+  getPasswordAlertText,
   validateTel,
   validateEmail,
 } from "@/utils/strings";
@@ -65,15 +66,7 @@ export default function Page() {
   }, [fetchCaptcha]);
 
   const checkPassword = (pass1: string, pass2: string) => {
-    if (pass1 && pass2 && pass1 !== pass2) {
-      setPasswordAlertText("两次输入的密码不一致");
-      return;
-    }
-    if (pass1 && !validatePassword(pass1)) {
-      setPasswordAlertText("不低于8位，包含数字和字母");
-      return;
-    }
-    setPasswordAlertText("");
+    setPasswordAlertText(getPasswordAlertText(pass1, pass2));
   };
 
   const handleEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -104,15 +97,18 @@ export default function Page() {
       uuid: uuid,
       captcha_code: inputCaptcha.toLowerCase(),
     };
-    const resp = await fetch(`${apiUrl}/resetPass`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(req_data),
-    });
 
-    if (resp.ok) {
+    try {
+      const resp = await fetch(`${apiUrl}/resetPass`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req_data),
+      });
+
+      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
+
       const data = await resp.json();
       if (data.code === 0) {
         openToast({
@@ -127,8 +123,11 @@ export default function Page() {
         setCaptchaImageUrl(await fetchCaptcha());
         setInputCaptcha("");
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 

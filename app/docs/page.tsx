@@ -93,7 +93,7 @@ const DocumentPage = () => {
       // 创建临时a标签并触发点击
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${userWgInfo?.tunnel_name}.conf`;
+      a.download = `${userWgInfo?.tunnel_name ?? "tunnel"}.conf`;
       a.style.display = "none";
       document.body.appendChild(a);
       a.click();
@@ -160,7 +160,13 @@ const DocumentPage = () => {
             return;
           }
 
-          const isSafari = navigator.userAgent.includes("Safari");
+          // iOS 上只有 Safari 能正常下载并分享给 WG；
+          // Chrome/Firefox/Edge 等内核的 UA 里同样带有 Safari 标识，需要排除掉
+          const ua = navigator.userAgent;
+          const isSafari =
+            ua.includes("Safari") &&
+            !/CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo/.test(ua);
+
           if (isSafari) {
             if (userWgInfo) GenConfFile(userWgInfo.conf_text);
           } else {
@@ -170,7 +176,7 @@ const DocumentPage = () => {
             });
           }
         }}
-        isDisabled={userInfo ? false : true}
+        isDisabled={!userInfo}
       >
         点击下载{userWgInfo?.node_alias}隧道文件
       </Button>

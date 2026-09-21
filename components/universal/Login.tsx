@@ -17,7 +17,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { useEffect, useState } from "react";
 import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "./toast";
-import { getHash, validateTel, validateEmail } from "@/utils/strings";
+import { getHash, getErrorMessage } from "@/utils/strings";
 import { setAuthToken } from "@/store/authKey";
 import { apiUrl } from "@/utils/api";
 
@@ -89,15 +89,24 @@ export default function LoginModal() {
       captcha_code: inputCaptcha.toLowerCase(),
     };
 
-    const resp = await fetch(`${apiUrl}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(req_data),
-    });
+    try {
+      const resp = await fetch(`${apiUrl}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req_data),
+      });
 
-    if (resp.ok) {
+      if (resp.status === 401) {
+        openToast({ content: "账号或密码错误", status: "warning" });
+        setCaptchaImageUrl(await fetchCaptcha());
+        setInputCaptcha("");
+        return;
+      }
+
+      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
+
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "登陆成功", status: "success" });
@@ -109,12 +118,11 @@ export default function LoginModal() {
         setCaptchaImageUrl(await fetchCaptcha());
         setInputCaptcha("");
       }
-    } else if (resp.status === 401) {
-      openToast({ content: "账号或密码错误", status: "warning" });
-      setCaptchaImageUrl(await fetchCaptcha());
-      setInputCaptcha("");
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 

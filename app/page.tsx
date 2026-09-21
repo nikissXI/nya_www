@@ -3,28 +3,28 @@ import { Flex, Image, Text, Box, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
 
+// 平台亮点数据（静态数据，放到组件外避免每次渲染重新创建）
+const highlights = [
+  {
+    title: "免费无广",
+    description: "多个节点免费使用，无任何广告",
+    icon: "✨",
+  },
+  {
+    title: "多端支持",
+    description: "支持安卓/苹果/电脑/SteamDeck",
+    icon: "📱",
+  },
+  {
+    title: "全球可用",
+    description: "国内多地设有节点，跨境也能用",
+    icon: "🌍",
+  },
+];
+
 export default function Page() {
   const navigate = useNavigate();
   const { userInfo, serverData } = useUserStateStore();
-
-  // 平台亮点数据
-  const highlights = [
-    {
-      title: "免费无广",
-      description: "多个节点免费使用，无任何广告",
-      icon: "✨",
-    },
-    {
-      title: "多端支持",
-      description: "支持安卓/苹果/电脑/SteamDeck",
-      icon: "📱",
-    },
-    {
-      title: "全球可用",
-      description: "国内多地设有节点，跨境也能用",
-      icon: "🌍",
-    },
-  ];
 
   return (
     <Flex direction="column" px={{ base: 4, md: 8 }} align="center">

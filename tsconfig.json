@@ -32,6 +32,12 @@
     "App.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "release",
+    "release-new",
+    "release-old"
   ]
 }

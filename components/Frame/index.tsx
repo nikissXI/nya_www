@@ -10,7 +10,18 @@ import LoginModal from "../universal/Login";
 import { NoticeText } from "../universal/Notice";
 import TunnelUpdateModal from "../docs/ReGetIpModal";
 import ServerNodeListModal from "../serverInfo/nodeList";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
+// 页面标题配置：新增页面时在这里补一行
+const PAGE_TITLES: Record<string, string> = {
+  "/": "喵服首页",
+  "/register": "注册账号",
+  "/forgetPass": "忘记密码",
+  "/me": "我的信息",
+  "/sponsor": "赞助喵服",
+  "/docs": "联机教程",
+  "/room": "联机房间",
+};
 
 export default function Frame({
   children,
@@ -18,7 +29,10 @@ export default function Frame({
   children: React.ReactNode;
 }>) {
   const { pathname } = useLocation();
-  const { loginLoading, getInviteCode, getInApp, inApp } = useUserStateStore();
+  const loginLoading = useUserStateStore((state) => state.loginLoading);
+  const getInviteCode = useUserStateStore((state) => state.getInviteCode);
+  const getInApp = useUserStateStore((state) => state.getInApp);
+  const inApp = useUserStateStore((state) => state.inApp);
 
   // 登录加载完成后获取邀请码
   useEffect(() => {
@@ -27,20 +41,7 @@ export default function Frame({
   }, [getInviteCode, getInApp]);
 
   const rootPath = "/" + pathname.split("/")[1];
-  const [title, setTitle] = useState<string>("");
-
-  useEffect(() => {
-    const titles: { [key: string]: string } = {
-      "/": "首页",
-      "/register": "注册",
-      "/forgetPass": "忘记密码",
-      "/me": "我的信息",
-      "/sponsor": "赞助喵服",
-      "/docs": "联机教程",
-      "/room": "联机房间",
-    };
-    setTitle(titles[rootPath]);
-  }, [rootPath]);
+  const title = PAGE_TITLES[rootPath] ?? "";
 
   return (
     <>

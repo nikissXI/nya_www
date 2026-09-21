@@ -94,6 +94,8 @@ export default function Page() {
         </Text>
       </VStack>
 
+      <Divider my={5} />
+
       <BackButton />
     </DocBox>
   );

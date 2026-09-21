@@ -25,15 +25,15 @@ export default function Navbar({ path }: { path: string }) {
   const rootPath = "/" + currentPath.split("/")[1];
 
   const rootGuide = [
-    { name: "喵服首页", path: "/" },
-    { name: "联机房间", path: "/room" },
-    { name: "我的信息", path: "/me" },
+    { name: "首页", path: "/" },
+    { name: "房间", path: "/room" },
+    { name: "我的", path: "/me" },
   ];
 
   const mobileNavItems = [
-    { label: "喵服首页", path: "/", icon: FaHome },
-    { label: "联机房间", path: "/room", icon: FaUsers },
-    { label: "我的信息", path: "/me", icon: FaUser },
+    { label: "首页", path: "/", icon: FaHome },
+    { label: "房间", path: "/room", icon: FaUsers },
+    { label: "信息", path: "/me", icon: FaUser },
   ];
 
   return (

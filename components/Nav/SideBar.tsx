@@ -13,11 +13,13 @@ import {
   VStack,
   Divider,
   Image,
+  Icon,
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
 import { Link as RouterLink } from "react-router-dom";
-import { ROOM_GAME_LIST, GENERAL_QQ_GROUP } from "@/app/room/page";
+import { ROOM_GAME_LIST, GENERAL_QQ_GROUP } from "@/utils/roomGames";
 import { copyText } from "@/utils/strings";
+import { MdContentCopy } from "react-icons/md";
 
 const formatDate = (rawTs: number, short: boolean = false): string => {
   // 支持秒或毫秒
@@ -65,15 +67,20 @@ export default function SideBar() {
           <Heading as="h3" fontSize="xl" color="#a8d1ff">
             喵服官方QQ群
           </Heading>
-          <Link
-            display="block"
+
+          <Box
             as="button"
+            display="inline-flex"
+            alignItems="center"
+            gap={1}
             onClick={() => copyText(GENERAL_QQ_GROUP)}
             _hover={{ textDecoration: "none" }}
             fontWeight="bold"
           >
-            {GENERAL_QQ_GROUP}（大群）
-          </Link>
+            {GENERAL_QQ_GROUP}
+            <Icon as={MdContentCopy} boxSize={3.5} color="#7dd4ff" />
+          </Box>
+
           <Link
             mt="1px"
             display="block"
@@ -154,7 +161,7 @@ export default function SideBar() {
           <ModalCloseButton />
           <ModalBody>
             <Heading as="h2" fontSize="lg" mb={4}>
-              各游戏QQ群（点击可复制）
+              各游戏QQ群
             </Heading>
             <VStack align="stretch" spacing={2}>
               {ROOM_GAME_LIST.filter((game) => game.title !== "通用联机房").map(
@@ -185,9 +192,10 @@ export default function SideBar() {
                       onClick={() => {
                         if (game.qq) copyText(game.qq);
                       }}
-                      color={game.qq ? "#7dd4ff" : "gray.400"}
+                      color={game.qq ? "white" : "gray.400"}
                     >
                       {game.qq ? game.qq : "暂无专属群"}
+                      <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
                     </Text>
                   </Flex>
                 ),

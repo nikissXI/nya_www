@@ -20,7 +20,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useUserStateStore, NodeInfo } from "@/store/user-state";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -55,8 +55,6 @@ function sortNodes(
       if (b.delay === undefined) return -1;
       return sortOrder === "asc" ? a.delay - b.delay : b.delay - a.delay;
     } else if (sortBy === "net") {
-      if (a.net === null) return 1;
-      if (b.net === null) return -1;
       return sortOrder === "asc" ? a.net - b.net : b.net - a.net;
     } else if (sortBy === "bandwidth") {
       const bwA = a.bandwidth || 0;
@@ -87,7 +85,8 @@ const ServerNodeItem: React.FC<{
   node: NodeInfo;
   selected: boolean;
 }> = ({ node, selected }) => {
-  const { selectNode, userWgInfo, selectNodeLock } = useUserStateStore();
+  const selectNode = useUserStateStore((state) => state.selectNode);
+  const selectNodeLock = useUserStateStore((state) => state.selectNodeLock);
 
   return (
     <motion.div
@@ -121,9 +120,9 @@ const ServerNodeItem: React.FC<{
             ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"
             : "0 2px 4px rgba(0, 0, 0, 0.1)"
         }
-        onClick={async () => {
-          if (node.net === -1 || selectNodeLock === true) return;
-          if (node.alias === userWgInfo?.node_alias) {
+        onClick={() => {
+          if (node.net === -1 || selectNodeLock) return;
+          if (selected) {
             openToast({
               content: "已经在使用该节点",
               status: "info",
@@ -236,15 +235,15 @@ const ServerNodeItem: React.FC<{
 };
 
 export default function ServerNodeListModal() {
-  const {
-    getNodeListLock,
-    getNodeList,
-    nodeMap,
-    showNodeListModal,
-    setNodeListModal,
-    userWgInfo,
-    fixedNode,
-  } = useUserStateStore();
+  const getNodeListLock = useUserStateStore((state) => state.getNodeListLock);
+  const getNodeList = useUserStateStore((state) => state.getNodeList);
+  const nodeMap = useUserStateStore((state) => state.nodeMap);
+  const showNodeListModal = useUserStateStore(
+    (state) => state.showNodeListModal,
+  );
+  const setNodeListModal = useUserStateStore((state) => state.setNodeListModal);
+  const userWgInfo = useUserStateStore((state) => state.userWgInfo);
+  const fixedNode = useUserStateStore((state) => state.fixedNode);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
@@ -254,24 +253,33 @@ export default function ServerNodeListModal() {
   const [searchTerm, setSearchTerm] = useState("");
 
   // 处理节点数据
-  const nodes = nodeMap ? Array.from(nodeMap.values()) : [];
-  const filteredNodes = filterNodes(nodes, filterBy, searchTerm);
-  let sortedNodes = sortNodes(filteredNodes, sortBy, sortOrder);
-
-  // 如果已有选中节点，将其放到列表第一位（在每次打开列表时置顶）
-  if (fixedNode) {
-    const idx = sortedNodes.findIndex((n) => n.alias === fixedNode);
-    if (idx > -1) {
-      const [fixedNode] = sortedNodes.splice(idx, 1);
-      sortedNodes.unshift(fixedNode);
-    }
-  }
+  const nodes = useMemo(
+    () => (nodeMap ? Array.from(nodeMap.values()) : []),
+    [nodeMap],
+  );
 
   // 获取所有网络类型
-  const netTypes = [
-    "all",
-    ...Array.from(new Set(nodes.map((node) => node.net_type))),
-  ];
+  const netTypes = useMemo(
+    () => ["all", ...Array.from(new Set(nodes.map((node) => node.net_type)))],
+    [nodes],
+  );
+
+  // 筛选 + 排序，并把当前使用的节点置顶
+  const sortedNodes = useMemo(() => {
+    const sorted = sortNodes(
+      filterNodes(nodes, filterBy, searchTerm),
+      sortBy,
+      sortOrder,
+    );
+
+    if (!fixedNode) return sorted;
+    const idx = sorted.findIndex((node) => node.alias === fixedNode);
+    if (idx <= 0) return sorted;
+
+    const [currentNode] = sorted.splice(idx, 1);
+    sorted.unshift(currentNode);
+    return sorted;
+  }, [nodes, filterBy, searchTerm, sortBy, sortOrder, fixedNode]);
 
   return (
     <Modal

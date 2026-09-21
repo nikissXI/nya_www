@@ -23,6 +23,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
+import { getErrorMessage } from "@/utils/strings";
 import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
 import { FaWeixin } from "react-icons/fa";
@@ -60,11 +61,11 @@ const Page = () => {
           );
           setSponsorList(filtered);
         } else {
-          openToast({ content: `响应出错 ${data.msg}`, status: "error" });
+          throw new Error(`响应出错 ${data.msg}`);
         }
       } catch (err) {
         openToast({
-          content: (err as Error).message || "请求发生错误",
+          content: getErrorMessage(err, "赞助名单加载失败，请稍后再试"),
           status: "error",
         });
       }
@@ -74,18 +75,17 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    async function getUid() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlUid = urlParams.get("app");
-      if (urlUid) {
-        setUid(Number(urlUid));
-      } else if (userInfo) {
-        setUid(userInfo.uid);
-      }
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlUid = urlParams.get("app");
+    const parsedUid = Number(urlUid);
 
-    getUid();
-  }, []);
+    // APP 内打开时会通过 ?app=<uid> 传入用户 UID
+    if (urlUid && Number.isInteger(parsedUid) && parsedUid > 0) {
+      setUid(parsedUid);
+    } else if (userInfo) {
+      setUid(userInfo.uid);
+    }
+  }, [userInfo]);
 
   return (
     <Box maxW="800px" mx="auto" px={{ base: 4, md: 8 }} pb={8}>
@@ -184,7 +184,7 @@ const Page = () => {
                   mt={2}
                 >
                   <Text
-                    fontSize="xl"
+                    fontSize="lg"
                     fontWeight="bold"
                     color="black"
                     bg="#ffd54e"
@@ -193,7 +193,7 @@ const Page = () => {
                     borderRadius="md"
                     mr={2}
                   >
-                    {uid ? `您的UID是 ${uid}` : `（请先登录查看您的UID）`}
+                    {uid ? `您的UID是 ${uid}` : `登录后才能查看UID`}
                   </Text>
 
                   <Button

@@ -278,6 +278,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           roomData: undefined,
           latency: undefined,
           nodeNetLoad: -1,
+          // 清理与账号绑定的数据，避免下一个登录的账号看到上一个账号的信息
+          confKey: null,
+          fixedNode: undefined,
+          needShowReget: false,
         });
         localStorage.setItem("uuid", new_uuid);
       },
@@ -288,11 +292,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         ping_host: string,
         net: number | null = 0,
       ) => {
-        if (net === null) return 0;
+        // 节点离线（net 为 -1）或负载未知（null）时不必测速，直接返回 0，避免无意义超时等待
+        if (net === null || net === -1) return 0;
 
         const statusUrl = `https://${ping_host}/ping`;
-        // 清除该 URL 的旧条目，确保获取最新
-        performance.clearResourceTimings();
 
         const singlePing = async (first: boolean = false): Promise<number> => {
           try {
@@ -302,16 +305,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             );
 
             const pingPromise = (async () => {
-              const resp = await fetch(statusUrl);
+              // no-store 保证每次都是真实请求，否则命中缓存会读到旧的 performance 条目
+              const resp = await fetch(statusUrl, { cache: "no-store" });
               if (!resp.ok) {
                 throw new Error(`${node_alias}节点获取延迟出错`);
               }
               await new Promise((resolve) => setTimeout(resolve, 100));
 
-              const entries = performance.getEntriesByName(statusUrl);
-              const lastEntry = entries.at(-1) as
-                | PerformanceResourceTiming
-                | undefined;
+              // 同一个 URL 的条目按时间顺序追加，最后一条即本次请求
+              const lastEntry = performance
+                .getEntriesByName(statusUrl)
+                .at(-1) as PerformanceResourceTiming | undefined;
               if (lastEntry) {
                 const delay = Math.floor(
                   lastEntry.responseStart - lastEntry.requestStart,
@@ -332,14 +336,19 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         };
 
         try {
-          const delay1 = await singlePing(true);
-          const delay2 = await singlePing();
-          let minDelay = Math.min(delay1, delay2);
-
-          if (minDelay === 0 || minDelay === 999) {
-            const retryDelay = await singlePing();
-            minDelay = Math.min(minDelay, retryDelay);
+          // 0 表示本次测量无效（拿不到性能条目），999 表示超时
+          const measured = [await singlePing(true), await singlePing()];
+          if (measured.some((delay) => delay <= 0 || delay >= 999)) {
+            measured.push(await singlePing());
           }
+
+          const validDelays = measured.filter(
+            (delay) => delay > 0 && delay < 999,
+          );
+          const minDelay =
+            validDelays.length > 0
+              ? Math.min(...validDelays)
+              : Math.min(...measured);
 
           // 更新 nodeMap 中的延迟
           set(
@@ -373,7 +382,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       getNodeListLock: false,
-      nodeMap: new Map<string, any>(),
+      nodeMap: new Map<string, NodeInfo>(),
       fixedNode: undefined,
       getNodeList: async () => {
         if (get().getNodeListLock) return;
@@ -496,7 +505,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           if (!resp.ok) throw new Error("请求出错");
 
           const data = await resp.json();
-          if (data.code === -1) window.location.reload();
+          // 后端返回数据异常时刷新页面，注意要提前返回，避免继续处理无效数据
+          if (data.code === -1) {
+            window.location.reload();
+            return;
+          }
 
           // --- 核心优化开始 ---
 

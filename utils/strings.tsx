@@ -33,20 +33,49 @@ export function isInteger(value: string): boolean {
   return regex.test(value);
 }
 
+/** 校验两次密码输入，返回提示文案（空字符串表示通过） */
+export function getPasswordAlertText(
+  password: string,
+  passwordAgain: string,
+): string {
+  if (password && passwordAgain && password !== passwordAgain) {
+    return "两次输入的密码不一致";
+  }
+  if (password && !validatePassword(password)) {
+    return "不低于8位，包含数字和字母";
+  }
+  return "";
+}
+
+/** 从各种异常中提取可展示的错误文案 */
+export function getErrorMessage(
+  error: unknown,
+  fallback: string = "请求失败，请重试",
+): string {
+  if (error instanceof Error && error.message) return error.message;
+  if (typeof error === "string" && error.trim()) return error;
+  return fallback;
+}
+
 export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
-export const copyText = async (text: string) => {
+export const copyText = async (text: string): Promise<boolean> => {
   try {
     if (navigator.clipboard && navigator.permissions) {
       await navigator.clipboard.writeText(text);
       openToast({ content: "已复制", status: "info" });
-    } else {
-      throw new Error("不支持自动复制");
+      return true;
     }
-  } catch (err) {}
+    // 不支持自动复制时给出提示，避免用户误以为已经复制成功
+    openToast({ content: "复制失败，请手动复制", status: "error" });
+    return false;
+  } catch {
+    openToast({ content: "复制失败，请手动复制", status: "error" });
+    return false;
+  }
 };
 
 const GOOD = "#00e63a";

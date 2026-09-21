@@ -16,7 +16,7 @@ import {
   useDisclosure,
   Flex,
   Tag,
-  IconButton,
+  Icon,
   Badge,
   Stack,
   Image,
@@ -34,6 +34,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { getAuthToken } from "@/store/authKey";
 import {
   copyText,
+  getErrorMessage,
   getNetColor,
   getNetText,
   isInteger,
@@ -49,6 +50,15 @@ import SponsorTag from "@/components/universal/SponsorTag";
 import OfflineReasons from "@/components/docs/OfflineReasons";
 import { apiUrl } from "@/utils/api";
 import TheEscapistsTool from "@/components/universal/theEscapistsTool";
+import {
+  ROOM_GAME_LIST,
+  GENERAL_QQ_GROUP,
+  GENERAL_QQ_GROUP_LINK,
+  ROLE_HOSTER,
+  ROLE_NONE,
+  getRoomGameName,
+  type GameRoomItem,
+} from "@/utils/roomGames";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -61,177 +71,8 @@ interface HandleRoomResponse {
   [key: string]: any;
 }
 
-interface GameRoomItem {
-  path: string;
-  title: string;
-  icon: string;
-  qq: string | null;
-  support?: string[];
-}
-
-const getRoomGameName = (game?: GameRoomItem): string => {
-  if (!game || game.path === "/docs") return "";
-  return game.path.replace(/^\/docs\//, "");
-};
-
-export const ROOM_GAME_LIST: GameRoomItem[] = [
-  {
-    path: "/docs/universal",
-    title: "通用联机房",
-    icon: "/images/universal/icon.webp",
-    qq: null,
-    support: [
-      "该房间适合任意游戏，只是该房间无特定游戏的联机操作教程",
-      "支持通过IP加入游戏都可以用喵服联机，搜索加入的就不好说",
-      "游戏列表没你玩的游戏，且不清楚是否能联机，可以加大群问问",
-      "如果你希望新增某游戏，请加大群联系群主（服主）",
-    ],
-  },
-  {
-    path: "/docs/stardewValley",
-    title: "星露谷物语",
-    icon: "/images/stardewValley/icon.webp",
-    qq: "817658554",
-    support: ["支持安卓、苹果、电脑三端跨平台联机"],
-  },
-  {
-    path: "/docs/doNotStarve",
-    title: "饥荒联机版",
-    icon: "/images/doNotStarve/icon.webp",
-    qq: "641115719",
-    support: [
-      "不支持PC端与移动端联机；安卓可以与苹果联机",
-      "苹果只能做主机，无法搜索房间，除非安装改版饥荒能调出控制台",
-    ],
-  },
-  {
-    path: "/docs/slayTheSpire",
-    title: "杀戮尖塔",
-    icon: "/images/slayTheSpire/icon.webp",
-    qq: "698892019",
-    support: [
-      "支持安卓、苹果、电脑三端跨平台联机",
-      "Steam端需要安装IP联机mod才能使用喵服联机，房间内的游戏联机教程有提供",
-    ],
-  },
-  {
-    path: "/docs/terraria",
-    title: "泰拉瑞亚",
-    icon: "/images/terraria/icon.webp",
-    qq: "976129564",
-    support: [
-      "国际版支持安卓、苹果、电脑三端跨平台联机",
-      "TapTap版仅支持安卓与苹果联机，且不支持与国际版联机",
-    ],
-  },
-  {
-    path: "/docs/isaac",
-    title: "以撒的结合",
-    icon: "/images/isaac/icon.webp",
-    qq: "1074963191",
-    support: [
-      "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道",
-      "不支持PC端与移动端联机",
-    ],
-  },
-  {
-    path: "/docs/ark",
-    title: "方舟：生存进化",
-    icon: "/images/ark/icon.webp",
-    qq: "1106534252",
-    support: [
-      "手游需要使用“琳星Lin-C”版，否则无法使用IP加入游戏",
-      "不支持PC端与移动端联机",
-    ],
-  },
-  {
-    path: "/docs/theEscapists",
-    title: "逃脱者手游",
-    icon: "/images/theEscapists/icon.webp",
-    qq: "961793250",
-    support: ["支持安卓与苹果联机，需游戏版本一致"],
-  },
-  {
-    path: "/docs/mindustry",
-    title: "像素工厂",
-    icon: "/images/mindustry/icon.webp",
-    qq: "830268831",
-    support: ["支持安卓、苹果、电脑三端跨平台联机"],
-  },
-  {
-    path: "/docs/l4d2",
-    title: "求生之路2",
-    icon: "/images/l4d2/icon.webp",
-    qq: "138012638",
-    support: [
-      "正版和盗版都支持，但盗版卡Steam验证自己去解决",
-      "该游戏只有PC端，别问手机能不能玩了",
-    ],
-  },
-  {
-    path: "/docs/survivalcraft",
-    title: "生存战争",
-    icon: "/images/survivalcraft/icon.webp",
-    qq: "1092247198",
-    support: ["支持安卓、苹果、电脑三端跨平台联机"],
-  },
-  {
-    path: "/docs/wizardOfLegend",
-    title: "传说法师手游",
-    icon: "/images/wizardOfLegend/icon.webp",
-    qq: "981286541",
-    support: [
-      "支持安卓与苹果联机，但仅安卓能搜索房间",
-      "不支持电脑端，因为电脑端没有联机模式",
-    ],
-  },
-  {
-    path: "/docs/overcooked",
-    title: "胡闹厨房",
-    icon: "/images/overcooked/icon.webp",
-    qq: null,
-    support: [
-      "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道",
-    ],
-  },
-  {
-    path: "/docs/machinesAtWar3",
-    title: "机械战争3",
-    icon: "/images/machinesAtWar3/icon.webp",
-    qq: "689358384",
-    support: ["有联机模式的基本都支持，苹果系统另说"],
-  },
-  {
-    path: "/docs/projectZomboid",
-    title: "僵尸毁灭工程",
-    icon: "/images/projectZomboid/icon.webp",
-    qq: null,
-    support: [
-      "正版和盗版都支持，但如果卡Steam验证问题需要自己去解决",
-      "该游戏只有PC端，别问手机能不能玩了",
-    ],
-  },
-  {
-    path: "/docs/juicyRealm",
-    title: "恶果之地",
-    icon: "/images/juicyRealm/icon.webp",
-    qq: "981282876",
-    support: ["支持安卓、苹果、电脑三端跨平台联机"],
-  },
-  {
-    path: "/docs/aresVirus2",
-    title: "阿瑞斯病毒2",
-    icon: "/images/aresVirus2/icon.webp",
-    qq: "966579113",
-    support: ["支持安卓、苹果、电脑三端跨平台联机"],
-  },
-];
-
-// 抽取角色常量
-const ROLE_HOSTER = "hoster";
-const ROLE_NONE = "none";
-export const GENERAL_QQ_GROUP = "1047464328";
-const GENERAL_QQ_GROUP_LINK = "https://qm.qq.com/q/HxnUVAdRa8";
+// 游戏房间配置、群号、房间角色常量已迁移到 @/utils/roomGames
+// （放在独立模块可避免该页面被静态引用，保证路由懒加载生效）
 
 export default function Page() {
   const navigate = useNavigate();
@@ -326,8 +167,11 @@ export default function Page() {
 
         const data: HandleRoomResponse = await resp.json();
 
-        // 数据异常就刷新
-        if (data.code === -1) window.location.reload();
+        // 数据异常就刷新页面，同时中断后续流程，避免用无效数据继续渲染
+        if (data.code === -1) {
+          window.location.reload();
+          throw new Error("数据异常，页面即将刷新");
+        }
 
         // 房间操作后滚动到页面顶部
         if (data.code === 0) window.scrollTo(0, 0);
@@ -339,6 +183,14 @@ export default function Page() {
     },
     [], // 无依赖，保持完全稳定
   );
+
+  // 统一的请求异常提示
+  const showRequestError = useCallback((err: unknown, prefix = "") => {
+    openToast({
+      content: `${prefix}${getErrorMessage(err)}`,
+      status: "error",
+    });
+  }, []);
 
   // 设置房间密码
   const handleSetRoomPasswd = useCallback(
@@ -358,10 +210,16 @@ export default function Page() {
           openToast({ content: data.msg, status: "warning" });
         }
       } catch (err) {
-        openToast({ content: String(err), status: "error" });
+        showRequestError(err);
       }
     },
-    [requestRoomApi, roomData, setRoomPassword, setPassOnClose],
+    [
+      requestRoomApi,
+      roomData,
+      setRoomPassword,
+      setPassOnClose,
+      showRequestError,
+    ],
   );
 
   // 创建房间
@@ -388,47 +246,38 @@ export default function Page() {
           openToast({ content: data.msg, status: "warning" });
         }
       } catch (err) {
-        openToast({ content: String(err), status: "error" });
+        showRequestError(err);
       }
     },
-    [requestRoomApi, getRoomData, isOnline, openSponsorNotice],
+    [
+      requestRoomApi,
+      getRoomData,
+      isOnline,
+      openSponsorNotice,
+      showRequestError,
+    ],
   );
 
-  // 关闭房间（房主）
-  const handleCloseRoom = useCallback(async () => {
-    try {
-      const data = await requestRoomApi("handleRoom", {
-        handleType: "closeRoom",
-        value: "",
-      });
-      if (data.code === 0) {
-        setSelectedGame(null);
-        getRoomData();
-      } else {
-        openToast({ content: data.msg, status: "error" });
+  // 关闭房间（房主）/ 退出房间（成员）：两个操作只有 handleType 不同
+  const handleLeaveRoom = useCallback(
+    async (handleType: "closeRoom" | "exitRoom") => {
+      try {
+        const data = await requestRoomApi("handleRoom", {
+          handleType,
+          value: "",
+        });
+        if (data.code === 0) {
+          setSelectedGame(null);
+          getRoomData();
+        } else {
+          openToast({ content: data.msg, status: "error" });
+        }
+      } catch (err) {
+        showRequestError(err, "请求出错：");
       }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  }, [requestRoomApi, getRoomData]);
-
-  // 退出房间（成员）
-  const handleExitRoom = useCallback(async () => {
-    try {
-      const data = await requestRoomApi("handleRoom", {
-        handleType: "exitRoom",
-        value: "",
-      });
-      if (data.code === 0) {
-        setSelectedGame(null);
-        getRoomData();
-      } else {
-        openToast({ content: data.msg, status: "error" });
-      }
-    } catch (err) {
-      openToast({ content: `请求出错: ${String(err)}`, status: "error" });
-    }
-  }, [requestRoomApi, getRoomData]);
+    },
+    [requestRoomApi, getRoomData, showRequestError],
+  );
 
   // 加入房间
   const handleJoinRoom = useCallback(
@@ -466,10 +315,10 @@ export default function Page() {
           openToast({ content: data.msg, status: "warning" });
         }
       } catch (err) {
-        openToast({ content: `请求出错: ${String(err)}`, status: "error" });
+        showRequestError(err, "请求出错：");
       }
     },
-    [requestRoomApi, getRoomData, isOnline],
+    [requestRoomApi, getRoomData, isOnline, showRequestError],
   );
 
   // 踢出成员
@@ -486,10 +335,10 @@ export default function Page() {
           openToast({ content: data.msg, status: "error" });
         }
       } catch (err) {
-        openToast({ content: `请求出错: ${String(err)}`, status: "error" });
+        showRequestError(err, "请求出错：");
       }
     },
-    [requestRoomApi, getRoomData],
+    [requestRoomApi, getRoomData, showRequestError],
   );
 
   // 键盘事件处理
@@ -903,21 +752,8 @@ export default function Page() {
                     喵服IP
                   </Text>
                   {item.ip}
+                  <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
                 </Text>
-                <IconButton
-                  display="inline-block"
-                  aria-label="复制联机ip"
-                  title="复制联机ip"
-                  icon={<MdContentCopy />}
-                  size="xs"
-                  variant="ghost"
-                  color="#7dd4ff"
-                  sx={{
-                    _hover: {
-                      textDecoration: "none", // 悬停时没有效果
-                    },
-                  }}
-                />
               </Flex>
 
               {item.sponsorship > 0 && <SponsorTag amount={item.sponsorship} />}
@@ -947,7 +783,9 @@ export default function Page() {
           px={0}
           size="md"
           bg="transparent"
-          onClick={roomRole === ROLE_HOSTER ? handleCloseRoom : handleExitRoom}
+          onClick={() =>
+            handleLeaveRoom(roomRole === ROLE_HOSTER ? "closeRoom" : "exitRoom")
+          }
         >
           {roomRole === ROLE_HOSTER ? "关闭房间" : "退出房间"}
           <IoIosExit size={30} color="#ff4444" />
@@ -1157,22 +995,12 @@ export default function Page() {
 
           {roomRole !== ROLE_NONE && (
             <Flex align="center" justify="center">
-              <IconButton
-                aria-label="复制房间分享信息"
-                title="复制节点、房间号和房间密码"
-                icon={<MdContentCopy />}
-                size="sm"
-                variant="ghost"
-                color="#7dd4ff"
+              <Text
+                fontSize={18}
+                fontWeight="bold"
                 onClick={handleCopyRoomInfo}
-                sx={{
-                  _hover: {
-                    textDecoration: "none", // 悬停时没有效果
-                  },
-                }}
-              />
-
-              <Text fontSize={18} fontWeight="bold">
+              >
+                <Icon mr={1} as={MdContentCopy} boxSize={3.5} color="#7dd4ff" />
                 房间号{roomData?.room_id}
               </Text>
 
