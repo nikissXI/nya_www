@@ -16,28 +16,16 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   Button,
   Heading,
-  Alert,
-  AlertIcon,
-  Divider,
-  HStack,
   Flex,
 } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
 import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
 import { FaWeixin } from "react-icons/fa";
-import {
-  RiMoneyCnyBoxLine,
-  RiAccessibilityLine,
-  RiServerLine,
-} from "react-icons/ri";
-import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { apiUrl } from "@/utils/api";
 
 interface SponsorItem {
@@ -51,6 +39,8 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { userInfo } = useUserStateStore();
+
+  const [uid, setUid] = useState(0);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -81,6 +71,20 @@ const Page = () => {
     }
 
     fetchSponsors();
+  }, []);
+
+  useEffect(() => {
+    async function getUid() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlUid = urlParams.get("app");
+      if (urlUid) {
+        setUid(Number(urlUid));
+      } else if (userInfo) {
+        setUid(userInfo.uid);
+      }
+    }
+
+    getUid();
   }, []);
 
   return (
@@ -189,18 +193,16 @@ const Page = () => {
                     borderRadius="md"
                     mr={2}
                   >
-                    {userInfo
-                      ? `您的UID是 ${userInfo.uid}`
-                      : `（请先登录查看您的UID）`}
+                    {uid ? `您的UID是 ${uid}` : `（请先登录查看您的UID）`}
                   </Text>
 
                   <Button
                     colorScheme="blue"
                     size="sm"
                     onClick={() => {
-                      if (userInfo?.uid) {
+                      if (uid) {
                         navigator.clipboard
-                          .writeText(userInfo.uid.toString())
+                          .writeText(uid.toString())
                           .then(() => {
                             openToast({
                               content: "UID已复制到剪贴板",
@@ -215,7 +217,7 @@ const Page = () => {
                           });
                       }
                     }}
-                    disabled={!userInfo?.uid}
+                    disabled={!uid}
                   >
                     复制UID
                   </Button>
