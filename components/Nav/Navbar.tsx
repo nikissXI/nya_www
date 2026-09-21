@@ -1,5 +1,5 @@
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
-import { Box, Flex, Text, Link, Stack } from "@chakra-ui/react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Box, Flex, Text, Stack } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { FaHome, FaUsers, FaUser } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
@@ -13,7 +13,8 @@ export default function Navbar({ path }: { path: string }) {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const { getServerData, serverData } = useUserStateStore();
+  const getServerData = useUserStateStore((state) => state.getServerData);
+  const serverData = useUserStateStore((state) => state.serverData);
 
   useEffect(() => {
     if (serverData === undefined) {
@@ -25,24 +26,14 @@ export default function Navbar({ path }: { path: string }) {
   const rootPath = "/" + currentPath.split("/")[1];
 
   const rootGuide = [
-    { name: "首页", path: "/" },
-    { name: "房间", path: "/room" },
-    { name: "我的", path: "/me" },
-  ];
-
-  const mobileNavItems = [
     { label: "首页", path: "/", icon: FaHome },
     { label: "房间", path: "/room", icon: FaUsers },
-    { label: "信息", path: "/me", icon: FaUser },
+    { label: "我的", path: "/me", icon: FaUser },
   ];
 
   return (
     <>
-      <Box
-        as="header"
-        maxW="200px"
-        flex={{ base: "none", md: "0 0 200px" }}
-      >
+      <Box as="header" maxW="200px" flex={{ base: "none", md: "0 0 200px" }}>
         <Flex
           display={{ base: "none", md: "flex" }}
           justifyContent="space-between"
@@ -52,27 +43,34 @@ export default function Navbar({ path }: { path: string }) {
           position="sticky"
         >
           <Flex as="nav" direction="column" py={10} px={8}>
-            {rootGuide.map((item) => (
-              <Link
-                as={RouterLink}
-                key={item.path}
-                to={item.path}
-                my={3}
-                py={3}
-                _hover={{ textDecoration: "none" }}
-                bg={rootPath === item.path ? "#4098f282" : "transparent"}
-                rounded={12}
-              >
-                <Text
-                  textAlign="center"
-                  color={rootPath === item.path ? "white" : "gray.200"}
-                  fontWeight={rootPath === item.path ? "bold" : "normal"}
+            {rootGuide.map(({ label, path: itemPath, icon: Icon }) => {
+              const isActive = rootPath === itemPath;
+              return (
+                <Flex
+                  key={itemPath}
+                  // 图标与文字同一行，水平/垂直都居中
+                  align="center"
+                  justify="center"
+                  gap={2}
+                  my={3}
+                  py={3}
+                  px={2}
+                  rounded={12}
                   fontSize="lg"
+                  fontWeight="bold"
+                  color={isActive ? "white" : "gray.200"}
+                  bg={isActive ? "#4098f282" : "transparent"}
+                  cursor="pointer"
+                  _hover={{
+                    bg: isActive ? "#4098f282" : "whiteAlpha.100",
+                  }}
+                  onClick={() => navigate(itemPath)}
                 >
-                  {item.name}
-                </Text>
-              </Link>
-            ))}
+                  <Icon />
+                  <Text lineHeight="1">{label}</Text>
+                </Flex>
+              );
+            })}
           </Flex>
         </Flex>
       </Box>
@@ -89,7 +87,7 @@ export default function Navbar({ path }: { path: string }) {
         display={{ md: "none", base: "flex" }}
         zIndex={100}
       >
-        {mobileNavItems.map(({ label, path: itemPath, icon: Icon }) => (
+        {rootGuide.map(({ label, path: itemPath, icon: Icon }) => (
           <Button
             key={itemPath}
             padding="1rem"
