@@ -9,60 +9,60 @@ import { openToast } from "@/components/universal/toast";
 import { apiUrl } from "@/utils/api";
 
 interface AnnouncementItem {
-  timestamp: number;
-  content: string;
+  timestamp: number; // 公告发布时间戳（10位）
+  content: string; // 公告内容
 }
 interface ServerData {
-  viewCount: number;
-  userCount: number;
-  carouselMsg: string[];
-  announcements: AnnouncementItem[];
+  viewCount: number; // 访问数
+  userCount: number; // 用户数
+  carouselMsg: string[]; // 轮播公告
+  announcements: AnnouncementItem[]; // 服务器公告
 }
 interface UserInfo {
-  uid: number;
-  username: string;
-  tel: string;
-  email: string;
-  qq: string;
-  sponsorship: number;
+  uid: number; //用户uid
+  username: string; // 昵称
+  tel: string; // 手机
+  email: string; // 邮箱
+  qq: string; // QQ
+  sponsorship: number; // 赞助金额
 }
 
 interface UserWgInfo {
-  node_alias: string;
-  tunnel_name: string;
-  conf_text: string;
-  ping_host: string;
-  user_ip: string;
-  net_type: string;
-  bandwidth: number;
+  node_alias: string; // 所选节点名称
+  tunnel_name: string; // 隧道名称
+  conf_text: string; // 所选节点的隧道conf内容，用于直接导入wireguard
+  ping_host: string; // 用于获取节点延迟，WEB端用过xhr请求获取，APP端通过ICMP获取
+  user_ip: string; // 隧道的IP地址
+  net_type: string; // 所选节点的网络类型
+  bandwidth: number; // 所选节点的用户中转带宽峰值
 }
 
 // 登录后，用户访问房间列表拉取的房间信息
 interface Member {
-  username: string;
-  ip: string;
-  status: "在线" | "离线";
-  sponsorship: number;
+  username: string; // 用户昵称
+  ip: string; // 用户联机IP
+  status: "在线" | "离线"; // 用户WG连接状态
+  sponsorship: number; // 用户赞助金额
 }
 interface RoomInfo {
-  room_id: number;
-  user_ip: string;
-  hoster_ip: string;
-  members: Member[];
-  room_max: number;
-  room_passwd: string | null;
-  room_game: string | null;
+  room_id: number; // 房间id，用于加入房间
+  user_ip: string; // 用户自己的联机ip
+  hoster_ip: string; // 房主的联机ip
+  members: Member[]; // 房间成员
+  room_max: number; // 房间最大人数
+  room_passwd: string | null; // 房间加入密码
+  room_game: string | null; // 房间游戏名称
 }
 // 登录后，拉取的节点信息
 export interface NodeInfo {
-  alias: string;
-  bandwidth: number;
-  net: number;
-  net_type: string;
-  node_desc: string;
-  ping_host: string;
-  sponsor: boolean;
-  delay: number;
+  alias: string; // 节点名称
+  bandwidth: number; // 节点中转带宽峰值
+  net: number; // 节点网络负载百分比
+  net_type: string; // 节点网络类型
+  node_desc: string; // 节点描述
+  ping_host: string; // 用于获取节点延迟，WEB端用过xhr请求获取，APP端通过ICMP获取
+  sponsor: boolean; // 是否赞助专用节点
+  delay: number; // 网络延迟，单位ms
 }
 
 interface ILoginStateSlice {
