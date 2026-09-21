@@ -240,11 +240,32 @@ export default function Page() {
         </Flex>
 
         {showText && (
-          <Text mt={2} color="#ffd648" fontSize="sm" role="status">
+          <Text mt={1} color="#ffd648" fontSize="sm" role="status">
             {showText}
           </Text>
         )}
       </Box>
+
+      <Divider my={5} />
+
+      <Heading size="md">单机农场转联机农场</Heading>
+
+      <Text fontSize="sm" my={1} color="gray.300">
+        端游和手游一样
+      </Text>
+
+      <VStack align="stretch" spacing={2}>
+        <Text>
+          ①
+          进入要转换的担任农场里，前往地图右上角的【木匠的商店】，向游戏NPC【罗宾】对话
+          → 【建造农场建筑】 →
+          【联机小屋】，根据你需要联机的人数来建造联机小屋即可
+        </Text>
+        <Text>
+          ②
+          联机小屋建造完毕后，返回农场睡觉度过当天，然后在第二天早上即可退出农场，即可在合作的【主持】的页面中，找到你的单机存档进行联机
+        </Text>
+      </VStack>
 
       <Divider my={5} />
 

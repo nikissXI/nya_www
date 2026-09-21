@@ -88,6 +88,9 @@ interface ILoginStateSlice {
 
   // 获取邀请码
   getInviteCode: () => void;
+  // 是否在app中打开
+  getInApp: () => void;
+  inApp: boolean;
 
   // 获取节点延迟
   getNodeLatency: (
@@ -156,6 +159,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           localStorage.setItem("inviteCode", inviteCode);
         }
       },
+
+      getInApp: () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const inApp = urlParams.get("app");
+        if (inApp) {
+          set({ inApp: true });
+        }
+      },
+      inApp: false,
 
       serverData: undefined,
       getServerData: async () => {

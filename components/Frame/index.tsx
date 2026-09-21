@@ -2,16 +2,15 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
-import Header from "../Navbar/Header";
-import SideBar from "../Navbar/SideBar";
+import Navbar from "../Nav/Navbar";
+import SideBar from "../Nav/SideBar";
 import Toaster from "../universal/Toaster";
-import Footer from "../Navbar/Footer";
 import { useUserStateStore } from "@/store/user-state";
-import LoginModal from "../Navbar/Login";
+import LoginModal from "../universal/Login";
 import { NoticeText } from "../universal/Notice";
 import TunnelUpdateModal from "../docs/ReGetIpModal";
 import ServerNodeListModal from "../serverInfo/nodeList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Frame({
   children,
@@ -19,12 +18,29 @@ export default function Frame({
   children: React.ReactNode;
 }>) {
   const { pathname } = useLocation();
-  const { loginLoading, getInviteCode } = useUserStateStore();
+  const { loginLoading, getInviteCode, getInApp, inApp } = useUserStateStore();
 
   // 登录加载完成后获取邀请码
   useEffect(() => {
     getInviteCode();
-  }, [getInviteCode]);
+    getInApp();
+  }, [getInviteCode, getInApp]);
+
+  const rootPath = "/" + pathname.split("/")[1];
+  const [title, setTitle] = useState<string>("");
+
+  useEffect(() => {
+    const titles: { [key: string]: string } = {
+      "/": "首页",
+      "/register": "注册",
+      "/forgetPass": "忘记密码",
+      "/me": "我的信息",
+      "/sponsor": "赞助喵服",
+      "/docs": "联机教程",
+      "/room": "联机房间",
+    };
+    setTitle(titles[rootPath]);
+  }, [rootPath]);
 
   return (
     <>
@@ -38,8 +54,22 @@ export default function Frame({
         direction={{ base: "column", md: "row" }} // 移动端竖向，桌面端横向
         // height="100vh"
       >
-        {/* 头部导航栏 */}
-        <Header path={pathname} />
+        {/* 标题 */}
+        <Center
+          width="100%"
+          color="white"
+          fontSize="xl"
+          fontWeight="bold"
+          position="fixed"
+          mt={2.5}
+          display="flex"
+          zIndex={100}
+        >
+          {title}
+        </Center>
+
+        {/* 导航栏 */}
+        {!inApp && <Navbar path={pathname} />}
 
         {/* 主内容区域 */}
         <Box as="main" flex={{ base: "1", md: "4" }} mt={{ base: 20, md: 100 }}>
@@ -56,11 +86,8 @@ export default function Frame({
           )}
         </Box>
 
-        {/* 底部 */}
-        <Footer path={pathname} />
-
-        {/* 群号 */}
-        <SideBar />
+        {/* 侧边栏 */}
+        {!inApp && <SideBar />}
       </Flex>
     </>
   );

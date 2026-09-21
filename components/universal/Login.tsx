@@ -1,4 +1,4 @@
-import { Button } from "../universal/button";
+import { Button } from "./button";
 import {
   Modal,
   ModalCloseButton,
@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserStateStore } from "@/store/user-state";
 import { useEffect, useState } from "react";
 import useCaptcha from "@/utils/GetCaptcha";
-import { openToast } from "../universal/toast";
+import { openToast } from "./toast";
 import { getHash, validateTel, validateEmail } from "@/utils/strings";
 import { setAuthToken } from "@/store/authKey";
 import { apiUrl } from "@/utils/api";
