@@ -53,7 +53,6 @@ import TheEscapistsTool from "@/components/universal/theEscapistsTool";
 import {
   ROOM_GAME_LIST,
   GENERAL_QQ_GROUP,
-  GENERAL_QQ_GROUP_LINK,
   ROLE_HOSTER,
   ROLE_NONE,
   getRoomGameName,
@@ -426,23 +425,46 @@ export default function Page() {
             <ModalCloseButton />
             <ModalBody pb={6}>
               {gameInfo?.qq ? (
-                <Text mb={4}>该游戏的喵服QQ群 {gameInfo.qq}</Text>
+                <Text
+                  onClick={() => {
+                    if (gameInfo.qq) copyText(gameInfo.qq);
+                  }}
+                  mb={4}
+                >
+                  该游戏的喵服QQ群 {gameInfo.qq}
+                  <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
+                </Text>
               ) : (
                 <Text mb={4}>
                   {gameInfo?.title !== "通用联机房" ? (
-                    <>
+                    <Text
+                      onClick={() => {
+                        copyText(GENERAL_QQ_GROUP);
+                      }}
+                    >
                       暂无该游戏的喵服关联群，有问题请加大群：
-                      <Link
+                      {GENERAL_QQ_GROUP}
+                      <Icon
                         ml={1}
-                        href={GENERAL_QQ_GROUP_LINK}
-                        target="_blank"
+                        as={MdContentCopy}
+                        boxSize={3}
                         color="#7dd4ff"
-                      >
-                        {GENERAL_QQ_GROUP}
-                      </Link>
-                    </>
+                      />
+                    </Text>
                   ) : (
-                    <Text>喵服联机大群 {GENERAL_QQ_GROUP}</Text>
+                    <Text
+                      onClick={() => {
+                        copyText(GENERAL_QQ_GROUP);
+                      }}
+                    >
+                      喵服联机大群 {GENERAL_QQ_GROUP}
+                      <Icon
+                        ml={1}
+                        as={MdContentCopy}
+                        boxSize={3}
+                        color="#7dd4ff"
+                      />
+                    </Text>
                   )}
                 </Text>
               )}

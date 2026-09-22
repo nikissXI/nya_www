@@ -1,5 +1,3 @@
-"user client";
-
 import { Heading, Text, VStack } from "@chakra-ui/react";
 
 export const NoticeText = () => {
@@ -23,7 +21,7 @@ export const NoticeText = () => {
         <br />
         电脑：谷歌、Edge
         <br />
-        仍然无法解决就加Q群1047464328找群主(即服主)
+        仍然无法解决就加大群找群主(即服主)
       </Text>
     </VStack>
   );

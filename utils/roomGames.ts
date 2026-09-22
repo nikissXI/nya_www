@@ -23,7 +23,6 @@ export const ROLE_NONE = "none";
 
 /** 喵服联机大群 */
 export const GENERAL_QQ_GROUP = "1047464328";
-export const GENERAL_QQ_GROUP_LINK = "https://qm.qq.com/q/HxnUVAdRa8";
 
 export const ROOM_GAME_LIST: GameRoomItem[] = [
   {

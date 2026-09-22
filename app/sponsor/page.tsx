@@ -35,6 +35,9 @@ interface SponsorItem {
   sponsorship: number;
 }
 
+const AdminQQ = "1299577815";
+const AdminWX = "nikissxi";
+
 const Page = () => {
   const [sponsorList, setSponsorList] = useState<SponsorItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -110,7 +113,7 @@ const Page = () => {
             <Text as="span" mx={3} color="gray.500">
               |
             </Text>
-            <Icon as={FaQq} mx={1} /> 1299577815
+            <Icon as={FaQq} mx={1} /> {AdminQQ}
           </Text>
         </Flex>
 
@@ -230,9 +233,9 @@ const Page = () => {
                   如果催录入、漏了备注、无法备注、无法付款等等，请联系服主
                   <br />
                   <Icon as={FaWeixin} mx={1} />
-                  nikissxi&emsp;
+                  {AdminWX}&emsp;
                   <Icon as={FaQq} mx={1} />
-                  1299577815
+                  {AdminQQ}
                 </Text>
               </Box>
 

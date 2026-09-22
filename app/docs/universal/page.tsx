@@ -11,6 +11,7 @@ import {
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import { MdTipsAndUpdates } from "react-icons/md";
+import { GENERAL_QQ_GROUP } from "@/utils/roomGames";
 
 export default function Page() {
   return (
@@ -25,7 +26,7 @@ export default function Page() {
         适用范围：支持通过 IP
         加入的游戏；仅支持搜索或邀请加入的游戏，需要自行确认是否兼容
         <br />
-        有其他联机问题请加Q群1047464328
+        有其他联机问题请加Q群{GENERAL_QQ_GROUP}
       </Text>
 
       <Heading size="md" mb={2}>
