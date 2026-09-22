@@ -51,7 +51,6 @@ import { apiUrl } from "@/utils/api";
 import TheEscapistsTool from "@/components/universal/theEscapistsTool";
 import {
   ROOM_GAME_LIST,
-  GENERAL_QQ_GROUP,
   getRoomGameName,
   type GameRoomItem,
 } from "@/utils/roomGames";
@@ -425,7 +424,7 @@ export default function Page() {
             <ModalHeader>{gameInfo?.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
-              {gameInfo?.qq ? (
+              {gameInfo?.qq && (
                 <Text
                   onClick={() => {
                     if (gameInfo.qq) copyText(gameInfo.qq);
@@ -434,39 +433,6 @@ export default function Page() {
                 >
                   该游戏的喵服QQ群 {gameInfo.qq}
                   <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
-                </Text>
-              ) : (
-                <Text mb={4}>
-                  {gameInfo?.title !== "通用联机房" ? (
-                    <Text
-                      onClick={() => {
-                        copyText(GENERAL_QQ_GROUP);
-                      }}
-                    >
-                      暂无该游戏的喵服关联群，有问题请加大群：
-                      {GENERAL_QQ_GROUP}
-                      <Icon
-                        ml={1}
-                        as={MdContentCopy}
-                        boxSize={3}
-                        color="#7dd4ff"
-                      />
-                    </Text>
-                  ) : (
-                    <Text
-                      onClick={() => {
-                        copyText(GENERAL_QQ_GROUP);
-                      }}
-                    >
-                      喵服联机大群 {GENERAL_QQ_GROUP}
-                      <Icon
-                        ml={1}
-                        as={MdContentCopy}
-                        boxSize={3}
-                        color="#7dd4ff"
-                      />
-                    </Text>
-                  )}
                 </Text>
               )}
 

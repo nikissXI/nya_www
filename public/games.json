@@ -1,0 +1,169 @@
+{
+    "GENERAL_QQ_GROUP": "1047464328",
+    "ROOM_GAME_LIST": [
+        {
+            "path": "/docs/universal",
+            "title": "通用联机房",
+            "icon": "/images/universal/icon.webp",
+            "qq": null,
+            "support": [
+                "该房间适合任意游戏，只是该房间无特定游戏的联机操作教程",
+                "支持通过IP加入游戏都可以用喵服联机，搜索加入的就不好说",
+                "游戏列表没你玩的游戏，且不清楚是否能联机，可以加大群问问",
+                "如果你希望新增某游戏，请加大群联系群主（服主）"
+            ]
+        },
+        {
+            "path": "/docs/stardewValley",
+            "title": "星露谷物语",
+            "icon": "/images/stardewValley/icon.webp",
+            "qq": "817658554",
+            "support": [
+                "支持安卓、苹果、电脑三端跨平台联机"
+            ]
+        },
+        {
+            "path": "/docs/doNotStarve",
+            "title": "饥荒联机版",
+            "icon": "/images/doNotStarve/icon.webp",
+            "qq": "641115719",
+            "support": [
+                "不支持PC端与移动端联机；安卓可以与苹果联机",
+                "苹果只能做主机，无法搜索房间，除非安装改版饥荒能调出控制台"
+            ]
+        },
+        {
+            "path": "/docs/slayTheSpire",
+            "title": "杀戮尖塔",
+            "icon": "/images/slayTheSpire/icon.webp",
+            "qq": "698892019",
+            "support": [
+                "支持安卓、苹果、电脑三端跨平台联机",
+                "Steam端需要安装IP联机mod才能使用喵服联机，房间内的游戏联机教程有提供"
+            ]
+        },
+        {
+            "path": "/docs/terraria",
+            "title": "泰拉瑞亚",
+            "icon": "/images/terraria/icon.webp",
+            "qq": "976129564",
+            "support": [
+                "国际版支持安卓、苹果、电脑三端跨平台联机",
+                "TapTap版仅支持安卓与苹果联机，且不支持与国际版联机"
+            ]
+        },
+        {
+            "path": "/docs/isaac",
+            "title": "以撒的结合",
+            "icon": "/images/isaac/icon.webp",
+            "qq": "1074963191",
+            "support": [
+                "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道",
+                "不支持PC端与移动端联机"
+            ]
+        },
+        {
+            "path": "/docs/ark",
+            "title": "方舟：生存进化",
+            "icon": "/images/ark/icon.webp",
+            "qq": "1106534252",
+            "support": [
+                "手游需要使用“琳星Lin-C”版，否则无法使用IP加入游戏",
+                "不支持PC端与移动端联机"
+            ]
+        },
+        {
+            "path": "/docs/theEscapists",
+            "title": "逃脱者手游",
+            "icon": "/images/theEscapists/icon.webp",
+            "qq": "961793250",
+            "support": [
+                "支持安卓与苹果联机，需游戏版本一致"
+            ]
+        },
+        {
+            "path": "/docs/mindustry",
+            "title": "像素工厂",
+            "icon": "/images/mindustry/icon.webp",
+            "qq": "830268831",
+            "support": [
+                "支持安卓、苹果、电脑三端跨平台联机"
+            ]
+        },
+        {
+            "path": "/docs/l4d2",
+            "title": "求生之路2",
+            "icon": "/images/l4d2/icon.webp",
+            "qq": "138012638",
+            "support": [
+                "正版和盗版都支持，但盗版卡Steam验证自己去解决",
+                "该游戏只有PC端，别问手机能不能玩了"
+            ]
+        },
+        {
+            "path": "/docs/survivalcraft",
+            "title": "生存战争",
+            "icon": "/images/survivalcraft/icon.webp",
+            "qq": "1092247198",
+            "support": [
+                "支持安卓、苹果、电脑三端跨平台联机"
+            ]
+        },
+        {
+            "path": "/docs/wizardOfLegend",
+            "title": "传说法师手游",
+            "icon": "/images/wizardOfLegend/icon.webp",
+            "qq": "981286541",
+            "support": [
+                "支持安卓与苹果联机，但仅安卓能搜索房间",
+                "不支持电脑端，因为电脑端没有联机模式"
+            ]
+        },
+        {
+            "path": "/docs/overcooked",
+            "title": "胡闹厨房",
+            "icon": "/images/overcooked/icon.webp",
+            "qq": null,
+            "support": [
+                "由于不支持IP加入游戏，流量有低概率不走喵服，好不好使自己试试才知道"
+            ]
+        },
+        {
+            "path": "/docs/machinesAtWar3",
+            "title": "机械战争3",
+            "icon": "/images/machinesAtWar3/icon.webp",
+            "qq": "689358384",
+            "support": [
+                "有联机模式的基本都支持，苹果系统另说"
+            ]
+        },
+        {
+            "path": "/docs/projectZomboid",
+            "title": "僵尸毁灭工程",
+            "icon": "/images/projectZomboid/icon.webp",
+            "qq": null,
+            "support": [
+                "正版和盗版都支持，但如果卡Steam验证问题需要自己去解决",
+                "该游戏只有PC端，别问手机能不能玩了"
+            ]
+        },
+        {
+            "path": "/docs/juicyRealm",
+            "title": "恶果之地",
+            "icon": "/images/juicyRealm/icon.webp",
+            "qq": "981282876",
+            "support": [
+                "支持安卓、苹果、电脑三端跨平台联机"
+            ]
+        },
+        {
+            "path": "/docs/aresVirus2",
+            "title": "阿瑞斯病毒2",
+            "icon": "/images/aresVirus2/icon.webp",
+            "qq": "966579113",
+            "support": [
+                "支持安卓、苹果、电脑三端跨平台联机"
+            ]
+        }
+    ]
+}
