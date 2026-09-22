@@ -24,7 +24,7 @@ import {
 } from "@/utils/strings";
 import { useNavigate } from "react-router-dom";
 import { setAuthToken } from "@/store/authKey";
-import { apiUrl } from "@/utils/api";
+import { isBusinessError, request } from "@/utils/api";
 
 interface RegisterReqBody {
   verifyType: string; // 注册类型：tel或email
@@ -127,35 +127,29 @@ export default function Page() {
     };
 
     try {
-      const resp = await fetch(`${apiUrl}/register`, {
+      const token = await request<string>("/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req_data),
+        auth: false,
+        body: req_data,
       });
-
-      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
-
-      const data = await resp.json();
-      if (data.code === 0) {
-        openToast({
-          content: "注册成功，跳转到“个人中心”页面",
-          status: "success",
-        });
-        setAuthToken(data.data);
-        getUserInfo();
-        navigate("/me");
-      } else {
-        openToast({ content: data.msg, status: "warning" });
+      openToast({
+        content: "注册成功，跳转到“个人中心”页面",
+        status: "success",
+      });
+      if (token) setAuthToken(token);
+      getUserInfo();
+      navigate("/me");
+    } catch (err) {
+      if (isBusinessError(err)) {
+        openToast({ content: err.message, status: "warning" });
         setCaptchaImageUrl(await fetchCaptcha());
         setInputCaptcha("");
+      } else {
+        openToast({
+          content: getErrorMessage(err, "服务异常，请联系服主处理"),
+          status: "error",
+        });
       }
-    } catch (err) {
-      openToast({
-        content: getErrorMessage(err, "服务异常，请联系服主处理"),
-        status: "error",
-      });
     }
   };
 

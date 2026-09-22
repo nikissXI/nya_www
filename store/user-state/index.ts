@@ -6,7 +6,13 @@ import { createWithEqualityFn } from "zustand/traditional";
 import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
-import { apiUrl } from "@/utils/api";
+import {
+  ApiError,
+  isBusinessError,
+  request,
+  requestEnvelope,
+} from "@/utils/api";
+import { getErrorMessage } from "@/utils/strings";
 
 interface AnnouncementItem {
   timestamp: number; // 公告发布时间戳（10位）
@@ -61,6 +67,19 @@ export interface NodeInfo {
   ping_host: string; // 用于获取节点延迟，WEB端用过xhr请求获取，APP端通过ICMP获取
   sponsor: boolean; // 是否赞助专用节点
   delay: number; // 网络延迟，单位ms
+}
+
+// ---- 各接口返回的 data 结构（统一响应体 {code,msg,data} 中的 data）----
+interface UserInfoPayload {
+  reget_ip?: boolean; // IP 变动，需要重新导入隧道
+  user_info: UserInfo; // 用户信息
+  user_wg_info?: UserWgInfo; // 用户的 WG 隧道信息
+}
+interface GetRoomPayload {
+  is_online: boolean; // WG 是否在线
+  room: RoomInfo | null; // 房间信息
+  user_wg_info?: UserWgInfo; // 后端返回的完整节点信息
+  node_net_load?: number; // 节点负载百分比
 }
 
 interface ILoginStateSlice {
@@ -170,38 +189,33 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       announcementsData: undefined,
       getAnnouncementsData: async () => {
         try {
-          const resp = await fetch(`${apiUrl}/announcements`);
-          if (!resp.ok) throw new Error("请求出错");
-          const data = await resp.json();
-          set({ announcementsData: data.data });
+          const data = await request<AnnouncementsData>("/announcements", {
+            auth: false,
+          });
+          set({ announcementsData: data ?? undefined });
         } catch (error) {
           // 静默失败，不影响使用
-          console.warn("获取服务数据失败", error);
+          console.warn("获取公告数据失败", error);
         }
       },
 
       confKey: null,
       getConfKey: async (manual: boolean = false) => {
         try {
-          const resp = await fetch(`${apiUrl}/getDownloadConfkey`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${getAuthToken()}` },
-          });
-          if (!resp.ok) throw new Error("请求出错");
-          const data = await resp.json();
-          if (data.code === 0) {
-            set({ confKey: data.data });
-            if (manual)
-              openToast({ content: "key激活成功", status: "success" });
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-          }
+          const confKey = await request<string>("/getDownloadConfkey");
+          set({ confKey });
+          if (manual) openToast({ content: "key激活成功", status: "success" });
         } catch (error) {
-          // 改动：不再 reload，而是提示用户重新登录
-          openToast({
-            content: "获取配置失败，请尝试重新登录",
-            status: "error",
-          });
+          if (isBusinessError(error)) {
+            // 业务失败（如未选择节点），后端 msg 就是原因
+            openToast({ content: error.message, status: "warning" });
+          } else {
+            // 改动：不再 reload，而是提示用户重新登录
+            openToast({
+              content: "获取配置失败，请尝试重新登录",
+              status: "error",
+            });
+          }
         }
       },
 
@@ -220,47 +234,38 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           localStorage.setItem("uuid", new_uuid);
         }
 
-        if (getAuthToken()) {
-          try {
-            const resp = await fetch(`${apiUrl}/userInfo`, {
-              method: "GET",
-              headers: { Authorization: `Bearer ${getAuthToken()}` },
-            });
-            if (resp.status === 401) {
-              get().logout();
-              throw new Error("登陆凭证失效");
-            }
-            if (!resp.ok) throw new Error("服务器出错，请稍后再试");
-            const data = await resp.json();
+        if (!getAuthToken()) {
+          set({ loginLoading: false });
+          return;
+        }
 
-            if (data.data.reget_ip) {
-              set({ needShowReget: true });
-            }
+        try {
+          const data = await request<UserInfoPayload>("/userInfo");
 
-            const userInfo: UserInfo = data.data.user_info;
-            set({ userInfo });
-
-            if (data.data.user_wg_info) {
-              const userWgInfo: UserWgInfo = data.data.user_wg_info;
-              set({ userWgInfo });
-            } else {
-              get().setNodeListModal();
-            }
-          } catch (error) {
-            if (error instanceof Error) {
-              if (error.message === "登陆凭证失效") {
-                openToast({ content: "登陆凭证失效", status: "warning" });
-              } else {
-                openToast({ content: error.message, status: "error" });
-              }
-            } else {
-              openToast({ content: "服务器出错，请稍后再试", status: "error" });
-            }
-          } finally {
-            // 改动：确保在 finally 中重置加载状态
-            set({ loginLoading: false });
+          if (data?.reget_ip) {
+            set({ needShowReget: true });
           }
-        } else {
+
+          set({ userInfo: data?.user_info });
+
+          if (data?.user_wg_info) {
+            set({ userWgInfo: data.user_wg_info });
+          } else {
+            get().setNodeListModal();
+          }
+        } catch (error) {
+          if (error instanceof ApiError && error.isAuthError) {
+            // 凭证失效：清空登录态
+            get().logout();
+            openToast({ content: "登陆凭证失效", status: "warning" });
+          } else {
+            openToast({
+              content: getErrorMessage(error, "服务器出错，请稍后再试"),
+              status: "error",
+            });
+          }
+        } finally {
+          // 改动：确保在 finally 中重置加载状态
           set({ loginLoading: false });
         }
       },
@@ -392,10 +397,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
 
         try {
-          const resp = await fetch(`${apiUrl}/nodeList`);
-          if (!resp.ok) throw new Error("请求出错");
-          const data = await resp.json();
-          const nodes: NodeInfo[] = data.data;
+          const nodes =
+            (await request<NodeInfo[]>("/nodeList", { auth: false })) ?? [];
 
           set({
             nodeMap: new Map<string, NodeInfo>(nodes.map((n) => [n.alias, n])),
@@ -442,28 +445,26 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         try {
           set({ selectNodeLock: true });
 
-          const resp = await fetch(
-            `${apiUrl}/selectNode?node_alias=${node_alias}`,
-            {
-              method: "GET",
-              headers: { Authorization: `Bearer ${getAuthToken()}` },
-            },
+          const { code, msg, data } = await requestEnvelope<UserWgInfo>(
+            "/selectNode",
+            { params: { node_alias } },
           );
-          if (!resp.ok) throw new Error("请求出错");
-          const data = await resp.json();
-          if (data.code === 0) {
-            const userWgInfo: UserWgInfo = data.data;
+
+          if (code === 0) {
             set({
-              userWgInfo,
+              userWgInfo: data ?? undefined,
               roomData: undefined, // 切换节点后清空房间数据，触发重新获取
             });
-            openToast({ content: data.msg, status: "success" });
+            openToast({ content: msg ?? "节点切换成功", status: "success" });
           } else {
-            openToast({ content: data.msg, status: "warning" });
+            openToast({ content: msg ?? "节点切换失败", status: "warning" });
           }
         } catch (error) {
           // 改动：不刷新页面，提示错误
-          openToast({ content: "节点切换失败，请重试", status: "error" });
+          openToast({
+            content: getErrorMessage(error, "节点切换失败，请重试"),
+            status: "error",
+          });
         } finally {
           set({ selectNodeLock: false });
         }
@@ -497,26 +498,16 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           set({ rotate: true });
 
-          const resp = await fetch(`${apiUrl}/getRoom`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${getAuthToken()}` },
-          });
-          if (!resp.ok) throw new Error("请求出错");
-
-          const data = await resp.json();
-          // 后端返回数据异常时刷新页面，注意要提前返回，避免继续处理无效数据
-          if (data.code === -1) {
-            window.location.reload();
-            return;
-          }
+          // code === -1（客户端数据异常）由 request 统一处理：刷新页面并抛错
+          const data = await request<GetRoomPayload>("/getRoom");
 
           // --- 核心优化开始 ---
 
           // 1. 解构后端返回的完整数据
-          const isOnline = data.data.is_online as boolean;
-          const incomingUserWgInfo = data.data.user_wg_info; // 后端返回的完整节点信息
-          const nodeNetLoad = data.data.node_net_load;
-          const roomData = data.data.room as RoomInfo;
+          const isOnline = (data?.is_online ?? false) as boolean;
+          const incomingUserWgInfo = data?.user_wg_info; // 后端返回的完整节点信息
+          const nodeNetLoad = data?.node_net_load;
+          const roomData = (data?.room ?? undefined) as RoomInfo | undefined;
 
           // 2. 【关键】直接用后端返回的最新节点信息覆盖 Store
           //    这一步同时更新了 node_alias, ping_host, net_type, bandwidth 等所有字段
@@ -568,6 +559,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           // --- 核心优化结束 ---
         } catch (error) {
+          // code === -1 时 request 内部已经在刷新页面，这里不再重复提示
+          if (error instanceof ApiError && error.isInvalidData) return;
+
           // 优化：不刷新页面，给予友好提示
           openToast({ content: "获取房间信息失败，请重试", status: "error" });
         } finally {

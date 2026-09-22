@@ -19,7 +19,7 @@ import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "./toast";
 import { getHash, getErrorMessage } from "@/utils/strings";
 import { setAuthToken } from "@/store/authKey";
-import { apiUrl } from "@/utils/api";
+import { ApiError, isBusinessError, request } from "@/utils/api";
 
 interface LoginReqBody {
   account: string; // 手机或邮箱
@@ -90,39 +90,31 @@ export default function LoginModal() {
     };
 
     try {
-      const resp = await fetch(`${apiUrl}/login`, {
+      const token = await request<string>("/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req_data),
+        auth: false,
+        body: req_data,
       });
-
-      if (resp.status === 401) {
+      openToast({ content: "登陆成功", status: "success" });
+      if (token) setAuthToken(token);
+      getUserInfo();
+      setShowLoginModal();
+    } catch (err) {
+      if (err instanceof ApiError && err.isAuthError) {
         openToast({ content: "账号或密码错误", status: "warning" });
-        setCaptchaImageUrl(await fetchCaptcha());
-        setInputCaptcha("");
+      } else if (isBusinessError(err)) {
+        openToast({ content: err.message, status: "warning" });
+      } else {
+        openToast({
+          content: getErrorMessage(err, "服务异常，请联系服主处理"),
+          status: "error",
+        });
         return;
       }
 
-      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
-
-      const data = await resp.json();
-      if (data.code === 0) {
-        openToast({ content: "登陆成功", status: "success" });
-        setAuthToken(data.data);
-        getUserInfo();
-        setShowLoginModal();
-      } else {
-        openToast({ content: data.msg, status: "warning" });
-        setCaptchaImageUrl(await fetchCaptcha());
-        setInputCaptcha("");
-      }
-    } catch (err) {
-      openToast({
-        content: getErrorMessage(err, "服务异常，请联系服主处理"),
-        status: "error",
-      });
+      // 登录失败后刷新验证码
+      setCaptchaImageUrl(await fetchCaptcha());
+      setInputCaptcha("");
     }
   };
 

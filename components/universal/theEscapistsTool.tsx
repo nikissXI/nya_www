@@ -1,8 +1,7 @@
 import { Flex, Heading, Text, Input, Box } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
-import { getAuthToken } from "@/store/authKey";
-import { apiUrl } from "@/utils/api";
+import { ApiError, requestEnvelope } from "@/utils/api";
 
 export default function TheEscapistsTool() {
   const [inputIp, setInputIp] = useState("");
@@ -19,24 +18,16 @@ export default function TheEscapistsTool() {
     setIsChecking(true);
 
     try {
-      const resp = await fetch(
-        `${apiUrl}/escapistsHelper?hosterIp=${encodeURIComponent(normalizedIp)}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getAuthToken()}`,
-          },
-        },
+      const { msg } = await requestEnvelope<string>("/escapistsHelper", {
+        params: { hosterIp: normalizedIp },
+      });
+      setShowText(msg ?? "响应结果异常，请联系服主");
+    } catch (err) {
+      setShowText(
+        err instanceof ApiError && err.status !== null
+          ? err.message
+          : "网络请求失败，请检查网络后重试",
       );
-
-      if (resp.ok) {
-        const data = await resp.json();
-        setShowText(data.msg || "响应结果异常，请联系服主");
-      } else {
-        setShowText("查房服务暂时不可用，请稍后再试");
-      }
-    } catch {
-      setShowText("网络请求失败，请检查网络后重试");
     } finally {
       setIsChecking(false);
     }

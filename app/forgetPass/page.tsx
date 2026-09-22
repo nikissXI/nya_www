@@ -21,7 +21,11 @@ import {
 } from "@/utils/strings";
 import { useNavigate } from "react-router-dom";
 import { setAuthToken } from "@/store/authKey";
-import { apiUrl } from "@/utils/api";
+import {
+  isBusinessError,
+  request,
+  requestEnvelope,
+} from "@/utils/api";
 
 interface ResetReqBody {
   verifyType: string; // 注册类型：qq或tel
@@ -99,35 +103,29 @@ export default function Page() {
     };
 
     try {
-      const resp = await fetch(`${apiUrl}/resetPass`, {
+      const token = await request<string>("/resetPass", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req_data),
+        auth: false,
+        body: req_data,
       });
-
-      if (!resp.ok) throw new Error("服务异常，请联系服主处理");
-
-      const data = await resp.json();
-      if (data.code === 0) {
-        openToast({
-          content: "重置密码成功，跳转到“个人中心”页面",
-          status: "success",
-        });
-        setAuthToken(data.data);
-        getUserInfo();
-        navigate("/me");
-      } else {
-        openToast({ content: data.msg, status: "warning" });
+      openToast({
+        content: "重置密码成功，跳转到“个人中心”页面",
+        status: "success",
+      });
+      if (token) setAuthToken(token);
+      getUserInfo();
+      navigate("/me");
+    } catch (err) {
+      if (isBusinessError(err)) {
+        openToast({ content: err.message, status: "warning" });
         setCaptchaImageUrl(await fetchCaptcha());
         setInputCaptcha("");
+      } else {
+        openToast({
+          content: getErrorMessage(err, "服务异常，请联系服主处理"),
+          status: "error",
+        });
       }
-    } catch (err) {
-      openToast({
-        content: getErrorMessage(err, "服务异常，请联系服主处理"),
-        status: "error",
-      });
     }
   };
 
@@ -137,25 +135,31 @@ export default function Page() {
       return;
     }
 
-    const resp = await fetch(`${apiUrl}/telExist?tel=${tel}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 0) {
+    try {
+      // 这两个接口用 code 表达“是 / 否”，需要自己判断
+      const exist = await requestEnvelope("/telExist", {
+        params: { tel },
+        auth: false,
+      });
+      if (exist.code === 0) {
         openToast({ content: "该手机号未被注册", status: "warning" });
-      } else {
-        const resp = await fetch(`${apiUrl}/verifyTEL?tel=${tel}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.code === 0) {
-            openToast({ content: data.msg, status: "success" });
-            setSendVerifyButtonText("验证码已发");
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-          }
-        }
+        return;
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+
+      const verify = await requestEnvelope("/verifyTEL", {
+        params: { tel },
+        auth: false,
+      });
+      openToast({
+        content: verify.msg ?? "服务异常，请联系服主处理",
+        status: verify.code === 0 ? "success" : "warning",
+      });
+      if (verify.code === 0) setSendVerifyButtonText("验证码已发");
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 
@@ -165,25 +169,30 @@ export default function Page() {
       return;
     }
 
-    const resp = await fetch(`${apiUrl}/emailExist?email=${email}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.code === 0) {
+    try {
+      const exist = await requestEnvelope("/emailExist", {
+        params: { email },
+        auth: false,
+      });
+      if (exist.code === 0) {
         openToast({ content: "该电子邮箱未被注册", status: "warning" });
-      } else {
-        const resp = await fetch(`${apiUrl}/verifyEmail?email=${email}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.code === 0) {
-            openToast({ content: data.msg, status: "success" });
-            setSendVerifyButtonText("验证码已发");
-          } else {
-            openToast({ content: data.msg, status: "warning" });
-          }
-        }
+        return;
       }
-    } else {
-      openToast({ content: "服务异常，请联系服主处理", status: "error" });
+
+      const verify = await requestEnvelope("/verifyEmail", {
+        params: { email },
+        auth: false,
+      });
+      openToast({
+        content: verify.msg ?? "服务异常，请联系服主处理",
+        status: verify.code === 0 ? "success" : "warning",
+      });
+      if (verify.code === 0) setSendVerifyButtonText("验证码已发");
+    } catch (err) {
+      openToast({
+        content: getErrorMessage(err, "服务异常，请联系服主处理"),
+        status: "error",
+      });
     }
   };
 

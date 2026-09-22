@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
-import { getAuthToken } from "@/store/authKey";
 import { MdTipsAndUpdates } from "react-icons/md";
 import {
   FiArrowDownLeft,
@@ -24,7 +23,7 @@ import {
 } from "react-icons/fi";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
-import { apiUrl } from "@/utils/api";
+import { ApiError, requestEnvelope } from "@/utils/api";
 
 export default function Page() {
   const [inputIp, setInputIp] = useState("");
@@ -43,24 +42,16 @@ export default function Page() {
     setShowText("正在查房，请保持农场在前台并稍候……");
 
     try {
-      const resp = await fetch(
-        `${apiUrl}/stardewValleyRoomCheck?hosterIp=${encodeURIComponent(normalizedIp)}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getAuthToken()}`,
-          },
-        },
+      const { msg } = await requestEnvelope<string>("/stardewValleyRoomCheck", {
+        params: { hosterIp: normalizedIp },
+      });
+      setShowText(msg ?? "响应结果异常，请联系服主");
+    } catch (err) {
+      setShowText(
+        err instanceof ApiError && err.status !== null
+          ? err.message
+          : "网络请求失败，请检查网络后重试",
       );
-
-      if (resp.ok) {
-        const data = await resp.json();
-        setShowText(data.msg || "响应结果异常，请联系服主");
-      } else {
-        setShowText("查房服务暂时不可用，请稍后再试");
-      }
-    } catch {
-      setShowText("网络请求失败，请检查网络后重试");
     } finally {
       setIsChecking(false);
     }

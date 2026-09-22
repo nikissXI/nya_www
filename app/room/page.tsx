@@ -30,7 +30,6 @@ import { IoReloadCircle } from "react-icons/io5";
 import { TbReload } from "react-icons/tb";
 import { MdContentCopy } from "react-icons/md";
 import { useUserStateStore } from "@/store/user-state";
-import { getAuthToken } from "@/store/authKey";
 import {
   copyText,
   getErrorMessage,
@@ -47,7 +46,7 @@ import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
 import SponsorTag from "@/components/universal/SponsorTag";
 import OfflineReasons from "@/components/docs/OfflineReasons";
-import { apiUrl } from "@/utils/api";
+import { requestEnvelope, ApiError, type ApiEnvelope } from "@/utils/api";
 import TheEscapistsTool from "@/components/universal/theEscapistsTool";
 import {
   ROOM_GAME_LIST,
@@ -63,12 +62,6 @@ const spin = keyframes`
 /** 房间角色常量 */
 const ROLE_HOSTER = "hoster";
 const ROLE_NONE = "none";
-
-interface HandleRoomResponse {
-  code: number;
-  msg: string;
-  [key: string]: any;
-}
 
 // 游戏房间配置、群号、房间角色常量已迁移到 @/utils/roomGames
 // （放在独立模块可避免该页面被静态引用，保证路由懒加载生效）
@@ -143,39 +136,20 @@ export default function Page() {
     async (
       endpoint: string,
       params: Record<string, string> = {},
-    ): Promise<HandleRoomResponse> => {
+    ): Promise<ApiEnvelope<unknown>> => {
       if (isRequesting.current) {
         throw new Error("请不要点太快");
       }
       isRequesting.current = true;
 
       try {
-        const urlParams = new URLSearchParams(params);
-        const url = `${apiUrl}/${endpoint}?${urlParams.toString()}`;
-
-        const resp = await fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getAuthToken()}`,
-          },
-        });
-
-        if (!resp.ok) {
-          throw new Error(`访问接口出错: ${resp.status}`);
-        }
-
-        const data: HandleRoomResponse = await resp.json();
-
-        // 数据异常就刷新页面，同时中断后续流程，避免用无效数据继续渲染
-        if (data.code === -1) {
-          window.location.reload();
-          throw new Error("数据异常，页面即将刷新");
-        }
+        // code === -1（数据异常刷新页面）由 request 内部统一处理
+        const payload = await requestEnvelope(endpoint, { params });
 
         // 房间操作后滚动到页面顶部
-        if (data.code === 0) window.scrollTo(0, 0);
+        if (payload.code === 0) window.scrollTo(0, 0);
 
-        return data;
+        return payload;
       } finally {
         isRequesting.current = false;
       }
@@ -185,6 +159,9 @@ export default function Page() {
 
   // 统一的请求异常提示
   const showRequestError = useCallback((err: unknown, prefix = "") => {
+    // code === -1 时 request 内部已经在刷新页面，这里不再重复提示
+    if (err instanceof ApiError && err.isInvalidData) return;
+
     openToast({
       content: `${prefix}${getErrorMessage(err)}`,
       status: "error",
@@ -203,10 +180,10 @@ export default function Page() {
           if (roomData) {
             setRoomPassword(newPasswd);
           }
-          openToast({ content: data.msg, status: "success" });
+          openToast({ content: data.msg ?? "密码设置成功", status: "success" });
           setPassOnClose();
         } else {
-          openToast({ content: data.msg, status: "warning" });
+          openToast({ content: data.msg ?? "密码设置失败", status: "warning" });
         }
       } catch (err) {
         showRequestError(err);
@@ -233,16 +210,16 @@ export default function Page() {
           setSelectedGame(game ?? null);
           getRoomData();
         } else {
-          if (data.msg.includes("赞助")) {
-            setSponsorNotice(data.msg);
+          if (data.msg?.includes("赞助")) {
+            setSponsorNotice(data.msg ?? "");
             openSponsorNotice();
             return;
           }
 
-          if (isOnline && data.msg.includes("再创建")) {
+          if (isOnline && data.msg?.includes("再创建")) {
             getRoomData();
           }
-          openToast({ content: data.msg, status: "warning" });
+          openToast({ content: data.msg ?? "创建房间失败", status: "warning" });
         }
       } catch (err) {
         showRequestError(err);
@@ -269,7 +246,7 @@ export default function Page() {
           setSelectedGame(null);
           getRoomData();
         } else {
-          openToast({ content: data.msg, status: "error" });
+          openToast({ content: data.msg ?? "操作失败", status: "error" });
         }
       } catch (err) {
         showRequestError(err, "请求出错：");
@@ -305,13 +282,13 @@ export default function Page() {
           setInputRoomId("");
           setInputPasswd("");
         } else {
-          if (data.msg.includes("密码")) {
+          if (data.msg?.includes("密码")) {
             setHideJoinPassInput(false);
           }
-          if (isOnline && data.msg.includes("再加入")) {
+          if (isOnline && data.msg?.includes("再加入")) {
             getRoomData();
           }
-          openToast({ content: data.msg, status: "warning" });
+          openToast({ content: data.msg ?? "加入房间失败", status: "warning" });
         }
       } catch (err) {
         showRequestError(err, "请求出错：");
@@ -331,7 +308,7 @@ export default function Page() {
         if (data.code === 0) {
           getRoomData();
         } else {
-          openToast({ content: data.msg, status: "error" });
+          openToast({ content: data.msg ?? "操作失败", status: "error" });
         }
       } catch (err) {
         showRequestError(err, "请求出错：");

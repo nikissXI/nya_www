@@ -27,7 +27,7 @@ import { getErrorMessage } from "@/utils/strings";
 import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
 import { FaWeixin } from "react-icons/fa";
-import { apiUrl } from "@/utils/api";
+import { request } from "@/utils/api";
 
 interface SponsorItem {
   uid: number;
@@ -52,20 +52,13 @@ const Page = () => {
   useEffect(() => {
     async function fetchSponsors() {
       try {
-        const res = await fetch(`${apiUrl}/sponsorList`);
-        if (!res.ok) {
-          throw new Error(`请求失败，状态码：${res.status}`);
-        }
-        const data = await res.json();
-        if (data.code === 0 && Array.isArray(data.data)) {
-          // 过滤出赞助金额不低于50的
-          const filtered = data.data.filter(
-            (item: SponsorItem) => item.sponsorship >= 50,
-          );
-          setSponsorList(filtered);
-        } else {
-          throw new Error(`响应出错 ${data.msg}`);
-        }
+        const data = await request<SponsorItem[]>("/sponsorList", {
+          auth: false,
+        });
+        // 过滤出赞助金额不低于50的
+        setSponsorList(
+          (data ?? []).filter((item) => item.sponsorship >= 50),
+        );
       } catch (err) {
         openToast({
           content: getErrorMessage(err, "赞助名单加载失败，请稍后再试"),
