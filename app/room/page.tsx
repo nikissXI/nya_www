@@ -20,7 +20,6 @@ import {
   Badge,
   Stack,
   Image,
-  Link,
   Center,
   Spinner,
 } from "@chakra-ui/react";
@@ -53,8 +52,6 @@ import TheEscapistsTool from "@/components/universal/theEscapistsTool";
 import {
   ROOM_GAME_LIST,
   GENERAL_QQ_GROUP,
-  ROLE_HOSTER,
-  ROLE_NONE,
   getRoomGameName,
   type GameRoomItem,
 } from "@/utils/roomGames";
@@ -63,6 +60,10 @@ const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
+
+/** 房间角色常量 */
+const ROLE_HOSTER = "hoster";
+const ROLE_NONE = "none";
 
 interface HandleRoomResponse {
   code: number;

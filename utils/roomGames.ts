@@ -16,11 +16,6 @@ export const getRoomGameName = (game?: GameRoomItem): string => {
   return game.path.replace(/^\/docs\//, "");
 };
 
-/** 房间角色常量 */
-export const ROLE_HOSTER = "hoster";
-export const ROLE_MEMBER = "member";
-export const ROLE_NONE = "none";
-
 /** 喵服联机大群 */
 export const GENERAL_QQ_GROUP = "1047464328";
 
