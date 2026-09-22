@@ -46,7 +46,12 @@ import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
 import SponsorTag from "@/components/universal/SponsorTag";
 import OfflineReasons from "@/components/docs/OfflineReasons";
-import { requestEnvelope, ApiError, type ApiEnvelope } from "@/utils/api";
+import {
+  ApiError,
+  shouldSilenceError,
+  type ApiEnvelope,
+} from "@/utils/api";
+import { api } from "@/utils/endpoints";
 import TheEscapistsTool from "@/components/universal/theEscapistsTool";
 import {
   ROOM_GAME_LIST,
@@ -131,11 +136,10 @@ export default function Page() {
     }
   }, [userWgInfo?.node_alias, roomData, getRoomData]);
 
-  // 通用请求函数：使用 useRef 锁，避免 useCallback 依赖 loading 状态导致频繁重建
-  const requestRoomApi = useCallback(
+  // 房间操作统一入口：加并发锁 + 成功后回到页面顶部
+  const runRoomAction = useCallback(
     async (
-      endpoint: string,
-      params: Record<string, string> = {},
+      action: () => Promise<ApiEnvelope<unknown>>,
     ): Promise<ApiEnvelope<unknown>> => {
       if (isRequesting.current) {
         throw new Error("请不要点太快");
@@ -143,10 +147,9 @@ export default function Page() {
       isRequesting.current = true;
 
       try {
-        // code === -1（数据异常刷新页面）由 request 内部统一处理
-        const payload = await requestEnvelope(endpoint, { params });
+        // code === -1（数据异常刷新页面）由请求层统一处理
+        const payload = await action();
 
-        // 房间操作后滚动到页面顶部
         if (payload.code === 0) window.scrollTo(0, 0);
 
         return payload;
@@ -159,8 +162,8 @@ export default function Page() {
 
   // 统一的请求异常提示
   const showRequestError = useCallback((err: unknown, prefix = "") => {
-    // code === -1 时 request 内部已经在刷新页面，这里不再重复提示
-    if (err instanceof ApiError && err.isInvalidData) return;
+    // 凭证失效（已统一登出）/ 数据异常（已刷新页面）不再重复提示
+    if (shouldSilenceError(err)) return;
 
     openToast({
       content: `${prefix}${getErrorMessage(err)}`,
@@ -172,9 +175,7 @@ export default function Page() {
   const handleSetRoomPasswd = useCallback(
     async (newPasswd: string) => {
       try {
-        const data = await requestRoomApi("setRoomPasswd", {
-          roomPasswd: newPasswd,
-        });
+        const data = await runRoomAction(() => api.setRoomPasswd(newPasswd));
 
         if (data.code === 0) {
           if (roomData) {
@@ -190,7 +191,7 @@ export default function Page() {
       }
     },
     [
-      requestRoomApi,
+      runRoomAction,
       roomData,
       setRoomPassword,
       setPassOnClose,
@@ -202,10 +203,12 @@ export default function Page() {
   const handleCreateRoom = useCallback(
     async (game?: GameRoomItem) => {
       try {
-        const data = await requestRoomApi("handleRoom", {
-          handleType: "createRoom",
-          value: getRoomGameName(game),
-        });
+        const data = await runRoomAction(() =>
+          api.roomAction({
+            handleType: "createRoom",
+            value: getRoomGameName(game),
+          }),
+        );
         if (data.code === 0) {
           setSelectedGame(game ?? null);
           getRoomData();
@@ -226,7 +229,7 @@ export default function Page() {
       }
     },
     [
-      requestRoomApi,
+      runRoomAction,
       getRoomData,
       isOnline,
       openSponsorNotice,
@@ -238,10 +241,9 @@ export default function Page() {
   const handleLeaveRoom = useCallback(
     async (handleType: "closeRoom" | "exitRoom") => {
       try {
-        const data = await requestRoomApi("handleRoom", {
-          handleType,
-          value: "",
-        });
+        const data = await runRoomAction(() =>
+          api.roomAction({ handleType, value: "" }),
+        );
         if (data.code === 0) {
           setSelectedGame(null);
           getRoomData();
@@ -252,7 +254,7 @@ export default function Page() {
         showRequestError(err, "请求出错：");
       }
     },
-    [requestRoomApi, getRoomData, showRequestError],
+    [runRoomAction, getRoomData, showRequestError],
   );
 
   // 加入房间
@@ -269,11 +271,13 @@ export default function Page() {
       }
 
       try {
-        const data = await requestRoomApi("handleRoom", {
-          handleType: "joinRoom",
-          value: roomId,
-          roomPasswd: passwd,
-        });
+        const data = await runRoomAction(() =>
+          api.roomAction({
+            handleType: "joinRoom",
+            value: roomId,
+            roomPasswd: passwd,
+          }),
+        );
 
         if (data.code === 0) {
           setSelectedGame(null);
@@ -294,17 +298,16 @@ export default function Page() {
         showRequestError(err, "请求出错：");
       }
     },
-    [requestRoomApi, getRoomData, isOnline, showRequestError],
+    [runRoomAction, getRoomData, isOnline, showRequestError],
   );
 
   // 踢出成员
   const handleDelMember = useCallback(
     async (delIp: string) => {
       try {
-        const data = await requestRoomApi("handleRoom", {
-          handleType: "delMember",
-          value: delIp,
-        });
+        const data = await runRoomAction(() =>
+          api.roomAction({ handleType: "delMember", value: delIp }),
+        );
         if (data.code === 0) {
           getRoomData();
         } else {
@@ -314,7 +317,7 @@ export default function Page() {
         showRequestError(err, "请求出错：");
       }
     },
-    [requestRoomApi, getRoomData, showRequestError],
+    [runRoomAction, getRoomData, showRequestError],
   );
 
   // 键盘事件处理

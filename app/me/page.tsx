@@ -32,11 +32,8 @@ import useCaptcha from "@/utils/GetCaptcha";
 import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
 import SponsorTag from "@/components/universal/SponsorTag";
-import {
-  isBusinessError,
-  request,
-  requestEnvelope,
-} from "@/utils/api";
+import { isBusinessError, shouldSilenceError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
 
 export default function UserProfilePage() {
   const navigate = useNavigate();
@@ -60,6 +57,9 @@ export default function UserProfilePage() {
     err: unknown,
     options: { refreshCaptcha?: boolean } = {},
   ) => {
+    // 凭证失效（已统一登出）/ 数据异常（已刷新页面）不再重复提示
+    if (shouldSilenceError(err)) return;
+
     if (isBusinessError(err)) {
       openToast({ content: err.message, status: "warning" });
       if (options.refreshCaptcha) {
@@ -77,10 +77,7 @@ export default function UserProfilePage() {
     if (!inputUsername) return;
 
     try {
-      await request("/modifyUsername", {
-        method: "POST",
-        body: { username: inputUsername },
-      });
+      await api.modifyUsername({ username: inputUsername });
       openToast({ content: "修改成功", status: "success" });
       getUserInfo();
     } catch (err) {
@@ -119,19 +116,13 @@ export default function UserProfilePage() {
 
     try {
       // 这两个接口用 code 表达“是 / 否”，需要自己判断，所以用 requestEnvelope
-      const exist = await requestEnvelope("/qqExist", {
-        params: { qq },
-        auth: false,
-      });
+      const exist = await api.qqExist(qq);
       if (exist.code === 1) {
         setVerifyQQText("该QQ号已被注册");
         return;
       }
 
-      const verify = await requestEnvelope("/verifyQQ", {
-        params: { uuid, qq },
-        auth: false,
-      });
+      const verify = await api.verifyQQ(uuid, qq);
       setVerifyQQText(verify.msg ?? "服务异常，请联系服主处理");
       if (verify.code === 0) {
         setDisableVerifyQQ(true);
@@ -143,13 +134,10 @@ export default function UserProfilePage() {
 
   const handleBindQQ = async () => {
     try {
-      await request("/bindQQ", {
-        method: "POST",
-        body: {
-          qq: inputAccount,
-          uuid: uuid,
-          captcha_code: inputCaptcha,
-        },
+      await api.bindQQ({
+        qq: inputAccount,
+        uuid: uuid,
+        captcha_code: inputCaptcha,
       });
       openToast({ content: "绑定新QQ成功", status: "success" });
       getUserInfo();
@@ -179,19 +167,13 @@ export default function UserProfilePage() {
   //   }
   //
   //   // 这两个接口用 code 表达“是 / 否”，需要自己判断
-  //   const exist = await requestEnvelope("/telExist", {
-  //     params: { tel },
-  //     auth: false,
-  //   });
+  //   const exist = await api.telExist(tel);
   //   if (exist.code === 0) {
   //     openToast({ content: "该手机号未被注册", status: "warning" });
   //     return;
   //   }
   //
-  //   const verify = await requestEnvelope("/verifyTEL", {
-  //     params: { tel },
-  //     auth: false,
-  //   });
+  //   const verify = await api.verifyTEL(tel);
   //   openToast({
   //     content: verify.msg ?? "服务异常，请联系服主处理",
   //     status: verify.code === 0 ? "success" : "warning",
@@ -200,14 +182,10 @@ export default function UserProfilePage() {
 
   const handleBindTEL = async () => {
     try {
-      await request("/bindTEL", {
-        method: "POST",
-        body: {
-          tel: inputAccount,
-          // verify_code: inputVerifyCode,
-          uuid: uuid,
-          captcha_code: inputCaptcha,
-        },
+      await api.bindTEL({
+        tel: inputAccount,
+        uuid: uuid,
+        captcha_code: inputCaptcha,
       });
       openToast({ content: "绑定新手机成功", status: "success" });
       getUserInfo();
@@ -237,19 +215,13 @@ export default function UserProfilePage() {
   //   }
   //
   //   // 这两个接口用 code 表达“是 / 否”，需要自己判断
-  //   const exist = await requestEnvelope("/emailExist", {
-  //     params: { email },
-  //     auth: false,
-  //   });
+  //   const exist = await api.emailExist(email);
   //   if (exist.code === 0) {
   //     openToast({ content: "该电子邮箱未被注册", status: "warning" });
   //     return;
   //   }
   //
-  //   const verify = await requestEnvelope("/verifyEmail", {
-  //     params: { email },
-  //     auth: false,
-  //   });
+  //   const verify = await api.verifyEmail(email);
   //   openToast({
   //     content: verify.msg ?? "服务异常，请联系服主处理",
   //     status: verify.code === 0 ? "success" : "warning",
@@ -258,14 +230,10 @@ export default function UserProfilePage() {
 
   const handleBindEmail = async () => {
     try {
-      await request("/bindEmail", {
-        method: "POST",
-        body: {
-          email: inputAccount,
-          // verify_code: inputVerifyCode,
-          uuid: uuid,
-          captcha_code: inputCaptcha,
-        },
+      await api.bindEmail({
+        email: inputAccount,
+        uuid: uuid,
+        captcha_code: inputCaptcha,
       });
       openToast({ content: "绑定新电子邮箱成功", status: "success" });
       getUserInfo();
@@ -317,12 +285,9 @@ export default function UserProfilePage() {
     }
 
     try {
-      const token = await request<string>("/changePassword", {
-        method: "POST",
-        body: {
-          password: getHash(inputPassword0),
-          newPassword: getHash(inputPassword),
-        },
+      const token = await api.changePassword({
+        password: getHash(inputPassword0),
+        newPassword: getHash(inputPassword),
       });
       openToast({ content: "修改密码成功", status: "success" });
       if (token) setAuthToken(token);

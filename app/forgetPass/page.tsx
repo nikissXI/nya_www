@@ -21,20 +21,9 @@ import {
 } from "@/utils/strings";
 import { useNavigate } from "react-router-dom";
 import { setAuthToken } from "@/store/authKey";
-import {
-  isBusinessError,
-  request,
-  requestEnvelope,
-} from "@/utils/api";
-
-interface ResetReqBody {
-  verifyType: string; // 注册类型：qq或tel
-  account: string; // 手机或QQ
-  verify_code: string; // 手机验证码
-  password: string; // 登陆密码sha256
-  uuid: string; // 表单uuid
-  captcha_code: string; // 表单图片验证码
-}
+import { isBusinessError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
+import type { ResetReqBody } from "@/utils/endpoints";
 
 export default function Page() {
   const navigate = useNavigate();
@@ -103,11 +92,7 @@ export default function Page() {
     };
 
     try {
-      const token = await request<string>("/resetPass", {
-        method: "POST",
-        auth: false,
-        body: req_data,
-      });
+      const token = await api.resetPass(req_data);
       openToast({
         content: "重置密码成功，跳转到“个人中心”页面",
         status: "success",
@@ -137,19 +122,13 @@ export default function Page() {
 
     try {
       // 这两个接口用 code 表达“是 / 否”，需要自己判断
-      const exist = await requestEnvelope("/telExist", {
-        params: { tel },
-        auth: false,
-      });
+      const exist = await api.telExist(tel);
       if (exist.code === 0) {
         openToast({ content: "该手机号未被注册", status: "warning" });
         return;
       }
 
-      const verify = await requestEnvelope("/verifyTEL", {
-        params: { tel },
-        auth: false,
-      });
+      const verify = await api.verifyTEL(tel);
       openToast({
         content: verify.msg ?? "服务异常，请联系服主处理",
         status: verify.code === 0 ? "success" : "warning",
@@ -170,19 +149,13 @@ export default function Page() {
     }
 
     try {
-      const exist = await requestEnvelope("/emailExist", {
-        params: { email },
-        auth: false,
-      });
+      const exist = await api.emailExist(email);
       if (exist.code === 0) {
         openToast({ content: "该电子邮箱未被注册", status: "warning" });
         return;
       }
 
-      const verify = await requestEnvelope("/verifyEmail", {
-        params: { email },
-        auth: false,
-      });
+      const verify = await api.verifyEmail(email);
       openToast({
         content: verify.msg ?? "服务异常，请联系服主处理",
         status: verify.code === 0 ? "success" : "warning",

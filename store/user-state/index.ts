@@ -7,80 +7,21 @@ import { v4 as uuidv4 } from "uuid";
 import { getAuthToken, clearAuthToken } from "../authKey";
 import { openToast } from "@/components/universal/toast";
 import {
-  ApiError,
   isBusinessError,
-  request,
-  requestEnvelope,
+  setUnauthorizedHandler,
+  shouldSilenceError,
 } from "@/utils/api";
+import { api } from "@/utils/endpoints";
+import type {
+  AnnouncementsData,
+  GetRoomPayload,
+  NodeInfo,
+  RoomInfo,
+  UserInfo,
+  UserInfoPayload,
+  UserWgInfo,
+} from "@/utils/endpoints";
 import { getErrorMessage } from "@/utils/strings";
-
-interface AnnouncementItem {
-  timestamp: number; // 公告发布时间戳（10位）
-  content: string; // 公告内容
-}
-interface AnnouncementsData {
-  carouselMsg: string[]; // 轮播公告
-  announcements: AnnouncementItem[]; // 服务器公告
-}
-interface UserInfo {
-  uid: number; //用户uid
-  username: string; // 昵称
-  tel: string; // 手机
-  email: string; // 邮箱
-  qq: string; // QQ
-  sponsorship: number; // 赞助金额
-}
-
-interface UserWgInfo {
-  node_alias: string; // 所选节点名称
-  tunnel_name: string; // 隧道名称
-  conf_text: string; // 所选节点的隧道conf内容，用于直接导入wireguard
-  ping_host: string; // 用于获取节点延迟，WEB端用过xhr请求获取，APP端通过ICMP获取
-  user_ip: string; // 隧道的IP地址
-  net_type: string; // 所选节点的网络类型
-  bandwidth: number; // 所选节点的用户中转带宽峰值
-}
-
-// 登录后，用户访问房间列表拉取的房间信息
-interface Member {
-  username: string; // 用户昵称
-  ip: string; // 用户联机IP
-  status: "在线" | "离线"; // 用户WG连接状态
-  sponsorship: number; // 用户赞助金额
-}
-interface RoomInfo {
-  room_id: number; // 房间id，用于加入房间
-  user_ip: string; // 用户自己的联机ip
-  hoster_ip: string; // 房主的联机ip
-  members: Member[]; // 房间成员
-  room_max: number; // 房间最大人数
-  room_passwd: string | null; // 房间加入密码
-  room_game: string | null; // 房间游戏名称
-}
-// 登录后，拉取的节点信息
-export interface NodeInfo {
-  alias: string; // 节点名称
-  bandwidth: number; // 节点中转带宽峰值
-  net: number; // 节点网络负载百分比
-  net_type: string; // 节点网络类型
-  node_desc: string; // 节点描述
-  ping_host: string; // 用于获取节点延迟，WEB端用过xhr请求获取，APP端通过ICMP获取
-  sponsor: boolean; // 是否赞助专用节点
-  delay: number; // 网络延迟，单位ms
-}
-
-// ---- 各接口返回的 data 结构（统一响应体 {code,msg,data} 中的 data）----
-interface UserInfoPayload {
-  reget_ip?: boolean; // IP 变动，需要重新导入隧道
-  user_info: UserInfo; // 用户信息
-  user_wg_info?: UserWgInfo; // 用户的 WG 隧道信息
-}
-interface GetRoomPayload {
-  is_online: boolean; // WG 是否在线
-  room: RoomInfo | null; // 房间信息
-  user_wg_info?: UserWgInfo; // 后端返回的完整节点信息
-  node_net_load?: number; // 节点负载百分比
-}
 
 interface ILoginStateSlice {
   // 访问唯一标识
@@ -189,9 +130,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       announcementsData: undefined,
       getAnnouncementsData: async () => {
         try {
-          const data = await request<AnnouncementsData>("/announcements", {
-            auth: false,
-          });
+          const data = await api.announcements();
           set({ announcementsData: data ?? undefined });
         } catch (error) {
           // 静默失败，不影响使用
@@ -202,12 +141,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       confKey: null,
       getConfKey: async (manual: boolean = false) => {
         try {
-          const confKey = await request<string>("/getDownloadConfkey");
+          const confKey = await api.confKey();
           set({ confKey });
           if (manual) openToast({ content: "key激活成功", status: "success" });
         } catch (error) {
+          // 凭证失效/数据异常已由统一处理接管
+          if (shouldSilenceError(error)) return;
+
           if (isBusinessError(error)) {
-            // 业务失败（如未选择节点），后端 msg 就是原因
+            // 业务失败（如未选择节点），后端 msg 即原因
             openToast({ content: error.message, status: "warning" });
           } else {
             // 改动：不再 reload，而是提示用户重新登录
@@ -240,7 +182,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
 
         try {
-          const data = await request<UserInfoPayload>("/userInfo");
+          const data = await api.userInfo();
 
           if (data?.reget_ip) {
             set({ needShowReget: true });
@@ -254,16 +196,13 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             get().setNodeListModal();
           }
         } catch (error) {
-          if (error instanceof ApiError && error.isAuthError) {
-            // 凭证失效：清空登录态
-            get().logout();
-            openToast({ content: "登陆凭证失效", status: "warning" });
-          } else {
-            openToast({
-              content: getErrorMessage(error, "服务器出错，请稍后再试"),
-              status: "error",
-            });
-          }
+          // 凭证失效已由全局 handler 统一登出并提示，这里不再重复
+          if (shouldSilenceError(error)) return;
+
+          openToast({
+            content: getErrorMessage(error, "服务器出错，请稍后再试"),
+            status: "error",
+          });
         } finally {
           // 改动：确保在 finally 中重置加载状态
           set({ loginLoading: false });
@@ -397,8 +336,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
 
         try {
-          const nodes =
-            (await request<NodeInfo[]>("/nodeList", { auth: false })) ?? [];
+          const nodes = (await api.nodeList()) ?? [];
 
           set({
             nodeMap: new Map<string, NodeInfo>(nodes.map((n) => [n.alias, n])),
@@ -445,10 +383,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         try {
           set({ selectNodeLock: true });
 
-          const { code, msg, data } = await requestEnvelope<UserWgInfo>(
-            "/selectNode",
-            { params: { node_alias } },
-          );
+          const { code, msg, data } = await api.selectNode(node_alias);
 
           if (code === 0) {
             set({
@@ -460,6 +395,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             openToast({ content: msg ?? "节点切换失败", status: "warning" });
           }
         } catch (error) {
+          // 凭证失效已由统一处理接管
+          if (shouldSilenceError(error)) return;
+
           // 改动：不刷新页面，提示错误
           openToast({
             content: getErrorMessage(error, "节点切换失败，请重试"),
@@ -499,7 +437,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           set({ rotate: true });
 
           // code === -1（客户端数据异常）由 request 统一处理：刷新页面并抛错
-          const data = await request<GetRoomPayload>("/getRoom");
+          const data = await api.getRoom();
 
           // --- 核心优化开始 ---
 
@@ -559,8 +497,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           // --- 核心优化结束 ---
         } catch (error) {
-          // code === -1 时 request 内部已经在刷新页面，这里不再重复提示
-          if (error instanceof ApiError && error.isInvalidData) return;
+          // 凭证失效 / 数据异常已由统一处理接管，这里不再重复提示
+          if (shouldSilenceError(error)) return;
 
           // 优化：不刷新页面，给予友好提示
           openToast({ content: "获取房间信息失败，请重试", status: "error" });
@@ -587,3 +525,17 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   },
   shallow,
 );
+
+// ---- 凭证失效统一处理：任何接口带着 token 请求却返回 401，都会走到这里 ----
+let lastAuthToastTime = 0;
+setUnauthorizedHandler(() => {
+  // 重置登录态（内部会清掉 token、房间、隧道等信息）
+  useUserStateStore.getState().logout();
+
+  // 并发请求可能同时 401，3 秒内只提示一次
+  const now = Date.now();
+  if (now - lastAuthToastTime > 3000) {
+    openToast({ content: "登陆凭证失效", status: "warning" });
+    lastAuthToastTime = now;
+  }
+});

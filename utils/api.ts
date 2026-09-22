@@ -77,6 +77,22 @@ export interface RequestOptions {
 
 const DEFAULT_TIMEOUT = 15000;
 
+/**
+ * 凭证失效的全局处理（由 store 注册为 logout）
+ * 这样任何接口返回 401 都能自动登出，页面不用各自处理
+ */
+let unauthorizedHandler: (() => void) | null = null;
+
+export const setUnauthorizedHandler = (handler: (() => void) | null) => {
+  unauthorizedHandler = handler;
+};
+
+/** 清掉本地凭证并通知全局处理 */
+const handleUnauthorized = () => {
+  clearAuthToken();
+  unauthorizedHandler?.();
+};
+
 const buildUrl = (path: string, params?: Record<string, QueryValue>): string => {
   const url = `${apiUrl}${path.startsWith("/") ? path : `/${path}`}`;
   if (!params) return url;
@@ -122,10 +138,8 @@ export const requestEnvelope = async <T = unknown>(
   } = options;
 
   const headers: Record<string, string> = { Accept: "application/json" };
-  if (auth) {
-    const token = getAuthToken();
-    if (token) headers.Authorization = `Bearer ${token}`;
-  }
+  const token = auth ? getAuthToken() : null;
+  if (token) headers.Authorization = `Bearer ${token}`;
   if (body !== undefined) headers["Content-Type"] = "application/json";
 
   const controller = new AbortController();
@@ -154,8 +168,9 @@ export const requestEnvelope = async <T = unknown>(
     const payload = await parseEnvelope<T>(resp);
 
     if (!resp.ok) {
-      // 凭证失效时顺手清掉本地 token，调用方可通过 isAuthError 做后续处理
-      if (resp.status === 401) clearAuthToken();
+      // 带着凭证请求仍返回 401 → 凭证失效，统一登出
+      // （没带凭证的 401，例如登录密码错误，交给调用方自己处理）
+      if (resp.status === 401 && token) handleUnauthorized();
 
       throw new ApiError(
         payload?.msg ?? errorMessage ?? statusMessage(resp.status),
@@ -168,6 +183,9 @@ export const requestEnvelope = async <T = unknown>(
         status: resp.status,
       });
     }
+
+    // 业务层直接返回凭证失效
+    if (payload.code === 401 && token) handleUnauthorized();
 
     return payload;
   } finally {
@@ -188,8 +206,6 @@ export const request = async <T = null>(
   const payload = await requestEnvelope<T>(path, options);
 
   if (payload.code !== 0) {
-    if (payload.code === 401) clearAuthToken();
-
     if (payload.code === INVALID_DATA_CODE) {
       window.location.reload();
       throw new ApiError(payload.msg ?? "数据异常，正在刷新页面", {
@@ -205,6 +221,13 @@ export const request = async <T = null>(
 
   return (payload.data ?? null) as T;
 };
+
+/**
+ * 是否应该跳过业务提示
+ * 凭证失效（已统一登出）、数据异常（已刷新页面）都不需要调用方再弹一次
+ */
+export const shouldSilenceError = (error: unknown): boolean =>
+  error instanceof ApiError && (error.isAuthError || error.isInvalidData);
 
 /** 是否为后端返回的业务失败（能拿到 code，说明服务端正常响应了） */
 export const isBusinessError = (error: unknown): error is ApiError =>

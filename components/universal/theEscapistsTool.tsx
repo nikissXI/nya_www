@@ -1,7 +1,8 @@
 import { Flex, Heading, Text, Input, Box } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
-import { ApiError, requestEnvelope } from "@/utils/api";
+import { ApiError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
 
 export default function TheEscapistsTool() {
   const [inputIp, setInputIp] = useState("");
@@ -18,9 +19,7 @@ export default function TheEscapistsTool() {
     setIsChecking(true);
 
     try {
-      const { msg } = await requestEnvelope<string>("/escapistsHelper", {
-        params: { hosterIp: normalizedIp },
-      });
+      const { msg } = await api.escapistsHelper(normalizedIp);
       setShowText(msg ?? "响应结果异常，请联系服主");
     } catch (err) {
       setShowText(

@@ -19,7 +19,8 @@ import {
   SimpleGrid,
   Input,
 } from "@chakra-ui/react";
-import { useUserStateStore, NodeInfo } from "@/store/user-state";
+import { useUserStateStore } from "@/store/user-state";
+import type { NodeInfo } from "@/utils/endpoints";
 import { useMemo, useState } from "react";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";

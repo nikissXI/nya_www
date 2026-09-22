@@ -23,7 +23,8 @@ import {
 } from "react-icons/fi";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
-import { ApiError, requestEnvelope } from "@/utils/api";
+import { ApiError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
 
 export default function Page() {
   const [inputIp, setInputIp] = useState("");
@@ -42,9 +43,7 @@ export default function Page() {
     setShowText("正在查房，请保持农场在前台并稍候……");
 
     try {
-      const { msg } = await requestEnvelope<string>("/stardewValleyRoomCheck", {
-        params: { hosterIp: normalizedIp },
-      });
+      const { msg } = await api.stardewValleyRoomCheck(normalizedIp);
       setShowText(msg ?? "响应结果异常，请联系服主");
     } catch (err) {
       setShowText(

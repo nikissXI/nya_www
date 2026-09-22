@@ -19,14 +19,9 @@ import useCaptcha from "@/utils/GetCaptcha";
 import { openToast } from "./toast";
 import { getHash, getErrorMessage } from "@/utils/strings";
 import { setAuthToken } from "@/store/authKey";
-import { ApiError, isBusinessError, request } from "@/utils/api";
-
-interface LoginReqBody {
-  account: string; // 手机或邮箱
-  password: string; // 登陆密码sha256
-  uuid: string; // 表单uuid
-  captcha_code: string; // 表单图片验证码
-}
+import { ApiError, isBusinessError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
+import type { LoginReqBody } from "@/utils/endpoints";
 
 export default function LoginModal() {
   const navigate = useNavigate();
@@ -90,11 +85,7 @@ export default function LoginModal() {
     };
 
     try {
-      const token = await request<string>("/login", {
-        method: "POST",
-        auth: false,
-        body: req_data,
-      });
+      const token = await api.login(req_data);
       openToast({ content: "登陆成功", status: "success" });
       if (token) setAuthToken(token);
       getUserInfo();

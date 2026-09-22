@@ -24,18 +24,9 @@ import {
 } from "@/utils/strings";
 import { useNavigate } from "react-router-dom";
 import { setAuthToken } from "@/store/authKey";
-import { isBusinessError, request } from "@/utils/api";
-
-interface RegisterReqBody {
-  verifyType: string; // 注册类型：tel或email
-  account: string; // 手机或邮箱
-  // verify_code: string; // 手机验证码
-  username: string; // 登陆用户名
-  password: string; // 登陆密码sha256
-  uuid: string; // 表单uuid
-  captcha_code: string; // 表单图片验证码
-  invite_code?: string; // 邀请码
-}
+import { isBusinessError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
+import type { RegisterReqBody } from "@/utils/endpoints";
 
 export default function Page() {
   const navigate = useNavigate();
@@ -127,11 +118,7 @@ export default function Page() {
     };
 
     try {
-      const token = await request<string>("/register", {
-        method: "POST",
-        auth: false,
-        body: req_data,
-      });
+      const token = await api.register(req_data);
       openToast({
         content: "注册成功，跳转到“个人中心”页面",
         status: "success",

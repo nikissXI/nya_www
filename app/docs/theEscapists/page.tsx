@@ -18,7 +18,8 @@ import { useUserStateStore } from "@/store/user-state";
 import { MdTipsAndUpdates } from "react-icons/md";
 import BackButton from "@/components/docs/BackButton";
 import DocBox from "@/components/docs/DocBox";
-import { ApiError, requestEnvelope } from "@/utils/api";
+import { ApiError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
 
 export default function AndroidPage0() {
   const { userInfo, setShowLoginModal } = useUserStateStore();
@@ -36,9 +37,7 @@ export default function AndroidPage0() {
     setIsChecking(true);
 
     try {
-      const { msg } = await requestEnvelope<string>("/escapistsHelper", {
-        params: { hosterIp: normalizedIp },
-      });
+      const { msg } = await api.escapistsHelper(normalizedIp);
       setShowText(msg ?? "响应结果异常，请联系服主");
     } catch (err) {
       setShowText(

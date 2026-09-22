@@ -27,13 +27,8 @@ import { getErrorMessage } from "@/utils/strings";
 import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
 import { FaWeixin } from "react-icons/fa";
-import { request } from "@/utils/api";
-
-interface SponsorItem {
-  uid: number;
-  username: string;
-  sponsorship: number;
-}
+import { api } from "@/utils/endpoints";
+import type { SponsorItem } from "@/utils/endpoints";
 
 const AdminQQ = "1299577815";
 const AdminWX = "nikissxi";
@@ -52,13 +47,9 @@ const Page = () => {
   useEffect(() => {
     async function fetchSponsors() {
       try {
-        const data = await request<SponsorItem[]>("/sponsorList", {
-          auth: false,
-        });
+        const data = await api.sponsorList();
         // 过滤出赞助金额不低于50的
-        setSponsorList(
-          (data ?? []).filter((item) => item.sponsorship >= 50),
-        );
+        setSponsorList((data ?? []).filter((item) => item.sponsorship >= 50));
       } catch (err) {
         openToast({
           content: getErrorMessage(err, "赞助名单加载失败，请稍后再试"),
