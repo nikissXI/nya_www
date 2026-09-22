@@ -140,7 +140,7 @@ const Page = () => {
               房间内成员的赞助也可以计入，累计房间人数
             </Text>
             <Text fontSize="sm" mt={2}>
-              房间人数 = 累计赞助金额 ÷ 节点解锁金额 + 1，最多{" "}
+              房间人数 = 累计赞助金额 ÷ 节点解锁金额 + 1，最多
               <strong>16 人</strong>。
             </Text>
             <Text fontSize="sm" mt={2} color="#ffca3d">
@@ -193,7 +193,7 @@ const Page = () => {
                     borderRadius="md"
                     mr={2}
                   >
-                    {uid ? `您的UID是 ${uid}` : `登录后才能查看UID`}
+                    {uid ? `您的UID ${uid}` : `登录后才能查看UID`}
                   </Text>
 
                   <Button

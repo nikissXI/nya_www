@@ -57,7 +57,7 @@ export default function Page() {
             第 2 步 · 客机
           </Badge>
           <Text>
-            其他玩家作为客机，点{" "}
+            其他玩家作为客机，点
             <strong>连接服务器 → 本地服列表 → 添加服务器（如下图）</strong>
             ，添加后加入即可
           </Text>
