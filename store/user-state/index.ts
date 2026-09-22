@@ -111,7 +111,7 @@ interface ILoginStateSlice {
   selectNodeLock: boolean;
 
   latency: number | undefined;
-  nodeNetLoad: number;
+  nodeNetLoad: number | undefined;
   isOnline: boolean;
 
   // 刷新房间信息冷却
@@ -275,7 +275,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           roomRole: "none",
           roomData: undefined,
           latency: undefined,
-          nodeNetLoad: -1,
+          nodeNetLoad: undefined,
           // 清理与账号绑定的数据，避免下一个登录的账号看到上一个账号的信息
           confKey: null,
           fixedNode: undefined,
@@ -470,7 +470,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       latency: undefined,
-      nodeNetLoad: -1,
+      nodeNetLoad: undefined,
       isOnline: false,
 
       disableFlush: false,

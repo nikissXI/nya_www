@@ -854,7 +854,7 @@ export default function Page() {
               announcementsData?.carouselMsg[carouselIndex]}
           </Text>
 
-          {userWgInfo?.node_alias ? (
+          {userWgInfo?.node_alias && nodeNetLoad !== undefined ? (
             <>
               <Flex
                 align="center"
