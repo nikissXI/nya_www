@@ -850,10 +850,11 @@ export default function Page() {
       ) : (
         <>
           <Text color="#ffca3d" mb={2} fontWeight="bold">
-            {announcementsData?.carouselMsg && announcementsData?.carouselMsg[carouselIndex]}
+            {announcementsData?.carouselMsg &&
+              announcementsData?.carouselMsg[carouselIndex]}
           </Text>
 
-          {userWgInfo?.node_alias && roomData !== undefined ? (
+          {userWgInfo?.node_alias ? (
             <>
               <Flex
                 align="center"
