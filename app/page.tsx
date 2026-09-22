@@ -24,20 +24,10 @@ const highlights = [
 
 export default function Page() {
   const navigate = useNavigate();
-  const { userInfo, serverData } = useUserStateStore();
+  const { userInfo } = useUserStateStore();
 
   return (
     <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
-      {/* 网站统计信息 */}
-      <Flex direction="row" justifyContent="center">
-        <Text w="150px" textAlign="center" fontSize="sm">
-          访问人次：{serverData?.viewCount}
-        </Text>
-        <Text w="150px" textAlign="center" fontSize="sm">
-          用户数量：{serverData?.userCount}
-        </Text>
-      </Flex>
-
       {/* Hero 区域 */}
       <Image
         src="/images/logo.webp"

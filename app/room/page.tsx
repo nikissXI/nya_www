@@ -114,7 +114,7 @@ export default function Page() {
     setNodeListModal,
     setOfflineReasonsModal,
     nodeNetLoad,
-    serverData,
+    announcementsData,
   } = useUserStateStore();
 
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -122,15 +122,15 @@ export default function Page() {
   // 轮播效果：每6秒更换一条消息
   useEffect(() => {
     const interval = setInterval(() => {
-      if (serverData?.carouselMsg)
+      if (announcementsData?.carouselMsg)
         setCarouselIndex(
-          (prevIndex) => (prevIndex + 1) % serverData.carouselMsg.length,
+          (prevIndex) => (prevIndex + 1) % announcementsData.carouselMsg.length,
         );
     }, 6000);
 
     // 清理定时器
     return () => clearInterval(interval);
-  }, [serverData?.carouselMsg]);
+  }, [announcementsData?.carouselMsg]);
 
   useEffect(() => {
     // 当节点存在，且还没有房间数据时，自动拉取
@@ -850,7 +850,7 @@ export default function Page() {
       ) : (
         <>
           <Text color="#ffca3d" mb={2} fontWeight="bold">
-            {serverData?.carouselMsg && serverData?.carouselMsg[carouselIndex]}
+            {announcementsData?.carouselMsg && announcementsData?.carouselMsg[carouselIndex]}
           </Text>
 
           {userWgInfo?.node_alias && roomData !== undefined ? (

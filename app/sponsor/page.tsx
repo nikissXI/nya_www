@@ -76,10 +76,10 @@ const Page = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const urlUid = urlParams.get("app");
+    const urlUid = urlParams.get("uid");
     const parsedUid = Number(urlUid);
 
-    // APP 内打开时会通过 ?app=<uid> 传入用户 UID
+    // APP 内打开时会通过 ?uid=<uid> 传入用户 UID，而无需登录
     if (urlUid && Number.isInteger(parsedUid) && parsedUid > 0) {
       setUid(parsedUid);
     } else if (userInfo) {

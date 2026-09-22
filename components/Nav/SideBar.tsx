@@ -43,7 +43,7 @@ export default function SideBar() {
     onOpen: openGameGroup,
     onClose: closeGameGroup,
   } = useDisclosure();
-  const { serverData } = useUserStateStore();
+  const { announcementsData } = useUserStateStore();
 
   return (
     <Box
@@ -117,14 +117,14 @@ export default function SideBar() {
             喵服公告
           </Heading>
 
-          {serverData?.announcements && serverData.announcements.length > 0 ? (
+          {announcementsData?.announcements && announcementsData.announcements.length > 0 ? (
             <>
               <Text fontWeight="bold" textAlign="left">
-                {formatDate(serverData.announcements[0].timestamp, true)}
+                {formatDate(announcementsData.announcements[0].timestamp, true)}
               </Text>
 
               <Text fontSize="sm" whiteSpace="pre-wrap" textAlign="left">
-                {serverData.announcements[0].content}
+                {announcementsData.announcements[0].content}
               </Text>
 
               <Link
@@ -218,8 +218,8 @@ export default function SideBar() {
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={2}>
-              {serverData?.announcements &&
-                serverData.announcements.map((item, index) => (
+              {announcementsData?.announcements &&
+                announcementsData.announcements.map((item, index) => (
                   <Box key={index} p={1} w="100%">
                     <Text mb={1} fontWeight="bold" color="#f4d106">
                       {formatDate(item.timestamp)}

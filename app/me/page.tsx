@@ -378,7 +378,7 @@ export default function UserProfilePage() {
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "修改密码成功", status: "success" });
-        setAuthToken(data.token);
+        setAuthToken(data.data);
         changePassOnClose();
       } else {
         openToast({ content: data.msg, status: "warning" });

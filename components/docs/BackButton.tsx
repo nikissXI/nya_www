@@ -5,10 +5,10 @@ import { useUserStateStore } from "@/store/user-state";
 
 export default function BackButton() {
   const navigate = useNavigate();
-  const { inApp } = useUserStateStore();
+  const { embed } = useUserStateStore();
 
   return (
-    <Center mt={5} display={inApp ? "none" : "block"}>
+    <Center mt={5} display={embed ? "none" : "block"}>
       <Button
         size="sm"
         onClick={() => {

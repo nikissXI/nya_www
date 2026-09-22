@@ -143,7 +143,7 @@ export default function Page() {
           content: "注册成功，跳转到“个人中心”页面",
           status: "success",
         });
-        setAuthToken(data.token);
+        setAuthToken(data.data);
         getUserInfo();
         navigate("/me");
       } else {

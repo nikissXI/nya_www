@@ -12,9 +12,7 @@ interface AnnouncementItem {
   timestamp: number; // 公告发布时间戳（10位）
   content: string; // 公告内容
 }
-interface ServerData {
-  viewCount: number; // 访问数
-  userCount: number; // 用户数
+interface AnnouncementsData {
   carouselMsg: string[]; // 轮播公告
   announcements: AnnouncementItem[]; // 服务器公告
 }
@@ -70,8 +68,8 @@ interface ILoginStateSlice {
   uuid: string;
 
   // 网站访问数据和关联群
-  serverData: ServerData | undefined;
-  getServerData: () => Promise<void>;
+  announcementsData: AnnouncementsData | undefined;
+  getAnnouncementsData: () => Promise<void>;
 
   // 用于导入隧道的key
   confKey: string | null;
@@ -89,8 +87,8 @@ interface ILoginStateSlice {
   // 获取邀请码
   getInviteCode: () => void;
   // 是否在app中打开
-  getInApp: () => void;
-  inApp: boolean;
+  getEmbedParama: () => void;
+  embed: boolean;
 
   // 获取节点延迟
   getNodeLatency: (
@@ -160,22 +158,22 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      getInApp: () => {
+      getEmbedParama: () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const inApp = urlParams.get("app");
-        if (inApp) {
-          set({ inApp: true });
+        const embed = urlParams.get("embed");
+        if (embed) {
+          set({ embed: true });
         }
       },
-      inApp: false,
+      embed: false,
 
-      serverData: undefined,
-      getServerData: async () => {
+      announcementsData: undefined,
+      getAnnouncementsData: async () => {
         try {
-          const resp = await fetch(`${apiUrl}/serverData`);
+          const resp = await fetch(`${apiUrl}/announcements`);
           if (!resp.ok) throw new Error("请求出错");
           const data = await resp.json();
-          set({ serverData: data });
+          set({ announcementsData: data.data });
         } catch (error) {
           // 静默失败，不影响使用
           console.warn("获取服务数据失败", error);
@@ -192,7 +190,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           if (!resp.ok) throw new Error("请求出错");
           const data = await resp.json();
           if (data.code === 0) {
-            set({ confKey: data.key });
+            set({ confKey: data.data });
             if (manual)
               openToast({ content: "key激活成功", status: "success" });
           } else {
@@ -235,15 +233,15 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             if (!resp.ok) throw new Error("服务器出错，请稍后再试");
             const data = await resp.json();
 
-            if (data.reget_ip) {
+            if (data.data.reget_ip) {
               set({ needShowReget: true });
             }
 
-            const userInfo: UserInfo = data.user_info;
+            const userInfo: UserInfo = data.data.user_info;
             set({ userInfo });
 
-            if (data.user_wg_info) {
-              const userWgInfo: UserWgInfo = data.user_wg_info;
+            if (data.data.user_wg_info) {
+              const userWgInfo: UserWgInfo = data.data.user_wg_info;
               set({ userWgInfo });
             } else {
               get().setNodeListModal();
@@ -396,7 +394,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         try {
           const resp = await fetch(`${apiUrl}/nodeList`);
           if (!resp.ok) throw new Error("请求出错");
-          const nodes: NodeInfo[] = await resp.json();
+          const data = await resp.json();
+          const nodes: NodeInfo[] = data.data;
 
           set({
             nodeMap: new Map<string, NodeInfo>(nodes.map((n) => [n.alias, n])),
@@ -453,7 +452,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           if (!resp.ok) throw new Error("请求出错");
           const data = await resp.json();
           if (data.code === 0) {
-            const userWgInfo: UserWgInfo = data.user_wg_info;
+            const userWgInfo: UserWgInfo = data.data;
             set({
               userWgInfo,
               roomData: undefined, // 切换节点后清空房间数据，触发重新获取
@@ -514,10 +513,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // --- 核心优化开始 ---
 
           // 1. 解构后端返回的完整数据
-          const isOnline = data.is_online as boolean;
-          const roomData = data.data as RoomInfo;
-          const incomingUserWgInfo = data.user_wg_info; // 后端返回的完整节点信息
-          const nodeNetLoad = data.node_net_load;
+          const isOnline = data.data.is_online as boolean;
+          const incomingUserWgInfo = data.data.user_wg_info; // 后端返回的完整节点信息
+          const nodeNetLoad = data.data.node_net_load;
+          const roomData = data.data.room as RoomInfo;
 
           // 2. 【关键】直接用后端返回的最新节点信息覆盖 Store
           //    这一步同时更新了 node_alias, ping_host, net_type, bandwidth 等所有字段

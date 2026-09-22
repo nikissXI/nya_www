@@ -13,14 +13,14 @@ export default function Navbar({ path }: { path: string }) {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const getServerData = useUserStateStore((state) => state.getServerData);
-  const serverData = useUserStateStore((state) => state.serverData);
+  const getAnnouncementsData = useUserStateStore((state) => state.getAnnouncementsData);
+  const announcementsData = useUserStateStore((state) => state.announcementsData);
 
   useEffect(() => {
-    if (serverData === undefined) {
-      getServerData();
+    if (announcementsData === undefined) {
+      getAnnouncementsData();
     }
-  }, [serverData, getServerData]);
+  }, [announcementsData, getAnnouncementsData]);
 
   const currentPath = path || pathname;
   const rootPath = "/" + currentPath.split("/")[1];

@@ -31,14 +31,14 @@ export default function Frame({
   const { pathname } = useLocation();
   const loginLoading = useUserStateStore((state) => state.loginLoading);
   const getInviteCode = useUserStateStore((state) => state.getInviteCode);
-  const getInApp = useUserStateStore((state) => state.getInApp);
-  const inApp = useUserStateStore((state) => state.inApp);
+  const getEmbedParama = useUserStateStore((state) => state.getEmbedParama);
+  const embed = useUserStateStore((state) => state.embed);
 
   // 登录加载完成后获取邀请码
   useEffect(() => {
     getInviteCode();
-    getInApp();
-  }, [getInviteCode, getInApp]);
+    getEmbedParama();
+  }, [getInviteCode, getEmbedParama]);
 
   const rootPath = "/" + pathname.split("/")[1];
   const title = PAGE_TITLES[rootPath] ?? "";
@@ -63,7 +63,7 @@ export default function Frame({
         position="relative"
         direction={{ base: "column", md: "row" }} // 移动端竖向，桌面端横向
       >
-        {!inApp && (
+        {!embed && (
           <>
             {/* 标题 */}
             <Center
@@ -114,7 +114,7 @@ export default function Frame({
         </Box>
 
         {/* 侧边栏 */}
-        {!inApp && <SideBar />}
+        {!embed && <SideBar />}
       </Flex>
     </>
   );

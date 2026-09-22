@@ -110,7 +110,7 @@ export default function LoginModal() {
       const data = await resp.json();
       if (data.code === 0) {
         openToast({ content: "登陆成功", status: "success" });
-        setAuthToken(data.token);
+        setAuthToken(data.data);
         getUserInfo();
         setShowLoginModal();
       } else {
