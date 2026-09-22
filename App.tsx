@@ -82,26 +82,6 @@ const docPages = [
 export default function App() {
   return (
     <ChakraProvider>
-      <Box
-        position="fixed"
-        inset={0}
-        zIndex={-1}
-        backgroundImage="url('/images/bg.png')"
-        backgroundRepeat="repeat"
-        backgroundSize="auto"
-      />
-      <Box
-        as="header"
-        position="fixed"
-        top={-50}
-        left={0}
-        width="100%"
-        height="105px"
-        zIndex={99}
-        backgroundImage="url('/images/head_bg.webp')"
-        backgroundRepeat="repeat-x"
-        backgroundSize="auto"
-      />
       <Frame>
         <Suspense
           fallback={

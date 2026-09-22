@@ -50,27 +50,53 @@ export default function Frame({
       <TunnelUpdateModal />
       <ServerNodeListModal />
 
+      <Box
+        position="fixed"
+        inset={0}
+        zIndex={-1}
+        backgroundImage="url('/images/bg.png')"
+        backgroundRepeat="repeat"
+        backgroundSize="auto"
+      />
+
       <Flex
         position="relative"
         direction={{ base: "column", md: "row" }} // 移动端竖向，桌面端横向
-        // height="100vh"
       >
-        {/* 标题 */}
-        <Center
-          width="100%"
-          color="white"
-          fontSize="xl"
-          fontWeight="bold"
-          position="fixed"
-          mt={2.5}
-          display="flex"
-          zIndex={100}
-        >
-          {title}
-        </Center>
+        {!inApp && (
+          <>
+            {/* 标题 */}
+            <Center
+              width="100%"
+              color="white"
+              fontSize="xl"
+              fontWeight="bold"
+              position="fixed"
+              mt={2.5}
+              display="flex"
+              zIndex={100}
+            >
+              {title}
+            </Center>
 
-        {/* 导航栏 */}
-        {!inApp && <Navbar path={pathname} />}
+            {/* 标题栏图片 */}
+            <Box
+              as="header"
+              position="fixed"
+              top={-50}
+              left={0}
+              width="100%"
+              height="105px"
+              zIndex={99}
+              backgroundImage="url('/images/head_bg.webp')"
+              backgroundRepeat="repeat-x"
+              backgroundSize="auto"
+            />
+
+            {/* 导航栏 */}
+            <Navbar path={pathname} />
+          </>
+        )}
 
         {/* 主内容区域 */}
         <Box as="main" flex={{ base: "1", md: "4" }} mt={{ base: 20, md: 100 }}>
