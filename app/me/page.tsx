@@ -45,6 +45,7 @@ import {
 } from "@/components/universal/ui";
 import {
   FaUser,
+  FaIdCard,
   FaMobileAlt,
   FaEnvelope,
   FaQq,
@@ -593,75 +594,7 @@ export default function UserProfilePage() {
           </VStack>
         ) : (
           <VStack spacing={3} w="100%" maxW="440px" mx="auto" align="stretch">
-            {/* 昵称 */}
-            <Box {...CARD_STYLE} {...CARD_PADDING}>
-              <Flex align="center" gap={3}>
-                <Flex align="center" gap={3} flex={1} minW={0}>
-                  <Text
-                    fontWeight="bold"
-                    fontSize="lg"
-                    isTruncated
-                    textAlign="left"
-                  >
-                    {userInfo.username}
-                  </Text>
-
-                  <Text
-                    fontSize="sm"
-                    color="rgba(255, 255, 255, 0.6)"
-                    flexShrink={0}
-                  >
-                    UID {userInfo.uid}
-                  </Text>
-                </Flex>
-
-                {Number(userInfo.sponsorship) > 0 && (
-                  <SponsorTag amount={userInfo.sponsorship} />
-                )}
-
-                {!isEditingUsername && (
-                  <Button
-                    size="sm"
-                    px={3}
-                    flexShrink={0}
-                    onClick={() => {
-                      setInputUsername(userInfo.username);
-                      setIsEditingUsername(true);
-                    }}
-                  >
-                    修改昵称
-                  </Button>
-                )}
-              </Flex>
-
-              {isEditingUsername && (
-                <Flex gap={2} mt={3}>
-                  <Input
-                    value={inputUsername}
-                    onChange={(e) => setInputUsername(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleSaveUsername();
-                    }}
-                    placeholder="请输入昵称"
-                    {...INPUT_STYLE}
-                  />
-                  <Button px={4} flexShrink={0} onClick={handleSaveUsername}>
-                    保存
-                  </Button>
-                  <Button
-                    px={3}
-                    flexShrink={0}
-                    bgColor="transparent"
-                    color="rgba(255, 255, 255, 0.7)"
-                    onClick={() => setIsEditingUsername(false)}
-                  >
-                    取消
-                  </Button>
-                </Flex>
-              )}
-            </Box>
-
-            {/* 账号信息（含账号绑定） */}
+            {/* 账号信息（含昵称与账号绑定） */}
             <Box {...CARD_STYLE} {...CARD_PADDING}>
               <SectionTitle>账号信息</SectionTitle>
 
@@ -671,6 +604,72 @@ export default function UserProfilePage() {
                 mt={1}
                 divider={<Divider borderColor="rgba(255, 255, 255, 0.1)" />}
               >
+                <InfoRow
+                  icon={FaUser}
+                  label="昵称"
+                  right={
+                    !isEditingUsername && (
+                      <Button
+                        size="sm"
+                        px={3}
+                        flexShrink={0}
+                        onClick={() => {
+                          setInputUsername(userInfo.username);
+                          setIsEditingUsername(true);
+                        }}
+                      >
+                        修改
+                      </Button>
+                    )
+                  }
+                >
+                  <Text fontSize="sm" isTruncated>
+                    {userInfo.username}
+                  </Text>
+                </InfoRow>
+
+                {isEditingUsername && (
+                  <Flex gap={2} py={2}>
+                    <Input
+                      value={inputUsername}
+                      onChange={(e) => setInputUsername(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSaveUsername();
+                      }}
+                      placeholder="请输入昵称"
+                      {...INPUT_STYLE}
+                    />
+                    <Button px={4} flexShrink={0} onClick={handleSaveUsername}>
+                      保存
+                    </Button>
+                    <Button
+                      px={3}
+                      flexShrink={0}
+                      bgColor="transparent"
+                      color="rgba(255, 255, 255, 0.7)"
+                      onClick={() => setIsEditingUsername(false)}
+                    >
+                      取消
+                    </Button>
+                  </Flex>
+                )}
+
+                <InfoRow icon={FaIdCard} label="UID">
+                  <Text fontSize="sm">{userInfo.uid}</Text>
+                </InfoRow>
+
+                {Number(userInfo.sponsorship) > 0 && (
+                  <InfoRow
+                    icon={FaHeart}
+                    label="赞助金额"
+                    right={<SponsorTag amount={userInfo.sponsorship} />}
+                  >
+                    <Text fontSize="sm" fontWeight="bold" color="#ffd012">
+                      {userInfo.sponsorship} 元
+                    </Text>
+                  </InfoRow>
+                )}
+
                 <InfoRow icon={FaNetworkWired} label="喵服IP">
                   {userWgInfo?.user_ip ? (
                     <Flex align="center" gap={1.5}>
@@ -692,14 +691,6 @@ export default function UserProfilePage() {
                     </Text>
                   )}
                 </InfoRow>
-
-                {Number(userInfo.sponsorship) > 0 && (
-                  <InfoRow icon={FaHeart} label="赞助金额">
-                    <Text fontSize="sm" fontWeight="bold" color="#ffd012">
-                      {userInfo.sponsorship} 元
-                    </Text>
-                  </InfoRow>
-                )}
 
                 <InfoRow
                   icon={FaMobileAlt}
