@@ -3,6 +3,8 @@ import {
   Box,
   Text,
   Input,
+  InputGroup,
+  InputLeftElement,
   Modal,
   ModalOverlay,
   Heading,
@@ -18,17 +20,25 @@ import {
   Tag,
   Icon,
   Badge,
-  Stack,
   Image,
   Center,
   Spinner,
+  Divider,
+  Collapse,
+  type BoxProps,
+  type InputProps,
+  type ModalContentProps,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
-import { IoReloadCircle } from "react-icons/io5";
 import { TbReload } from "react-icons/tb";
-import { MdContentCopy } from "react-icons/md";
+import {
+  MdContentCopy,
+  MdCampaign,
+  MdSearch,
+  MdInfoOutline,
+} from "react-icons/md";
 import { useUserStateStore } from "@/store/user-state";
 import {
   copyText,
@@ -66,6 +76,49 @@ const ROLE_NONE = "none";
 // 游戏房间配置、群号、房间角色常量已迁移到 @/utils/roomGames
 // （放在独立模块可避免该页面被静态引用，保证路由懒加载生效）
 
+/* ------------------ 统一视觉样式（本页所有卡片/输入/弹窗共用） ------------------ */
+
+/** 卡片：半透明蓝底 + 细边框，与站点其它页面保持一致 */
+const CARD_STYLE: BoxProps = {
+  w: "100%",
+  borderRadius: "xl",
+  bg: "rgba(52, 139, 246, 0.18)",
+  border: "1px solid",
+  borderColor: "rgba(125, 212, 255, 0.18)",
+  boxShadow: "0 4px 14px rgba(0, 0, 0, 0.12)",
+};
+
+/** 卡片内边距 */
+const CARD_PADDING = { px: 3, py: 2.5 };
+
+/** 输入框：暗底 + 聚焦高亮 */
+const INPUT_STYLE: InputProps = {
+  bg: "rgba(0, 0, 0, 0.25)",
+  border: "1px solid",
+  borderColor: "rgba(255, 255, 255, 0.14)",
+  color: "white",
+  _placeholder: { color: "rgba(255, 255, 255, 0.45)" },
+  _hover: { borderColor: "rgba(125, 212, 255, 0.5)" },
+  _focus: { borderColor: "#7dd4ff", boxShadow: "0 0 0 1px #7dd4ff" },
+};
+
+/** 弹窗：统一深蓝底 + 细边框 */
+const MODAL_STYLE: ModalContentProps = {
+  bg: "#0e2949",
+  color: "white",
+  border: "1px solid",
+  borderColor: "rgba(125, 212, 255, 0.25)",
+  borderRadius: "xl",
+  mx: 4,
+};
+
+/** 卡片内的小标题 */
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  <Text fontSize="xs" fontWeight="bold" color="#a8d1ff" letterSpacing="0.08em">
+    {children}
+  </Text>
+);
+
 export default function Page() {
   const navigate = useNavigate();
 
@@ -91,22 +144,21 @@ export default function Page() {
   const [selectedGame, setSelectedGame] = useState<GameRoomItem | null>(null);
   const [gameInfo, setGameInfo] = useState<GameRoomItem | null>(null);
   const [sponsorNotice, setSponsorNotice] = useState("");
-  const {
-    userInfo,
-    userWgInfo,
-    roomData,
-    getRoomData,
-    setRoomPassword,
-    roomRole,
-    latency,
-    isOnline,
-    rotate,
-    disableFlush,
-    setShowLoginModal,
-    setNodeListModal,
-    nodeNetLoad,
-    announcementsData,
-  } = useUserStateStore();
+  // 用 selector 单独订阅，避免 store 任意状态变化都触发本页重渲染
+  const userInfo = useUserStateStore((s) => s.userInfo);
+  const userWgInfo = useUserStateStore((s) => s.userWgInfo);
+  const roomData = useUserStateStore((s) => s.roomData);
+  const roomRole = useUserStateStore((s) => s.roomRole);
+  const latency = useUserStateStore((s) => s.latency);
+  const isOnline = useUserStateStore((s) => s.isOnline);
+  const rotate = useUserStateStore((s) => s.rotate);
+  const disableFlush = useUserStateStore((s) => s.disableFlush);
+  const nodeNetLoad = useUserStateStore((s) => s.nodeNetLoad);
+  const announcementsData = useUserStateStore((s) => s.announcementsData);
+  const getRoomData = useUserStateStore((s) => s.getRoomData);
+  const setRoomPassword = useUserStateStore((s) => s.setRoomPassword);
+  const setShowLoginModal = useUserStateStore((s) => s.setShowLoginModal);
+  const setNodeListModal = useUserStateStore((s) => s.setNodeListModal);
 
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -337,7 +389,7 @@ export default function Page() {
   const nodeWarningText = useMemo(() => {
     const netType = userWgInfo?.net_type;
     if (netType === "电信") {
-      return "你选的是电信线路节点，只建议所有用户都是用中国电信或流量的时候使用";
+      return "你选的是电信线路节点，建议所有用户都是用中国电信或流量上网的时候使用，否则联机容易卡顿（尤其晚上）";
     }
     // else if (netType === "境外") {
     //   return "你选的是境外线路节点，只建议中国大陆外的用户使用";
@@ -348,13 +400,7 @@ export default function Page() {
   const nodeWarningElement = useMemo(() => {
     if (!nodeWarningText) return null;
     return (
-      <Text
-        maxW="300px"
-        color="#ffca3d"
-        fontSize="sm"
-        textAlign="center"
-        mx={5}
-      >
+      <Text mt={2} color="#ffca3d" fontSize="xs" textAlign="left">
         {nodeWarningText}
       </Text>
     );
@@ -378,17 +424,17 @@ export default function Page() {
     [selectedGame, roomData?.room_game],
   );
 
-  // 待加入页面（未进房间）
+  // 待加入页面（未进房间）：加入房间 + 创建房间
   const standbyPage = () => (
-    <Box textAlign="center" w="320px">
-      <VStack spacing={1}>
+    <Box>
+      <VStack spacing={3} align="stretch">
         <Modal
           isOpen={gameInfo !== null}
           onClose={() => setGameInfo(null)}
           isCentered
         >
           <ModalOverlay />
-          <ModalContent bgColor="#002f5c" mx={4}>
+          <ModalContent {...MODAL_STYLE}>
             <ModalHeader>{gameInfo?.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
@@ -398,23 +444,27 @@ export default function Page() {
                     if (gameInfo.qq) copyText(gameInfo.qq);
                   }}
                   mb={4}
+                  cursor="pointer"
                 >
-                  该游戏的喵服QQ群 {gameInfo.qq}
+                  该游戏的喵服QQ群{" "}
+                  <Text as="span" fontWeight="bold" color="#7dd4ff">
+                    {gameInfo.qq}
+                  </Text>
                   <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
                 </Text>
               )}
 
-              <Text mb={2} fontWeight="bold" color="#a8d1ff">
-                联机支持情况
-              </Text>
+              <SectionTitle>联机支持情况</SectionTitle>
               {gameInfo?.support && gameInfo.support.length > 0 ? (
-                <VStack align="stretch" spacing={2}>
+                <VStack align="stretch" spacing={2} mt={2}>
                   {gameInfo.support.map((item) => (
-                    <Text key={item}>• {item}</Text>
+                    <Text key={item} fontSize="sm" lineHeight="1.7">
+                      • {item}
+                    </Text>
                   ))}
                 </VStack>
               ) : (
-                <Text color="gray.300">
+                <Text mt={2} fontSize="sm" color="gray.300">
                   具体平台、版本和主机方向请先查看该游戏教程中的说明。
                 </Text>
               )}
@@ -428,10 +478,12 @@ export default function Page() {
           isCentered
         >
           <ModalOverlay />
-          <ModalContent bgColor="#202e4f" color="white" mx={4}>
+          <ModalContent {...MODAL_STYLE}>
             <ModalBody>
               <Text mt={3}>{sponsorNotice}</Text>
-              <Text>注：仅需房主赞助</Text>
+              <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
+                注：仅需房主赞助
+              </Text>
               {sponsorNotice.includes("10元") ? (
                 <Text color="#ffca3d">
                   赞助专用节点拥挤度低，带宽更大，联机更稳定
@@ -441,7 +493,11 @@ export default function Page() {
               )}
             </ModalBody>
             <ModalFooter gap={3}>
-              <Button bgColor="transparent" onClick={closeSponsorNotice}>
+              <Button
+                bgColor="transparent"
+                color="rgba(255, 255, 255, 0.75)"
+                onClick={closeSponsorNotice}
+              >
                 稍后再说
               </Button>
               <Button
@@ -457,32 +513,23 @@ export default function Page() {
           </ModalContent>
         </Modal>
 
-        <Box borderRadius="lg" w="100%" overflow="hidden">
-          <Flex
-            align="center"
-            justify="space-between"
-            px={3}
-            py={3}
-            bg="rgba(52, 139, 246, 0.18)"
-          >
+        <Box {...CARD_STYLE} {...CARD_PADDING}>
+          <SectionTitle>加入房间</SectionTitle>
+
+          <Flex gap={2} mt={2}>
             <Input
-              type="text"
               placeholder="房间号"
               value={inputRoomId}
               onChange={(e) => {
                 setInputRoomId(e.target.value);
                 setHideJoinPassInput(true);
               }}
-              bg="rgba(0,0,0,0.12)"
-              border="1px solid rgba(255,255,255,0.15)"
-              color="white"
-              _placeholder={{ color: "rgba(255,255,255,0.6)" }}
-              mr={3}
               onKeyDown={handleJoinRoomEnter}
+              {...INPUT_STYLE}
             />
             <Button
-              size="sm"
-              minW="60px"
+              px={5}
+              flexShrink={0}
               onClick={() => {
                 handleJoinRoom(inputRoomId, inputPasswd);
               }}
@@ -491,306 +538,412 @@ export default function Page() {
             </Button>
           </Flex>
 
-          {!hideJoinPassInput && (
-            <Flex
-              align="center"
-              justify="space-between"
-              px={3}
-              py={3}
-              bg="rgba(75, 127, 187, 0.14)"
-            >
-              <Input
-                type="text"
-                placeholder="请输入房间密码"
-                value={inputPasswd}
-                onChange={(e) => {
-                  setInputPasswd(e.target.value);
-                }}
-                bg="rgba(0,0,0,0.12)"
-                border="1px solid rgba(255,255,255,0.15)"
-                color="white"
-                _placeholder={{ color: "rgba(255,255,255,0.6)" }}
-                onKeyDown={handleJoinRoomEnter}
-              />
-            </Flex>
-          )}
+          <Collapse in={!hideJoinPassInput} animateOpacity>
+            <Input
+              mt={2}
+              placeholder="房间密码（房主设置的）"
+              value={inputPasswd}
+              onChange={(e) => {
+                setInputPasswd(e.target.value);
+              }}
+              onKeyDown={handleJoinRoomEnter}
+              {...INPUT_STYLE}
+            />
+          </Collapse>
         </Box>
 
-        <Box
-          w="100%"
-          mb={{ md: 10, base: 0 }}
-          borderRadius="lg"
-          overflow="hidden"
-          border="1px solid rgba(255,255,255,0.08)"
-          bg="rgba(52, 139, 246, 0.18)"
-        >
-          <Flex align="center" justify="space-between" w="100%" px={3} py={3}>
+        <Box {...CARD_STYLE} {...CARD_PADDING}>
+          <SectionTitle>创建房间</SectionTitle>
+
+          <InputGroup mt={2}>
+            <InputLeftElement pointerEvents="none">
+              <Icon as={MdSearch} color="rgba(255, 255, 255, 0.45)" />
+            </InputLeftElement>
             <Input
+              pl={9}
+              placeholder="搜索游戏名称"
               value={gameSearchTerm}
               onChange={(e) => setGameSearchTerm(e.target.value)}
-              placeholder="搜索游戏"
-              bg="rgba(0,0,0,0.12)"
-              border="1px solid rgba(255,255,255,0.15)"
-              color="white"
-              _placeholder={{ color: "rgba(255,255,255,0.6)" }}
+              {...INPUT_STYLE}
             />
-          </Flex>
+          </InputGroup>
 
           {filteredRoomGames.length === 0 ? (
-            <Flex w="100%" px={3} pb={3} justify="center">
-              <Text color="rgba(255,255,255,0.7)">
-                未找到相关游戏
-                <br />
-                请使用通用联机房
-              </Text>
-            </Flex>
+            <Text
+              py={6}
+              textAlign="center"
+              fontSize="sm"
+              color="rgba(255,255,255,0.7)"
+            >
+              未找到相关游戏，请使用「通用联机房」
+            </Text>
           ) : (
-            filteredRoomGames.map((game) => (
-              <Flex
-                key={game.path}
-                align="center"
-                justify="space-between"
-                w="100%"
-                px={3}
-                py={3}
-              >
-                <Flex align="center" minW={0} flex={1} pr={3}>
+            <VStack spacing={1} align="stretch" mt={2}>
+              {filteredRoomGames.map((game) => (
+                <Flex
+                  key={game.path}
+                  align="center"
+                  gap={3}
+                  py={1.5}
+                  px={1}
+                  borderRadius="lg"
+                  transition="background 0.2s"
+                  _hover={{ bg: "rgba(125, 212, 255, 0.1)" }}
+                >
                   <Image
                     src={game.icon}
                     alt={game.title}
-                    boxSize="42px"
+                    boxSize="40px"
+                    objectFit="cover"
+                    borderRadius="lg"
+                    flexShrink={0}
+                    bg="rgba(255,255,255,0.08)"
+                  />
+
+                  <Box flex={1} minW={0} textAlign="left">
+                    <Text fontWeight="bold" color="white" isTruncated>
+                      {game.title}
+                    </Text>
+                    <Flex
+                      as="button"
+                      align="center"
+                      gap={1}
+                      fontSize="xs"
+                      color="#7dd4ff"
+                      onClick={() => setGameInfo(game)}
+                      _hover={{ textDecoration: "underline" }}
+                    >
+                      <Icon as={MdInfoOutline} boxSize={3.5} />
+                      查看联机支持情况
+                    </Flex>
+                  </Box>
+
+                  <Button
+                    size="sm"
+                    px={4}
+                    flexShrink={0}
+                    onClick={() => {
+                      handleCreateRoom(game);
+                    }}
+                  >
+                    创建
+                  </Button>
+                </Flex>
+              ))}
+            </VStack>
+          )}
+        </Box>
+      </VStack>
+    </Box>
+  );
+
+  // 已加入页面：房间信息 + 成员列表 + 房间操作
+  const joinedPage = () => {
+    const hosterIp = roomData?.hoster_ip;
+
+    return (
+      <Box>
+        <VStack spacing={3} align="stretch">
+          <Box {...CARD_STYLE} {...CARD_PADDING}>
+            <Flex align="center" justify="space-between" gap={3}>
+              <Box minW={0}>
+                <SectionTitle>房间号（点击复制）</SectionTitle>
+                <Text
+                  fontSize="2xl"
+                  fontWeight="bold"
+                  lineHeight="1.3"
+                  cursor="pointer"
+                  onClick={handleCopyRoomInfo}
+                  title="点击复制房间信息"
+                  textAlign="center"
+                >
+                  {roomData?.room_id}
+                  <Icon
+                    ml={1.5}
+                    as={MdContentCopy}
+                    boxSize={4}
+                    color="#7dd4ff"
+                  />
+                </Text>
+              </Box>
+
+              <HStack spacing={2} flexShrink={0}>
+                {roomData?.room_passwd && (
+                  <Tag size="sm" colorScheme="blue" fontWeight="bold">
+                    已设密码
+                  </Tag>
+                )}
+                {roomRole === ROLE_HOSTER && (
+                  <Button
+                    size="sm"
+                    px={4}
+                    onClick={() => {
+                      setInputPasswd(
+                        roomData?.room_passwd ? roomData.room_passwd : "",
+                      );
+                      setPassOnOpen();
+                    }}
+                  >
+                    设置密码
+                  </Button>
+                )}
+              </HStack>
+            </Flex>
+
+            {roomGame && (
+              <>
+                <Divider my={2.5} borderColor="rgba(255, 255, 255, 0.12)" />
+
+                <Flex align="center" gap={2}>
+                  <Image
+                    src={roomGame.icon}
+                    alt={roomGame.title}
+                    boxSize="28px"
                     objectFit="cover"
                     borderRadius="md"
                     flexShrink={0}
                     bg="rgba(255,255,255,0.08)"
                   />
-                  <Box ml={3} minW={0} textAlign="left">
-                    <Text
-                      fontSize="md"
-                      fontWeight="bold"
-                      color="white"
-                      isTruncated
-                    >
-                      {game.title}
-                    </Text>
-                    <Button
-                      variant="link"
-                      bg="transparent"
-                      color="#7dd4ff"
-                      fontSize="sm"
-                      fontWeight="normal"
-                      onClick={() => setGameInfo(game)}
-                    >
-                      查看联机支持情况
-                    </Button>
-                  </Box>
+                  <Text fontWeight="bold" isTruncated flex={1} textAlign="left">
+                    {roomGame.title}
+                  </Text>
+                  <Button
+                    size="sm"
+                    px={4}
+                    flexShrink={0}
+                    onClick={() => navigate(roomGame.path)}
+                  >
+                    联机教程
+                  </Button>
                 </Flex>
+              </>
+            )}
+          </Box>
 
-                <Button
-                  size="sm"
-                  minW="60px"
-                  onClick={() => {
-                    handleCreateRoom(game);
-                  }}
-                >
-                  创建
-                </Button>
-              </Flex>
-            ))
-          )}
-        </Box>
-      </VStack>
-    </Box>
-  );
+          {roomGame?.title === "逃脱者手游" && <TheEscapistsTool />}
 
-  // 已加入页面
-  const joinedPage = () => (
-    <Box textAlign="center" mt={1}>
-      <Modal isOpen={setPassIsOpen} onClose={setPassOnClose}>
-        <ModalOverlay />
-        <ModalContent bgColor="#002f5c">
-          <ModalHeader>设置加入房间的密码</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody onKeyDown={handleSetPassEnter}>
-            <Input
-              type="text"
-              placeholder="请输入房间密码"
-              value={inputPasswd}
-              onChange={(e) => setInputPasswd(e.target.value)}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button bgColor="#be2b2b" onClick={() => handleSetRoomPasswd("")}>
-              清除密码
-            </Button>
-            <Button
-              ml={3}
-              bgColor="#007bc0"
-              onClick={() => handleSetRoomPasswd(inputPasswd)}
-            >
-              更新密码
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          <Box {...CARD_STYLE} {...CARD_PADDING}>
+            <Flex align="center" justify="space-between">
+              <SectionTitle>成员</SectionTitle>
 
-      <VStack>
-        {roomGame && (
-          <VStack spacing={3} justify="center" wrap="wrap" my={1}>
-            <Button
-              size={isOnline ? "sm" : "xs"}
-              fontSize={isOnline ? "md" : "sm"}
-              onClick={() => navigate(roomGame.path)}
-              pl={isOnline ? 0 : 2}
-              pr={2}
-            >
-              <Image
-                ml={2}
-                mr={1}
-                src={roomGame.icon}
-                alt={roomGame.title}
-                h="1.6em"
-                w="1.6em"
-                objectFit="cover"
-                borderRadius="md"
-                flexShrink={0}
-                display={isOnline ? "inline" : "none"}
-              />
-
-              {roomGame.title === "通用联机房"
-                ? `通用游戏联机教程`
-                : `${roomGame.title} 联机教程`}
-            </Button>
-
-            {roomGame.title === "逃脱者手游" && <TheEscapistsTool />}
-          </VStack>
-        )}
-
-        {roomData?.members.map((item) => (
-          <Box
-            w="300px"
-            key={item.ip}
-            bg="rgb(75 127 187 / 38%)"
-            p={1}
-            borderRadius={12}
-            borderColor={
-              item.ip === userWgInfo?.user_ip ? "#6db4ff" : "transparent"
-            }
-            borderWidth={3}
-          >
-            <Flex>
-              {item.ip === userWgInfo?.user_ip && (
-                <Tag colorScheme="blue" fontWeight="bold" size="md">
-                  我
-                </Tag>
-              )}
-              <Text fontWeight="bold" fontSize="1.1rem" ml={2} color="white">
-                {item.username}
+              <Text ml={2} fontSize="xs" color="rgba(255, 255, 255, 0.55)">
+                点刷新房间才会更新
               </Text>
 
-              <Tag
-                ml="auto"
-                bg="transparent"
-                fontWeight="bold"
-                color={getStatusColor(item.status === "在线")}
-              >
-                {item.status}
-              </Tag>
-            </Flex>
-
-            <Flex mt={1}>
-              <Flex
-                onClick={() => {
-                  copyText(item.ip);
-                }}
-              >
-                <Text mx={1} fontSize="sm" fontWeight="medium">
-                  <Text as="span" color="gray.300" mr={1}>
-                    喵服IP
-                  </Text>
-                  {item.ip}
-                  <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
-                </Text>
-              </Flex>
-
-              {item.sponsorship > 0 && <SponsorTag amount={item.sponsorship} />}
-
-              {roomRole === ROLE_HOSTER && item.ip !== roomData.hoster_ip && (
-                <Tag
+              {roomRole === ROLE_HOSTER && (
+                <Text
                   ml="auto"
-                  color="white"
-                  bg="#be1c1c"
-                  onClick={() => handleDelMember(item.ip)}
-                  cursor="pointer"
+                  mr={3}
+                  fontSize="sm"
+                  fontWeight="bold"
+                  as="button"
+                  color="#7dd4ff"
+                  onClick={() => navigate("/sponsor")}
                 >
-                  踢出
-                </Tag>
+                  提升人数
+                </Text>
               )}
+
+              <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
+                <Text as="span" fontSize="md" fontWeight="bold" color="white">
+                  {roomData?.members.length}
+                </Text>
+                /{roomData?.room_max} 人
+              </Text>
             </Flex>
+
+            <VStack spacing={2} align="stretch" mt={2}>
+              {roomData?.members.map((item) => {
+                const isMe = item.ip === userWgInfo?.user_ip;
+                const isHoster = item.ip === hosterIp;
+
+                return (
+                  <Box
+                    key={item.ip}
+                    px={2.5}
+                    py={2}
+                    borderRadius="lg"
+                    bg={
+                      isMe
+                        ? "rgba(109, 180, 255, 0.18)"
+                        : "rgba(255, 255, 255, 0.05)"
+                    }
+                    border="1px solid"
+                    borderColor={
+                      isMe
+                        ? "rgba(109, 180, 255, 0.55)"
+                        : "rgba(255, 255, 255, 0.08)"
+                    }
+                  >
+                    <Flex align="center" gap={2}>
+                      {isMe && (
+                        <Tag
+                          size="sm"
+                          colorScheme="blue"
+                          fontWeight="bold"
+                          flexShrink={0}
+                        >
+                          我
+                        </Tag>
+                      )}
+
+                      <Text
+                        fontWeight="bold"
+                        color="white"
+                        isTruncated
+                        flex={1}
+                        textAlign="left"
+                      >
+                        {item.username}
+                      </Text>
+
+                      {isHoster && (
+                        <Tag
+                          size="sm"
+                          bg="rgba(255, 202, 61, 0.18)"
+                          color="#ffca3d"
+                          fontWeight="bold"
+                          flexShrink={0}
+                        >
+                          房主
+                        </Tag>
+                      )}
+
+                      <Text
+                        fontSize="sm"
+                        fontWeight="bold"
+                        color={getStatusColor(item.status === "在线")}
+                        flexShrink={0}
+                      >
+                        {item.status}
+                      </Text>
+                    </Flex>
+
+                    <Flex align="center" gap={2} mt={1}>
+                      <Flex
+                        as="button"
+                        align="center"
+                        gap={1}
+                        fontSize="sm"
+                        color="rgba(255, 255, 255, 0.85)"
+                        onClick={() => {
+                          copyText(item.ip);
+                        }}
+                        _hover={{ color: "white" }}
+                        minW={0}
+                      >
+                        <Text as="span" fontSize="xs" color="gray.400">
+                          喵服IP
+                        </Text>
+                        <Text isTruncated>{item.ip}</Text>
+                        <Icon
+                          as={MdContentCopy}
+                          boxSize={3}
+                          color="#7dd4ff"
+                          flexShrink={0}
+                        />
+                      </Flex>
+
+                      {item.sponsorship > 0 && (
+                        <SponsorTag amount={item.sponsorship} />
+                      )}
+
+                      {roomRole === ROLE_HOSTER && !isHoster && (
+                        <Tag
+                          ml="auto"
+                          size="sm"
+                          color="white"
+                          bg="#be1c1c"
+                          fontWeight="bold"
+                          flexShrink={0}
+                          cursor="pointer"
+                          _hover={{ bg: "#d32b2b" }}
+                          onClick={() => handleDelMember(item.ip)}
+                        >
+                          踢出
+                        </Tag>
+                      )}
+                    </Flex>
+                  </Box>
+                );
+              })}
+            </VStack>
           </Box>
-        ))}
 
-        {roomData?.members.length === 1 &&
-          roomRole === ROLE_HOSTER &&
-          nodeWarningElement}
-      </VStack>
-
-      <HStack justify="center">
-        <Button
-          px={0}
-          size="md"
-          bg="transparent"
-          onClick={() =>
-            handleLeaveRoom(roomRole === ROLE_HOSTER ? "closeRoom" : "exitRoom")
-          }
-        >
-          {roomRole === ROLE_HOSTER ? "关闭房间" : "退出房间"}
-          <IoIosExit size={30} color="#ff4444" />
-        </Button>
-
-        <Text fontSize="lg" fontWeight="bold" mx={2}>
-          {roomData?.members.length}/{roomData?.room_max}
-        </Text>
-
-        <Button
-          px={0}
-          size="md"
-          bg="transparent"
-          disabled={disableFlush}
-          onClick={() => {
-            getRoomData(false);
-          }}
-        >
-          刷新房间
-          <IoReloadCircle size={26} color="#35c535" />
-        </Button>
-      </HStack>
-
-      {roomRole === ROLE_HOSTER &&
-        roomData &&
-        roomData?.members.length === 1 && (
-          <>
-            <Text
-              fontSize="sm"
-              color="gray.300"
-              display={{ base: "none", md: "block" }}
+          <HStack spacing={3} justify="center">
+            <Button
+              size="sm"
+              px={4}
+              bgColor="#b8332f"
+              onClick={() =>
+                handleLeaveRoom(
+                  roomRole === ROLE_HOSTER ? "closeRoom" : "exitRoom",
+                )
+              }
             >
-              如需增加人数请查阅赞助页面，入口在右侧
-            </Text>
-            <Text
-              fontSize="sm"
-              color="gray.300"
-              display={{ base: "block", md: "none" }}
+              {roomRole === ROLE_HOSTER ? "关闭房间" : "退出房间"}
+              <Box as="span" ml={1} display="inline-flex">
+                <IoIosExit size={18} />
+              </Box>
+            </Button>
+
+            <Button
+              size="sm"
+              px={4}
+              bgColor="transparent"
+              color="#7dd4ff"
+              disabled={disableFlush}
+              onClick={() => {
+                getRoomData(false);
+              }}
             >
-              如需增加人数请查阅赞助页面，入口在下方
-            </Text>
-          </>
-        )}
-    </Box>
-  );
+              <Box
+                as="span"
+                display="inline-flex"
+                animation={rotate ? `${spin} 1s linear infinite` : "none"}
+              >
+                <TbReload size={16} />
+              </Box>
+              <Text ml={1} fontSize="sm">
+                刷新房间
+              </Text>
+            </Button>
+          </HStack>
+        </VStack>
+
+        <Modal isOpen={setPassIsOpen} onClose={setPassOnClose} isCentered>
+          <ModalOverlay />
+          <ModalContent {...MODAL_STYLE}>
+            <ModalHeader>设置加入房间的密码</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody onKeyDown={handleSetPassEnter}>
+              <Input
+                placeholder="请输入房间密码"
+                value={inputPasswd}
+                onChange={(e) => setInputPasswd(e.target.value)}
+                {...INPUT_STYLE}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button bgColor="#be2b2b" onClick={() => handleSetRoomPasswd("")}>
+                清除密码
+              </Button>
+              <Button
+                ml={3}
+                bgColor="#007bc0"
+                onClick={() => handleSetRoomPasswd(inputPasswd)}
+              >
+                更新密码
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
+    );
+  };
 
   return (
-    <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
+    <Flex direction="column" px={{ base: 4, md: 8 }} align="center" pb={6}>
       {!userInfo ? (
         <VStack spacing={3} align="center">
           <Heading size="md">你还没登录呢</Heading>
@@ -805,209 +958,197 @@ export default function Page() {
           <NoticeText />
         </VStack>
       ) : (
-        <>
-          <Text color="#ffca3d" mb={2} fontWeight="bold">
-            {announcementsData?.carouselMsg &&
-              announcementsData?.carouselMsg[carouselIndex]}
-          </Text>
+        <VStack spacing={3} w="100%" maxW="440px" align="stretch">
+          {/* 轮播公告 */}
+          {announcementsData?.carouselMsg?.[carouselIndex] && (
+            <Flex
+              align="center"
+              gap={2}
+              px={3}
+              py={2}
+              minH="38px"
+              borderRadius="lg"
+              bg="rgba(255, 202, 61, 0.12)"
+              border="1px solid"
+              borderColor="rgba(255, 202, 61, 0.3)"
+            >
+              <Icon
+                as={MdCampaign}
+                boxSize={4}
+                color="#ffca3d"
+                flexShrink={0}
+              />
+              <Text fontSize="sm" color="#ffd964" textAlign="left" flex={1}>
+                {announcementsData.carouselMsg[carouselIndex]}
+              </Text>
+            </Flex>
+          )}
 
+          {/* 当前节点 */}
           {userWgInfo?.node_alias && nodeNetLoad !== undefined ? (
-            <>
-              <Flex
-                align="center"
-                justify="space-between"
-                borderRadius="lg"
-                boxShadow="sm"
-                mb={2}
-                bg="rgba(52, 139, 246, 0.18)"
-                border="1px solid"
-                borderColor="rgba(75, 127, 187, 0.2)"
-                px={3}
-                py={2}
-                w="100%"
-                maxW="320px"
-              >
-                <Stack spacing={1} w="44px" flexShrink={0}>
-                  <Badge
-                    colorScheme="orange"
-                    fontSize="xs"
-                    textAlign="center"
-                    px={1}
-                  >
-                    {userWgInfo.net_type}
-                  </Badge>
-                  <Badge
-                    colorScheme="teal"
-                    fontSize="xs"
-                    textAlign="center"
-                    px={1}
-                  >
-                    {userWgInfo.bandwidth}M
-                  </Badge>
-                </Stack>
-
-                <Flex
-                  flex="1"
-                  alignItems="center"
-                  justifyContent="center"
-                  gap={2}
-                  minW={0}
-                  px={2}
+            <Box {...CARD_STYLE} {...CARD_PADDING}>
+              <Flex align="center" gap={{ base: 2, md: 3 }}>
+                {/* 线路类型 + 带宽：竖排，左 */}
+                <Badge
+                  colorScheme="orange"
+                  fontSize="xs"
+                  borderRadius="sm"
+                  px={1}
+                  textAlign="center"
                 >
-                  <Text
-                    fontWeight="bold"
-                    fontSize="lg"
-                    isTruncated
-                    title={userWgInfo?.node_alias}
-                    color="white"
-                    letterSpacing="-0.3px"
-                  >
-                    {userWgInfo?.node_alias}
-                  </Text>
+                  {userWgInfo.net_type}
+                </Badge>
+                <Badge
+                  colorScheme="teal"
+                  fontSize="xs"
+                  borderRadius="sm"
+                  px={1}
+                  textAlign="center"
+                >
+                  {userWgInfo.bandwidth}M
+                </Badge>
 
-                  <Flex
-                    alignItems="center"
-                    gap={1}
-                    flexShrink={0}
-                    bg="rgba(0,0,0,0.04)"
-                    mx={1}
-                    borderRadius="full"
-                  >
+                {/* 节点名称：占据中间剩余空间并居中 */}
+                <Text
+                  flex={1}
+                  minW={0}
+                  textAlign="center"
+                  fontWeight="bold"
+                  fontSize="lg"
+                  color="white"
+                  isTruncated
+                  title={userWgInfo.node_alias}
+                >
+                  {userWgInfo.node_alias}
+                </Text>
+
+                {/* 负载情况 + 切换节点：右 */}
+                <Flex align="center" gap={{ base: 2, md: 3 }} flexShrink={0}>
+                  <Flex align="center" gap={1.5}>
                     <Box
-                      w="10px"
-                      h="10px"
+                      w="8px"
+                      h="8px"
                       borderRadius="full"
                       bg={getNetColor(nodeNetLoad)}
-                      boxShadow="0 0 4px rgba(0,0,0,0.1)"
                     />
-                    <Text
-                      fontSize="xs"
-                      fontWeight="medium"
-                      color="white"
-                      whiteSpace="nowrap"
-                    >
+                    <Text fontSize="xs" color="rgba(255, 255, 255, 0.8)">
                       {getNetText(nodeNetLoad)}
                     </Text>
                   </Flex>
-                </Flex>
 
-                <Button
-                  onClick={setNodeListModal}
-                  size="sm"
-                  color="white"
-                  fontWeight="medium"
-                  px={3}
-                  flexShrink={0}
-                >
-                  切换节点
-                </Button>
+                  <Button ml={2} size="sm" px={3} onClick={setNodeListModal}>
+                    切换节点
+                  </Button>
+                </Flex>
               </Flex>
 
-              <Flex align="center" gap={2}>
-                <Text
-                  fontSize={18}
-                  fontWeight="bold"
-                  color={getStatusColor(isOnline)}
-                >
+              {roomRole === ROLE_HOSTER && nodeWarningElement}
+            </Box>
+          ) : (
+            <Center {...CARD_STYLE} py={4} gap={2}>
+              <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
+                节点数据加载中
+              </Text>
+              <Spinner size="sm" />
+            </Center>
+          )}
+
+          {/* 连接状态 */}
+          <Box {...CARD_STYLE} {...CARD_PADDING}>
+            <Flex align="center" justify="space-between" gap={2}>
+              <HStack spacing={2} minW={0}>
+                <Box
+                  w="8px"
+                  h="8px"
+                  borderRadius="full"
+                  bg={getStatusColor(isOnline)}
+                  flexShrink={0}
+                />
+                <Text fontWeight="bold" color={getStatusColor(isOnline)}>
                   {isOnline ? "WG在线" : "WG离线"}
                 </Text>
 
                 {isOnline && latency !== undefined ? (
                   <Flex align="center" color={getDelayColor(latency)}>
                     {getDelayIcon(latency)}
-                    <Text as="span" fontWeight="bold">
+                    <Text as="span" fontWeight="bold" ml={0.5}>
                       {latency}ms
                     </Text>
                   </Flex>
                 ) : (
-                  <RiSignalCellularOffLine size={20} />
+                  <Icon
+                    as={RiSignalCellularOffLine}
+                    color="rgba(255, 255, 255, 0.6)"
+                  />
                 )}
+              </HStack>
 
-                <Button
-                  bg="transparent"
-                  h={5}
-                  px={0}
-                  disabled={disableFlush}
-                  onClick={() => {
-                    getRoomData(false);
-                  }}
-                  color="#7dd4ff"
-                >
-                  <Text>刷新</Text>
-                  <Box
-                    animation={rotate ? `${spin} 1s linear infinite` : "none"}
-                  >
-                    <TbReload size={18} />
-                  </Box>
-                </Button>
-              </Flex>
-            </>
-          ) : (
-            <Center my={2}>
-              节点数据加载中
-              <Spinner size="md" />
-            </Center>
-          )}
-
-          {roomRole !== ROLE_NONE && (
-            <Flex align="center" justify="center">
-              <Text
-                fontSize={18}
-                fontWeight="bold"
-                onClick={handleCopyRoomInfo}
-              >
-                <Icon mr={1} as={MdContentCopy} boxSize={3.5} color="#7dd4ff" />
-                房间号{roomData?.room_id}
-              </Text>
-
-              {roomRole === ROLE_HOSTER && (
-                <Button
-                  ml={2}
-                  color="#7dd4ff"
-                  variant="link"
-                  bg="transparent"
-                  onClick={() => {
-                    setInputPasswd(
-                      roomData?.room_passwd ? roomData.room_passwd : "",
-                    );
-                    setPassOnOpen();
-                  }}
-                >
-                  设置密码
-                </Button>
+              {!isOnline && (
+                <Text mr="auto" fontSize="xs" color="rgba(255, 255, 255, 0.55)">
+                  亲，要安装WG客户端！
+                </Text>
               )}
-            </Flex>
-          )}
 
-          {isOnline === false && (
-            <Text color="#ffca3d" textAlign="center">
-              WG隧道打开还是未连接？
               <Button
-                variant="link"
-                bg="transparent"
+                size="sm"
+                px={3}
+                bgColor="transparent"
                 color="#7dd4ff"
+                disabled={disableFlush}
+                flexShrink={0}
                 onClick={() => {
-                  navigate("/offlineCheck");
+                  getRoomData(false);
                 }}
               >
-                点我排查
+                <Box
+                  as="span"
+                  display="inline-flex"
+                  animation={rotate ? `${spin} 1s linear infinite` : "none"}
+                >
+                  <TbReload size={16} />
+                </Box>
+                <Text ml={1} fontSize="sm">
+                  刷新
+                </Text>
               </Button>
-            </Text>
-          )}
+            </Flex>
 
-          <Button
-            size={isOnline ? "xs" : "sm"}
-            fontSize={isOnline ? "xs" : "md"}
-            my={1}
-            onClick={() => {
-              navigate("/docs");
-            }}
-          >
-            WG安装部署教程
-          </Button>
+            <Flex
+              align="center"
+              justify="center"
+              gap={3}
+              mt={1.5}
+              fontSize="sm"
+            >
+              <Text
+                as="button"
+                color="#7dd4ff"
+                onClick={() => {
+                  navigate("/docs");
+                }}
+              >
+                WG安装部署教程
+              </Text>
+
+              {isOnline === false && (
+                <>
+                  <Box w="1px" h="12px" bg="rgba(255, 255, 255, 0.25)" />
+                  <Text
+                    as="button"
+                    color="#ffca3d"
+                    onClick={() => {
+                      navigate("/offlineCheck");
+                    }}
+                  >
+                    打开隧道还是离线？点我排查
+                  </Text>
+                </>
+              )}
+            </Flex>
+          </Box>
 
           {roomRole === ROLE_NONE ? standbyPage() : joinedPage()}
-        </>
+        </VStack>
       )}
     </Flex>
   );
