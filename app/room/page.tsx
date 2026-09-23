@@ -32,7 +32,6 @@ import { Button } from "@/components/universal/button";
 import { TbReload } from "react-icons/tb";
 import {
   MdContentCopy,
-  MdCampaign,
   MdSearch,
   MdInfoOutline,
 } from "react-icons/md";
@@ -67,6 +66,7 @@ import {
   MODAL_STYLE,
   SectionTitle,
 } from "@/components/universal/ui";
+import { AnnouncementCarousel } from "@/components/universal/Announcements";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -116,26 +116,10 @@ export default function Page() {
   const rotate = useUserStateStore((s) => s.rotate);
   const disableFlush = useUserStateStore((s) => s.disableFlush);
   const nodeNetLoad = useUserStateStore((s) => s.nodeNetLoad);
-  const announcementsData = useUserStateStore((s) => s.announcementsData);
   const getRoomData = useUserStateStore((s) => s.getRoomData);
   const setRoomPassword = useUserStateStore((s) => s.setRoomPassword);
   const openLoginModal = useUserStateStore((s) => s.openLoginModal);
   const setNodeListModal = useUserStateStore((s) => s.setNodeListModal);
-
-  const [carouselIndex, setCarouselIndex] = useState(0);
-
-  // 轮播效果：每6秒更换一条消息
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (announcementsData?.carouselMsg)
-        setCarouselIndex(
-          (prevIndex) => (prevIndex + 1) % announcementsData.carouselMsg.length,
-        );
-    }, 6000);
-
-    // 清理定时器
-    return () => clearInterval(interval);
-  }, [announcementsData?.carouselMsg]);
 
   useEffect(() => {
     // 当节点存在，且还没有房间数据时，自动拉取
@@ -922,29 +906,7 @@ export default function Page() {
       ) : (
         <VStack spacing={3} w="100%" maxW="440px" align="stretch">
           {/* 轮播公告 */}
-          {announcementsData?.carouselMsg?.[carouselIndex] && (
-            <Flex
-              align="center"
-              gap={2}
-              px={3}
-              py={2}
-              minH="38px"
-              borderRadius="lg"
-              bg="rgba(255, 202, 61, 0.12)"
-              border="1px solid"
-              borderColor="rgba(255, 202, 61, 0.3)"
-            >
-              <Icon
-                as={MdCampaign}
-                boxSize={4}
-                color="#ffca3d"
-                flexShrink={0}
-              />
-              <Text fontSize="sm" color="#ffd964" textAlign="left" flex={1}>
-                {announcementsData.carouselMsg[carouselIndex]}
-              </Text>
-            </Flex>
-          )}
+          <AnnouncementCarousel />
 
           {/* 当前节点 */}
           {userWgInfo?.node_alias && nodeNetLoad !== undefined ? (

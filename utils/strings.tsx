@@ -112,3 +112,19 @@ export const getStatusColor = (online: boolean) => {
   if (online) return GOOD;
   return BAD;
 };
+
+/** 公告时间戳格式化（兼容秒/毫秒；short 为 true 时只到日） */
+export function formatAnnouncementDate(
+  rawTs: number,
+  short: boolean = false,
+): string {
+  const ts = rawTs < 1e12 ? rawTs * 1000 : rawTs;
+  const d = new Date(ts);
+
+  if (short) return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 ${hours}:${minutes}`;
+}

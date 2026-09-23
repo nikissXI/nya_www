@@ -1,12 +1,15 @@
+import { useState } from "react";
 import {
   Box,
   Flex,
   Text,
   Link,
   Heading,
+  Input,
   Modal,
   ModalOverlay,
   ModalContent,
+  ModalHeader,
   ModalCloseButton,
   ModalBody,
   useDisclosure,
@@ -18,23 +21,10 @@ import {
 import { useUserStateStore } from "@/store/user-state";
 import { Link as RouterLink } from "react-router-dom";
 import { ROOM_GAME_LIST, GENERAL_QQ_GROUP } from "@/utils/roomGames";
-import { copyText } from "@/utils/strings";
+import { copyText, formatAnnouncementDate } from "@/utils/strings";
 import { MdContentCopy } from "react-icons/md";
-
-const formatDate = (rawTs: number, short: boolean = false): string => {
-  // 支持秒或毫秒
-  const ts = rawTs < 1e12 ? rawTs * 1000 : rawTs;
-  const d = new Date(ts);
-
-  const year = d.getFullYear();
-  const month = d.getMonth() + 1;
-  const date = d.getDate();
-  const hours = String(d.getHours()).padStart(2, "0");
-  const minutes = String(d.getMinutes()).padStart(2, "0");
-
-  if (short) return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
-  else return `${year}年${month}月${date}日 ${hours}:${minutes}`;
-};
+import { INPUT_STYLE, MODAL_STYLE } from "@/components/universal/ui";
+import { AnnouncementList } from "@/components/universal/Announcements";
 
 export default function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,7 +33,24 @@ export default function SideBar() {
     onOpen: openGameGroup,
     onClose: closeGameGroup,
   } = useDisclosure();
-  const { announcementsData } = useUserStateStore();
+
+  // 用 selector 单独订阅，避免 store 任意状态变化都触发侧栏重渲染
+  const announcementsData = useUserStateStore((s) => s.announcementsData);
+
+  // 各游戏群列表搜索
+  const [gameSearchTerm, setGameSearchTerm] = useState("");
+
+  const filteredGames = ROOM_GAME_LIST.filter(
+    (game) =>
+      game.title !== "通用联机房" &&
+      game.title.toLowerCase().includes(gameSearchTerm.toLowerCase()),
+  );
+
+  /** 关闭群列表弹窗时顺带清空搜索 */
+  const closeGameGroupAndReset = () => {
+    closeGameGroup();
+    setGameSearchTerm("");
+  };
 
   return (
     <Box
@@ -55,7 +62,7 @@ export default function SideBar() {
       mx={{ base: "auto", md: 0 }}
     >
       <Flex
-        px={{ base: "auto", md: 3 }}
+        px={{ md: 3 }}
         direction="column"
         position={{ base: "static", md: "sticky" }}
         top={{ base: 0, md: 24 }}
@@ -120,7 +127,10 @@ export default function SideBar() {
           {announcementsData?.announcements && announcementsData.announcements.length > 0 ? (
             <>
               <Text fontWeight="bold" textAlign="left">
-                {formatDate(announcementsData.announcements[0].timestamp, true)}
+                {formatAnnouncementDate(
+                  announcementsData.announcements[0].timestamp,
+                  true,
+                )}
               </Text>
 
               <Text fontSize="sm" whiteSpace="pre-wrap" textAlign="left">
@@ -145,90 +155,108 @@ export default function SideBar() {
 
       <Modal
         isOpen={isGameGroupOpen}
-        onClose={closeGameGroup}
+        onClose={closeGameGroupAndReset}
         size="md"
         isCentered
       >
         <ModalOverlay />
-        <ModalContent
-          bg="#202e4fe0"
-          color="white"
-          maxH="70%"
-          overflowY="auto"
-          mx={5}
-          py={5}
-        >
+        <ModalContent {...MODAL_STYLE} maxH="80vh" overflowY="auto">
+          <ModalHeader>各游戏QQ群</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Heading as="h2" fontSize="lg" mb={4}>
-              各游戏QQ群
-            </Heading>
-            <VStack align="stretch" spacing={2}>
-              {ROOM_GAME_LIST.filter((game) => game.title !== "通用联机房").map(
-                (game) => (
-                  <Flex
-                    key={game.path}
-                    align="center"
-                    justify="space-between"
-                    gap={3}
-                    pb={2}
-                    borderBottom="1px solid"
-                    borderColor="whiteAlpha.200"
-                  >
-                    <Flex>
-                      <Image
-                        mr={2}
-                        src={game.icon}
-                        alt={game.title}
-                        boxSize="24px"
-                        objectFit="cover"
-                        borderRadius="md"
-                        flexShrink={0}
-                        bg="rgba(255,255,255,0.08)"
-                      />
-                      <Text>{game.title}</Text>
-                    </Flex>
-                    <Text
-                      onClick={() => {
-                        if (game.qq) copyText(game.qq);
-                      }}
-                      color={game.qq ? "white" : "gray.400"}
-                    >
-                      {game.qq ? game.qq : "暂无专属群"}
-                      <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
-                    </Text>
-                  </Flex>
-                ),
-              )}
-            </VStack>
+
+          <ModalBody pb={6}>
+            <Input
+              mb={3}
+              placeholder="搜索游戏名称"
+              value={gameSearchTerm}
+              onChange={(e) => setGameSearchTerm(e.target.value)}
+              {...INPUT_STYLE}
+            />
+
+            {filteredGames.length === 0 ? (
+              <Text
+                py={4}
+                fontSize="sm"
+                color="rgba(255, 255, 255, 0.6)"
+                textAlign="center"
+              >
+                未找到相关游戏
+              </Text>
+            ) : (
+              <VStack spacing={0} align="stretch">
+                {filteredGames.map((game, index) => {
+                  const qq = game.qq;
+
+                  return (
+                    <Box key={game.path}>
+                      {index > 0 && (
+                        <Divider borderColor="rgba(255, 255, 255, 0.1)" />
+                      )}
+
+                      <Flex
+                        align="center"
+                        justify="space-between"
+                        gap={3}
+                        py={2}
+                      >
+                        <Flex align="center" minW={0}>
+                          <Image
+                            mr={2}
+                            src={game.icon}
+                            alt={game.title}
+                            boxSize="28px"
+                            objectFit="cover"
+                            borderRadius="md"
+                            flexShrink={0}
+                            bg="rgba(255,255,255,0.08)"
+                          />
+
+                          <Text isTruncated>{game.title}</Text>
+                        </Flex>
+
+                        {/* 无专属群的只给灰字，不再渲染可点却没反应的复制图标 */}
+                        {qq ? (
+                          <Flex
+                            as="button"
+                            type="button"
+                            align="center"
+                            gap={1}
+                            flexShrink={0}
+                            fontSize="sm"
+                            color="white"
+                            onClick={() => copyText(qq)}
+                            _hover={{ color: "#7dd4ff" }}
+                          >
+                            {qq}
+                            <Icon
+                              as={MdContentCopy}
+                              boxSize={3.5}
+                              color="#7dd4ff"
+                            />
+                          </Flex>
+                        ) : (
+                          <Text flexShrink={0} fontSize="sm" color="gray.400">
+                            暂无专属群
+                          </Text>
+                        )}
+                      </Flex>
+                    </Box>
+                  );
+                })}
+              </VStack>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
 
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
-        <ModalContent
-          bg="#202e4fe0"
-          color="white"
-          maxH="70%"
-          overflowY="auto"
-          mx={5}
-          py={5}
-        >
+        <ModalContent {...MODAL_STYLE} maxH="80vh" overflowY="auto">
+          <ModalHeader>历史公告</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <VStack spacing={2}>
-              {announcementsData?.announcements &&
-                announcementsData.announcements.map((item, index) => (
-                  <Box key={index} p={1} w="100%">
-                    <Text mb={1} fontWeight="bold" color="#f4d106">
-                      {formatDate(item.timestamp)}
-                    </Text>
-                    <Divider mb={2} />
-                    <Text whiteSpace="pre-wrap">{item.content}</Text>
-                  </Box>
-                ))}
-            </VStack>
+
+          <ModalBody pb={6}>
+            <AnnouncementList />
           </ModalBody>
         </ModalContent>
       </Modal>
