@@ -25,9 +25,6 @@ import {
   Spinner,
   Divider,
   Collapse,
-  type BoxProps,
-  type InputProps,
-  type ModalContentProps,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
@@ -63,6 +60,13 @@ import {
   getRoomGameName,
   type GameRoomItem,
 } from "@/utils/roomGames";
+import {
+  CARD_PADDING,
+  CARD_STYLE,
+  INPUT_STYLE,
+  MODAL_STYLE,
+  SectionTitle,
+} from "@/components/universal/ui";
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -76,48 +80,6 @@ const ROLE_NONE = "none";
 // 游戏房间配置、群号、房间角色常量已迁移到 @/utils/roomGames
 // （放在独立模块可避免该页面被静态引用，保证路由懒加载生效）
 
-/* ------------------ 统一视觉样式（本页所有卡片/输入/弹窗共用） ------------------ */
-
-/** 卡片：半透明蓝底 + 细边框，与站点其它页面保持一致 */
-const CARD_STYLE: BoxProps = {
-  w: "100%",
-  borderRadius: "xl",
-  bg: "rgba(52, 139, 246, 0.18)",
-  border: "1px solid",
-  borderColor: "rgba(125, 212, 255, 0.18)",
-  boxShadow: "0 4px 14px rgba(0, 0, 0, 0.12)",
-};
-
-/** 卡片内边距 */
-const CARD_PADDING = { px: 3, py: 2.5 };
-
-/** 输入框：暗底 + 聚焦高亮 */
-const INPUT_STYLE: InputProps = {
-  bg: "rgba(0, 0, 0, 0.25)",
-  border: "1px solid",
-  borderColor: "rgba(255, 255, 255, 0.14)",
-  color: "white",
-  _placeholder: { color: "rgba(255, 255, 255, 0.45)" },
-  _hover: { borderColor: "rgba(125, 212, 255, 0.5)" },
-  _focus: { borderColor: "#7dd4ff", boxShadow: "0 0 0 1px #7dd4ff" },
-};
-
-/** 弹窗：统一深蓝底 + 细边框 */
-const MODAL_STYLE: ModalContentProps = {
-  bg: "#0e2949",
-  color: "white",
-  border: "1px solid",
-  borderColor: "rgba(125, 212, 255, 0.25)",
-  borderRadius: "xl",
-  mx: 4,
-};
-
-/** 卡片内的小标题 */
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <Text fontSize="xs" fontWeight="bold" color="#a8d1ff" letterSpacing="0.08em">
-    {children}
-  </Text>
-);
 
 export default function Page() {
   const navigate = useNavigate();
