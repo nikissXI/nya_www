@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { useState } from "react";
-import { useUserStateStore } from "@/store/user-state";
 import { MdTipsAndUpdates } from "react-icons/md";
 import BackButton from "@/components/docs/BackButton";
 import DocBox from "@/components/docs/DocBox";
@@ -22,7 +21,6 @@ import { ApiError } from "@/utils/api";
 import { api } from "@/utils/endpoints";
 
 export default function AndroidPage0() {
-  const { userInfo, setShowLoginModal } = useUserStateStore();
   const [inputIp, setInputIp] = useState("");
   const [showText, setShowText] = useState("");
   const [isChecking, setIsChecking] = useState(false);

@@ -1,15 +1,21 @@
+import { useState } from "react";
 import {
+  Icon,
+  Input,
+  InputGroup,
+  InputRightElement,
   Text,
   type BoxProps,
   type InputProps,
   type ModalContentProps,
 } from "@chakra-ui/react";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 /**
  * 全站通用视觉常量
  * ------------------------------------------------------------
  * 页面里的卡片、输入框、弹窗都从这里取样式，避免各页面各写一份导致深浅不一。
- * 目前使用方：app/room/page.tsx、app/me/page.tsx
+ * 目前使用方：app/room/page.tsx、app/me/page.tsx、app/register/page.tsx、app/forgetPass/page.tsx
  */
 
 /** 卡片：半透明蓝底 + 细边框 */
@@ -52,3 +58,42 @@ export const SectionTitle = ({ children }: { children: React.ReactNode }) => (
     {children}
   </Text>
 );
+
+/**
+ * 密码输入框：右侧带“显示 / 隐藏”切换。
+ * 注意：需要外边距时请用外层 Box 控制（直接传 mt 会让头像与输入框错位）。
+ */
+export const PasswordInput = (
+  props: Omit<InputProps, "value" | "onChange" | "type"> & {
+    value: string;
+    onChange: (value: string) => void;
+  },
+) => {
+  const { value, onChange, ...rest } = props;
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <InputGroup>
+      <Input
+        type={visible ? "text" : "password"}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        pr={10}
+        {...INPUT_STYLE}
+        {...rest}
+      />
+
+      <InputRightElement h="100%">
+        <Icon
+          as={visible ? MdVisibilityOff : MdVisibility}
+          // 注意：Chakra 的 sizes 标度里没有 4.5，boxSize={4.5} 会被当成 4.5px
+          boxSize={5}
+          color="rgba(255, 255, 255, 0.6)"
+          cursor="pointer"
+          _hover={{ color: "#7dd4ff" }}
+          onClick={() => setVisible((prev) => !prev)}
+        />
+      </InputRightElement>
+    </InputGroup>
+  );
+};

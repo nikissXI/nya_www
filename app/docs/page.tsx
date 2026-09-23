@@ -55,7 +55,7 @@ const DocumentPage = () => {
     isOnline,
     rotate,
     disableFlush,
-    setShowLoginModal,
+    openLoginModal,
   } = useUserStateStore();
 
   const navigate = useNavigate();
@@ -226,7 +226,7 @@ const DocumentPage = () => {
           <Button
             variant="outline"
             rounded={10}
-            onClick={setShowLoginModal}
+            onClick={openLoginModal}
             border={0}
           >
             点击登录

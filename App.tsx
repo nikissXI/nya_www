@@ -7,6 +7,7 @@ import "@/app/globals.css";
 const HomePage = lazy(() => import("@/app/page"));
 const DocsPage = lazy(() => import("@/app/docs/page"));
 const ForgetPassPage = lazy(() => import("@/app/forgetPass/page"));
+const LoginPage = lazy(() => import("@/app/login/page"));
 const MePage = lazy(() => import("@/app/me/page"));
 const RegisterPage = lazy(() => import("@/app/register/page"));
 const RoomPage = lazy(() => import("@/app/room/page"));
@@ -95,6 +96,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/docs" element={<DocsPage />} />
             <Route path="/forgetPass" element={<ForgetPassPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/me" element={<MePage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/room" element={<RoomPage />} />

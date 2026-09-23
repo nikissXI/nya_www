@@ -21,6 +21,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/sponsor": "赞助喵服",
   "/docs": "联机教程",
   "/room": "联机房间",
+  "/login": "登录",
 };
 
 export default function Frame({
@@ -30,15 +31,17 @@ export default function Frame({
 }>) {
   const { pathname } = useLocation();
   const loginLoading = useUserStateStore((state) => state.loginLoading);
+  const getUserInfo = useUserStateStore((state) => state.getUserInfo);
   const getInviteCode = useUserStateStore((state) => state.getInviteCode);
   const getEmbedParama = useUserStateStore((state) => state.getEmbedParama);
   const embed = useUserStateStore((state) => state.embed);
 
-  // 登录加载完成后获取邀请码
+  // 启动时拉取登录态（原本挂在登录弹窗里）+ 邀请码 + embed 参数
   useEffect(() => {
+    getUserInfo();
     getInviteCode();
     getEmbedParama();
-  }, [getInviteCode, getEmbedParama]);
+  }, [getUserInfo, getInviteCode, getEmbedParama]);
 
   const rootPath = "/" + pathname.split("/")[1];
   const title = PAGE_TITLES[rootPath] ?? "";

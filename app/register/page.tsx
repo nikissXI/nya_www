@@ -1,16 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Text,
-  Box,
-  Flex,
-  Center,
-  Input,
-  Image,
-  VStack,
-  RadioGroup,
-  Radio,
-  Stack,
-} from "@chakra-ui/react";
+import { Text, Box, Flex, Input, Image, VStack, Icon, Spinner } from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useUserStateStore } from "@/store/user-state";
@@ -27,25 +16,38 @@ import { setAuthToken } from "@/store/authKey";
 import { isBusinessError } from "@/utils/api";
 import { api } from "@/utils/endpoints";
 import type { RegisterReqBody } from "@/utils/endpoints";
+import {
+  CARD_PADDING,
+  CARD_STYLE,
+  INPUT_STYLE,
+  PasswordInput,
+  SectionTitle,
+} from "@/components/universal/ui";
+import { FaEnvelope, FaMobileAlt } from "react-icons/fa";
+
+/** 注册方式选项 */
+const VERIFY_TYPES = [
+  { value: "email", label: "邮箱", icon: FaEnvelope },
+  { value: "tel", label: "手机", icon: FaMobileAlt },
+];
 
 export default function Page() {
   const navigate = useNavigate();
 
-  const { uuid, getUserInfo } = useUserStateStore();
+  // 用 selector 单独订阅，避免 store 任意状态变化都触发本页重渲染
+  const uuid = useUserStateStore((s) => s.uuid);
+  const getUserInfo = useUserStateStore((s) => s.getUserInfo);
+  const openLoginModal = useUserStateStore((s) => s.openLoginModal);
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();
   const [captchaImageUrl, setCaptchaImageUrl] = useState("");
-
-  // const [sendVerifyButtonText, setSendVerifyButtonText] =
-  //   useState("获取验证码");
 
   const [passwordAlertText, setPasswordAlertText] = useState("");
 
   // 填写的表单数据
   const [verifyType, setVerifyType] = useState("email");
   const [inputAccount, setInputAccount] = useState("");
-  // const [inputVerifyCode, setInputVerifyCode] = useState("");
   const [inputUsername, setInputUsername] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputPassword2, setInputPassword2] = useState("");
@@ -57,6 +59,12 @@ export default function Page() {
     };
     loadCaptcha();
   }, [fetchCaptcha]);
+
+  /** 换一张验证码并清空已填内容 */
+  const refreshCaptcha = async () => {
+    setCaptchaImageUrl(await fetchCaptcha());
+    setInputCaptcha("");
+  };
 
   const checkPassword = (pass1: string, pass2: string) => {
     setPasswordAlertText(getPasswordAlertText(pass1, pass2));
@@ -129,8 +137,7 @@ export default function Page() {
     } catch (err) {
       if (isBusinessError(err)) {
         openToast({ content: err.message, status: "warning" });
-        setCaptchaImageUrl(await fetchCaptcha());
-        setInputCaptcha("");
+        await refreshCaptcha();
       } else {
         openToast({
           content: getErrorMessage(err, "服务异常，请联系服主处理"),
@@ -141,99 +148,170 @@ export default function Page() {
   };
 
   return (
-    <Center>
-      <VStack
-        p={5}
-        spacing={3}
-        align="stretch"
-        maxW="300px"
-        onKeyDown={handleRegisterEnter}
-      >
-        <Flex>
-          注册方式
-          <RadioGroup
-            ml={3}
-            value={verifyType}
-            onChange={(value) => {
-              setInputAccount("");
-              // setSendVerifyButtonText("获取验证码");
-              setVerifyType(value);
-            }}
+    <Flex direction="column" px={{ base: 4, md: 8 }} align="center" pb={6}>
+      <Box {...CARD_STYLE} {...CARD_PADDING} maxW="380px" px={4} py={4}>
+        <VStack spacing={3} align="stretch" onKeyDown={handleRegisterEnter}>
+          {/* 注册方式 */}
+          <Box>
+            <SectionTitle>注册方式</SectionTitle>
+
+            <Flex gap={2} mt={2}>
+              {VERIFY_TYPES.map(({ value, label, icon }) => {
+                const active = verifyType === value;
+                return (
+                  <Button
+                    key={value}
+                    flex="1"
+                    size="sm"
+                    bgColor={active ? "#2976bd" : "rgba(255, 255, 255, 0.08)"}
+                    color={active ? "white" : "rgba(255, 255, 255, 0.65)"}
+                    onClick={() => {
+                      setInputAccount("");
+                      setVerifyType(value);
+                    }}
+                  >
+                    <Icon as={icon} mr={1.5} />
+                    {label}
+                  </Button>
+                );
+              })}
+            </Flex>
+          </Box>
+
+          {/* 账号 */}
+          <Box>
+            <SectionTitle>
+              {verifyType === "tel" ? "手机号" : "邮箱地址"}
+            </SectionTitle>
+
+            <Input
+              mt={1}
+              value={inputAccount}
+              onChange={(e) => setInputAccount(e.target.value)}
+              placeholder={
+                verifyType === "tel" ? "请输入手机号" : "请输入邮箱地址"
+              }
+              inputMode={verifyType === "tel" ? "numeric" : undefined}
+              {...INPUT_STYLE}
+            />
+          </Box>
+
+          {/* 账号昵称 */}
+          <Box>
+            <SectionTitle>账号昵称</SectionTitle>
+
+            <Input
+              mt={1}
+              value={inputUsername}
+              onChange={(e) => setInputUsername(e.target.value)}
+              placeholder="请输入账号昵称"
+              {...INPUT_STYLE}
+            />
+
+            <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+              2-14 个字符，或 1-7 个汉字
+            </Text>
+          </Box>
+
+          {/* 密码 */}
+          <Box>
+            <SectionTitle>密码</SectionTitle>
+
+            <Box mt={1}>
+              <PasswordInput
+                value={inputPassword}
+                onChange={(value) => {
+                  setInputPassword(value);
+                  checkPassword(value, inputPassword2);
+                }}
+                placeholder="不低于 8 位，包含数字和字母"
+              />
+            </Box>
+
+            {passwordAlertText && (
+              <Text mt={1} fontSize="xs" color="#ffd648">
+                {passwordAlertText}
+              </Text>
+            )}
+          </Box>
+
+          {/* 确认密码 */}
+          <Box>
+            <SectionTitle>确认密码</SectionTitle>
+
+            <Box mt={1}>
+              <PasswordInput
+                value={inputPassword2}
+                onChange={(value) => {
+                  setInputPassword2(value);
+                  checkPassword(inputPassword, value);
+                }}
+                placeholder="请重复一次密码"
+              />
+            </Box>
+          </Box>
+
+          {/* 图形验证码 */}
+          <Box>
+            <SectionTitle>图形验证码</SectionTitle>
+
+            <Flex gap={2} mt={1}>
+              <Input
+                value={inputCaptcha}
+                onChange={(e) => setInputCaptcha(e.target.value)}
+                placeholder="请输入图片验证码"
+                {...INPUT_STYLE}
+              />
+
+              <Flex
+                w="104px"
+                h="40px"
+                flexShrink={0}
+                align="center"
+                justify="center"
+                overflow="hidden"
+                cursor="pointer"
+                borderRadius="md"
+                bg="rgba(255, 255, 255, 0.06)"
+                border="1px solid"
+                borderColor="rgba(255, 255, 255, 0.14)"
+                onClick={refreshCaptcha}
+              >
+                {captchaImageUrl ? (
+                  <Image
+                    src={captchaImageUrl}
+                    alt="验证码（点击刷新）"
+                    w="100%"
+                    h="100%"
+                    objectFit="cover"
+                  />
+                ) : (
+                  <Spinner size="xs" />
+                )}
+              </Flex>
+            </Flex>
+
+            <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+              看不清？点击图片刷新验证码
+            </Text>
+          </Box>
+
+          <Button w="100%" mt={1} onClick={handleRegister}>
+            注册
+          </Button>
+
+          <Text
+            fontSize="sm"
+            textAlign="center"
+            color="rgba(255, 255, 255, 0.7)"
           >
-            <Stack spacing={3} direction="row">
-              <Radio value="email">邮箱</Radio>
-              <Radio value="tel">手机</Radio>
-            </Stack>
-          </RadioGroup>
-        </Flex>
-
-        <Input
-          type="text"
-          value={inputAccount}
-          onChange={(e) => setInputAccount(e.target.value)}
-          placeholder={verifyType === "tel" ? "请输入手机号" : "请输入邮箱地址"}
-        />
-
-        <Box>
-          <Input
-            value={inputUsername}
-            onChange={(e) => setInputUsername(e.target.value)}
-            placeholder="请输入账号昵称"
-          />
-
-          <Text color="#ffffff82" fontSize="13px">
-            允许中文、字母、数字，不超过10个字符
+            已有账号？
+            <Text as="button" ml={1} color="#7dd4ff" onClick={openLoginModal}>
+              点击登录
+            </Text>
           </Text>
-        </Box>
-
-        <Box>
-          <Input
-            type="password"
-            value={inputPassword}
-            onChange={(e) => {
-              setInputPassword(e.target.value);
-              checkPassword(e.target.value, inputPassword2);
-            }}
-            placeholder="请输入密码"
-          />
-
-          <Text color="#ffd648" fontSize="14px">
-            {passwordAlertText}
-          </Text>
-        </Box>
-
-        <Input
-          type="password"
-          value={inputPassword2}
-          onChange={(e) => {
-            setInputPassword2(e.target.value);
-            checkPassword(inputPassword, e.target.value);
-          }}
-          placeholder="请重复一次密码"
-        />
-
-        <Flex>
-          <Input
-            value={inputCaptcha}
-            onChange={(e) => setInputCaptcha(e.target.value)}
-            placeholder="请输入图片验证码"
-          />
-
-          <Image
-            rounded={5}
-            ml={1}
-            onClick={async () => {
-              setCaptchaImageUrl(await fetchCaptcha());
-              setInputCaptcha("");
-            }}
-            src={captchaImageUrl ? captchaImageUrl : undefined}
-            alt="验证码"
-            cursor="pointer"
-          />
-        </Flex>
-
-        <Button onClick={handleRegister}>注册</Button>
-      </VStack>
-    </Center>
+        </VStack>
+      </Box>
+    </Flex>
   );
 }

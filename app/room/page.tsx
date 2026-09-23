@@ -119,7 +119,7 @@ export default function Page() {
   const announcementsData = useUserStateStore((s) => s.announcementsData);
   const getRoomData = useUserStateStore((s) => s.getRoomData);
   const setRoomPassword = useUserStateStore((s) => s.setRoomPassword);
-  const setShowLoginModal = useUserStateStore((s) => s.setShowLoginModal);
+  const openLoginModal = useUserStateStore((s) => s.openLoginModal);
   const setNodeListModal = useUserStateStore((s) => s.setNodeListModal);
 
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -912,7 +912,7 @@ export default function Page() {
           <Button
             variant="outline"
             rounded={10}
-            onClick={setShowLoginModal}
+            onClick={openLoginModal}
             border={0}
           >
             点击登录

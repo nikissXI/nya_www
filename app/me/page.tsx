@@ -170,7 +170,7 @@ export default function UserProfilePage() {
   const userInfo = useUserStateStore((s) => s.userInfo);
   const userWgInfo = useUserStateStore((s) => s.userWgInfo);
   const logout = useUserStateStore((s) => s.logout);
-  const setShowLoginModal = useUserStateStore((s) => s.setShowLoginModal);
+  const openLoginModal = useUserStateStore((s) => s.openLoginModal);
 
   // 修改用户名（进入编辑态才出现输入框）
   const [inputUsername, setInputUsername] = useState(userInfo?.username);
@@ -584,7 +584,7 @@ export default function UserProfilePage() {
             <Button
               variant="outline"
               rounded={10}
-              onClick={setShowLoginModal}
+              onClick={openLoginModal}
               border={0}
             >
               点击登录

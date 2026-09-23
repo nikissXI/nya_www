@@ -89,7 +89,10 @@ interface ILoginStateSlice {
   setShowRegetModal: () => void;
 
   showLoginModal: boolean;
-  setShowLoginModal: () => void;
+  /** 打开登录弹窗（显式 API，避免 toggle 语义在多处调用时错乱） */
+  openLoginModal: () => void;
+  /** 关闭登录弹窗 */
+  closeLoginModal: () => void;
 }
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
@@ -510,9 +513,8 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       },
 
       showLoginModal: false,
-      setShowLoginModal: () => {
-        set({ showLoginModal: !get().showLoginModal });
-      },
+      openLoginModal: () => set({ showLoginModal: true }),
+      closeLoginModal: () => set({ showLoginModal: false }),
     };
   },
   shallow,
