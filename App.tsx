@@ -11,6 +11,7 @@ const MePage = lazy(() => import("@/app/me/page"));
 const RegisterPage = lazy(() => import("@/app/register/page"));
 const RoomPage = lazy(() => import("@/app/room/page"));
 const SponsorPage = lazy(() => import("@/app/sponsor/page"));
+const OfflineCheckPage = lazy(() => import("@/app/offlineCheck/page"));
 
 // 文档页配置：新增游戏文档只需在这里加一行
 const docPages = [
@@ -98,6 +99,7 @@ export default function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/room" element={<RoomPage />} />
             <Route path="/sponsor" element={<SponsorPage />} />
+            <Route path="/offlineCheck" element={<OfflineCheckPage />} />
 
             {/* 文档页：由配置数组自动生成 */}
             {docPages.map(({ path, component: Component }) => (

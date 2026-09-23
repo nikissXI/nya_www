@@ -28,7 +28,6 @@ import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
-import OfflineReasons from "@/components/docs/OfflineReasons";
 import { getStatusColor } from "@/utils/strings";
 import { NoticeText } from "@/components/universal/Notice";
 
@@ -56,7 +55,6 @@ const DocumentPage = () => {
     isOnline,
     rotate,
     disableFlush,
-    setOfflineReasonsModal,
     setShowLoginModal,
   } = useUserStateStore();
 
@@ -185,8 +183,6 @@ const DocumentPage = () => {
 
   return (
     <Box px={{ base: 4, md: 8 }} pb={5} maxW="900px" mx="auto">
-      <OfflineReasons />
-
       <Alert
         status="info"
         variant="subtle"
@@ -704,7 +700,9 @@ const DocumentPage = () => {
                 variant="link"
                 bg="transparent"
                 color="#7dd4ff"
-                onClick={setOfflineReasonsModal}
+                onClick={() => {
+                  navigate("/offlineCheck");
+                }}
               >
                 点我排查
               </Button>

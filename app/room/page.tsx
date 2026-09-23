@@ -45,12 +45,7 @@ import { IoIosExit } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
 import SponsorTag from "@/components/universal/SponsorTag";
-import OfflineReasons from "@/components/docs/OfflineReasons";
-import {
-  ApiError,
-  shouldSilenceError,
-  type ApiEnvelope,
-} from "@/utils/api";
+import { shouldSilenceError, type ApiEnvelope } from "@/utils/api";
 import { api } from "@/utils/endpoints";
 import TheEscapistsTool from "@/components/universal/theEscapistsTool";
 import {
@@ -109,7 +104,6 @@ export default function Page() {
     disableFlush,
     setShowLoginModal,
     setNodeListModal,
-    setOfflineReasonsModal,
     nodeNetLoad,
     announcementsData,
   } = useUserStateStore();
@@ -228,13 +222,7 @@ export default function Page() {
         showRequestError(err);
       }
     },
-    [
-      runRoomAction,
-      getRoomData,
-      isOnline,
-      openSponsorNotice,
-      showRequestError,
-    ],
+    [runRoomAction, getRoomData, isOnline, openSponsorNotice, showRequestError],
   );
 
   // 关闭房间（房主）/ 退出房间（成员）：两个操作只有 handleType 不同
@@ -961,8 +949,6 @@ export default function Page() {
             </Center>
           )}
 
-          <OfflineReasons />
-
           {roomRole !== ROLE_NONE && (
             <Flex align="center" justify="center">
               <Text
@@ -1000,7 +986,9 @@ export default function Page() {
                 variant="link"
                 bg="transparent"
                 color="#7dd4ff"
-                onClick={setOfflineReasonsModal}
+                onClick={() => {
+                  navigate("/offlineCheck");
+                }}
               >
                 点我排查
               </Button>

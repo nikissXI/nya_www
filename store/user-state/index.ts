@@ -90,9 +90,6 @@ interface ILoginStateSlice {
 
   showLoginModal: boolean;
   setShowLoginModal: () => void;
-
-  showOfflineReasonsModal: boolean;
-  setOfflineReasonsModal: () => void;
 }
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
@@ -515,11 +512,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       showLoginModal: false,
       setShowLoginModal: () => {
         set({ showLoginModal: !get().showLoginModal });
-      },
-
-      showOfflineReasonsModal: false,
-      setOfflineReasonsModal: () => {
-        set({ showOfflineReasonsModal: !get().showOfflineReasonsModal });
       },
     };
   },
