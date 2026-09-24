@@ -31,7 +31,7 @@ export default function LoginModal() {
           )}
 
           {/* 需要浏览器返回键 / 可分享链接时，可以改走独立登录页 */}
-          <Text
+          {/* <Text
             as="button"
             type="button"
             mt={4}
@@ -46,7 +46,7 @@ export default function LoginModal() {
             }}
           >
             在单独页面打开登录
-          </Text>
+          </Text> */}
         </ModalBody>
       </ModalContent>
     </Modal>
