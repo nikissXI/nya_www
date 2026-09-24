@@ -15,7 +15,6 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Tag,
   Icon,
 } from "@chakra-ui/react";
 import { useUserStateStore } from "@/store/user-state";
@@ -33,7 +32,6 @@ import { setAuthToken } from "@/store/authKey";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
-import SponsorTag from "@/components/universal/SponsorTag";
 import { isBusinessError, shouldSilenceError } from "@/utils/api";
 import { api } from "@/utils/endpoints";
 import {
@@ -595,7 +593,7 @@ export default function UserProfilePage() {
                   label="昵称"
                   right={
                     isEditingUsername ? (
-                      <>
+                      <VStack>
                         <Button
                           size="sm"
                           px={3}
@@ -615,7 +613,7 @@ export default function UserProfilePage() {
                         >
                           取消
                         </Button>
-                      </>
+                      </VStack>
                     ) : (
                       <Button
                         size="sm"
@@ -646,7 +644,11 @@ export default function UserProfilePage() {
                         {...INPUT_STYLE}
                       />
 
-                      <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+                      <Text
+                        mt={1}
+                        fontSize="xs"
+                        color="rgba(255, 255, 255, 0.5)"
+                      >
                         2-14 个字符，或 1-7 个汉字
                       </Text>
                     </Box>
@@ -660,18 +662,6 @@ export default function UserProfilePage() {
                 <InfoRow icon={FaIdCard} label="UID">
                   <Text fontSize="sm">{userInfo.uid}</Text>
                 </InfoRow>
-
-                {Number(userInfo.sponsorship) > 0 && (
-                  <InfoRow
-                    icon={FaHeart}
-                    label="赞助金额"
-                    right={<SponsorTag amount={userInfo.sponsorship} />}
-                  >
-                    <Text fontSize="sm" fontWeight="bold" color="#ffd012">
-                      {userInfo.sponsorship} 元
-                    </Text>
-                  </InfoRow>
-                )}
 
                 <InfoRow icon={FaNetworkWired} label="喵服IP">
                   {userWgInfo?.user_ip ? (
@@ -693,6 +683,25 @@ export default function UserProfilePage() {
                       未选择节点
                     </Text>
                   )}
+                </InfoRow>
+
+                <InfoRow
+                  icon={FaHeart}
+                  label="赞助金额"
+                  right={
+                    <Button
+                      size="sm"
+                      px={3}
+                      flexShrink={0}
+                      onClick={() => {
+                        navigate("/sponsor");
+                      }}
+                    >
+                      赞助
+                    </Button>
+                  }
+                >
+                  <Text fontSize="sm">{userInfo.sponsorship} 元</Text>
                 </InfoRow>
 
                 <InfoRow

@@ -71,7 +71,7 @@ export default function SideBar() {
         textAlign="left"
       >
         <Box w="100%">
-          <Heading as="h3" fontSize="xl" color="#a8d1ff">
+          <Heading as="h3" fontSize="xl">
             喵服官方QQ群
           </Heading>
 
@@ -102,7 +102,7 @@ export default function SideBar() {
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize="xl" color="#a8d1ff">
+          <Heading as="h3" fontSize="xl">
             赞助喵服
           </Heading>
 
@@ -120,11 +120,12 @@ export default function SideBar() {
         </Box>
 
         <Box w="100%">
-          <Heading as="h3" fontSize="xl" color="#a8d1ff">
+          <Heading as="h3" fontSize="xl">
             喵服公告
           </Heading>
 
-          {announcementsData?.announcements && announcementsData.announcements.length > 0 ? (
+          {announcementsData?.announcements &&
+          announcementsData.announcements.length > 0 ? (
             <>
               <Text fontWeight="bold" textAlign="left">
                 {formatAnnouncementDate(
