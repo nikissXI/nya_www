@@ -87,7 +87,9 @@ export default function Frame({
   const getAnnouncementsData = useUserStateStore(
     (state) => state.getAnnouncementsData,
   );
-  const announcementsData = useUserStateStore((state) => state.announcementsData);
+  const announcementsData = useUserStateStore(
+    (state) => state.announcementsData,
+  );
   const embed = useUserStateStore((state) => state.embed);
 
   // 启动时拉取登录态 + 邀请码 + embed 参数 + 公告
@@ -109,13 +111,15 @@ export default function Frame({
     rootPath === "/docs" && segments.length > 1
       ? (DOC_PAGE_TITLES["/" + segments.join("/")] ?? DOC_GAME_TITLE)
       : (PAGE_TITLES[rootPath] ?? "");
-  const showPageTitle = Boolean(title) && rootPath !== "/";
+  const showPageTitle =
+    Boolean(title) &&
+    rootPath !== "/" &&
+    rootPath !== "/sponsor" &&
+    rootPath !== "/room";
 
   // 浏览器标签页标题跟着路由走（首页不重复拼站点名）
   useEffect(() => {
-    document.title = showPageTitle
-      ? `${title} · 喵服联机平台`
-      : "喵服联机平台";
+    document.title = showPageTitle ? `${title} · 喵服联机平台` : "喵服联机平台";
   }, [showPageTitle, title]);
 
   return (
@@ -163,6 +167,7 @@ export default function Frame({
                   fontSize={{ base: "2xl", md: "3xl" }}
                   fontWeight="800"
                   mb={{ base: 4, md: 6 }}
+                  textAlign="center"
                 >
                   {title}
                 </Heading>

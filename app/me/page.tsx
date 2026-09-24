@@ -574,9 +574,7 @@ export default function UserProfilePage() {
           >
             {/* 账号信息（含昵称与账号绑定） */}
             <Box {...CARD_STYLE} {...CARD_PADDING}>
-              <SectionTitle>账号信息</SectionTitle>
-
-              <VStack spacing={0} align="stretch" mt={1} divider={<Divider />}>
+              <VStack spacing={0} align="stretch" divider={<Divider />}>
                 <InfoRow
                   icon={FaUser}
                   label="昵称"
