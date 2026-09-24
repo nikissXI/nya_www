@@ -838,7 +838,11 @@ export default function Page() {
               />
             </ModalBody>
             <ModalFooter>
-              <Button bgColor="#be2b2b" onClick={() => handleSetRoomPasswd("")}>
+              <Button
+                display={roomData?.room_passwd ? "block" : "none"}
+                bgColor="#be2b2b"
+                onClick={() => handleSetRoomPasswd("")}
+              >
                 清除密码
               </Button>
               <Button
@@ -846,7 +850,7 @@ export default function Page() {
                 bgColor="#007bc0"
                 onClick={() => handleSetRoomPasswd(inputPasswd)}
               >
-                更新密码
+                {roomData?.room_passwd ? "更新密码" : "设置密码"}
               </Button>
             </ModalFooter>
           </ModalContent>
