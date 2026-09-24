@@ -78,7 +78,7 @@ export default function Page() {
 
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          关掉其他网络加速器或VPN
+          关掉其他游戏加速器或VPN
         </Text>
 
         <Text>
