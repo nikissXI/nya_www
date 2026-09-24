@@ -32,13 +32,13 @@ export default function AndroidPage0() {
       </Heading>
 
       <VStack align="stretch" spacing={3}>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1}>
             第 1 步 · 主机
           </Badge>
           <Text>一名玩家作为主机，建立服务器，进到地图里等待</Text>
         </Box>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1}>
             第 2 步 · 客机
           </Badge>
@@ -60,7 +60,7 @@ export default function AndroidPage0() {
           <Link
             ml={1}
             href="https://zhuanlan.zhihu.com/p/397675766"
-            color="#7dd4ff"
+            color="#7ddcff"
             target="_blank"
           >
             不会关点我

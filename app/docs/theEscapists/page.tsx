@@ -71,7 +71,7 @@ export default function AndroidPage0() {
       </Text>
 
       <VStack align="stretch" spacing={3}>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1}>
             第 1 步 · 主机
           </Badge>
@@ -80,7 +80,7 @@ export default function AndroidPage0() {
             游戏必须保持在前台，切出游戏外客机就会掉线
           </Text>
         </Box>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1}>
             第 2 步 · 客机
           </Badge>

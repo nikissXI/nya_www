@@ -55,7 +55,7 @@ export default function Page() {
           <Text
             ml={2}
             as="span"
-            color="#7dd4ff"
+            color="#7ddcff"
             size="sm"
             onClick={() => setShowXM(!showXM)}
           >

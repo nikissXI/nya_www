@@ -276,7 +276,7 @@ const DocumentPage = () => {
                 ② 下载并安装WG客户端
                 <Text
                   as="span"
-                  color="#7dd4ff"
+                  color="#7ddcff"
                   onClick={() => {
                     setAndroidDLWarning(!showAndroidDLWarning);
                   }}
@@ -309,7 +309,7 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7dd4ff"
+                  color="#7ddcff"
                   onClick={() => {
                     getConfKey(true);
                   }}
@@ -347,7 +347,7 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7dd4ff"
+                  color="#7ddcff"
                   size="sm"
                   onClick={() => setShowXM(!showXM)}
                 >
@@ -517,7 +517,7 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7dd4ff"
+                  color="#7ddcff"
                   size="sm"
                   onClick={() => setShowMSI(!showMSI)}
                 >
@@ -530,7 +530,7 @@ const DocumentPage = () => {
                   <Text
                     as="span"
                     fontSize="sm"
-                    color="#7dd4ff"
+                    color="#7ddcff"
                     onClick={() => {
                       window.open("/apks/右键以管理员身份运行.bat", "_blank");
                     }}
@@ -632,7 +632,7 @@ const DocumentPage = () => {
                   <br />
                   <Link
                     ml={1}
-                    color="#7dd4ff"
+                    color="#7ddcff"
                     href="https://www.wireguard.com/install/"
                     target="_blank"
                   >
@@ -683,7 +683,7 @@ const DocumentPage = () => {
               onClick={() => {
                 getRoomData(false);
               }}
-              color="#7dd4ff"
+              color="#7ddcff"
             >
               <Text>刷新</Text>
               <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
@@ -699,7 +699,7 @@ const DocumentPage = () => {
                 ml={1}
                 variant="link"
                 bg="transparent"
-                color="#7dd4ff"
+                color="#7ddcff"
                 onClick={() => {
                   navigate("/offlineCheck");
                 }}
@@ -713,12 +713,12 @@ const DocumentPage = () => {
             ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
             ，网页只负责创建和加入房间，WG客户端保持连接就行
             <br />
-            WG部署教程到此结束，请
+            WG安装教程到此结束，请
             <Button
               mx={1}
               variant="link"
               bg="transparent"
-              color="#7dd4ff"
+              color="#7ddcff"
               onClick={() => {
                 navigate("/room");
               }}

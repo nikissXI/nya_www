@@ -75,7 +75,7 @@ export interface NodeInfo {
 }
 /** /userInfo 的 data */
 export interface UserInfoPayload {
-  reget_ip?: boolean; // IP 变动，需要重新导入隧道
+  reget_ip: boolean; // IP 变动，需要重新导入隧道
   user_info: UserInfo; // 用户信息
   user_wg_info?: UserWgInfo; // 用户的 WG 隧道信息
 }
@@ -83,8 +83,8 @@ export interface UserInfoPayload {
 export interface GetRoomPayload {
   is_online: boolean; // WG 是否在线
   room: RoomInfo | null; // 房间信息
-  user_wg_info?: UserWgInfo; // 后端返回的完整节点信息
-  node_net_load?: number; // 节点负载百分比
+  user_wg_info: UserWgInfo; // 后端返回的完整节点信息
+  node_net_load: number; // 节点负载百分比
 }
 
 // ---------------- 请求体 ----------------

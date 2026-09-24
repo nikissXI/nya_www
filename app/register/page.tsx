@@ -306,7 +306,7 @@ export default function Page() {
             color="rgba(255, 255, 255, 0.7)"
           >
             已有账号？
-            <Text as="button" ml={1} color="#7dd4ff" onClick={openLoginModal}>
+            <Text as="button" ml={1} color="#7ddcff" onClick={openLoginModal}>
               点击登录
             </Text>
           </Text>

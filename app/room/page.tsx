@@ -30,11 +30,7 @@ import { keyframes } from "@emotion/react";
 import { openToast } from "@/components/universal/toast";
 import { Button } from "@/components/universal/button";
 import { TbReload } from "react-icons/tb";
-import {
-  MdContentCopy,
-  MdSearch,
-  MdInfoOutline,
-} from "react-icons/md";
+import { MdContentCopy, MdSearch, MdInfoOutline } from "react-icons/md";
 import { useUserStateStore } from "@/store/user-state";
 import {
   copyText,
@@ -79,7 +75,6 @@ const ROLE_NONE = "none";
 
 // 游戏房间配置、群号、房间角色常量已迁移到 @/utils/roomGames
 // （放在独立模块可避免该页面被静态引用，保证路由懒加载生效）
-
 
 export default function Page() {
   const navigate = useNavigate();
@@ -393,10 +388,10 @@ export default function Page() {
                   cursor="pointer"
                 >
                   该游戏的喵服QQ群{" "}
-                  <Text as="span" fontWeight="bold" color="#7dd4ff">
+                  <Text as="span" fontWeight="bold" color="#7ddcff">
                     {gameInfo.qq}
                   </Text>
-                  <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7dd4ff" />
+                  <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7ddcff" />
                 </Text>
               )}
 
@@ -555,7 +550,7 @@ export default function Page() {
                       align="center"
                       gap={1}
                       fontSize="xs"
-                      color="#7dd4ff"
+                      color="#7ddcff"
                       onClick={() => setGameInfo(game)}
                       _hover={{ textDecoration: "underline" }}
                     >
@@ -608,7 +603,7 @@ export default function Page() {
                     ml={1.5}
                     as={MdContentCopy}
                     boxSize={4}
-                    color="#7dd4ff"
+                    color="#7ddcff"
                   />
                 </Text>
               </Box>
@@ -683,7 +678,7 @@ export default function Page() {
                   fontSize="sm"
                   fontWeight="bold"
                   as="button"
-                  color="#7dd4ff"
+                  color="#7ddcff"
                   onClick={() => navigate("/sponsor")}
                 >
                   提升人数
@@ -785,7 +780,7 @@ export default function Page() {
                         <Icon
                           as={MdContentCopy}
                           boxSize={3}
-                          color="#7dd4ff"
+                          color="#7ddcff"
                           flexShrink={0}
                         />
                       </Flex>
@@ -837,7 +832,7 @@ export default function Page() {
               size="sm"
               px={4}
               bgColor="transparent"
-              color="#7dd4ff"
+              color="#7ddcff"
               disabled={disableFlush}
               onClick={() => {
                 getRoomData(false);
@@ -912,22 +907,15 @@ export default function Page() {
           {userWgInfo?.node_alias && nodeNetLoad !== undefined ? (
             <Box {...CARD_STYLE} {...CARD_PADDING}>
               <Flex align="center" gap={{ base: 2, md: 3 }}>
-                {/* 线路类型 + 带宽：竖排，左 */}
                 <Badge
-                  colorScheme="orange"
+                  // colorScheme="orange"
                   fontSize="xs"
-                  borderRadius="sm"
-                  px={1}
-                  textAlign="center"
                 >
                   {userWgInfo.net_type}
                 </Badge>
                 <Badge
-                  colorScheme="teal"
+                  // colorScheme="teal"
                   fontSize="xs"
-                  borderRadius="sm"
-                  px={1}
-                  textAlign="center"
                 >
                   {userWgInfo.bandwidth}M
                 </Badge>
@@ -1009,7 +997,7 @@ export default function Page() {
 
               {!isOnline && (
                 <Text mr="auto" fontSize="xs" color="rgba(255, 255, 255, 0.55)">
-                  亲，要安装WG客户端！
+                  要安装WG客户端
                 </Text>
               )}
 
@@ -1017,7 +1005,7 @@ export default function Page() {
                 size="sm"
                 px={3}
                 bgColor="transparent"
-                color="#7dd4ff"
+                color="#7ddcff"
                 disabled={disableFlush}
                 flexShrink={0}
                 onClick={() => {
@@ -1040,18 +1028,18 @@ export default function Page() {
             <Flex
               align="center"
               justify="center"
-              gap={3}
+              gap={2}
               mt={1.5}
               fontSize="sm"
             >
               <Text
                 as="button"
-                color="#7dd4ff"
+                color="#7ddcff"
                 onClick={() => {
                   navigate("/docs");
                 }}
               >
-                WG安装部署教程
+                WG安装教程
               </Text>
 
               {isOnline === false && (
@@ -1059,12 +1047,13 @@ export default function Page() {
                   <Box w="1px" h="12px" bg="rgba(255, 255, 255, 0.25)" />
                   <Text
                     as="button"
-                    color="#ffca3d"
+                    color="#7ddcff"
+                    // color="#ffca3d"
                     onClick={() => {
                       navigate("/offlineCheck");
                     }}
                   >
-                    打开隧道还是离线？点我排查
+                    WG连接失败或联机不稳定
                   </Text>
                 </>
               )}

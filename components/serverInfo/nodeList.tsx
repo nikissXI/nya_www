@@ -155,10 +155,8 @@ const ServerNodeItem: React.FC<{
               </Text>
               {node.net !== -1 ? (
                 <>
-                  <Badge colorScheme="orange" fontSize="xs">
-                    {node.net_type}
-                  </Badge>
-                  <Badge colorScheme="teal" fontSize="xs" mx={1}>
+                  <Badge fontSize="xs">{node.net_type}</Badge>
+                  <Badge fontSize="xs" mx={1}>
                     {node.bandwidth}M
                   </Badge>
                   {node.node_desc && (
@@ -184,7 +182,7 @@ const ServerNodeItem: React.FC<{
         >
           <Box textAlign="center">
             <Flex align="center" justify="center">
-              <MdOutlineSignalCellularAlt size={16} color="#7dd4ff" />
+              <MdOutlineSignalCellularAlt size={16} color="#7ddcff" />
               <Text ml={1} fontSize="sm" color="gray.300">
                 延迟
               </Text>
@@ -216,7 +214,7 @@ const ServerNodeItem: React.FC<{
 
           <Box textAlign="center">
             <Flex align="center" justify="center">
-              <FaServer size={16} color="#7dd4ff" />
+              <FaServer size={16} color="#7ddcff" />
               <Text ml={1} fontSize="sm" color="gray.300">
                 负载
               </Text>
@@ -321,8 +319,8 @@ export default function ServerNodeListModal() {
                 width="100%"
                 height="28px"
                 _focus={{
-                  borderColor: "#7dd4ff",
-                  boxShadow: "0 0 0 1px #7dd4ff",
+                  borderColor: "#7ddcff",
+                  boxShadow: "0 0 0 1px #7ddcff",
                 }}
                 _hover={{
                   borderColor: "rgba(255, 255, 255, 0.3)",
@@ -364,8 +362,8 @@ export default function ServerNodeListModal() {
                 width="100%"
                 height="28px"
                 _focus={{
-                  borderColor: "#7dd4ff",
-                  boxShadow: "0 0 0 1px #7dd4ff",
+                  borderColor: "#7ddcff",
+                  boxShadow: "0 0 0 1px #7ddcff",
                 }}
                 _hover={{
                   borderColor: "rgba(255, 255, 255, 0.3)",
@@ -393,8 +391,8 @@ export default function ServerNodeListModal() {
                 width="100%"
                 height="28px"
                 _focus={{
-                  borderColor: "#7dd4ff",
-                  boxShadow: "0 0 0 1px #7dd4ff",
+                  borderColor: "#7ddcff",
+                  boxShadow: "0 0 0 1px #7ddcff",
                 }}
                 _hover={{
                   borderColor: "rgba(255, 255, 255, 0.3)",
@@ -402,11 +400,11 @@ export default function ServerNodeListModal() {
               />
             </SimpleGrid>
 
-            <Text  textAlign="center">
+            <Text textAlign="center">
               点击选择联机节点
               <Button
                 ml={1}
-                color="#7dd4ff"
+                color="#7ddcff"
                 bgColor="transparent"
                 onClick={toggleExpanded}
                 variant="link"
@@ -427,13 +425,13 @@ export default function ServerNodeListModal() {
               >
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
                     如需独享节点（50元起/月）请联系服主
                   </Text>
                 </ListItem>
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
                     线路选择指南：
                     <br />
                     多线 - 首选，适合中国大陆任意网络，不含港澳台
@@ -445,7 +443,7 @@ export default function ServerNodeListModal() {
                 </ListItem>
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
                     负载解读：
                     <br />
                     显示拥挤时联机容易卡顿。
@@ -454,7 +452,7 @@ export default function ServerNodeListModal() {
                 </ListItem>
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
                     延迟说明：
                     <br />
                     网络延迟越低越好，如果不是延迟敏感游戏不必追求低延迟。
@@ -463,7 +461,7 @@ export default function ServerNodeListModal() {
                 </ListItem>
                 <ListItem>
                   <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7dd4ff" />
+                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
                     带宽选择：
                     <br />
                     不同游戏所需带宽不一样，对应游戏教程里会给出带宽建议

@@ -39,7 +39,7 @@ export const INPUT_STYLE: InputProps = {
   color: "white",
   _placeholder: { color: "rgba(255, 255, 255, 0.45)" },
   _hover: { borderColor: "rgba(125, 212, 255, 0.5)" },
-  _focus: { borderColor: "#7dd4ff", boxShadow: "0 0 0 1px #7dd4ff" },
+  _focus: { borderColor: "#7ddcff", boxShadow: "0 0 0 1px #7ddcff" },
 };
 
 /** 弹窗：统一深蓝底 + 细边框 */
@@ -90,7 +90,7 @@ export const PasswordInput = (
           boxSize={5}
           color="rgba(255, 255, 255, 0.6)"
           cursor="pointer"
-          _hover={{ color: "#7dd4ff" }}
+          _hover={{ color: "#7ddcff" }}
           onClick={() => setVisible((prev) => !prev)}
         />
       </InputRightElement>

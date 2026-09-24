@@ -196,7 +196,7 @@ export default function AuthForm({
           <Text
             as="button"
             type="button"
-            color="#7dd4ff"
+            color="#7ddcff"
             onClick={() => {
               onLeave?.();
               navigate("/forgetPass");
@@ -208,7 +208,7 @@ export default function AuthForm({
           <Text
             as="button"
             type="button"
-            color="#7dd4ff"
+            color="#7ddcff"
             onClick={() => {
               onLeave?.();
               navigate("/register");

@@ -35,7 +35,7 @@ export default function Page() {
       </Text>
 
       <VStack align="stretch" spacing={3}>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1}>
             第 1 步 · 主机
           </Badge>
@@ -44,7 +44,7 @@ export default function Page() {
             手机或平板做主机时，游戏必须保持在前台，不能锁屏或切到后台
           </Text>
         </Box>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1}>
             第 2 步 · 客机
           </Badge>
@@ -55,7 +55,7 @@ export default function Page() {
             如果有任一玩家是端游，就需要全部玩家都安装IP联机mod，因为端游原版是没有IP联机选项的
           </Text>
         </Box>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1}>
             IP联机mod（按需安装）
           </Badge>
@@ -68,7 +68,7 @@ export default function Page() {
             这里提供一个兼容v0.111版本的，也可以自行找其他同类mod
             <Link
               ml={1}
-              color="#7dd4ff"
+              color="#7ddcff"
               href="/apks/[IP直连1.4.0][v0.111].zip"
               target="_blank"
             >
@@ -100,7 +100,7 @@ export default function Page() {
           <Link
             ml={1}
             href="https://zhuanlan.zhihu.com/p/397675766"
-            color="#7dd4ff"
+            color="#7ddcff"
             target="_blank"
           >
             不会关点我

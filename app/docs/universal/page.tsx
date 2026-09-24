@@ -34,7 +34,7 @@ export default function Page() {
       </Heading>
 
       <VStack align="stretch" spacing={3}>
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1} fontSize="sm">
             第 1 步 · 主机创建游戏
           </Badge>
@@ -46,7 +46,7 @@ export default function Page() {
           </Text>
         </Box>
 
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1} fontSize="sm">
             第 2 步 · 客机加入（方式一：IP 直连）
           </Badge>
@@ -58,7 +58,7 @@ export default function Page() {
           </Text>
         </Box>
 
-        <Box borderLeft="4px solid" borderColor="#7dd4ff" pl={4}>
+        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
           <Badge colorScheme="blue" mb={1} fontSize="sm">
             第 2 步 · 客机加入（方式二：搜索或邀请）
           </Badge>
@@ -82,7 +82,7 @@ export default function Page() {
           <Link
             ml={1}
             href="https://zhuanlan.zhihu.com/p/397675766"
-            color="#7dd4ff"
+            color="#7ddcff"
             target="_blank"
           >
             不会关点我

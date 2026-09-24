@@ -196,7 +196,7 @@ export default function Page() {
             <Icon
               as={MdTipsAndUpdates}
               boxSize={4}
-              color="#7dd4ff"
+              color="#7ddcff"
               flexShrink={0}
               mt={0.5}
             />
@@ -348,7 +348,7 @@ export default function Page() {
             <Text
               as="button"
               ml={1}
-              color="#7dd4ff"
+              color="#7ddcff"
               onClick={() => navigate(-1)}
             >
               返回

@@ -137,7 +137,7 @@ const InfoRow = (props: {
   right?: React.ReactNode;
 }) => (
   <Flex align="center" gap={3} py={2}>
-    <Icon as={props.icon} boxSize={4} color="#7dd4ff" flexShrink={0} />
+    <Icon as={props.icon} boxSize={4} color="#7ddcff" flexShrink={0} />
 
     <Box flex={1} minW={0} textAlign="left">
       <SectionTitle>{props.label}</SectionTitle>
@@ -146,20 +146,6 @@ const InfoRow = (props: {
 
     {props.right}
   </Flex>
-);
-
-/** 绑定状态徽标 */
-const BindTag = ({ bound }: { bound: boolean }) => (
-  <Tag
-    size="sm"
-    flexShrink={0}
-    borderRadius="md"
-    fontWeight="bold"
-    bg={bound ? "rgba(0, 230, 58, 0.16)" : "rgba(255, 255, 255, 0.1)"}
-    color={bound ? "#00e63a" : "rgba(255, 255, 255, 0.65)"}
-  >
-    {bound ? "已绑定" : "未绑定"}
-  </Tag>
 );
 
 export default function UserProfilePage() {
@@ -679,7 +665,7 @@ export default function UserProfilePage() {
                       <Icon
                         as={MdContentCopy}
                         boxSize={3.5}
-                        color="#7dd4ff"
+                        color="#7ddcff"
                         cursor="pointer"
                         flexShrink={0}
                         onClick={() => copyText(userWgInfo.user_ip)}
@@ -696,22 +682,18 @@ export default function UserProfilePage() {
                   icon={FaMobileAlt}
                   label="手机"
                   right={
-                    <>
-                      <BindTag bound={!!userInfo.tel} />
-
-                      <Button
-                        size="sm"
-                        px={3}
-                        flexShrink={0}
-                        onClick={async () => {
-                          await refreshCaptcha();
-                          setInputAccount("");
-                          bindTELOnopen();
-                        }}
-                      >
-                        {userInfo.tel ? "换绑" : "绑定"}
-                      </Button>
-                    </>
+                    <Button
+                      size="sm"
+                      px={3}
+                      flexShrink={0}
+                      onClick={async () => {
+                        await refreshCaptcha();
+                        setInputAccount("");
+                        bindTELOnopen();
+                      }}
+                    >
+                      {userInfo.tel ? "换绑" : "绑定"}
+                    </Button>
                   }
                 >
                   <Text
@@ -719,7 +701,7 @@ export default function UserProfilePage() {
                     isTruncated
                     color={userInfo.tel ? "white" : "rgba(255, 255, 255, 0.55)"}
                   >
-                    {userInfo.tel || "未绑定手机"}
+                    {userInfo.tel || "未绑定"}
                   </Text>
                 </InfoRow>
 
@@ -727,22 +709,18 @@ export default function UserProfilePage() {
                   icon={FaEnvelope}
                   label="电子邮箱"
                   right={
-                    <>
-                      <BindTag bound={!!userInfo.email} />
-
-                      <Button
-                        size="sm"
-                        px={3}
-                        flexShrink={0}
-                        onClick={async () => {
-                          await refreshCaptcha();
-                          setInputAccount("");
-                          bindEmailOnopen();
-                        }}
-                      >
-                        {userInfo.email ? "换绑" : "绑定"}
-                      </Button>
-                    </>
+                    <Button
+                      size="sm"
+                      px={3}
+                      flexShrink={0}
+                      onClick={async () => {
+                        await refreshCaptcha();
+                        setInputAccount("");
+                        bindEmailOnopen();
+                      }}
+                    >
+                      {userInfo.email ? "换绑" : "绑定"}
+                    </Button>
                   }
                 >
                   <Text
@@ -752,7 +730,7 @@ export default function UserProfilePage() {
                       userInfo.email ? "white" : "rgba(255, 255, 255, 0.55)"
                     }
                   >
-                    {userInfo.email || "未绑定电子邮箱"}
+                    {userInfo.email || "未绑定"}
                   </Text>
                 </InfoRow>
 
@@ -760,24 +738,20 @@ export default function UserProfilePage() {
                   icon={FaQq}
                   label="QQ"
                   right={
-                    <>
-                      <BindTag bound={!!userInfo.qq} />
-
-                      <Button
-                        size="sm"
-                        px={3}
-                        flexShrink={0}
-                        onClick={async () => {
-                          await refreshCaptcha();
-                          setInputAccount("");
-                          setVerifyQQText("");
-                          setDisableVerifyQQ(false);
-                          bindQQOnOpen();
-                        }}
-                      >
-                        {userInfo.qq ? "换绑" : "绑定"}
-                      </Button>
-                    </>
+                    <Button
+                      size="sm"
+                      px={3}
+                      flexShrink={0}
+                      onClick={async () => {
+                        await refreshCaptcha();
+                        setInputAccount("");
+                        setVerifyQQText("");
+                        setDisableVerifyQQ(false);
+                        bindQQOnOpen();
+                      }}
+                    >
+                      {userInfo.qq ? "换绑" : "绑定"}
+                    </Button>
                   }
                 >
                   <Text
@@ -785,7 +759,7 @@ export default function UserProfilePage() {
                     isTruncated
                     color={userInfo.qq ? "white" : "rgba(255, 255, 255, 0.55)"}
                   >
-                    {userInfo.qq || "未绑定QQ"}
+                    {userInfo.qq || "未绑定"}
                   </Text>
                 </InfoRow>
               </VStack>
@@ -798,7 +772,7 @@ export default function UserProfilePage() {
                   <Icon
                     as={FaShieldAlt}
                     boxSize={4}
-                    color="#7dd4ff"
+                    color="#7ddcff"
                     flexShrink={0}
                   />
 

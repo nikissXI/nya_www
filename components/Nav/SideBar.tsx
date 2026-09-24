@@ -85,7 +85,7 @@ export default function SideBar() {
             fontWeight="bold"
           >
             {GENERAL_QQ_GROUP}
-            <Icon as={MdContentCopy} boxSize={3.5} color="#7dd4ff" />
+            <Icon as={MdContentCopy} boxSize={3.5} color="#7ddcff" />
           </Box>
 
           <Link
@@ -95,7 +95,7 @@ export default function SideBar() {
             onClick={openGameGroup}
             _hover={{ textDecoration: "none" }}
             fontWeight="bold"
-            color="#7dd4ff"
+            color="#7ddcff"
           >
             查看各游戏小群列表
           </Link>
@@ -112,7 +112,7 @@ export default function SideBar() {
             fontWeight="bold"
             as={RouterLink}
             to="/sponsor"
-            color="#7dd4ff"
+            color="#7ddcff"
             _hover={{ textDecoration: "none" }}
           >
             查看赞助方式和特权
@@ -141,7 +141,7 @@ export default function SideBar() {
                 mt="1px"
                 fontWeight="bold"
                 onClick={onOpen}
-                color="#7dd4ff"
+                color="#7ddcff"
                 _hover={{ textDecoration: "none" }}
               >
                 查看历史公告
@@ -225,13 +225,13 @@ export default function SideBar() {
                             fontSize="sm"
                             color="white"
                             onClick={() => copyText(qq)}
-                            _hover={{ color: "#7dd4ff" }}
+                            _hover={{ color: "#7ddcff" }}
                           >
                             {qq}
                             <Icon
                               as={MdContentCopy}
                               boxSize={3.5}
-                              color="#7dd4ff"
+                              color="#7ddcff"
                             />
                           </Flex>
                         ) : (

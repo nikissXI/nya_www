@@ -58,7 +58,7 @@ export default function TunnelUpdateModal() {
             my={4}
             w="100%"
             onClick={() => {
-              navigate("/docs#download");
+              navigate("/docs");
               setShowRegetModal();
             }}
             isDisabled={!canClose}

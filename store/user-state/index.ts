@@ -14,11 +14,9 @@ import {
 import { api } from "@/utils/endpoints";
 import type {
   AnnouncementsData,
-  GetRoomPayload,
   NodeInfo,
   RoomInfo,
   UserInfo,
-  UserInfoPayload,
   UserWgInfo,
 } from "@/utils/endpoints";
 import { getErrorMessage } from "@/utils/strings";
@@ -61,8 +59,6 @@ interface ILoginStateSlice {
   nodeMap: Map<string, NodeInfo>;
   fixedNode: string | undefined;
   getNodeList: () => Promise<void>;
-
-  needShowReget: boolean;
 
   // 节点选择
   showNodeListModal: boolean;
@@ -184,11 +180,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         try {
           const data = await api.userInfo();
 
-          if (data?.reget_ip) {
-            set({ needShowReget: true });
+          if (data.reget_ip) {
+            get().setShowRegetModal();
           }
 
-          set({ userInfo: data?.user_info });
+          set({ userInfo: data.user_info });
 
           if (data?.user_wg_info) {
             set({ userWgInfo: data.user_wg_info });
@@ -223,7 +219,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // 清理与账号绑定的数据，避免下一个登录的账号看到上一个账号的信息
           confKey: null,
           fixedNode: undefined,
-          needShowReget: false,
         });
         localStorage.setItem("uuid", new_uuid);
       },
@@ -359,23 +354,13 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      needShowReget: false,
-
       showNodeListModal: false,
       setNodeListModal: () => {
-        const state = get();
-        const currentShow = state.showNodeListModal;
-        const updates: Partial<ILoginStateSlice> = {
-          showNodeListModal: !currentShow,
-        };
-        if (currentShow && state.needShowReget) {
-          updates.showRegetModal = true;
-          updates.needShowReget = false;
-        }
-        set(updates);
-        if (!currentShow) {
+        const showModal = get().showNodeListModal;
+        if (!showModal) {
           get().getNodeList();
         }
+        set({ showNodeListModal: !showModal });
       },
 
       selectNodeLock: false,
@@ -442,9 +427,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // --- 核心优化开始 ---
 
           // 1. 解构后端返回的完整数据
-          const isOnline = (data?.is_online ?? false) as boolean;
-          const incomingUserWgInfo = data?.user_wg_info; // 后端返回的完整节点信息
-          const nodeNetLoad = data?.node_net_load;
+          const isOnline = data.is_online;
+          const incomingUserWgInfo = data.user_wg_info; // 后端返回的完整节点信息
+          const nodeNetLoad = data.node_net_load;
           const roomData = (data?.room ?? undefined) as RoomInfo | undefined;
 
           // 2. 【关键】直接用后端返回的最新节点信息覆盖 Store

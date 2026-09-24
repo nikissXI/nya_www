@@ -39,7 +39,7 @@ export default function LoginModal() {
             textAlign="center"
             fontSize="xs"
             color="rgba(255, 255, 255, 0.5)"
-            _hover={{ color: "#7dd4ff" }}
+            _hover={{ color: "#7ddcff" }}
             onClick={() => {
               closeLoginModal();
               navigate("/login");

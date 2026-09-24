@@ -10,7 +10,7 @@ export default function DocLink({
   return (
     <Text my={3} textAlign="center">
       {linkText}
-      <Link ml={1} color="#7dd4ff" href={linkUrl} target="_blank">
+      <Link ml={1} color="#7ddcff" href={linkUrl} target="_blank">
         {linkUrl}
       </Link>
     </Text>
