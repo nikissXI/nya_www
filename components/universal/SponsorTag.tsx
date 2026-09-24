@@ -56,7 +56,6 @@ export default function SponsorTag({ amount }: { amount: number }) {
 
   return (
     <Tag
-      ml={2}
       bg={bgGradient ? undefined : bg}
       bgGradient={bgGradient}
       bgSize="200% 200%"
@@ -69,7 +68,7 @@ export default function SponsorTag({ amount }: { amount: number }) {
       userSelect="none"
     >
       {icon && <TagLeftIcon as={icon} mr={0} />}
-      <TagLabel>赞助者</TagLabel>
+      {/* <TagLabel>赞助者</TagLabel> */}
     </Tag>
   );
 }

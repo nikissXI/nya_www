@@ -123,10 +123,11 @@ export default function Page() {
     }
   }, [userWgInfo?.node_alias, roomData, getRoomData]);
 
-  // 房间操作统一入口：加并发锁 + 成功后回到页面顶部
+  // 房间操作统一入口：加并发锁；创建/加入/关闭/退出房间时成功后回到页面顶部
   const runRoomAction = useCallback(
     async (
       action: () => Promise<ApiEnvelope<unknown>>,
+      options: { scrollTop?: boolean } = {},
     ): Promise<ApiEnvelope<unknown>> => {
       if (isRequesting.current) {
         throw new Error("请不要点太快");
@@ -137,7 +138,8 @@ export default function Page() {
         // code === -1（数据异常刷新页面）由请求层统一处理
         const payload = await action();
 
-        if (payload.code === 0) window.scrollTo(0, 0);
+        // 只有会切换房间状态的操作用户才会“换页”，设密码/踢人不需要滚顶
+        if (options.scrollTop && payload.code === 0) window.scrollTo(0, 0);
 
         return payload;
       } finally {
@@ -190,11 +192,13 @@ export default function Page() {
   const handleCreateRoom = useCallback(
     async (game?: GameRoomItem) => {
       try {
-        const data = await runRoomAction(() =>
-          api.roomAction({
-            handleType: "createRoom",
-            value: getRoomGameName(game),
-          }),
+        const data = await runRoomAction(
+          () =>
+            api.roomAction({
+              handleType: "createRoom",
+              value: getRoomGameName(game),
+            }),
+          { scrollTop: true },
         );
         if (data.code === 0) {
           setSelectedGame(game ?? null);
@@ -222,8 +226,9 @@ export default function Page() {
   const handleLeaveRoom = useCallback(
     async (handleType: "closeRoom" | "exitRoom") => {
       try {
-        const data = await runRoomAction(() =>
-          api.roomAction({ handleType, value: "" }),
+        const data = await runRoomAction(
+          () => api.roomAction({ handleType, value: "" }),
+          { scrollTop: true },
         );
         if (data.code === 0) {
           setSelectedGame(null);
@@ -252,12 +257,14 @@ export default function Page() {
       }
 
       try {
-        const data = await runRoomAction(() =>
-          api.roomAction({
-            handleType: "joinRoom",
-            value: roomId,
-            roomPasswd: passwd,
-          }),
+        const data = await runRoomAction(
+          () =>
+            api.roomAction({
+              handleType: "joinRoom",
+              value: roomId,
+              roomPasswd: passwd,
+            }),
+          { scrollTop: true },
         );
 
         if (data.code === 0) {
@@ -330,7 +337,7 @@ export default function Page() {
   const nodeWarningText = useMemo(() => {
     const netType = userWgInfo?.net_type;
     if (netType === "电信") {
-      return "你选的是电信线路节点，建议所有用户都是用中国电信或流量上网的时候使用，否则联机容易卡顿（尤其晚上）";
+      return "你选的是电信线路节点，建议用户都是用中国电信或流量上网时使用，否则联机容易卡顿";
     }
     // else if (netType === "境外") {
     //   return "你选的是境外线路节点，只建议中国大陆外的用户使用";
@@ -609,11 +616,6 @@ export default function Page() {
               </Box>
 
               <HStack spacing={2} flexShrink={0}>
-                {roomData?.room_passwd && (
-                  <Tag size="sm" colorScheme="blue" fontWeight="bold">
-                    已设密码
-                  </Tag>
-                )}
                 {roomRole === ROLE_HOSTER && (
                   <Button
                     size="sm"
@@ -625,7 +627,7 @@ export default function Page() {
                       setPassOnOpen();
                     }}
                   >
-                    设置密码
+                    {roomData?.room_passwd ? "修改密码" : "设置密码"}
                   </Button>
                 )}
               </HStack>
@@ -704,28 +706,13 @@ export default function Page() {
                     px={2.5}
                     py={2}
                     borderRadius="lg"
-                    bg={
-                      isMe
-                        ? "rgba(109, 180, 255, 0.18)"
-                        : "rgba(255, 255, 255, 0.05)"
-                    }
+                    bg="rgba(109, 180, 255, 0.18)"
                     border="1px solid"
-                    borderColor={
-                      isMe
-                        ? "rgba(109, 180, 255, 0.55)"
-                        : "rgba(255, 255, 255, 0.08)"
-                    }
+                    borderColor="rgba(109, 180, 255, 0.18)"
                   >
                     <Flex align="center" gap={2}>
-                      {isMe && (
-                        <Tag
-                          size="sm"
-                          colorScheme="blue"
-                          fontWeight="bold"
-                          flexShrink={0}
-                        >
-                          我
-                        </Tag>
+                      {item.sponsorship > 0 && (
+                        <SponsorTag amount={item.sponsorship} />
                       )}
 
                       <Text
@@ -736,19 +723,8 @@ export default function Page() {
                         textAlign="left"
                       >
                         {item.username}
+                        {isMe && ` (我)`}
                       </Text>
-
-                      {isHoster && (
-                        <Tag
-                          size="sm"
-                          bg="rgba(255, 202, 61, 0.18)"
-                          color="#ffca3d"
-                          fontWeight="bold"
-                          flexShrink={0}
-                        >
-                          房主
-                        </Tag>
-                      )}
 
                       <Text
                         fontSize="sm"
@@ -784,10 +760,6 @@ export default function Page() {
                           flexShrink={0}
                         />
                       </Flex>
-
-                      {item.sponsorship > 0 && (
-                        <SponsorTag amount={item.sponsorship} />
-                      )}
 
                       {roomRole === ROLE_HOSTER && !isHoster && (
                         <Tag
@@ -948,7 +920,19 @@ export default function Page() {
                     </Text>
                   </Flex>
 
-                  <Button ml={2} size="sm" px={3} onClick={setNodeListModal}>
+                  <Button
+                    ml={2}
+                    size="sm"
+                    px={3}
+                    onClick={() => {
+                      if (roomRole === ROLE_NONE) setNodeListModal();
+                      else
+                        openToast({
+                          content: `${roomRole === ROLE_HOSTER ? "关闭" : "退出"}房间后再切换节点`,
+                          status: "warning",
+                        });
+                    }}
+                  >
                     切换节点
                   </Button>
                 </Flex>
@@ -1053,7 +1037,7 @@ export default function Page() {
                       navigate("/offlineCheck");
                     }}
                   >
-                    WG连接失败或联机不稳定
+                    WG连不上或掉线
                   </Text>
                 </>
               )}

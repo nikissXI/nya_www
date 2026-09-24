@@ -78,6 +78,11 @@ export default function Page() {
 
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
+          关掉其他网络加速器或VPN
+        </Text>
+
+        <Text>
+          <Icon as={MdTipsAndUpdates} mr={1} />
           确保玩家自己联机设备的网络足够稳定，建议使用WiFi进行联机
         </Text>
 
