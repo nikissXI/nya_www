@@ -40,13 +40,13 @@ export default function Page() {
       <VStack align="stretch" spacing={2}>
         <Text display={userWgInfo ? "block" : "none"}>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          隧道名称是否为<strong>{userWgInfo?.tunnel_name}</strong>
+          连接的隧道名称是否为<strong>{userWgInfo?.tunnel_name}</strong>
           ，如果不是请导入正确隧道
         </Text>
 
         <Text display={userWgInfo ? "block" : "none"}>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          隧道必须是自己账号的！不能用其他人给的conf_key
+          隧道必须是自己账号的！不能用其他人给的conf_key/二维码/隧道文件
         </Text>
 
         <Text display={platform === "android" ? "block" : "none"}>
@@ -78,12 +78,7 @@ export default function Page() {
 
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          关掉其他游戏加速器或VPN
-        </Text>
-
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
-          确保玩家自己联机设备的网络足够稳定，建议使用WiFi进行联机
+          关掉其他游戏加速器或VPN，确保玩家自己联机设备的网络足够稳定，建议使用WiFi进行联机
         </Text>
 
         <Text>
@@ -93,12 +88,7 @@ export default function Page() {
 
         <Text>
           <Icon as={MdTipsAndUpdates} mr={1} />
-          大陆外玩家只能用跨境线路节点，节点列表线路筛选，选跨境
-        </Text>
-
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
-          国外部分地区（目前已知俄罗斯）无法直连喵服，这种情况请找服主特殊处理
+          大陆外玩家只能用跨境线路节点，节点列表线路筛选，选跨境。国外部分地区用跨境线路节点也连不上，目前已知俄罗斯，这种情况请找服主特殊处理
         </Text>
       </VStack>
 
