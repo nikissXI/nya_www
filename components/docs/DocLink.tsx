@@ -8,9 +8,16 @@ export default function DocLink({
   linkUrl: string;
 }) {
   return (
-    <Text my={3} textAlign="center">
+    <Text my={3} textAlign="center" color="text.muted">
       {linkText}
-      <Link ml={1} color="#7ddcff" href={linkUrl} target="_blank">
+      <Link
+        ml={1}
+        color="brand.text"
+        href={linkUrl}
+        target="_blank"
+        rel="noreferrer"
+        wordBreak="break-all"
+      >
         {linkUrl}
       </Link>
     </Text>

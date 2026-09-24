@@ -180,7 +180,7 @@ export default function Page() {
   };
 
   return (
-    <Flex direction="column" px={{ base: 4, md: 8 }} align="center" pb={6}>
+    <Flex direction="column" align="center" pb={6}>
       <Box {...CARD_STYLE} {...CARD_PADDING} maxW="380px" px={4} py={4}>
         <VStack spacing={3} align="stretch" onKeyDown={handleEnter}>
           {/* 提示：本页只支持邮箱找回 */}
@@ -188,22 +188,22 @@ export default function Page() {
             align="flex-start"
             gap={2}
             p={2.5}
-            borderRadius="lg"
-            bg="rgba(125, 212, 255, 0.12)"
+            borderRadius="control"
+            bg="brand.soft"
             border="1px solid"
-            borderColor="rgba(125, 212, 255, 0.3)"
+            borderColor="brand.line"
           >
             <Icon
               as={MdTipsAndUpdates}
               boxSize={4}
-              color="#7ddcff"
+              color="brand.text"
               flexShrink={0}
               mt={0.5}
             />
 
             <Text
               fontSize="xs"
-              color="rgba(255, 255, 255, 0.85)"
+              color="brand.text"
               lineHeight="1.7"
               textAlign="left"
             >
@@ -268,7 +268,7 @@ export default function Page() {
             </Box>
 
             {passwordAlertText && (
-              <Text mt={1} fontSize="xs" color="#ffd648">
+              <Text mt={1} fontSize="xs" color="warning.text">
                 {passwordAlertText}
               </Text>
             )}
@@ -310,10 +310,10 @@ export default function Page() {
                 justify="center"
                 overflow="hidden"
                 cursor="pointer"
-                borderRadius="md"
-                bg="rgba(255, 255, 255, 0.06)"
+                borderRadius="control"
+                bg="bg.subtle"
                 border="1px solid"
-                borderColor="rgba(255, 255, 255, 0.14)"
+                borderColor="border.line"
                 onClick={refreshCaptcha}
               >
                 {captchaImageUrl ? (
@@ -330,7 +330,7 @@ export default function Page() {
               </Flex>
             </Flex>
 
-            <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+            <Text mt={1} fontSize="xs" color="text.faint">
               看不清？点击图片刷新验证码
             </Text>
           </Box>
@@ -339,16 +339,13 @@ export default function Page() {
             提交
           </Button>
 
-          <Text
-            fontSize="sm"
-            textAlign="center"
-            color="rgba(255, 255, 255, 0.7)"
-          >
+          <Text fontSize="sm" textAlign="center" color="text.muted">
             想起来了？
             <Text
               as="button"
               ml={1}
-              color="#7ddcff"
+              color="brand.text"
+              fontWeight="600"
               onClick={() => navigate(-1)}
             >
               返回

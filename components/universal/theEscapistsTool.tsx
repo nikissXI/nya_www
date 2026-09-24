@@ -1,5 +1,6 @@
 import { Flex, Heading, Text, Input, Box } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
+import { INPUT_STYLE } from "@/components/universal/ui";
 import { useState } from "react";
 import { ApiError } from "@/utils/api";
 import { api } from "@/utils/endpoints";
@@ -33,7 +34,7 @@ export default function TheEscapistsTool() {
   };
 
   return (
-    <Box p={2} bg="rgba(52, 139, 246, 0.18)" borderRadius="md">
+    <Box p={3} bg="bg.subtle" border="1px solid" borderColor="border.line" borderRadius="control">
       <Heading size="sm" mb={2} textAlign="center">
         创建搜索任务，不创建搜不到房间
       </Heading>
@@ -50,6 +51,7 @@ export default function TheEscapistsTool() {
         </Button>
 
         <Input
+          {...INPUT_STYLE}
           size="sm"
           type="text"
           value={inputIp}
@@ -63,15 +65,12 @@ export default function TheEscapistsTool() {
           }}
           placeholder="填主机喵服IP 如100.64.0.1"
           aria-label="主机喵服 IP"
-          bg="white"
-          color="#1a202c"
-          borderRadius="md"
-          _placeholder={{ color: "#718096" ,fontSize:"13px"}}
+          _placeholder={{ fontSize: "13px" }}
         />
       </Flex>
 
       {showText && (
-        <Text mt={1} color="#ffd648" fontSize="sm" role="status">
+        <Text mt={2} color="warning.text" fontSize="sm" role="status">
           {showText}
         </Text>
       )}

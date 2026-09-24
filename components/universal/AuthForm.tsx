@@ -157,10 +157,10 @@ export default function AuthForm({
               justify="center"
               overflow="hidden"
               cursor="pointer"
-              borderRadius="md"
-              bg="rgba(255, 255, 255, 0.06)"
+              borderRadius="control"
+              bg="bg.subtle"
               border="1px solid"
-              borderColor="rgba(255, 255, 255, 0.14)"
+              borderColor="border.line"
               onClick={refreshCaptcha}
             >
               {captchaImageUrl ? (
@@ -177,7 +177,7 @@ export default function AuthForm({
             </Flex>
           </Flex>
 
-          <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+          <Text mt={1.5} fontSize="xs" color="text.faint">
             看不清？点击图片刷新验证码
           </Text>
         </Box>
@@ -196,7 +196,8 @@ export default function AuthForm({
           <Text
             as="button"
             type="button"
-            color="#7ddcff"
+            color="brand.text"
+            fontWeight="600"
             onClick={() => {
               onLeave?.();
               navigate("/forgetPass");
@@ -208,7 +209,8 @@ export default function AuthForm({
           <Text
             as="button"
             type="button"
-            color="#7ddcff"
+            color="brand.text"
+            fontWeight="600"
             onClick={() => {
               onLeave?.();
               navigate("/register");

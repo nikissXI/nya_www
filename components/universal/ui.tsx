@@ -1,62 +1,134 @@
 import { useState } from "react";
 import {
+  Box,
+  Flex,
+  Heading,
   Icon,
   Input,
   InputGroup,
   InputRightElement,
   Text,
   type BoxProps,
+  type HeadingProps,
   type InputProps,
   type ModalContentProps,
 } from "@chakra-ui/react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 /**
- * 全站通用视觉常量
- * ------------------------------------------------------------
- * 页面里的卡片、输入框、弹窗都从这里取样式，避免各页面各写一份导致深浅不一。
- * 目前使用方：app/room/page.tsx、app/me/page.tsx、app/register/page.tsx、app/forgetPass/page.tsx
+ * 全站通用视觉基元
+ * ------------------------------------------------------------------
+ * 页面里的卡片、输入框、弹窗、空态统一从这里取，避免各写一份。
+ * 颜色一律走 theme.ts 的语义 token（`bg.surface` / `text.muted` …），
+ * 因此亮色、暗色模式天然同时成立，不需要在页面里写 `_dark`。
  */
 
-/** 卡片：半透明蓝底 + 细边框 */
+/** 卡片容器（配合 Card 使用；需要自定义时可直接 spread） */
 export const CARD_STYLE: BoxProps = {
   w: "100%",
-  borderRadius: "xl",
-  bg: "rgba(52, 139, 246, 0.18)",
+  bg: "bg.surface",
   border: "1px solid",
-  borderColor: "rgba(125, 212, 255, 0.18)",
-  boxShadow: "0 4px 14px rgba(0, 0, 0, 0.12)",
+  borderColor: "border.line",
+  borderRadius: "card",
+  boxShadow: "var(--nya-shadow-card)",
 };
 
-/** 卡片内边距（和 CARD_STYLE 搭配使用） */
-export const CARD_PADDING = { px: 3, py: 2.5 };
+/** 卡片内边距 */
+export const CARD_PADDING = { p: { base: 4, md: 5 } };
 
-/** 输入框：暗底 + 聚焦高亮 */
+/**
+ * 卡片：`<Card>` = CARD_STYLE + CARD_PADDING，需要更紧凑时传 p / px / py 覆盖。
+ */
+export const Card = ({
+  children,
+  ...rest
+}: BoxProps & { children?: React.ReactNode }) => (
+  <Box {...CARD_STYLE} {...CARD_PADDING} {...rest}>
+    {children}
+  </Box>
+);
+
+/** 输入框：统一走主题里的 app 变体（亮暗自动适配） */
 export const INPUT_STYLE: InputProps = {
-  bg: "rgba(0, 0, 0, 0.25)",
-  border: "1px solid",
-  borderColor: "rgba(255, 255, 255, 0.14)",
-  color: "white",
-  _placeholder: { color: "rgba(255, 255, 255, 0.45)" },
-  _hover: { borderColor: "rgba(125, 212, 255, 0.5)" },
-  _focus: { borderColor: "#7ddcff", boxShadow: "0 0 0 1px #7ddcff" },
+  variant: "app",
+  size: "md",
 };
 
-/** 弹窗：统一深蓝底 + 细边框 */
+/** 弹窗内容容器：底色/圆角/边框由主题的 Modal baseStyle 统一给，这里只补间距 */
 export const MODAL_STYLE: ModalContentProps = {
-  bg: "#0e2949",
-  color: "white",
-  border: "1px solid",
-  borderColor: "rgba(125, 212, 255, 0.25)",
-  borderRadius: "xl",
   mx: 4,
 };
 
-/** 卡片/表单行内的小标题 */
-export const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <Text fontSize="xs" fontWeight="bold" color="#a8d1ff" letterSpacing="0.08em">
+/** 表单字段小标题 */
+export const SectionTitle = ({
+  children,
+  ...rest
+}: { children: React.ReactNode } & HeadingProps) => (
+  <Heading
+    as="h4"
+    fontSize="sm"
+    fontWeight="600"
+    color="text.muted"
+    letterSpacing="0"
+    {...rest}
+  >
     {children}
-  </Text>
+  </Heading>
+);
+
+/** 区块标题：卡片内的小节（可选右侧操作区、底部描述） */
+export const SectionHeading = ({
+  title,
+  description,
+  action,
+  mb = 3,
+}: {
+  title: React.ReactNode;
+  description?: React.ReactNode;
+  action?: React.ReactNode;
+  mb?: BoxProps["mb"];
+}) => (
+  <Flex align="center" justify="space-between" gap={3} mb={mb}>
+    <Box minW={0}>
+      <Heading as="h2" fontSize={{ base: "md", md: "lg" }} fontWeight="700">
+        {title}
+      </Heading>
+      {description && (
+        <Text mt={0.5} fontSize="sm" color="text.faint">
+          {description}
+        </Text>
+      )}
+    </Box>
+    {action}
+  </Flex>
+);
+
+/** 空态：列表/卡片无数据时统一占位 */
+export const EmptyState = ({
+  icon,
+  title,
+  description,
+  action,
+  py = 10,
+}: {
+  icon?: React.ComponentType;
+  title: React.ReactNode;
+  description?: React.ReactNode;
+  action?: React.ReactNode;
+  py?: BoxProps["py"];
+}) => (
+  <Flex direction="column" align="center" justify="center" py={py} gap={2}>
+    {icon && <Icon as={icon} boxSize={6} color="text.faint" />}
+    <Text fontSize="sm" fontWeight="600" color="text.muted">
+      {title}
+    </Text>
+    {description && (
+      <Text fontSize="xs" color="text.faint" textAlign="center" maxW="320px">
+        {description}
+      </Text>
+    )}
+    {action && <Box pt={1}>{action}</Box>}
+  </Flex>
 );
 
 /**
@@ -88,9 +160,9 @@ export const PasswordInput = (
           as={visible ? MdVisibilityOff : MdVisibility}
           // 注意：Chakra 的 sizes 标度里没有 4.5，boxSize={4.5} 会被当成 4.5px
           boxSize={5}
-          color="rgba(255, 255, 255, 0.6)"
+          color="text.faint"
           cursor="pointer"
-          _hover={{ color: "#7ddcff" }}
+          _hover={{ color: "brand.text" }}
           onClick={() => setVisible((prev) => !prev)}
         />
       </InputRightElement>

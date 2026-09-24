@@ -1,43 +1,49 @@
 import { useEffect, useState } from "react";
 import {
   Box,
-  Text,
-  Image,
-  VStack,
-  SimpleGrid,
-  TableContainer,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
+  Button,
+  Flex,
+  Heading,
   Icon,
+  Image,
   Modal,
-  ModalOverlay,
-  ModalContent,
   ModalBody,
   ModalCloseButton,
-  Button,
-  Heading,
-  Flex,
+  ModalContent,
+  ModalOverlay,
+  SimpleGrid,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  VStack,
 } from "@chakra-ui/react";
+import { FaQq, FaWeixin } from "react-icons/fa";
 import { openToast } from "@/components/universal/toast";
+import { Card, EmptyState, SectionHeading } from "@/components/universal/ui";
 import { getErrorMessage } from "@/utils/strings";
-import { FaQq } from "react-icons/fa";
 import { useUserStateStore } from "@/store/user-state";
-import { FaWeixin } from "react-icons/fa";
 import { api } from "@/utils/endpoints";
 import type { SponsorItem } from "@/utils/endpoints";
 
 const AdminQQ = "1299577815";
 const AdminWX = "nikissxi";
 
+/** 赞助规则说明（文案保持不变，只调整排版） */
+const RULES_TEXT = [
+  "如需定制独享节点（50元起/月）可联系服主，房间人数无上限，仅指定用户可建房",
+  "累计赞助不少于 10 元，可联系服主获取一对一技术支持",
+];
+
 const Page = () => {
   const [sponsorList, setSponsorList] = useState<SponsorItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { userInfo } = useUserStateStore();
+  const userInfo = useUserStateStore((s) => s.userInfo);
 
   const [uid, setUid] = useState(0);
 
@@ -75,69 +81,85 @@ const Page = () => {
   }, [userInfo]);
 
   return (
-    <Box maxW="800px" mx="auto" px={{ base: 4, md: 8 }} pb={8}>
+    <Box maxW="640px" mx="auto" pb={8}>
       <VStack spacing={5} align="stretch">
         <Heading size="lg" textAlign="center">
           感谢赞助者们的支持！
         </Heading>
 
-        <Flex
-          mx="auto"
-          borderRadius="md"
-          borderColor="whiteAlpha.300"
-          align={{ base: "flex-start", md: "center" }}
-          gap={{ base: 2, md: 4 }}
-          flexWrap="wrap"
-        >
-          <Text fontWeight="bold" whiteSpace="nowrap">
-            联系服主
-          </Text>
-          <Text fontSize="sm">
-            <Icon as={FaWeixin} mx={1} /> nikissxi
-            <Text as="span" mx={3} color="gray.500">
-              |
+        {/* 联系服主 */}
+        <Card p={4}>
+          <Flex
+            align={{ base: "flex-start", md: "center" }}
+            gap={{ base: 2, md: 4 }}
+            flexWrap="wrap"
+          >
+            <Text fontWeight="700" whiteSpace="nowrap">
+              联系服主
             </Text>
-            <Icon as={FaQq} mx={1} /> {AdminQQ}
-          </Text>
-        </Flex>
 
-        <VStack maxW="600px" spacing={3} mx="auto">
-          <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-            <Text fontSize="sm">
-              如需定制独享节点（50元起/月）可联系服主，房间人数无上限，仅指定用户可建房
+            <Text fontSize="sm" color="text.muted">
+              <Icon as={FaWeixin} mx={1} color="success.text" />
+              {AdminWX}
+              <Text as="span" mx={3} color="border.strong">
+                |
+              </Text>
+              <Icon as={FaQq} mx={1} color="brand.text" />
+              {AdminQQ}
             </Text>
-          </Box>
+          </Flex>
+        </Card>
 
-          <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-            <Text fontSize="sm">
-              累计赞助不少于 10 元，可联系服主获取一对一技术支持
-            </Text>
-          </Box>
+        {/* 赞助规则 */}
+        <VStack spacing={3} w="100%">
+          {RULES_TEXT.map((text) => (
+            <Card key={text} p={4}>
+              <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+                {text}
+              </Text>
+            </Card>
+          ))}
 
-          <Box w="100%" p={4} borderRadius="md" bg="rgba(52, 139, 246, 0.18)">
-            <Text fontWeight="bold">赞助专用节点解锁规则</Text>
-            <Text fontSize="sm" mt={2} color="#ffca3d">
-              赞助专用节点房间人数上限 <strong>16人</strong>
-            </Text>
-            <Text fontSize="sm" mt={2}>
-              有两种线路的赞助节点：多线、跨境
-              <br />
-              多线赞助满 <strong>10元</strong> 解锁，国内联机用这种
-              <br />
-              跨境赞助满 <strong>20元</strong> 解锁，跨境联机用这种
-            </Text>
-            <Text fontWeight="bold" fontSize="sm" color="#ffca3d" mt={2}>
-              只需要房主赞助，成员无需单独赞助
-            </Text>
-            <Text fontSize="sm">房间内成员的赞助也可以叠加房间人数</Text>
-            <Text fontSize="sm" mt={2} color="#ffca3d">
-              简单点说：多线节点赞助10元房间2人，20元则3人，后续每加10元多1人，16人封顶；跨境节点所需金额翻倍
-            </Text>
-            <Text fontSize="sm" mt={2}>
-              计算公式如下<br/>
-              房间人数 = 总赞助金额 <strong>//</strong> 节点解锁金额 <strong>+1</strong>
-            </Text>
-          </Box>
+          <Card p={4}>
+            <SectionHeading title="赞助专用节点解锁规则" mb={2} />
+
+            <VStack align="stretch" spacing={2}>
+              <Text fontSize="sm" color="warning.text" fontWeight="600">
+                赞助专用节点房间人数上限 <strong>16人</strong>
+              </Text>
+
+              <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+                有两种线路的赞助节点：多线、跨境
+                <br />
+                多线赞助满 <strong>10元</strong> 解锁，国内联机用这种
+                <br />
+                跨境赞助满 <strong>20元</strong> 解锁，跨境联机用这种
+              </Text>
+
+              <Text
+                fontSize="sm"
+                color="warning.text"
+                fontWeight="700"
+              >
+                只需要房主赞助，成员无需单独赞助
+              </Text>
+
+              <Text fontSize="sm" color="text.muted">
+                房间内成员的赞助也可以叠加房间人数
+              </Text>
+
+              <Text fontSize="sm" color="warning.text" lineHeight="1.8">
+                简单点说：多线节点赞助10元房间2人，20元则3人，后续每加10元多1人，16人封顶；跨境节点所需金额翻倍
+              </Text>
+
+              <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+                计算公式如下
+                <br />
+                房间人数 = 总赞助金额 <strong>//</strong> 节点解锁金额{" "}
+                <strong>+1</strong>
+              </Text>
+            </VStack>
+          </Card>
         </VStack>
 
         <Button
@@ -145,49 +167,58 @@ const Page = () => {
           size="lg"
           mx="auto"
           onClick={openModal}
-          mb={2}
+          px={10}
         >
           查看收款码
         </Button>
 
+        {/* 收款码弹窗 */}
         <Modal isOpen={isModalOpen} onClose={closeModal} size="lg">
           <ModalOverlay />
-          <ModalContent bg="#202e4fe0" color="white" mx={5} py={5}>
+          <ModalContent mx={4} py={4}>
             <ModalCloseButton />
             <ModalBody mt={4}>
               {/* 备注提醒 */}
               <Box
                 mb={4}
                 p={3}
-                bg="#fff3cd"
-                borderRadius="md"
-                border="1px solid #ffeeba"
+                bg="warning.soft"
+                border="1px solid"
+                borderColor="warning.line"
+                borderRadius="control"
               >
-                <Text color="#856404" fontWeight="bold" fontSize="xl">
+                <Text
+                  color="warning.text"
+                  fontWeight="700"
+                  fontSize={{ base: "md", md: "lg" }}
+                >
                   ⚠️ 在付款备注中写上喵服UID，否则无法录入
                 </Text>
 
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  mt={2}
+                <Flex
+                  align="center"
+                  justify="center"
+                  mt={3}
+                  gap={2}
+                  wrap="wrap"
                 >
                   <Text
-                    fontSize="lg"
-                    fontWeight="bold"
-                    color="black"
-                    bg="#ffd54e"
+                    fontSize="sm"
+                    fontWeight="700"
+                    color="text.main"
+                    bg="bg.surface"
+                    border="1px solid"
+                    borderColor="warning.line"
                     px={3}
-                    py={1}
-                    borderRadius="md"
-                    mr={2}
+                    py={1.5}
+                    borderRadius="control"
+                    className="tabular"
                   >
                     {uid ? `您的UID ${uid}` : `登录后才能查看UID`}
                   </Text>
 
                   <Button
-                    colorScheme="blue"
+                    colorScheme="brand"
                     size="sm"
                     onClick={() => {
                       if (uid) {
@@ -207,14 +238,14 @@ const Page = () => {
                           });
                       }
                     }}
-                    disabled={!uid}
+                    isDisabled={!uid}
                   >
                     复制UID
                   </Button>
-                </Box>
+                </Flex>
 
-                <Text color="#856404" fontSize="sm">
-                  <Text as="span" fontWeight="bold">
+                <Text color="warning.text" fontSize="sm" mt={3} lineHeight="1.8">
+                  <Text as="span" fontWeight="700">
                     赞助金额由服主手动录入，就是看到了才更新；
                   </Text>
                   如果催录入、漏了备注、无法备注、无法付款等等，请联系服主
@@ -226,21 +257,30 @@ const Page = () => {
                 </Text>
               </Box>
 
-              <SimpleGrid columns={2} spacing={1}>
+              <SimpleGrid columns={2} spacing={3}>
                 <Box textAlign="center">
-                  <Text mb={1}>支付宝</Text>
+                  <Text mb={1} fontSize="sm" color="text.muted">
+                    支付宝
+                  </Text>
                   <Image
                     w="100%"
                     maxW="250px"
+                    mx="auto"
+                    borderRadius="control"
                     src="/images/sponsor/支付宝收款.webp"
                     alt="支付宝收款"
                   />
                 </Box>
+
                 <Box textAlign="center">
-                  <Text mb={1}>微信</Text>
+                  <Text mb={1} fontSize="sm" color="text.muted">
+                    微信
+                  </Text>
                   <Image
                     w="100%"
                     maxW="250px"
+                    mx="auto"
+                    borderRadius="control"
                     src="/images/sponsor/微信收款.webp"
                     alt="微信收款"
                   />
@@ -250,41 +290,48 @@ const Page = () => {
           </ModalContent>
         </Modal>
 
+        {/* 赞助名单 */}
         <Box textAlign="center">
           <Heading size="md" mb={1}>
             赞助名单
           </Heading>
-          <Text fontSize="sm" color="gray.300">
+          <Text fontSize="sm" color="text.faint">
             仅列出累计赞助不低于 50 元的用户
           </Text>
         </Box>
 
-        <TableContainer maxH="360px" overflowY="auto">
-          <Table variant="striped" colorScheme="transparent" w="auto" mx="auto">
-            <Thead position="sticky" top={0} bg="#3e4e63">
-              <Tr>
-                <Th color="white" fontSize="md" p={3}>
-                  UID
-                </Th>
-                <Th color="white" fontSize="md" p={3}>
-                  用户名
-                </Th>
-                <Th color="white" fontSize="md" p={3}>
-                  金额(元)
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {sponsorList.map((item, index) => (
-                <Tr key={index}>
-                  <Td p={3}>{item.uid} </Td>
-                  <Td p={3}>{item.username} </Td>
-                  <Td p={3}>{item.sponsorship}</Td>
+        <Card p={0} overflow="hidden">
+          <TableContainer maxH="360px" overflowY="auto">
+            <Table variant="simple">
+              <Thead position="sticky" top={0} bg="bg.subtle">
+                <Tr>
+                  <Th color="text.muted" fontSize="sm">
+                    UID
+                  </Th>
+                  <Th color="text.muted" fontSize="sm">
+                    用户名
+                  </Th>
+                  <Th color="text.muted" fontSize="sm">
+                    金额(元)
+                  </Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {sponsorList.map((item, index) => (
+                  <Tr key={index}>
+                    <Td className="tabular">{item.uid}</Td>
+                    <Td>{item.username}</Td>
+                    <Td className="tabular">{item.sponsorship}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+
+          {sponsorList.length === 0 && (
+            <EmptyState title="暂无赞助名单" description="名单数据来自服务端" />
+          )}
+        </Card>
       </VStack>
     </Box>
   );

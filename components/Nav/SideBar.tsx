@@ -1,31 +1,45 @@
 import { useState } from "react";
 import {
   Box,
+  Divider,
   Flex,
-  Text,
-  Link,
   Heading,
+  Icon,
+  IconButton,
+  Image,
   Input,
+  Link,
   Modal,
-  ModalOverlay,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
-  ModalBody,
+  ModalOverlay,
+  Text,
+  Tooltip,
   useDisclosure,
   VStack,
-  Divider,
-  Image,
-  Icon,
 } from "@chakra-ui/react";
-import { useUserStateStore } from "@/store/user-state";
 import { Link as RouterLink } from "react-router-dom";
-import { ROOM_GAME_LIST, GENERAL_QQ_GROUP } from "@/utils/roomGames";
+import {
+  MdCampaign,
+  MdContentCopy,
+  MdFavorite,
+  MdGroups,
+  MdHistory,
+} from "react-icons/md";
+import { useUserStateStore } from "@/store/user-state";
+import { GENERAL_QQ_GROUP, ROOM_GAME_LIST } from "@/utils/roomGames";
 import { copyText, formatAnnouncementDate } from "@/utils/strings";
-import { MdContentCopy } from "react-icons/md";
-import { INPUT_STYLE, MODAL_STYLE } from "@/components/universal/ui";
 import { AnnouncementList } from "@/components/universal/Announcements";
+import { Card, EmptyState, INPUT_STYLE, MODAL_STYLE } from "@/components/universal/ui";
 
+/**
+ * 全站右侧信息栏
+ * ------------------------------------------------------------------
+ * 桌面端（lg 起）是 sticky 右栏；移动端顺着内容流堆在页面底部，
+ * 两处共用同一份结构，只改宽度和定位，不重复渲染两份内容。
+ */
 export default function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -37,7 +51,6 @@ export default function SideBar() {
   // 用 selector 单独订阅，避免 store 任意状态变化都触发侧栏重渲染
   const announcementsData = useUserStateStore((s) => s.announcementsData);
 
-  // 各游戏群列表搜索
   const [gameSearchTerm, setGameSearchTerm] = useState("");
 
   const filteredGames = ROOM_GAME_LIST.filter(
@@ -45,6 +58,8 @@ export default function SideBar() {
       game.title !== "通用联机房" &&
       game.title.toLowerCase().includes(gameSearchTerm.toLowerCase()),
   );
+
+  const latestAnnouncement = announcementsData?.announcements?.[0];
 
   /** 关闭群列表弹窗时顺带清空搜索 */
   const closeGameGroupAndReset = () => {
@@ -55,105 +70,123 @@ export default function SideBar() {
   return (
     <Box
       as="aside"
-      maxW={{ base: "80%", md: "200px" }}
-      flex={{ base: "none", md: "0 0 200px" }}
-      mt={{ base: 6, md: 20 }}
-      mb={{ base: "200px", md: 0 }}
-      mx={{ base: "auto", md: 0 }}
+      w={{ base: "100%", lg: "300px" }}
+      flexShrink={0}
+      position={{ base: "static", lg: "sticky" }}
+      top={{ lg: "88px" }}
+      mt={{ base: 8, lg: 0 }}
     >
-      <Flex
-        px={{ md: 3 }}
-        direction="column"
-        position={{ base: "static", md: "sticky" }}
-        top={{ base: 0, md: 24 }}
-        gap={{ base: 3, md: 6 }}
-        align={{ base: "center", md: "stretch" }}
-        textAlign="left"
-      >
-        <Box w="100%">
-          <Heading as="h3" fontSize="xl">
-            喵服官方QQ群
-          </Heading>
+      <VStack align="stretch" spacing={4}>
+        {/* ---------- 公告 ---------- */}
+        <Card p={4}>
+          <SectionHead
+            icon={MdCampaign}
+            title="喵服公告"
+          />
 
-          <Box
-            as="button"
-            display="inline-flex"
-            alignItems="center"
-            gap={1}
-            onClick={() => copyText(GENERAL_QQ_GROUP)}
-            _hover={{ textDecoration: "none" }}
-            fontWeight="bold"
-          >
-            {GENERAL_QQ_GROUP}
-            <Icon as={MdContentCopy} boxSize={3.5} color="#7ddcff" />
-          </Box>
-
-          <Link
-            mt="1px"
-            display="block"
-            as="button"
-            onClick={openGameGroup}
-            _hover={{ textDecoration: "none" }}
-            fontWeight="bold"
-            color="#7ddcff"
-          >
-            查看各游戏小群列表
-          </Link>
-        </Box>
-
-        <Box w="100%">
-          <Heading as="h3" fontSize="xl">
-            赞助喵服
-          </Heading>
-
-          <Text whiteSpace="pre-wrap">觉得好用的话支持下啦</Text>
-          <Link
-            mt="1px"
-            fontWeight="bold"
-            as={RouterLink}
-            to="/sponsor"
-            color="#7ddcff"
-            _hover={{ textDecoration: "none" }}
-          >
-            查看赞助方式和特权
-          </Link>
-        </Box>
-
-        <Box w="100%">
-          <Heading as="h3" fontSize="xl">
-            喵服公告
-          </Heading>
-
-          {announcementsData?.announcements &&
-          announcementsData.announcements.length > 0 ? (
+          {latestAnnouncement ? (
             <>
-              <Text fontWeight="bold" textAlign="left">
-                {formatAnnouncementDate(
-                  announcementsData.announcements[0].timestamp,
-                  true,
-                )}
+              <Text
+                className="tabular"
+                fontSize="xs"
+                color="text.faint"
+                fontWeight="600"
+                mb={1}
+              >
+                {formatAnnouncementDate(latestAnnouncement.timestamp, true)}
               </Text>
 
-              <Text fontSize="sm" whiteSpace="pre-wrap" textAlign="left">
-                {announcementsData.announcements[0].content}
+              <Text
+                fontSize="sm"
+                color="text.muted"
+                whiteSpace="pre-wrap"
+                lineHeight="1.7"
+                noOfLines={6}
+              >
+                {latestAnnouncement.content}
               </Text>
 
               <Link
-                mt="1px"
-                fontWeight="bold"
+                as="button"
+                type="button"
+                mt={2}
+                fontSize="sm"
+                color="brand.text"
+                _hover={{ textDecoration: "underline" }}
                 onClick={onOpen}
-                color="#7ddcff"
-                _hover={{ textDecoration: "none" }}
               >
                 查看历史公告
               </Link>
             </>
           ) : (
-            <Text>暂无公告</Text>
+            <Text fontSize="sm" color="text.faint">
+              暂无公告
+            </Text>
           )}
-        </Box>
-      </Flex>
+        </Card>
 
+        {/* ---------- QQ 群 ---------- */}
+        <Card p={4}>
+          <SectionHead icon={MdGroups} title="官方 QQ 群" />
+
+          <Flex align="center" gap={2}>
+            <Text fontSize="sm" color="text.muted">
+              大群
+            </Text>
+
+            <Flex
+              as="button"
+              type="button"
+              align="center"
+              gap={1}
+              fontWeight="700"
+              fontSize="sm"
+              color="text.main"
+              onClick={() => copyText(GENERAL_QQ_GROUP)}
+              _hover={{ color: "brand.text" }}
+              title="点击复制"
+            >
+              {GENERAL_QQ_GROUP}
+              <Icon as={MdContentCopy} boxSize={3.5} color="brand.text" />
+            </Flex>
+          </Flex>
+
+          <Link
+            as="button"
+            type="button"
+            mt={2}
+            fontSize="sm"
+            textAlign="left"
+            color="brand.text"
+            _hover={{ textDecoration: "underline" }}
+            onClick={openGameGroup}
+          >
+            查看各游戏小群列表
+          </Link>
+        </Card>
+
+        {/* ---------- 赞助 ---------- */}
+        <Card p={4}>
+          <SectionHead icon={MdFavorite} title="赞助喵服" />
+
+          <Text fontSize="sm" color="text.muted" lineHeight="1.7">
+            觉得好用的话支持下啦，赞助可以解锁专属节点与特权。
+          </Text>
+
+          <Link
+            as={RouterLink}
+            to="/sponsor"
+            mt={2}
+            fontSize="sm"
+            color="brand.text"
+            _hover={{ textDecoration: "underline" }}
+          >
+            查看赞助方式
+          </Link>
+        </Card>
+      </VStack>
+
+      {/* ---------- 各游戏 QQ 群 ---------- */}
       <Modal
         isOpen={isGameGroupOpen}
         onClose={closeGameGroupAndReset}
@@ -175,14 +208,7 @@ export default function SideBar() {
             />
 
             {filteredGames.length === 0 ? (
-              <Text
-                py={4}
-                fontSize="sm"
-                color="rgba(255, 255, 255, 0.6)"
-                textAlign="center"
-              >
-                未找到相关游戏
-              </Text>
+              <EmptyState title="未找到相关游戏" />
             ) : (
               <VStack spacing={0} align="stretch">
                 {filteredGames.map((game, index) => {
@@ -190,16 +216,9 @@ export default function SideBar() {
 
                   return (
                     <Box key={game.path}>
-                      {index > 0 && (
-                        <Divider borderColor="rgba(255, 255, 255, 0.1)" />
-                      )}
+                      {index > 0 && <Divider />}
 
-                      <Flex
-                        align="center"
-                        justify="space-between"
-                        gap={3}
-                        py={2}
-                      >
+                      <Flex align="center" justify="space-between" gap={3} py={2}>
                         <Flex align="center" minW={0}>
                           <Image
                             mr={2}
@@ -209,13 +228,15 @@ export default function SideBar() {
                             objectFit="cover"
                             borderRadius="md"
                             flexShrink={0}
-                            bg="rgba(255,255,255,0.08)"
+                            bg="bg.subtle"
                           />
 
-                          <Text isTruncated>{game.title}</Text>
+                          <Text isTruncated fontSize="sm">
+                            {game.title}
+                          </Text>
                         </Flex>
 
-                        {/* 无专属群的只给灰字，不再渲染可点却没反应的复制图标 */}
+                        {/* 无专属群的只给灰字，不渲染可点却没反应的复制图标 */}
                         {qq ? (
                           <Flex
                             as="button"
@@ -224,19 +245,20 @@ export default function SideBar() {
                             gap={1}
                             flexShrink={0}
                             fontSize="sm"
-                            color="white"
+                            color="text.main"
                             onClick={() => copyText(qq)}
-                            _hover={{ color: "#7ddcff" }}
+                            _hover={{ color: "brand.text" }}
+                            title="点击复制"
                           >
                             {qq}
                             <Icon
                               as={MdContentCopy}
                               boxSize={3.5}
-                              color="#7ddcff"
+                              color="brand.text"
                             />
                           </Flex>
                         ) : (
-                          <Text flexShrink={0} fontSize="sm" color="gray.400">
+                          <Text flexShrink={0} fontSize="sm" color="text.faint">
                             暂无专属群
                           </Text>
                         )}
@@ -250,17 +272,53 @@ export default function SideBar() {
         </ModalContent>
       </Modal>
 
+      {/* ---------- 历史公告 ---------- */}
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
-        <ModalContent {...MODAL_STYLE} maxH="80vh" overflowY="auto">
+        <ModalContent {...MODAL_STYLE} maxH="80vh">
           <ModalHeader>历史公告</ModalHeader>
           <ModalCloseButton />
 
-          <ModalBody pb={6}>
+          <ModalBody pb={6} overflowY="auto">
             <AnnouncementList />
           </ModalBody>
         </ModalContent>
       </Modal>
     </Box>
+  );
+}
+
+/** 侧栏小节标题：图标 + 标题 + 右侧操作 */
+function SectionHead({
+  icon,
+  title,
+  action,
+}: {
+  icon: React.ComponentType;
+  title: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <Flex align="center" justify="space-between" gap={2} mb={2}>
+      <Flex align="center" gap={2} minW={0}>
+        <Flex
+          align="center"
+          justify="center"
+          boxSize="26px"
+          rounded="lg"
+          bg="brand.soft"
+          color="brand.text"
+          flexShrink={0}
+        >
+          <Icon as={icon} boxSize={4} />
+        </Flex>
+
+        <Heading as="h3" fontSize="sm" fontWeight="700" isTruncated>
+          {title}
+        </Heading>
+      </Flex>
+
+      {action}
+    </Flex>
   );
 }

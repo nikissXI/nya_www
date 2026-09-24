@@ -348,7 +348,7 @@ export default function Page() {
   const nodeWarningElement = useMemo(() => {
     if (!nodeWarningText) return null;
     return (
-      <Text mt={2} color="#ffca3d" fontSize="xs" textAlign="left">
+      <Text mt={2} color="warning.text" fontSize="xs" textAlign="left">
         {nodeWarningText}
       </Text>
     );
@@ -395,10 +395,15 @@ export default function Page() {
                   cursor="pointer"
                 >
                   该游戏的喵服QQ群{" "}
-                  <Text as="span" fontWeight="bold" color="#7ddcff">
+                  <Text as="span" fontWeight="bold" color="brand.text">
                     {gameInfo.qq}
                   </Text>
-                  <Icon ml={1} as={MdContentCopy} boxSize={3} color="#7ddcff" />
+                  <Icon
+                    ml={1}
+                    as={MdContentCopy}
+                    boxSize={3}
+                    color="brand.text"
+                  />
                 </Text>
               )}
 
@@ -412,7 +417,7 @@ export default function Page() {
                   ))}
                 </VStack>
               ) : (
-                <Text mt={2} fontSize="sm" color="gray.300">
+                <Text mt={2} fontSize="sm" color="text.muted">
                   具体平台、版本和主机方向请先查看该游戏教程中的说明。
                 </Text>
               )}
@@ -429,23 +434,21 @@ export default function Page() {
           <ModalContent {...MODAL_STYLE}>
             <ModalBody>
               <Text mt={3}>{sponsorNotice}</Text>
-              <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
+              <Text fontSize="sm" color="text.faint">
                 注：仅需房主赞助
               </Text>
               {sponsorNotice.includes("10元") ? (
-                <Text color="#ffca3d">
+                <Text color="warning.text">
                   赞助专用节点拥挤度低，带宽更大，联机更稳定
                 </Text>
               ) : (
-                <Text color="#ffca3d">该跨境联机节点支持国内外玩家联机</Text>
+                <Text color="warning.text">
+                  该跨境联机节点支持国内外玩家联机
+                </Text>
               )}
             </ModalBody>
             <ModalFooter gap={3}>
-              <Button
-                bgColor="transparent"
-                color="rgba(255, 255, 255, 0.75)"
-                onClick={closeSponsorNotice}
-              >
+              <Button variant="ghost" onClick={closeSponsorNotice}>
                 稍后再说
               </Button>
               <Button
@@ -505,7 +508,7 @@ export default function Page() {
 
           <InputGroup mt={2}>
             <InputLeftElement pointerEvents="none">
-              <Icon as={MdSearch} color="rgba(255, 255, 255, 0.45)" />
+              <Icon as={MdSearch} color="text.faint" />
             </InputLeftElement>
             <Input
               pl={9}
@@ -517,12 +520,7 @@ export default function Page() {
           </InputGroup>
 
           {filteredRoomGames.length === 0 ? (
-            <Text
-              py={6}
-              textAlign="center"
-              fontSize="sm"
-              color="rgba(255,255,255,0.7)"
-            >
+            <Text py={6} textAlign="center" fontSize="sm" color="text.faint">
               未找到相关游戏，请使用「通用联机房」
             </Text>
           ) : (
@@ -536,7 +534,7 @@ export default function Page() {
                   px={1}
                   borderRadius="lg"
                   transition="background 0.2s"
-                  _hover={{ bg: "rgba(125, 212, 255, 0.1)" }}
+                  _hover={{ bg: "bg.hover" }}
                 >
                   <Image
                     src={game.icon}
@@ -545,11 +543,11 @@ export default function Page() {
                     objectFit="cover"
                     borderRadius="lg"
                     flexShrink={0}
-                    bg="rgba(255,255,255,0.08)"
+                    bg="bg.subtle"
                   />
 
                   <Box flex={1} minW={0} textAlign="left">
-                    <Text fontWeight="bold" color="white" isTruncated>
+                    <Text fontWeight="bold" color="text.main" isTruncated>
                       {game.title}
                     </Text>
                     <Flex
@@ -557,7 +555,7 @@ export default function Page() {
                       align="center"
                       gap={1}
                       fontSize="xs"
-                      color="#7ddcff"
+                      color="brand.text"
                       onClick={() => setGameInfo(game)}
                       _hover={{ textDecoration: "underline" }}
                     >
@@ -610,7 +608,7 @@ export default function Page() {
                     ml={1.5}
                     as={MdContentCopy}
                     boxSize={4}
-                    color="#7ddcff"
+                    color="brand.text"
                   />
                 </Text>
               </Box>
@@ -635,7 +633,7 @@ export default function Page() {
 
             {roomGame && (
               <>
-                <Divider my={2.5} borderColor="rgba(255, 255, 255, 0.12)" />
+                <Divider my={2.5} />
 
                 <Flex align="center" gap={2}>
                   <Image
@@ -645,7 +643,7 @@ export default function Page() {
                     objectFit="cover"
                     borderRadius="md"
                     flexShrink={0}
-                    bg="rgba(255,255,255,0.08)"
+                    bg="bg.subtle"
                   />
                   <Text fontWeight="bold" isTruncated flex={1} textAlign="left">
                     {roomGame.title}
@@ -669,7 +667,7 @@ export default function Page() {
             <Flex align="center" justify="space-between">
               <SectionTitle>成员</SectionTitle>
 
-              <Text ml={2} fontSize="xs" color="rgba(255, 255, 255, 0.55)">
+              <Text ml={2} fontSize="xs" color="text.faint">
                 点刷新房间才会更新
               </Text>
 
@@ -680,15 +678,20 @@ export default function Page() {
                   fontSize="sm"
                   fontWeight="bold"
                   as="button"
-                  color="#7ddcff"
+                  color="brand.text"
                   onClick={() => navigate("/sponsor")}
                 >
                   提升人数
                 </Text>
               )}
 
-              <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
-                <Text as="span" fontSize="md" fontWeight="bold" color="white">
+              <Text fontSize="sm" color="text.muted">
+                <Text
+                  as="span"
+                  fontSize="md"
+                  fontWeight="bold"
+                  color="text.main"
+                >
                   {roomData?.members.length}
                 </Text>
                 /{roomData?.room_max} 人
@@ -705,10 +708,10 @@ export default function Page() {
                     key={item.ip}
                     px={2.5}
                     py={2}
-                    borderRadius="lg"
-                    bg="rgba(109, 180, 255, 0.18)"
+                    borderRadius="control"
+                    bg="bg.subtle"
                     border="1px solid"
-                    borderColor="rgba(109, 180, 255, 0.18)"
+                    borderColor="border.line"
                   >
                     <Flex align="center" gap={2}>
                       {item.sponsorship > 0 && (
@@ -717,7 +720,7 @@ export default function Page() {
 
                       <Text
                         fontWeight="bold"
-                        color="white"
+                        color="text.main"
                         isTruncated
                         flex={1}
                         textAlign="left"
@@ -742,21 +745,21 @@ export default function Page() {
                         align="center"
                         gap={1}
                         fontSize="sm"
-                        color="rgba(255, 255, 255, 0.85)"
+                        color="text.muted"
                         onClick={() => {
                           copyText(item.ip);
                         }}
-                        _hover={{ color: "white" }}
+                        _hover={{ color: "text.main" }}
                         minW={0}
                       >
-                        <Text as="span" fontSize="xs" color="gray.400">
+                        <Text as="span" fontSize="xs" color="text.faint">
                           喵服IP
                         </Text>
                         <Text isTruncated>{item.ip}</Text>
                         <Icon
                           as={MdContentCopy}
                           boxSize={3}
-                          color="#7ddcff"
+                          color="brand.text"
                           flexShrink={0}
                         />
                       </Flex>
@@ -766,11 +769,11 @@ export default function Page() {
                           ml="auto"
                           size="sm"
                           color="white"
-                          bg="#be1c1c"
+                          bg="danger.solid"
                           fontWeight="bold"
                           flexShrink={0}
                           cursor="pointer"
-                          _hover={{ bg: "#d32b2b" }}
+                          _hover={{ bg: "danger.solidHover" }}
                           onClick={() => handleDelMember(item.ip)}
                         >
                           踢出
@@ -787,7 +790,7 @@ export default function Page() {
             <Button
               size="sm"
               px={4}
-              bgColor="#b8332f"
+              colorScheme="red"
               onClick={() =>
                 handleLeaveRoom(
                   roomRole === ROLE_HOSTER ? "closeRoom" : "exitRoom",
@@ -803,8 +806,8 @@ export default function Page() {
             <Button
               size="sm"
               px={4}
-              bgColor="transparent"
-              color="#7ddcff"
+              variant="ghost"
+              color="brand.text"
               disabled={disableFlush}
               onClick={() => {
                 getRoomData(false);
@@ -840,16 +843,12 @@ export default function Page() {
             <ModalFooter>
               <Button
                 display={roomData?.room_passwd ? "block" : "none"}
-                bgColor="#be2b2b"
+                colorScheme="red"
                 onClick={() => handleSetRoomPasswd("")}
               >
                 清除密码
               </Button>
-              <Button
-                ml={3}
-                bgColor="#007bc0"
-                onClick={() => handleSetRoomPasswd(inputPasswd)}
-              >
+              <Button ml={3} onClick={() => handleSetRoomPasswd(inputPasswd)}>
                 {roomData?.room_passwd ? "更新密码" : "设置密码"}
               </Button>
             </ModalFooter>
@@ -860,22 +859,20 @@ export default function Page() {
   };
 
   return (
-    <Flex direction="column" px={{ base: 4, md: 8 }} align="center" pb={6}>
+    <Flex direction="column" align="center" pb={6}>
       {!userInfo ? (
         <VStack spacing={3} align="center">
           <Heading size="md">你还没登录呢</Heading>
-          <Button
-            variant="outline"
-            rounded={10}
-            onClick={openLoginModal}
-            border={0}
-          >
-            点击登录
-          </Button>
+          <Button onClick={openLoginModal}>点击登录</Button>
           <NoticeText />
         </VStack>
       ) : (
-        <VStack spacing={3} w="100%" maxW="440px" align="stretch">
+        <VStack
+          spacing={3}
+          w="100%"
+          maxW={{ base: "100%", md: "560px" }}
+          align="stretch"
+        >
           {/* 轮播公告 */}
           <AnnouncementCarousel />
 
@@ -903,7 +900,7 @@ export default function Page() {
                   textAlign="center"
                   fontWeight="bold"
                   fontSize="lg"
-                  color="white"
+                  color="text.main"
                   isTruncated
                   title={userWgInfo.node_alias}
                 >
@@ -919,7 +916,7 @@ export default function Page() {
                       borderRadius="full"
                       bg={getNetColor(nodeNetLoad)}
                     />
-                    <Text fontSize="xs" color="rgba(255, 255, 255, 0.8)">
+                    <Text fontSize="xs" color="text.muted">
                       {getNetText(nodeNetLoad)}
                     </Text>
                   </Flex>
@@ -946,7 +943,7 @@ export default function Page() {
             </Box>
           ) : (
             <Center {...CARD_STYLE} py={4} gap={2}>
-              <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
+              <Text fontSize="sm" color="text.faint">
                 节点数据加载中
               </Text>
               <Spinner size="sm" />
@@ -976,15 +973,12 @@ export default function Page() {
                     </Text>
                   </Flex>
                 ) : (
-                  <Icon
-                    as={RiSignalCellularOffLine}
-                    color="rgba(255, 255, 255, 0.6)"
-                  />
+                  <Icon as={RiSignalCellularOffLine} color="text.faint" />
                 )}
               </HStack>
 
               {!isOnline && (
-                <Text mr="auto" fontSize="xs" color="rgba(255, 255, 255, 0.55)">
+                <Text mr="auto" fontSize="xs" color="text.faint">
                   要安装WG客户端
                 </Text>
               )}
@@ -992,8 +986,8 @@ export default function Page() {
               <Button
                 size="sm"
                 px={3}
-                bgColor="transparent"
-                color="#7ddcff"
+                variant="ghost"
+                color="brand.text"
                 disabled={disableFlush}
                 flexShrink={0}
                 onClick={() => {
@@ -1013,39 +1007,25 @@ export default function Page() {
               </Button>
             </Flex>
 
-            <Flex
-              align="center"
-              justify="center"
-              gap={2}
-              mt={1.5}
-              fontSize="sm"
-            >
-              <Text
-                as="button"
-                color="#7ddcff"
-                onClick={() => {
-                  navigate("/docs");
-                }}
+            {isOnline === false && (
+              <Flex
+                align="center"
+                justify="center"
+                gap={2}
+                mt={1.5}
+                fontSize="sm"
               >
-                WG安装教程
-              </Text>
-
-              {isOnline === false && (
-                <>
-                  <Box w="1px" h="12px" bg="rgba(255, 255, 255, 0.25)" />
-                  <Text
-                    as="button"
-                    color="#7ddcff"
-                    // color="#ffca3d"
-                    onClick={() => {
-                      navigate("/offlineCheck");
-                    }}
-                  >
-                    WG连不上或掉线
-                  </Text>
-                </>
-              )}
-            </Flex>
+                <Text
+                  as="button"
+                  color="brand.text"
+                  onClick={() => {
+                    navigate("/offlineCheck");
+                  }}
+                >
+                  隧道打开了还是离线或掉线排查
+                </Text>
+              </Flex>
+            )}
           </Box>
 
           {roomRole === ROLE_NONE ? standbyPage() : joinedPage()}

@@ -135,7 +135,7 @@ const InfoRow = (props: {
   right?: React.ReactNode;
 }) => (
   <Flex align="center" gap={3} py={2}>
-    <Icon as={props.icon} boxSize={4} color="#7ddcff" flexShrink={0} />
+    <Icon as={props.icon} boxSize={4} color="brand.text" flexShrink={0} />
 
     <Box flex={1} minW={0} textAlign="left">
       <SectionTitle>{props.label}</SectionTitle>
@@ -372,7 +372,7 @@ export default function UserProfilePage() {
   };
 
   return (
-    <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
+    <Flex direction="column" align="center">
       {/* 绑定/改绑手机 */}
       <BindModal
         isOpen={bindTELIsOpen}
@@ -446,7 +446,7 @@ export default function UserProfilePage() {
               </Button>
             </Flex>
 
-            <Text color="#ffd648" fontSize="sm">
+            <Text color="warning.text" fontSize="sm">
               {verifyQQText}
             </Text>
           </Box>
@@ -487,7 +487,7 @@ export default function UserProfilePage() {
                   {...INPUT_STYLE}
                 />
 
-                <Text color="#ffd648" fontSize="sm">
+                <Text color="warning.text" fontSize="sm">
                   {passwordAlertText}
                 </Text>
               </Box>
@@ -508,8 +508,7 @@ export default function UserProfilePage() {
               <Button
                 py={1}
                 variant="link"
-                color="#7dfffe"
-                bgColor="transparent"
+                color="brand.text"
                 onClick={() => {
                   changePassOnClose();
                   navigate("/forgetPass");
@@ -534,21 +533,17 @@ export default function UserProfilePage() {
           <ModalCloseButton />
 
           <ModalBody pb={4}>
-            <Text fontSize="sm" color="rgba(255, 255, 255, 0.85)">
+            <Text fontSize="sm" color="text.muted">
               确认退出当前账号？退出后需要重新登录才能进入联机房间。
             </Text>
           </ModalBody>
 
           <ModalFooter gap={3}>
-            <Button
-              bgColor="transparent"
-              color="rgba(255, 255, 255, 0.75)"
-              onClick={logoutConfirmOnClose}
-            >
+            <Button variant="ghost" onClick={logoutConfirmOnClose}>
               取消
             </Button>
             <Button
-              bgColor="#b8332f"
+              colorScheme="red"
               onClick={() => {
                 logout();
                 logoutConfirmOnClose();
@@ -565,29 +560,23 @@ export default function UserProfilePage() {
           <VStack spacing={3} align="center">
             <Heading size="md">你还没登录呢</Heading>
 
-            <Button
-              variant="outline"
-              rounded={10}
-              onClick={openLoginModal}
-              border={0}
-            >
-              点击登录
-            </Button>
+            <Button onClick={openLoginModal}>点击登录</Button>
 
             <NoticeText />
           </VStack>
         ) : (
-          <VStack spacing={3} w="100%" maxW="440px" mx="auto" align="stretch">
+          <VStack
+            spacing={3}
+            w="100%"
+            maxW={{ base: "100%", md: "560px" }}
+            mx="auto"
+            align="stretch"
+          >
             {/* 账号信息（含昵称与账号绑定） */}
             <Box {...CARD_STYLE} {...CARD_PADDING}>
               <SectionTitle>账号信息</SectionTitle>
 
-              <VStack
-                spacing={0}
-                align="stretch"
-                mt={1}
-                divider={<Divider borderColor="rgba(255, 255, 255, 0.1)" />}
-              >
+              <VStack spacing={0} align="stretch" mt={1} divider={<Divider />}>
                 <InfoRow
                   icon={FaUser}
                   label="昵称"
@@ -607,8 +596,7 @@ export default function UserProfilePage() {
                           size="sm"
                           px={3}
                           flexShrink={0}
-                          bgColor="transparent"
-                          color="rgba(255, 255, 255, 0.7)"
+                          variant="ghost"
                           onClick={() => setIsEditingUsername(false)}
                         >
                           取消
@@ -644,11 +632,7 @@ export default function UserProfilePage() {
                         {...INPUT_STYLE}
                       />
 
-                      <Text
-                        mt={1}
-                        fontSize="xs"
-                        color="rgba(255, 255, 255, 0.5)"
-                      >
+                      <Text mt={1} fontSize="xs" color="text.faint">
                         2-14 个字符，或 1-7 个汉字
                       </Text>
                     </Box>
@@ -672,14 +656,14 @@ export default function UserProfilePage() {
                       <Icon
                         as={MdContentCopy}
                         boxSize={3.5}
-                        color="#7ddcff"
+                        color="brand.text"
                         cursor="pointer"
                         flexShrink={0}
                         onClick={() => copyText(userWgInfo.user_ip)}
                       />
                     </Flex>
                   ) : (
-                    <Text fontSize="sm" color="rgba(255, 255, 255, 0.55)">
+                    <Text fontSize="sm" color="text.faint">
                       未选择节点
                     </Text>
                   )}
@@ -725,7 +709,7 @@ export default function UserProfilePage() {
                   <Text
                     fontSize="sm"
                     isTruncated
-                    color={userInfo.tel ? "white" : "rgba(255, 255, 255, 0.55)"}
+                    color={userInfo.tel ? "text.main" : "text.faint"}
                   >
                     {userInfo.tel || "未绑定"}
                   </Text>
@@ -752,9 +736,7 @@ export default function UserProfilePage() {
                   <Text
                     fontSize="sm"
                     isTruncated
-                    color={
-                      userInfo.email ? "white" : "rgba(255, 255, 255, 0.55)"
-                    }
+                    color={userInfo.email ? "text.main" : "text.faint"}
                   >
                     {userInfo.email || "未绑定"}
                   </Text>
@@ -783,7 +765,7 @@ export default function UserProfilePage() {
                   <Text
                     fontSize="sm"
                     isTruncated
-                    color={userInfo.qq ? "white" : "rgba(255, 255, 255, 0.55)"}
+                    color={userInfo.qq ? "text.main" : "text.faint"}
                   >
                     {userInfo.qq || "未绑定"}
                   </Text>
@@ -798,7 +780,7 @@ export default function UserProfilePage() {
                   <Icon
                     as={FaShieldAlt}
                     boxSize={4}
-                    color="#7ddcff"
+                    color="brand.text"
                     flexShrink={0}
                   />
 
@@ -822,7 +804,7 @@ export default function UserProfilePage() {
                   <Icon
                     as={FaSignOutAlt}
                     boxSize={4}
-                    color="#ff6b5e"
+                    color="danger.text"
                     flexShrink={0}
                   />
 
@@ -830,7 +812,7 @@ export default function UserProfilePage() {
                     size="sm"
                     px={3}
                     flexShrink={0}
-                    bgColor="#b8332f"
+                    colorScheme="red"
                     onClick={logoutConfirmOnopen}
                   >
                     退出登录

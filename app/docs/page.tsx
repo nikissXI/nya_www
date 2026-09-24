@@ -14,10 +14,6 @@ import {
   Collapse,
   Image,
   Link,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -30,10 +26,11 @@ import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
 import { getStatusColor } from "@/utils/strings";
 import { NoticeText } from "@/components/universal/Notice";
+import { DocNotice } from "@/components/docs/DocParts";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
-    <Text as="span" color="#ffca3d" fontWeight="bold" {...props}>
+    <Text as="span" color="warning.text" fontWeight="bold" {...props}>
       {children}
     </Text>
   );
@@ -120,7 +117,7 @@ const DocumentPage = () => {
       <Box mb={1}>
         <Text>
           ① 当前选择的是&ensp;
-          <Text as="span" color="#ffca3d" fontWeight="bold">
+          <Text as="span" color="warning.text" fontWeight="bold">
             {userWgInfo?.node_alias}
           </Text>
           &ensp;节点
@@ -182,84 +179,52 @@ const DocumentPage = () => {
   };
 
   return (
-    <Box px={{ base: 4, md: 8 }} pb={5} maxW="900px" mx="auto">
-      <Alert
-        status="info"
-        variant="subtle"
-        borderRadius="md"
-        mb={5}
-        bg="#dbeafe"
-        color="#17324d"
-      >
-        <Box>
-          <Flex color="#17324d">
-            <AlertIcon />
-            <AlertTitle fontSize="md">开始前请注意</AlertTitle>
-          </Flex>
-
-          <AlertDescription fontSize="sm">
-            <VStack align="stretch" spacing={1} mt={1}>
-              <Text>
-                <Icon as={MdTipsAndUpdates} mr={1} />
-                联机的每个玩家都要注册喵服并安装WG
-              </Text>
-              <Text>
-                <Icon as={MdTipsAndUpdates} mr={1} />
-                WG客户端要安装在运行游戏的设备上
-              </Text>
-              <Text>
-                <Icon as={MdTipsAndUpdates} mr={1} />
-                禁止Minecraft联机（独享节点除外）
-              </Text>
-              <Text>
-                <Icon as={MdTipsAndUpdates} mr={1} />
-                不兼容华为的鸿蒙6系统
-              </Text>
-            </VStack>
-          </AlertDescription>
-        </Box>
-      </Alert>
+    <Box pb={5} maxW="900px" mx="auto">
+      <DocNotice
+        notices={[
+          "联机的每个玩家都要注册喵服并安装WG",
+          "WG客户端要安装在运行游戏的设备上",
+          "禁止Minecraft联机（独享节点除外）",
+          "不兼容华为的鸿蒙6系统",
+        ]}
+      />
 
       <Box mt={5} display={userWgInfo === undefined ? "block" : "none"}>
         <VStack spacing={3} align="center">
           <Heading size="md">请登录后再访问该页面</Heading>
-          <Button
-            variant="outline"
-            rounded={10}
-            onClick={openLoginModal}
-            border={0}
-          >
-            点击登录
-          </Button>
+          <Button onClick={openLoginModal}>点击登录</Button>
           <NoticeText />
         </VStack>
       </Box>
 
       <Box mt={5} display={userWgInfo === undefined ? "none" : "block"}>
-        <Tabs variant="line">
+        <Tabs variant="unstyled">
           <Heading size="md">点击选择联机的设备类型</Heading>
 
           <TabList
-            mt={1}
+            mt={2}
             flexWrap="wrap"
             gap={{ base: 1.5, md: 2 }} // 移动端间距小一点
-            p={1}
           >
             {["安卓", "苹果", "Windows", "Mac", "SteamDeck", "Linux"].map(
               (label) => (
                 <Tab
                   key={label}
                   py={1.5}
-                  px={{ base: 3, md: 5 }}
-                  fontWeight="bold"
-                  fontSize={{ base: "sm", md: "md" }} // 响应式字体
-                  borderRadius="lg"
+                  px={{ base: 3, md: 4 }}
+                  fontWeight="600"
+                  fontSize="sm"
+                  borderRadius="full"
+                  color="text.muted"
+                  bg="bg.subtle"
+                  border="1px solid"
+                  borderColor="border.line"
                   _selected={{
                     color: "white",
-                    bg: "blue.600",
-                    boxShadow: "md", // 阴影增强选中效果
+                    bg: "brand.solid",
+                    borderColor: "brand.solid",
                   }}
-                  transition="all 0.2s"
+                  transition="all .2s"
                 >
                   {label}
                 </Tab>
@@ -276,7 +241,8 @@ const DocumentPage = () => {
                 ② 下载并安装WG客户端
                 <Text
                   as="span"
-                  color="#7ddcff"
+                  color="brand.text"
+                  fontWeight="600"
                   onClick={() => {
                     setAndroidDLWarning(!showAndroidDLWarning);
                   }}
@@ -309,7 +275,8 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7ddcff"
+                  color="brand.text"
+                  fontWeight="600"
                   onClick={() => {
                     getConfKey(true);
                   }}
@@ -319,7 +286,7 @@ const DocumentPage = () => {
                 <Text
                   ml={1}
                   fontSize="sm"
-                  color="#ffd648"
+                  color="warning.text"
                   onClick={() => {
                     if (confKey) handleCopyLink(confKey);
                   }}
@@ -347,7 +314,8 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7ddcff"
+                  color="brand.text"
+                  fontWeight="600"
                   size="sm"
                   onClick={() => setShowXM(!showXM)}
                 >
@@ -390,7 +358,7 @@ const DocumentPage = () => {
                 />
               </Box>
 
-              <Tabs variant="line" colorScheme="orange">
+              <Tabs variant="unstyled">
                 <Text mt={5} fontWeight="bolder">
                   iOS导入隧道可以扫码或下载
                   <br />
@@ -399,23 +367,41 @@ const DocumentPage = () => {
                   </HighLight>
                 </Text>
 
-                <TabList
-                  my={1}
-                  display="inline-flex"
-                  alignItems="center"
-                  maxW="fit-content"
-                >
+                <TabList my={2}>
                   <Tab
-                    py={1}
-                    fontWeight="bolder"
-                    _selected={{ color: "white", bg: "blue.600" }}
+                    py={1.5}
+                    px={4}
+                    fontWeight="600"
+                    fontSize="sm"
+                    borderRadius="full"
+                    color="text.muted"
+                    bg="bg.subtle"
+                    border="1px solid"
+                    borderColor="border.line"
+                    mr={2}
+                    _selected={{
+                      color: "white",
+                      bg: "brand.solid",
+                      borderColor: "brand.solid",
+                    }}
                   >
                     扫二维码
                   </Tab>
                   <Tab
-                    py={1}
-                    fontWeight="bolder"
-                    _selected={{ color: "white", bg: "blue.600" }}
+                    py={1.5}
+                    px={4}
+                    fontWeight="600"
+                    fontSize="sm"
+                    borderRadius="full"
+                    color="text.muted"
+                    bg="bg.subtle"
+                    border="1px solid"
+                    borderColor="border.line"
+                    _selected={{
+                      color: "white",
+                      bg: "brand.solid",
+                      borderColor: "brand.solid",
+                    }}
                   >
                     下载隧道
                   </Tab>
@@ -517,7 +503,8 @@ const DocumentPage = () => {
                 <Text
                   ml={2}
                   as="span"
-                  color="#7ddcff"
+                  color="brand.text"
+                  fontWeight="600"
                   size="sm"
                   onClick={() => setShowMSI(!showMSI)}
                 >
@@ -530,7 +517,8 @@ const DocumentPage = () => {
                   <Text
                     as="span"
                     fontSize="sm"
-                    color="#7ddcff"
+                    color="brand.text"
+                    fontWeight="600"
                     onClick={() => {
                       window.open("/apks/右键以管理员身份运行.bat", "_blank");
                     }}
@@ -632,7 +620,7 @@ const DocumentPage = () => {
                   <br />
                   <Link
                     ml={1}
-                    color="#7ddcff"
+                    color="brand.text"
                     href="https://www.wireguard.com/install/"
                     target="_blank"
                   >
@@ -683,7 +671,7 @@ const DocumentPage = () => {
               onClick={() => {
                 getRoomData(false);
               }}
-              color="#7ddcff"
+              color="brand.text"
             >
               <Text>刷新</Text>
               <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
@@ -699,7 +687,7 @@ const DocumentPage = () => {
                 ml={1}
                 variant="link"
                 bg="transparent"
-                color="#7ddcff"
+                color="brand.text"
                 onClick={() => {
                   navigate("/offlineCheck");
                 }}
@@ -718,7 +706,7 @@ const DocumentPage = () => {
               mx={1}
               variant="link"
               bg="transparent"
-              color="#7ddcff"
+              color="brand.text"
               onClick={() => {
                 navigate("/room");
               }}

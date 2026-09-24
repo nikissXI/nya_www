@@ -28,7 +28,7 @@ export default function Page() {
   const [searchParams] = useSearchParams();
 
   return (
-    <Flex direction="column" px={{ base: 4, md: 8 }} align="center" pb={6}>
+    <Flex direction="column" align="center" pb={6}>
       <Box {...CARD_STYLE} {...CARD_PADDING} maxW="380px" px={4} py={4}>
         <AuthForm
           onSuccess={() =>

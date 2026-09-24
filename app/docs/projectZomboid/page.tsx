@@ -1,19 +1,16 @@
-import {
-  Heading,
-  Divider,
-  Text,
-  Box,
-  VStack,
-  Badge,
-  Icon,
-  Image,
-  Link,
-} from "@chakra-ui/react";
+import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
-import { MdTipsAndUpdates } from "react-icons/md";
+import {
+  DocImage,
+  DocMuted,
+  DocStep,
+  DocTip,
+  DocTips,
+  ExtLink,
+} from "@/components/docs/DocParts";
 
-export default function AndroidPage0() {
+export default function Page() {
   return (
     <DocBox
       notices={[
@@ -21,9 +18,7 @@ export default function AndroidPage0() {
       ]}
     >
       <Text>该游戏玩家群体太小，没有专门的交流群</Text>
-      <Text fontSize="sm" color="gray.300" mt={1}>
-        联机有问题请去大群找群主
-      </Text>
+      <DocMuted mt={1}>联机有问题请去大群找群主</DocMuted>
 
       <Divider my={5} />
 
@@ -32,19 +27,14 @@ export default function AndroidPage0() {
       </Heading>
 
       <VStack align="stretch" spacing={3}>
-        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
-          <Badge colorScheme="blue" mb={1}>
-            第 1 步 · 主机
-          </Badge>
+        <DocStep step={1} role="主机">
           <Text>一名玩家作为主机，建立服务器，进到地图里等待</Text>
-        </Box>
-        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
-          <Badge colorScheme="blue" mb={1}>
-            第 2 步 · 客机
-          </Badge>
+        </DocStep>
+
+        <DocStep step={2} role="客机">
           <Text>其他玩家作为客机，根据下图指引填写信息加入游戏</Text>
-          <Image src="/images/projectZomboid/hoster.webp" alt="hoster" />
-        </Box>
+          <DocImage src="/images/projectZomboid/hoster.webp" alt="hoster" />
+        </DocStep>
       </VStack>
 
       <Divider my={5} />
@@ -53,24 +43,15 @@ export default function AndroidPage0() {
         联机失败？按顺序检查
       </Heading>
 
-      <VStack align="stretch" spacing={2}>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+      <DocTips>
+        <DocTip>
           如果是Windows做主机，试试关闭防火墙
-          <Link
-            ml={1}
-            href="https://zhuanlan.zhihu.com/p/397675766"
-            color="#7ddcff"
-            target="_blank"
-          >
+          <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
             不会关点我
-          </Link>
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
-          如果加入后或规律性闪退、黑屏，请自行检查mod或是游戏bug
-        </Text>
-      </VStack>
+          </ExtLink>
+        </DocTip>
+        <DocTip>如果加入后或规律性闪退、黑屏，请自行检查mod或是游戏bug</DocTip>
+      </DocTips>
 
       <Divider my={5} />
 

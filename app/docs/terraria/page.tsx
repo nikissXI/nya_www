@@ -1,17 +1,14 @@
-import {
-  Heading,
-  Divider,
-  Text,
-  Image,
-  Box,
-  VStack,
-  Badge,
-  Icon,
-  Link,
-} from "@chakra-ui/react";
-import { MdTipsAndUpdates } from "react-icons/md";
+import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
+import {
+  DocImage,
+  DocMuted,
+  DocStep,
+  DocTip,
+  DocTips,
+  ExtLink,
+} from "@/components/docs/DocParts";
 
 export default function Page() {
   return (
@@ -23,55 +20,46 @@ export default function Page() {
       ]}
     >
       <Text>喵服泰拉瑞亚交流Q群 976129564</Text>
-      <Text fontSize="sm" color="gray.300" mt={1}>
-        联机有问题或找搭子请加群
-      </Text>
+      <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
       <Divider my={5} />
 
       <Heading size="md">联机步骤</Heading>
 
-      <Text fontSize="sm" my={1} color="gray.300">
-        端游和手游一样，下图用的是安卓国际版
-      </Text>
+      <DocMuted my={1}>端游和手游一样，下图用的是安卓国际版</DocMuted>
 
       <VStack align="stretch" spacing={3}>
-        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
-          <Badge colorScheme="blue" mb={1}>
-            第 1 步 · 主机
-          </Badge>
+        <DocStep step={1} role="主机">
           <Text>
             一名玩家作为主机，进到多人模式，创建一个多人世界并进去世界里等待
           </Text>
-          <Text fontSize="sm" color="gray.300" mt={1}>
+          <DocMuted mt={1}>
             手机或平板做主机时，游戏必须保持在前台，不能锁屏或切到后台
-          </Text>
-          <Image w="400px" src="/images/terraria/hoster.webp" alt="hoster" />
-        </Box>
-        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
-          <Badge colorScheme="blue" mb={1}>
-            第 2 步 · 客机
-          </Badge>
+          </DocMuted>
+          <DocImage w="400px" src="/images/terraria/hoster.webp" alt="hoster" />
+        </DocStep>
+
+        <DocStep step={2} role="客机">
           <Text>其他玩家作为客机，进到多人模式，看下图操作吧</Text>
-          <Image
+          <DocImage
             mt={1}
             w="400px"
             src="/images/terraria/joiner1.webp"
             alt="joiner1"
           />
-          <Image
+          <DocImage
             mt={1}
             w="400px"
             src="/images/terraria/joiner2.webp"
             alt="joiner2"
           />
-          <Image
+          <DocImage
             mt={1}
             w="400px"
             src="/images/terraria/joiner3.webp"
             alt="joiner3"
           />
-        </Box>
+        </DocStep>
       </VStack>
 
       <Divider my={5} />
@@ -80,28 +68,20 @@ export default function Page() {
         联机失败？按顺序检查
       </Heading>
 
-      <VStack align="stretch" spacing={2}>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+      <DocTips>
+        <DocTip>
           如果是Windows做主机，试试关闭防火墙
-          <Link
-            ml={1}
-            href="https://zhuanlan.zhihu.com/p/397675766"
-            color="#7ddcff"
-            target="_blank"
-          >
+          <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
             不会关点我
-          </Link>
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+          </ExtLink>
+        </DocTip>
+        <DocTip>
           装tMod不影响联机，如果装了后不能联机，关闭防火墙及检查模组
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+        </DocTip>
+        <DocTip>
           提示版本不一样就自己检查版本，最上面的注意事项写了TapTap版不支持与国际版联机
-        </Text>
-      </VStack>
+        </DocTip>
+      </DocTips>
 
       <Divider my={5} />
 

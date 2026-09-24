@@ -44,13 +44,19 @@ export default function TunnelUpdateModal() {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent bgColor="#002f5c">
+      <ModalContent>
         <ModalHeader alignSelf="center">请更新WG隧道文件</ModalHeader>
         <ModalBody>
-          <Text>你获取了新ip，旧ip及其隧道已失效</Text>
-          <Text>需要导入新IP的隧道才能连接喵服</Text>
+          <Text color="text.muted">你获取了新ip，旧ip及其隧道已失效</Text>
+          <Text color="text.muted">需要导入新IP的隧道才能连接喵服</Text>
 
-          <Text textAlign="center" mt={4}>
+          <Text
+            textAlign="center"
+            mt={4}
+            className="tabular"
+            fontSize="sm"
+            color="text.faint"
+          >
             {!canClose && `还有 ${countdown} 秒可以跳转`}
           </Text>
 

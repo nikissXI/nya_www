@@ -1,40 +1,101 @@
+/**
+ * 全局样式
+ * ------------------------------------------------------------------
+ * 只放「无法用 Chakra 语义 token 表达」的东西：
+ * 1. 亮暗两套阴影 / 焦点环 CSS 变量（Chakra 的 semanticTokens 不支持阴影）
+ * 2. 滚动条配色（跟随主题）
+ * 3. 原生控件配色、移动端安全区
+ *
+ * 页面样式一律不要写在这里，用 theme.ts 的语义 token。
+ */
+
+:root {
+  --nya-shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04),
+    0 12px 32px -20px rgba(16, 24, 40, 0.28);
+  --nya-shadow-pop: 0 24px 56px -20px rgba(16, 24, 40, 0.32);
+  --nya-ring: rgba(59, 130, 246, 0.28);
+  --nya-safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* 延迟 / 负载等状态色：亮色下需要更深的颜色才看得清 */
+  --nya-good: #059669;
+  --nya-soso: #d97706;
+  --nya-bad: #dc2626;
+}
+
+[data-theme="dark"] {
+  --nya-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5),
+    0 12px 32px -20px rgba(0, 0, 0, 0.9);
+  --nya-shadow-pop: 0 24px 56px -20px rgba(0, 0, 0, 0.85);
+  --nya-ring: rgba(96, 165, 250, 0.32);
+
+  --nya-good: #00e63a;
+  --nya-soso: #ffb12c;
+  --nya-bad: #ff3737;
+}
+
+html {
+  /* 亮暗切换时让原生控件（滚动条、日期选择器）跟着变 */
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html,
 body {
-  color: white !important;
+  padding: 0;
+  margin: 0;
 }
 
-/* button {
-  color: white !important;
-} */
-
-th {
-  text-align: center !important;
+#root {
+  min-height: 100dvh;
 }
 
-td {
-  text-align: center !important;
+/* ---------- 滚动条：跟随主题 ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--chakra-colors-border-strong) transparent;
 }
 
-/* 自定义滚动条 */
 ::-webkit-scrollbar {
   width: 10px;
-  /* 滚动条的宽度 */
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #9ce6ff;
-  /* 滚动条轨道的背景色 */
-  border-radius: 10px;
-  /* 轨道的圆角 */
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #007ab3;
-  /* 滚动条的颜色 */
-  border-radius: 6px;
-  /* 滚动条的圆角 */
+  background: var(--chakra-colors-border-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #003e5b;
-  /* 滚动条在悬停时的颜色 */
+  background: var(--chakra-colors-text-faint);
+  background-clip: content-box;
+}
+
+/* ---------- 表格：沿用全站居中 ---------- */
+th,
+td {
+  text-align: center;
+}
+
+/* ---------- 移动端底部安全区（底部标签栏用） ---------- */
+.safe-bottom {
+  padding-bottom: var(--nya-safe-bottom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

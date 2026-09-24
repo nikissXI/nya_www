@@ -148,7 +148,7 @@ export default function Page() {
   };
 
   return (
-    <Flex direction="column" px={{ base: 4, md: 8 }} align="center" pb={6}>
+    <Flex direction="column" align="center" pb={6}>
       <Box {...CARD_STYLE} {...CARD_PADDING} maxW="380px" px={4} py={4}>
         <VStack spacing={3} align="stretch" onKeyDown={handleRegisterEnter}>
           {/* 注册方式 */}
@@ -163,8 +163,14 @@ export default function Page() {
                     key={value}
                     flex="1"
                     size="sm"
-                    bgColor={active ? "#2976bd" : "rgba(255, 255, 255, 0.08)"}
-                    color={active ? "white" : "rgba(255, 255, 255, 0.65)"}
+                    bg={active ? "brand.solid" : "bg.subtle"}
+                    color={active ? "white" : "text.muted"}
+                    border="1px solid"
+                    borderColor={active ? "brand.solid" : "border.line"}
+                    _hover={{
+                      bg: active ? "brand.solidHover" : "bg.hover",
+                      color: active ? "white" : "text.main",
+                    }}
                     onClick={() => {
                       setInputAccount("");
                       setVerifyType(value);
@@ -208,7 +214,7 @@ export default function Page() {
               {...INPUT_STYLE}
             />
 
-            <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+            <Text mt={1} fontSize="xs" color="text.faint">
               2-14 个字符，或 1-7 个汉字
             </Text>
           </Box>
@@ -229,7 +235,7 @@ export default function Page() {
             </Box>
 
             {passwordAlertText && (
-              <Text mt={1} fontSize="xs" color="#ffd648">
+              <Text mt={1} fontSize="xs" color="warning.text">
                 {passwordAlertText}
               </Text>
             )}
@@ -271,10 +277,10 @@ export default function Page() {
                 justify="center"
                 overflow="hidden"
                 cursor="pointer"
-                borderRadius="md"
-                bg="rgba(255, 255, 255, 0.06)"
+                borderRadius="control"
+                bg="bg.subtle"
                 border="1px solid"
-                borderColor="rgba(255, 255, 255, 0.14)"
+                borderColor="border.line"
                 onClick={refreshCaptcha}
               >
                 {captchaImageUrl ? (
@@ -291,7 +297,7 @@ export default function Page() {
               </Flex>
             </Flex>
 
-            <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+            <Text mt={1} fontSize="xs" color="text.faint">
               看不清？点击图片刷新验证码
             </Text>
           </Box>
@@ -300,13 +306,15 @@ export default function Page() {
             注册
           </Button>
 
-          <Text
-            fontSize="sm"
-            textAlign="center"
-            color="rgba(255, 255, 255, 0.7)"
-          >
+          <Text fontSize="sm" textAlign="center" color="text.muted">
             已有账号？
-            <Text as="button" ml={1} color="#7ddcff" onClick={openLoginModal}>
+            <Text
+              as="button"
+              ml={1}
+              color="brand.text"
+              fontWeight="600"
+              onClick={openLoginModal}
+            >
               点击登录
             </Text>
           </Text>

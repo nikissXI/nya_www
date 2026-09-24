@@ -1,18 +1,10 @@
-
-import {
-  Flex,
-  Link,
-  Divider,
-  Text,
-  List,
-  ListItem,
-  ListIcon,
-  Heading,
-} from "@chakra-ui/react";
+import { Divider, Flex, Heading, List, ListItem, Text } from "@chakra-ui/react";
+import { Icon } from "@chakra-ui/react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import DocBox from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
+import { ExtLink } from "@/components/docs/DocParts";
 
 export default function Page() {
   const TextList = [
@@ -27,21 +19,14 @@ export default function Page() {
 
   return (
     <DocBox>
-      <Text my={3} fontSize="lg">
+      <Text my={3} fontSize="lg" lineHeight="1.9">
         电脑端联机建议用UU加速器(里面有免费组网联机功能)，比喵服更简单易用
-        <Link ml={1} color="#7ddcff" href="https://uu.163.com/" target="_blank">
-          https://uu.163.com/
-        </Link>
+        <ExtLink href="https://uu.163.com/">https://uu.163.com/</ExtLink>
         <br />
         UU加速器联机使用教程
-        <Link
-          ml={1}
-          color="#7ddcff"
-          href="https://www.bilibili.com/video/BV1wbQbBmEPv/"
-          target="_blank"
-        >
+        <ExtLink href="https://www.bilibili.com/video/BV1wbQbBmEPv/">
           https://www.bilibili.com/video/BV1wbQbBmEPv/
-        </Link>
+        </ExtLink>
       </Text>
 
       <Heading size="lg" textAlign="center">
@@ -53,11 +38,21 @@ export default function Page() {
         linkUrl="https://www.bilibili.com/video/BV1UX4GegEAf/"
       />
 
-      <List spacing={2}>
+      <List spacing={2.5}>
         {TextList.map((reason, index) => (
           <ListItem key={index} textAlign="left">
-            <ListIcon as={MdTipsAndUpdates} />
-            {reason}
+            <Flex align="flex-start" gap={2}>
+              <Icon
+                as={MdTipsAndUpdates}
+                boxSize={4}
+                color="brand.text"
+                flexShrink={0}
+                mt="3px"
+              />
+              <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+                {reason}
+              </Text>
+            </Flex>
           </ListItem>
         ))}
       </List>

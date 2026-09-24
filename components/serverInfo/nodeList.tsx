@@ -1,56 +1,56 @@
 import {
-  Box,
-  Flex,
-  Text,
-  Stack,
   Badge,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  VStack,
-  ModalFooter,
-  ModalBody,
+  Box,
   Collapse,
-  List,
-  ListItem,
-  ListIcon,
+  Flex,
   Icon,
+  Input,
+  List,
+  ListIcon,
+  ListItem,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
   Select,
   SimpleGrid,
-  Input,
+  Stack,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
-import { useUserStateStore } from "@/store/user-state";
-import type { NodeInfo } from "@/utils/endpoints";
 import { useMemo, useState } from "react";
+import { keyframes } from "@emotion/react";
+import { motion } from "framer-motion";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FaServer } from "react-icons/fa6";
+import { MdOutlineSignalCellularAlt, MdTipsAndUpdates } from "react-icons/md";
 import { Button } from "../universal/button";
 import { openToast } from "../universal/toast";
-import { MdTipsAndUpdates } from "react-icons/md";
-import { keyframes } from "@emotion/react";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { MdOutlineSignalCellularAlt } from "react-icons/md";
-import { FaServer } from "react-icons/fa6";
-import { motion } from "framer-motion";
+import { INPUT_STYLE } from "../universal/ui";
+import { useUserStateStore } from "@/store/user-state";
+import type { NodeInfo } from "@/utils/endpoints";
 import { getNetColor, getNetText, getDelayColor } from "@/utils/strings";
+
+/**
+ * 节点选择弹窗
+ * ------------------------------------------------------------------
+ * 支持排序 / 线路筛选 / 名称搜索，当前使用的节点恒置顶，
+ * 故障节点（net === -1）置底且不可点。颜色全部走语义 token。
+ */
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
 
-// 修改 sortNodes 函数，增加离线节点置底逻辑
-function sortNodes(
-  nodes: NodeInfo[],
-  sortBy: string,
-  sortOrder: "asc" | "desc",
-) {
-  const sorted = [...nodes].sort((a, b) => {
+function sortNodes(nodes: NodeInfo[], sortBy: string, sortOrder: "asc" | "desc") {
+  return [...nodes].sort((a, b) => {
     // 离线节点（net === -1）始终排在后面
     const aOffline = a.net === -1;
     const bOffline = b.net === -1;
     if (aOffline && !bOffline) return 1;
     if (!aOffline && bOffline) return -1;
 
-    // 在线节点按规则排序
     if (sortBy === "delay") {
       if (a.delay === undefined) return 1;
       if (b.delay === undefined) return -1;
@@ -68,10 +68,8 @@ function sortNodes(
     }
     return 0;
   });
-  return sorted;
 }
 
-// 筛选函数
 function filterNodes(nodes: NodeInfo[], filterBy: string, searchTerm: string) {
   return nodes.filter((node) => {
     const matchesFilter = filterBy === "all" || node.net_type === filterBy;
@@ -89,157 +87,143 @@ const ServerNodeItem: React.FC<{
   const selectNode = useUserStateStore((state) => state.selectNode);
   const selectNodeLock = useUserStateStore((state) => state.selectNodeLock);
 
+  const offline = node.net === -1;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.25 }}
     >
       <Box
         id={node.alias}
-        py={1}
-        px={3}
-        borderRadius="lg"
-        border={selected ? "2px solid" : "1px solid rgba(255, 255, 255, 0.1)"}
-        bgColor={
-          node.net === -1
-            ? "rgba(255, 255, 255, 0.02)"
-            : selected
-              ? "rgba(255, 137, 0, 0.2)"
-              : "rgba(255, 255, 255, 0.05)"
-        }
-        borderColor={
-          node.net === -1
-            ? "rgba(255, 255, 255, 0.05)"
-            : selected
-              ? "rgba(255, 117, 12, 0.6)"
-              : "rgba(255, 255, 255, 0.1)"
-        }
-        opacity={node.net === -1 ? 0.5 : 1}
-        boxShadow={
-          selected
-            ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"
-            : "0 2px 4px rgba(0, 0, 0, 0.1)"
+        p={3}
+        borderRadius="card"
+        border="1px solid"
+        borderColor={selected ? "brand.solid" : "border.line"}
+        bg={selected ? "brand.soft" : "bg.surface"}
+        boxShadow={selected ? "0 0 0 3px var(--nya-ring)" : undefined}
+        opacity={offline ? 0.55 : 1}
+        cursor={offline || selectNodeLock ? "not-allowed" : "pointer"}
+        transition="border-color .2s ease, background .2s ease, box-shadow .2s ease"
+        _hover={
+          offline
+            ? undefined
+            : {
+                borderColor: selected ? "brand.solid" : "border.strong",
+                boxShadow: selected
+                  ? "0 0 0 3px var(--nya-ring)"
+                  : "var(--nya-shadow-card)",
+              }
         }
         onClick={() => {
-          if (node.net === -1 || selectNodeLock) return;
+          if (offline || selectNodeLock) return;
           if (selected) {
-            openToast({
-              content: "已经在使用该节点",
-              status: "info",
-            });
+            openToast({ content: "已经在使用该节点", status: "info" });
             return;
           }
           selectNode(node.alias);
         }}
-        _hover={{
-          bgColor: selected
-            ? "rgba(255, 137, 0, 0.2)"
-            : "rgba(255, 255, 255, 0.1)",
-          boxShadow: selected
-            ? "0 0 3px 3px rgba(255, 174, 0, 0.6), 0 0 5px 5px rgba(255, 243, 20, 0.4)"
-            : "0 4px 8px rgba(0, 0, 0, 0.2)",
-        }}
-        cursor="pointer"
       >
-        <Flex justify="space-between" align="flex-start">
-          <Box>
-            <Flex align="center">
-              <Text
-                fontWeight="bold"
-                fontSize="lg"
-                color={node.sponsor ? "#ffd200" : "white"}
-                mr={2}
-              >
-                {node.alias}
-              </Text>
-              {node.net !== -1 ? (
-                <>
-                  <Badge fontSize="xs">{node.net_type}</Badge>
-                  <Badge fontSize="xs" mx={1}>
-                    {node.bandwidth}M
-                  </Badge>
-                  {node.node_desc && (
-                    <Badge colorScheme="gray" fontSize="xs">
-                      {node.node_desc}
-                    </Badge>
-                  )}
-                </>
-              ) : (
-                <Badge colorScheme="gray" fontSize="xs">
-                  节点故障，稍等或更换节点
+        <Flex align="center" gap={1.5} wrap="wrap">
+          <Text
+            fontWeight="700"
+            fontSize="md"
+            color={node.sponsor ? "warning.text" : "text.main"}
+          >
+            {node.alias}
+          </Text>
+
+          {!offline ? (
+            <>
+              <Badge bg="brand.soft" color="brand.text" fontSize="xs">
+                {node.net_type}
+              </Badge>
+              <Badge bg="bg.subtle" color="text.muted" fontSize="xs">
+                {node.bandwidth}M
+              </Badge>
+              {node.node_desc && (
+                <Badge bg="bg.subtle" color="text.faint" fontSize="xs">
+                  {node.node_desc}
                 </Badge>
               )}
-            </Flex>
-          </Box>
+            </>
+          ) : (
+            <Badge bg="danger.soft" color="danger.text" fontSize="xs">
+              节点故障，稍等或更换节点
+            </Badge>
+          )}
         </Flex>
 
-        <SimpleGrid
-          columns={2}
-          spacing={4}
-          display={node.net !== -1 ? "grid" : "none"}
-          mt={1}
-        >
-          <Box textAlign="center">
-            <Flex align="center" justify="center">
-              <MdOutlineSignalCellularAlt size={16} color="#7ddcff" />
-              <Text ml={1} fontSize="sm" color="gray.300">
-                延迟
-              </Text>
-            </Flex>
-            {node.net !== -1 &&
-              (node.delay !== undefined ? (
-                <Box>
-                  <Text
-                    fontSize="lg"
-                    fontWeight="bold"
-                    color={getDelayColor(node.delay)}
-                  >
-                    {node.delay}ms
+        <SimpleGrid columns={2} spacing={2} mt={2} display={offline ? "none" : "grid"}>
+          <Stat
+            icon={MdOutlineSignalCellularAlt}
+            label="延迟"
+            color={
+              node.delay !== undefined ? getDelayColor(node.delay) : "text.faint"
+            }
+            value={
+              node.delay !== undefined ? (
+                <Text as="span" className="tabular">
+                  {node.delay}
+                  <Text as="span" fontSize="xs" ml="1px">
+                    ms
                   </Text>
-                </Box>
-              ) : (
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    animation={`${spin} 1s linear infinite`}
-                    transformOrigin="center center"
-                  >
-                    <AiOutlineLoading3Quarters size={12} />
-                  </Box>
-                </Box>
-              ))}
-          </Box>
-
-          <Box textAlign="center">
-            <Flex align="center" justify="center">
-              <FaServer size={16} color="#7ddcff" />
-              <Text ml={1} fontSize="sm" color="gray.300">
-                负载
-              </Text>
-            </Flex>
-            {node.net !== -1 && (
-              <Box>
-                <Text fontWeight="bold" color={getNetColor(node.net)}>
-                  {getNetText(node.net)}
                 </Text>
-              </Box>
-            )}
-          </Box>
+              ) : (
+                <Icon
+                  as={AiOutlineLoading3Quarters}
+                  boxSize={3.5}
+                  animation={`${spin} 1s linear infinite`}
+                  color="text.faint"
+                />
+              )
+            }
+          />
+
+          <Stat
+            icon={FaServer}
+            label="负载"
+            color={getNetColor(node.net)}
+            value={getNetText(node.net)}
+          />
         </SimpleGrid>
       </Box>
     </motion.div>
   );
 };
 
+/** 节点卡片里的一个指标（延迟 / 负载） */
+function Stat({
+  icon,
+  label,
+  value,
+  color,
+}: {
+  icon: React.ComponentType;
+  label: string;
+  value: React.ReactNode;
+  color: string;
+}) {
+  return (
+    <Flex direction="column" align="center" justify="center" gap={0.5}>
+      <Flex align="center" gap={1} color="text.faint">
+        <Icon as={icon} boxSize={4} />
+        <Text fontSize="xs">{label}</Text>
+      </Flex>
+
+      <Text fontSize="lg" fontWeight="700" lineHeight="1.2" color={color}>
+        {value}
+      </Text>
+    </Flex>
+  );
+}
+
 export default function ServerNodeListModal() {
   const getNodeListLock = useUserStateStore((state) => state.getNodeListLock);
   const getNodeList = useUserStateStore((state) => state.getNodeList);
   const nodeMap = useUserStateStore((state) => state.nodeMap);
-  const showNodeListModal = useUserStateStore(
-    (state) => state.showNodeListModal,
-  );
+  const showNodeListModal = useUserStateStore((state) => state.showNodeListModal);
   const setNodeListModal = useUserStateStore((state) => state.setNodeListModal);
   const userWgInfo = useUserStateStore((state) => state.userWgInfo);
   const fixedNode = useUserStateStore((state) => state.fixedNode);
@@ -251,13 +235,11 @@ export default function ServerNodeListModal() {
   const [filterBy, setFilterBy] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // 处理节点数据
   const nodes = useMemo(
     () => (nodeMap ? Array.from(nodeMap.values()) : []),
     [nodeMap],
   );
 
-  // 获取所有网络类型
   const netTypes = useMemo(
     () => ["all", ...Array.from(new Set(nodes.map((node) => node.net_type)))],
     [nodes],
@@ -288,126 +270,64 @@ export default function ServerNodeListModal() {
       isCentered
     >
       <ModalOverlay />
-      <ModalContent
-        bgColor="#3b4960f1"
-        w={{ base: "full", md: "360px" }}
-        py={4}
-      >
-        <ModalBody>
-          <VStack spacing={1} align="stretch">
-            <SimpleGrid columns={3} spacingX={3} spacingY={1} width="100%">
-              <Text fontSize="sm">节点排序</Text>
-              <Text fontSize="sm">线路筛选</Text>
-              <Text fontSize="sm">节点搜索</Text>
+      <ModalContent w={{ base: "calc(100% - 24px)", md: "420px" }} mx={3} p={0}>
+        <ModalBody p={{ base: 4, md: 5 }}>
+          <VStack spacing={3} align="stretch">
+            <SimpleGrid columns={3} spacingX={2} spacingY={1.5} width="100%">
+              <FilterLabel text="节点排序" />
+              <FilterLabel text="线路筛选" />
+              <FilterLabel text="节点搜索" />
+
               <Select
-                size="xs"
+                size="sm"
                 value={sortBy}
                 onChange={(e) => {
                   const newSortBy = e.target.value;
                   setSortBy(newSortBy);
-                  // 当选择带宽优先时，自动设置为降序，确保带宽大的排在前面
-                  if (newSortBy === "bandwidth") {
-                    setSortOrder("desc");
-                  } else {
-                    setSortOrder("asc");
-                  }
+                  // 带宽优先时自动降序，确保带宽大的排在前面
+                  setSortOrder(newSortBy === "bandwidth" ? "desc" : "asc");
                 }}
-                bgColor="rgba(255, 255, 255, 0.05)"
-                borderColor="rgba(255, 255, 255, 0.1)"
-                borderRadius="md"
-                color="white"
-                width="100%"
-                height="28px"
-                _focus={{
-                  borderColor: "#7ddcff",
-                  boxShadow: "0 0 0 1px #7ddcff",
-                }}
-                _hover={{
-                  borderColor: "rgba(255, 255, 255, 0.3)",
-                }}
+                variant="app"
+                h="32px"
               >
-                <option
-                  value="delay"
-                  style={{ backgroundColor: "#3b4960", color: "white" }}
-                >
-                  延迟
-                </option>
-                <option
-                  value="net"
-                  style={{ backgroundColor: "#3b4960", color: "white" }}
-                >
-                  负载
-                </option>
-                <option
-                  value="bandwidth"
-                  style={{ backgroundColor: "#3b4960", color: "white" }}
-                >
-                  带宽
-                </option>
-                <option
-                  value="alias"
-                  style={{ backgroundColor: "#3b4960", color: "white" }}
-                >
-                  名称
-                </option>
+                <option value="delay">延迟</option>
+                <option value="net">负载</option>
+                <option value="bandwidth">带宽</option>
+                <option value="alias">名称</option>
               </Select>
+
               <Select
-                size="xs"
+                size="sm"
                 value={filterBy}
                 onChange={(e) => setFilterBy(e.target.value)}
-                borderRadius="md"
-                bgColor="rgba(255, 255, 255, 0.05)"
-                borderColor="rgba(255, 255, 255, 0.1)"
-                color="white"
-                width="100%"
-                height="28px"
-                _focus={{
-                  borderColor: "#7ddcff",
-                  boxShadow: "0 0 0 1px #7ddcff",
-                }}
-                _hover={{
-                  borderColor: "rgba(255, 255, 255, 0.3)",
-                }}
+                variant="app"
+                h="32px"
               >
                 {netTypes.map((type) => (
-                  <option
-                    key={type}
-                    value={type}
-                    style={{ backgroundColor: "#3b4960", color: "white" }}
-                  >
+                  <option key={type} value={type}>
                     {type === "all" ? "所有" : type}
                   </option>
                 ))}
               </Select>
+
               <Input
-                size="xs"
+                size="sm"
                 placeholder="名称"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                borderRadius="md"
-                bgColor="rgba(255, 255, 255, 0.05)"
-                borderColor="rgba(255, 255, 255, 0.1)"
-                color="white"
-                width="100%"
-                height="28px"
-                _focus={{
-                  borderColor: "#7ddcff",
-                  boxShadow: "0 0 0 1px #7ddcff",
-                }}
-                _hover={{
-                  borderColor: "rgba(255, 255, 255, 0.3)",
-                }}
+                {...INPUT_STYLE}
+                h="32px"
               />
             </SimpleGrid>
 
-            <Text textAlign="center">
+            <Text textAlign="center" fontSize="sm" color="text.muted">
               点击选择联机节点
               <Button
                 ml={1}
-                color="#7ddcff"
-                bgColor="transparent"
-                onClick={toggleExpanded}
                 variant="link"
+                size="sm"
+                colorScheme="brand"
+                onClick={toggleExpanded}
               >
                 {isExpanded ? "再点一次收起" : "不会选点我"}
               </Button>
@@ -417,67 +337,48 @@ export default function ServerNodeListModal() {
               <List
                 maxH="30vh"
                 overflowY="auto"
-                spacing={3}
-                p={2}
-                borderRadius="lg"
-                bgColor="rgba(255, 255, 255, 0.05)"
-                border="1px solid rgba(255, 255, 255, 0.1)"
+                spacing={2.5}
+                p={3}
+                borderRadius="control"
+                bg="bg.subtle"
+                border="1px solid"
+                borderColor="border.line"
               >
-                <ListItem>
-                  <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
-                    如需独享节点（50元起/月）请联系服主
-                  </Text>
-                </ListItem>
-                <ListItem>
-                  <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
-                    线路选择指南：
-                    <br />
-                    多线 - 首选，适合中国大陆任意网络，不含港澳台
-                    <br />
-                    电信 - 适合主客机都是中国电信的用户，其他运营商联机容易卡顿
-                    <br />
-                    跨境 - 适合国内和国外联机，港澳台也算“国外”
-                  </Text>
-                </ListItem>
-                <ListItem>
-                  <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
-                    负载解读：
-                    <br />
-                    显示拥挤时联机容易卡顿。
-                    追求稳定建议使用赞助专用节点，用的人少基本不挤
-                  </Text>
-                </ListItem>
-                <ListItem>
-                  <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
-                    延迟说明：
-                    <br />
-                    网络延迟越低越好，如果不是延迟敏感游戏不必追求低延迟。
-                    实际联机延迟=主机延迟+客机延迟
-                  </Text>
-                </ListItem>
-                <ListItem>
-                  <Text color="gray.200" fontSize="sm" mt={1}>
-                    <ListIcon as={MdTipsAndUpdates} color="#7ddcff" />
-                    带宽选择：
-                    <br />
-                    不同游戏所需带宽不一样，对应游戏教程里会给出带宽建议
-                  </Text>
-                </ListItem>
+                {[
+                  "如需独享节点（50元起/月）请联系服主",
+                  "线路选择指南：\n多线 - 首选，适合中国大陆任意网络，不含港澳台\n电信 - 适合主客机都是中国电信的用户，其他运营商联机容易卡顿\n跨境 - 适合国内和国外联机，港澳台也算“国外”",
+                  "负载解读：\n显示拥挤时联机容易卡顿。追求稳定建议使用赞助专用节点，用的人少基本不挤",
+                  "延迟说明：\n网络延迟越低越好，如果不是延迟敏感游戏不必追求低延迟。实际联机延迟=主机延迟+客机延迟",
+                  "带宽选择：\n不同游戏所需带宽不一样，对应游戏教程里会给出带宽建议",
+                ].map((text) => (
+                  <ListItem key={text}>
+                    <Flex align="flex-start" gap={2}>
+                      <ListIcon
+                        as={MdTipsAndUpdates}
+                        color="brand.text"
+                        mt="3px"
+                        flexShrink={0}
+                      />
+                      <Text
+                        color="text.muted"
+                        fontSize="sm"
+                        whiteSpace="pre-wrap"
+                        lineHeight="1.7"
+                      >
+                        {text}
+                      </Text>
+                    </Flex>
+                  </ListItem>
+                ))}
               </List>
             </Collapse>
 
             <Stack
-              spacing={3}
-              mx="auto"
-              p={2}
+              spacing={2.5}
               w="100%"
-              maxH={isExpanded ? "30vh" : "60vh"}
+              maxH={isExpanded ? "30vh" : "56vh"}
               overflowY="auto"
-              borderRadius="lg"
+              pr={1}
             >
               {sortedNodes.length > 0 ? (
                 sortedNodes.map((node) => (
@@ -489,12 +390,14 @@ export default function ServerNodeListModal() {
                 ))
               ) : (
                 <Box textAlign="center" py={10}>
-                  <Text color="gray.400">未找到匹配的节点</Text>
+                  <Text color="text.faint" fontSize="sm">
+                    未找到匹配的节点
+                  </Text>
                 </Box>
               )}
             </Stack>
 
-            <Flex justify="center" gap={4} width="100%">
+            <Flex justify="center" gap={3} width="100%">
               <Button
                 size="sm"
                 onClick={async () => {
@@ -508,6 +411,7 @@ export default function ServerNodeListModal() {
 
               <Button
                 size="sm"
+                colorScheme="red"
                 onClick={() => {
                   if (!userWgInfo) {
                     openToast({
@@ -520,7 +424,6 @@ export default function ServerNodeListModal() {
 
                   setNodeListModal();
                 }}
-                bgColor="#be2b2b"
                 flex="1"
               >
                 关闭窗口
@@ -528,9 +431,13 @@ export default function ServerNodeListModal() {
             </Flex>
           </VStack>
         </ModalBody>
-
-        <ModalFooter py={0} flexDirection="column"></ModalFooter>
       </ModalContent>
     </Modal>
   );
 }
+
+const FilterLabel = ({ text }: { text: string }) => (
+  <Text fontSize="xs" color="text.faint" fontWeight="600">
+    {text}
+  </Text>
+);

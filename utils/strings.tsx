@@ -78,9 +78,14 @@ export const copyText = async (text: string): Promise<boolean> => {
   }
 };
 
-const GOOD = "#00e63a";
-const SOSO = "#ffb12c";
-const BAD = "#ff3737";
+/**
+ * 延迟 / 负载状态色
+ * 用 CSS 变量而不是写死色值：亮色模式下需要更深的三色才看得清
+ * （变量定义在 app/globals.css）
+ */
+const GOOD = "var(--nya-good)";
+const SOSO = "var(--nya-soso)";
+const BAD = "var(--nya-bad)";
 
 export const getNetColor = (net: number) => {
   if (net == -1) return BAD;

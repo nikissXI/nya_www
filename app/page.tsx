@@ -1,85 +1,90 @@
+import { Box, Flex, Heading, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { Flex, Image, Text, Box, Heading } from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
+import { Card } from "@/components/universal/ui";
 import { useUserStateStore } from "@/store/user-state";
 
-// 平台亮点数据（静态数据，放到组件外避免每次渲染重新创建）
+/** 平台亮点（静态数据，放到组件外避免每次渲染重新创建） */
 const highlights = [
-  {
-    title: "免费无广",
-    description: "多个节点免费使用，无任何广告",
-    icon: "✨",
-  },
-  {
-    title: "多端支持",
-    description: "支持安卓/苹果/电脑/SteamDeck",
-    icon: "📱",
-  },
-  {
-    title: "全球可用",
-    description: "国内多地设有节点，跨境也能用",
-    icon: "🌍",
-  },
+  { title: "免费无广", description: "多个节点免费使用，无任何广告", icon: "✨" },
+  { title: "多端支持", description: "支持安卓/苹果/电脑/SteamDeck", icon: "📱" },
+  { title: "全球可用", description: "国内多地设有节点，跨境也能用", icon: "🌍" },
 ];
 
 export default function Page() {
   const navigate = useNavigate();
-  const { userInfo } = useUserStateStore();
+  const userInfo = useUserStateStore((s) => s.userInfo);
 
   return (
-    <Flex direction="column" px={{ base: 4, md: 8 }} align="center">
-      {/* Hero 区域 */}
-      <Image
-        src="/images/logo.webp"
-        alt="logo"
-        maxH={{ base: "120px", md: "160px" }}
-        my={3}
-      />
-      <Heading as="h1" size="lg" fontWeight="bold">
-        异地组网联机平台
-      </Heading>
+    <Flex
+      direction="column"
+      align="center"
+      textAlign="center"
+      py={{ base: 2, md: 6 }}
+      gap={{ base: 6, md: 10 }}
+    >
+      {/* Hero */}
+      <Flex direction="column" align="center" gap={4}>
+        <Image
+          src="/images/logo.webp"
+          alt="logo"
+          maxH={{ base: "104px", md: "148px" }}
+          objectFit="contain"
+        />
+
+        <Heading
+          as="h1"
+          fontSize={{ base: "2xl", md: "4xl" }}
+          fontWeight="800"
+          letterSpacing="-0.02em"
+        >
+          异地组网联机平台
+        </Heading>
+
+        <Button
+          size={{ base: "md", md: "lg" }}
+          fontSize={{ base: "md", md: "lg" }}
+          px={10}
+          h={{ base: "48px", md: "56px" }}
+          onClick={() => navigate(userInfo ? "/room" : "/me")}
+        >
+          👉开始使用喵服👈
+        </Button>
+      </Flex>
 
       {/* 平台亮点 */}
-      <Flex wrap="wrap" justifyContent="center" gap={{ base: 3, md: 6 }} my={6}>
-        {highlights.map((highlight, index) => (
-          <Box
-            key={index}
-            w="260px"
-            rounded="lg"
-            px={2}
-            pb={2}
-            backdropFilter="blur(2px)"
-            border="2px"
-            borderColor="#ff737faf"
+      <SimpleGrid
+        columns={{ base: 1, sm: 2, md: 3 }}
+        spacing={{ base: 3, md: 4 }}
+        w="100%"
+        maxW="880px"
+      >
+        {highlights.map((highlight) => (
+          <Card
+            key={highlight.title}
+            p={{ base: 4, md: 5 }}
+            transition="transform .2s ease, border-color .2s ease"
+            _hover={{ transform: "translateY(-2px)", borderColor: "brand.line" }}
           >
-            <Flex direction="column" align="center" textAlign="center">
-              <Text fontSize="3xl">{highlight.icon}</Text>
-              <Heading as="h3" size="md" mb={1} color="#fb727e">
+            <Flex direction="column" align="center" gap={2}>
+              <Text fontSize="3xl" lineHeight="1">
+                {highlight.icon}
+              </Text>
+
+              <Heading as="h3" fontSize="md" color="brand.text">
                 {highlight.title}
               </Heading>
-              <Text fontSize="sm" color="white">
+
+              <Text fontSize="sm" color="text.muted">
                 {highlight.description}
               </Text>
             </Flex>
-          </Box>
+          </Card>
         ))}
-      </Flex>
+      </SimpleGrid>
 
-      <Button
-        size={{ base: "md", md: "lg" }}
-        fontSize={{ base: "md", md: "lg" }}
-        px={8}
-        py={4}
-        onClick={() => {
-          if (userInfo) {
-            navigate("/room");
-          } else {
-            navigate("/me");
-          }
-        }}
-      >
-        👉开始使用喵服👈
-      </Button>
+      {/* 移动端占位：让底部标签栏不压住内容 */}
+      <Box h={1} />
     </Flex>
   );
 }

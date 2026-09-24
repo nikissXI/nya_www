@@ -40,10 +40,10 @@ export default function SponsorTag({ amount }: { amount: number }) {
   let bgGradient = undefined;
 
   if (amount === 0) {
-    bg = "gray.300";
-    color = "black";
+    bg = "bg.subtle";
+    color = "text.faint";
   } else if (amount < 50) {
-    bg = "orange.400";
+    bg = "orange.500";
     color = "white";
     icon = FaStar;
   } else {
@@ -62,7 +62,8 @@ export default function SponsorTag({ amount }: { amount: number }) {
       color={color}
       fontWeight="bold"
       size={size}
-      borderRadius="md"
+      borderRadius="full"
+      px={2}
       animation={animation}
       cursor="default"
       userSelect="none"

@@ -3,6 +3,7 @@ import { Box, Divider, Flex, Icon, Text, VStack } from "@chakra-ui/react";
 import { MdCampaign } from "react-icons/md";
 import { useUserStateStore } from "@/store/user-state";
 import { formatAnnouncementDate } from "@/utils/strings";
+import { EmptyState } from "./ui";
 
 /**
  * 公告展示组件
@@ -42,16 +43,22 @@ export function AnnouncementCarousel() {
       align="center"
       gap={2}
       px={3}
-      py={2}
-      minH="38px"
-      borderRadius="lg"
-      bg="rgba(255, 202, 61, 0.12)"
+      py={2.5}
+      minH="40px"
+      borderRadius="control"
+      bg="warning.soft"
       border="1px solid"
-      borderColor="rgba(255, 202, 61, 0.3)"
+      borderColor="warning.line"
     >
-      <Icon as={MdCampaign} boxSize={4} color="#ffca3d" flexShrink={0} />
+      <Icon as={MdCampaign} boxSize={4} color="warning.text" flexShrink={0} />
 
-      <Text fontSize="sm" color="#ffd964" textAlign="left" flex={1}>
+      <Text
+        fontSize="sm"
+        color="warning.text"
+        textAlign="left"
+        flex={1}
+        fontWeight="600"
+      >
         {current}
       </Text>
     </Flex>
@@ -65,29 +72,32 @@ export function AnnouncementList() {
   );
 
   if (!announcements?.length) {
-    return (
-      <Text
-        py={4}
-        fontSize="sm"
-        color="rgba(255, 255, 255, 0.6)"
-        textAlign="center"
-      >
-        暂无公告
-      </Text>
-    );
+    return <EmptyState title="暂无公告" description="有新的公告会第一时间出现在这里" />;
   }
 
   return (
     <VStack spacing={3} align="stretch">
       {announcements.map((item) => (
         <Box key={item.timestamp}>
-          <Text fontSize="sm" fontWeight="bold" color="#f4d106" textAlign="left">
+          <Text
+            className="tabular"
+            fontSize="xs"
+            fontWeight="700"
+            color="brand.text"
+            textAlign="left"
+          >
             {formatAnnouncementDate(item.timestamp)}
           </Text>
 
-          <Divider my={2} borderColor="rgba(255, 255, 255, 0.12)" />
+          <Divider my={2} />
 
-          <Text fontSize="sm" whiteSpace="pre-wrap" textAlign="left">
+          <Text
+            fontSize="sm"
+            color="text.muted"
+            whiteSpace="pre-wrap"
+            textAlign="left"
+            lineHeight="1.75"
+          >
             {item.content}
           </Text>
         </Box>

@@ -1,14 +1,55 @@
 <!doctype html>
-<html lang="zh">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <meta name="description" content="全平台组网联机平台" />
     <link rel="icon" href="/favicon.ico" />
     <title>喵服联机平台</title>
   </head>
   <body>
     <div id="root"></div>
+
+    <!--
+      防闪烁：在 React 挂载前就把主题标记写到 html 上。
+      key / 类名 / data-theme 必须与 Chakra 的 ColorModeProvider 完全一致，
+      否则首屏会先按默认色渲染一帧再跳成用户主题。
+      注意：亮暗 class 要挂在 body 上（Chakra 只读 body 上的 class）。
+    -->
+    <script>
+      (function () {
+        var mode;
+        try {
+          mode = localStorage.getItem("chakra-ui-color-mode");
+        } catch (e) {
+          mode = null;
+        }
+        if (mode !== "light" && mode !== "dark") {
+          mode = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+
+        var root = document.documentElement;
+        root.dataset.theme = mode;
+        root.style.colorScheme = mode;
+        // 首屏底色直接写死，避免等待 React 注入样式时出现白闪
+        root.style.backgroundColor = mode === "dark" ? "#080D18" : "#F5F7FB";
+
+        var applyClass = function () {
+          var body = document.body;
+          body.classList.add(mode === "dark" ? "chakra-ui-dark" : "chakra-ui-light");
+          body.classList.remove(mode === "dark" ? "chakra-ui-light" : "chakra-ui-dark");
+        };
+
+        if (document.body) applyClass();
+        else document.addEventListener("DOMContentLoaded", applyClass);
+      })();
+    </script>
+
     <script type="module" src="/main.tsx"></script>
   </body>
 </html>

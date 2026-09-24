@@ -1,16 +1,13 @@
 import React from "react";
-import {
-  Flex,
-  Text,
-  Box,
-  Icon,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  VStack,
-} from "@chakra-ui/react";
-import { MdTipsAndUpdates } from "react-icons/md";
+import { Box } from "@chakra-ui/react";
+import { DocNotice } from "./DocParts";
+
+/**
+ * 联机教程页的统一容器
+ * ------------------------------------------------------------------
+ * 顶部固定一段「开始前请注意」（与 WG 安装教程共用 DocNotice），下面放各游戏文档正文。
+ * 页面左右留白由 Frame 统一提供，这里不再重复加 padding。
+ */
 
 const defaultNotices = [
   "开始联机前请确保玩家在同一个喵服联机房间并都在线",
@@ -25,36 +22,9 @@ export default function DocBox({
   children: React.ReactNode;
   notices?: string[];
 }) {
-  const allNotices = [...defaultNotices, ...notices];
-
   return (
-    <Box maxW="900px" mx="auto" px={{ base: 4, md: 8 }} pb={5}>
-      <Alert
-        status="info"
-        variant="subtle"
-        borderRadius="md"
-        mb={5}
-        bg="#dbeafe"
-        color="#17324d"
-      >
-        <Box>
-          <Flex color="#17324d">
-            <AlertIcon />
-            <AlertTitle fontSize="md">开始前请注意</AlertTitle>
-          </Flex>
-
-          <AlertDescription fontSize="sm">
-            <VStack align="stretch" spacing={1} mt={1}>
-              {allNotices.map((notice, index) => (
-                <Text key={`${index}-${notice}`}>
-                  <Icon as={MdTipsAndUpdates} mr={1} />
-                  {notice}
-                </Text>
-              ))}
-            </VStack>
-          </AlertDescription>
-        </Box>
-      </Alert>
+    <Box maxW="900px" mx="auto" pb={5}>
+      <DocNotice notices={[...defaultNotices, ...notices]} />
 
       {children}
     </Box>

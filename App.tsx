@@ -1,7 +1,8 @@
-import { Box, ChakraProvider } from "@chakra-ui/react";
+import { Center, ChakraProvider, Spinner, Text, VStack } from "@chakra-ui/react";
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Frame from "@/components/Frame";
+import theme from "@/components/universal/theme";
 import "@/app/globals.css";
 
 const HomePage = lazy(() => import("@/app/page"));
@@ -44,10 +45,6 @@ const docPages = [
     component: lazy(() => import("@/app/docs/mindustry/page")),
   },
   {
-    path: "minecraft",
-    component: lazy(() => import("@/app/docs/minecraft/page")),
-  },
-  {
     path: "overcooked",
     component: lazy(() => import("@/app/docs/overcooked/page")),
   },
@@ -83,13 +80,24 @@ const docPages = [
 
 export default function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Frame>
         <Suspense
           fallback={
-            <Box p={8} textAlign="center">
-              加载中...
-            </Box>
+            <Center py={24}>
+              <VStack spacing={3}>
+                <Spinner
+                  thickness="3px"
+                  speed="0.65s"
+                  emptyColor="border.line"
+                  color="brand.solid"
+                  size="lg"
+                />
+                <Text fontSize="sm" color="text.faint">
+                  加载中…
+                </Text>
+              </VStack>
+            </Center>
           }
         >
           <Routes>

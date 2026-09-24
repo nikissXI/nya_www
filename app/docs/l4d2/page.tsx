@@ -1,18 +1,15 @@
-import {
-  Heading,
-  Divider,
-  Text,
-  Image,
-  Box,
-  VStack,
-  Badge,
-  Icon,
-  Link,
-  Code,
-} from "@chakra-ui/react";
-import { MdTipsAndUpdates } from "react-icons/md";
+import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
+import {
+  DocCode,
+  DocImage,
+  DocMuted,
+  DocStep,
+  DocTip,
+  DocTips,
+  ExtLink,
+} from "@/components/docs/DocParts";
 
 export default function Page() {
   return (
@@ -23,9 +20,7 @@ export default function Page() {
       ]}
     >
       <Text>喵服求生之路2交流Q群 138012638</Text>
-      <Text fontSize="sm" color="gray.300" mt={1}>
-        联机有问题或找搭子请加群
-      </Text>
+      <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
       <Divider my={5} />
 
@@ -44,96 +39,39 @@ export default function Page() {
 
       <Heading size="md">联机步骤</Heading>
 
-      <Text fontSize="sm" my={1} color="gray.300">
-        教程使用的是Steam正版
-      </Text>
+      <DocMuted my={1}>教程使用的是Steam正版</DocMuted>
 
       <VStack align="stretch" spacing={3}>
-        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
-          <Badge colorScheme="blue" mb={1}>
-            第 1 步 · 主机
-          </Badge>
+        <DocStep step={1} role="主机">
           <Text>
             一名玩家作为主机，进游戏点
             <strong>完成战役 → 与好友一起玩游戏 → 创建新战役大厅</strong>
           </Text>
-          <Image w="500px" src="/images/l4d2/hoster1.webp" alt="hoster1" />
+          <DocImage w="500px" src="/images/l4d2/hoster1.webp" alt="hoster1" />
 
           <Text mt={3}>
             服务器类型选 <strong>本地服务器</strong>
             ，然后直接开始游戏，进到游戏地图里等待
           </Text>
-          <Image w="500px" src="/images/l4d2/hoster3.webp" alt="hoster3" />
+          <DocImage w="500px" src="/images/l4d2/hoster3.webp" alt="hoster3" />
 
           <Text mt={3}>
             如果玩第三方地图，打开控制台用命令创建游戏
-            <Code
-              display="block"
-              whiteSpace="pre-wrap"
-              p={1}
-              maxW="300px"
-              borderRadius="md"
-              bg="gray.900"
-              color="cyan.200"
-              fontSize="sm"
-              fontFamily="mono"
-            >
-              map 地图代码 游戏模式
-            </Code>
+            <DocCode>map 地图代码 游戏模式</DocCode>
             比如 死亡中心-旅馆 合作模式
-            <Code
-              display="block"
-              whiteSpace="pre-wrap"
-              p={1}
-              maxW="300px"
-              borderRadius="md"
-              bg="gray.900"
-              color="cyan.200"
-              fontSize="sm"
-              fontFamily="mono"
-            >
-              map c1m1_hotel coop
-            </Code>
+            <DocCode>map c1m1_hotel coop</DocCode>
           </Text>
-          <Text fontSize="sm" color="gray.300" mt={1}>
-            控制台更多命令用法自行网上搜索或问AI
-          </Text>
-        </Box>
-        <Box borderLeft="4px solid" borderColor="#7ddcff" pl={4}>
-          <Badge colorScheme="blue" mb={1}>
-            第 2 步 · 客机
-          </Badge>
+          <DocMuted mt={1}>控制台更多命令用法自行网上搜索或问AI</DocMuted>
+        </DocStep>
+
+        <DocStep step={2} role="客机">
           <Text>
             其他玩家作为客机，打开控制台用命令加入游戏
-            <Code
-              display="block"
-              whiteSpace="pre-wrap"
-              p={1}
-              maxW="300px"
-              borderRadius="md"
-              bg="gray.900"
-              color="cyan.200"
-              fontSize="sm"
-              fontFamily="mono"
-            >
-              connect 主机喵服IP
-            </Code>
+            <DocCode>connect 主机喵服IP</DocCode>
             比如主机喵服IP是100.64.0.1
-            <Code
-              display="block"
-              whiteSpace="pre-wrap"
-              p={1}
-              maxW="300px"
-              borderRadius="md"
-              bg="gray.900"
-              color="cyan.200"
-              fontSize="sm"
-              fontFamily="mono"
-            >
-              connect 100.64.0.1
-            </Code>
+            <DocCode>connect 100.64.0.1</DocCode>
           </Text>
-        </Box>
+        </DocStep>
       </VStack>
 
       <Divider my={5} />
@@ -142,46 +80,37 @@ export default function Page() {
         联机失败？按顺序检查
       </Heading>
 
-      <VStack align="stretch" spacing={2}>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+      <DocTips>
+        <DocTip>
           加入游戏失败如果是下图错误，让主机关闭防火墙再试
-          <Link
-            ml={1}
-            href="https://zhuanlan.zhihu.com/p/397675766"
-            color="#7ddcff"
-            target="_blank"
-          >
+          <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
             不会关点我
-          </Link>
-          <Image h="150px" src="/images/l4d2/joiner.webp" alt="joiner" />
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+          </ExtLink>
+          <DocImage h="150px" src="/images/l4d2/joiner.webp" alt="joiner" />
+        </DocTip>
+        <DocTip>
           其他加入报错请加群询问（不一定能解决）或自行网上查找解决方法
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+        </DocTip>
+        <DocTip>
           建议到创意工坊把这个mod打上，能一定程度上避免兼容性问题导致无法加入，或自己找其他类似的mod也可以
-          <Image w="500px" src="/images/l4d2/mod.webp" alt="mod" />
-        </Text>
-      </VStack>
+          <DocImage w="500px" src="/images/l4d2/mod.webp" alt="mod" />
+        </DocTip>
+      </DocTips>
 
       <Divider my={5} />
+
       <Heading size="md" mb={3}>
         用喵服后联机还是卡顿？
       </Heading>
 
-      <VStack align="stretch" spacing={2}>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+      <DocTips>
+        <DocTip>
           比如主机到节点延迟30ms，客机到节点延迟50ms，那游戏的实际延迟将至少80ms
-        </Text>
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={1} />
+        </DocTip>
+        <DocTip>
           如果丧尸一多，主机客机就一起卡，这种情况多半是主机电脑硬件太新，这老游戏对新硬件兼容性不好，可以尝试用服务端开服
-        </Text>
-      </VStack>
+        </DocTip>
+      </DocTips>
 
       <Divider my={5} />
 
