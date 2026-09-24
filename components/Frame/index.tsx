@@ -35,7 +35,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/": "喵服首页",
   "/register": "注册账号",
   "/forgetPass": "忘记密码",
-  "/me": "我的信息",
+  "/me": "账号信息",
   "/sponsor": "赞助喵服",
   "/docs": "WG安装教程",
   "/room": "联机房间",
