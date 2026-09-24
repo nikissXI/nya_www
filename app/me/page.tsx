@@ -594,7 +594,29 @@ export default function UserProfilePage() {
                   icon={FaUser}
                   label="昵称"
                   right={
-                    !isEditingUsername && (
+                    isEditingUsername ? (
+                      <>
+                        <Button
+                          size="sm"
+                          px={3}
+                          flexShrink={0}
+                          onClick={handleSaveUsername}
+                        >
+                          保存
+                        </Button>
+
+                        <Button
+                          size="sm"
+                          px={3}
+                          flexShrink={0}
+                          bgColor="transparent"
+                          color="rgba(255, 255, 255, 0.7)"
+                          onClick={() => setIsEditingUsername(false)}
+                        >
+                          取消
+                        </Button>
+                      </>
+                    ) : (
                       <Button
                         size="sm"
                         px={3}
@@ -609,36 +631,31 @@ export default function UserProfilePage() {
                     )
                   }
                 >
-                  <Text fontSize="sm" isTruncated>
-                    {userInfo.username}
-                  </Text>
-                </InfoRow>
+                  {/* 编辑态直接在原地把值换成输入框，不再另起一行 */}
+                  {isEditingUsername ? (
+                    <Box>
+                      <Input
+                        size="sm"
+                        value={inputUsername}
+                        onChange={(e) => setInputUsername(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleSaveUsername();
+                          if (e.key === "Escape") setIsEditingUsername(false);
+                        }}
+                        placeholder="请输入昵称"
+                        {...INPUT_STYLE}
+                      />
 
-                {isEditingUsername && (
-                  <Flex gap={2} py={2}>
-                    <Input
-                      value={inputUsername}
-                      onChange={(e) => setInputUsername(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSaveUsername();
-                      }}
-                      placeholder="请输入昵称"
-                      {...INPUT_STYLE}
-                    />
-                    <Button px={4} flexShrink={0} onClick={handleSaveUsername}>
-                      保存
-                    </Button>
-                    <Button
-                      px={3}
-                      flexShrink={0}
-                      bgColor="transparent"
-                      color="rgba(255, 255, 255, 0.7)"
-                      onClick={() => setIsEditingUsername(false)}
-                    >
-                      取消
-                    </Button>
-                  </Flex>
-                )}
+                      <Text mt={1} fontSize="xs" color="rgba(255, 255, 255, 0.5)">
+                        2-14 个字符，或 1-7 个汉字
+                      </Text>
+                    </Box>
+                  ) : (
+                    <Text fontSize="sm" isTruncated>
+                      {userInfo.username}
+                    </Text>
+                  )}
+                </InfoRow>
 
                 <InfoRow icon={FaIdCard} label="UID">
                   <Text fontSize="sm">{userInfo.uid}</Text>
