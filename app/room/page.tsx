@@ -479,6 +479,7 @@ export default function Page() {
               {...INPUT_STYLE}
             />
             <Button
+              size="sm"
               px={5}
               flexShrink={0}
               onClick={() => {
@@ -934,7 +935,7 @@ export default function Page() {
                         });
                     }}
                   >
-                    节点
+                    切换
                   </Button>
                 </Flex>
               </Flex>
