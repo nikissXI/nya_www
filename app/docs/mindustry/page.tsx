@@ -21,7 +21,7 @@ export default function Page() {
       <Text>喵服像素工厂交流Q群 830268831</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -44,7 +44,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Heading size="md" mb={3}>
         联机失败？按顺序检查
@@ -60,7 +60,7 @@ export default function Page() {
         <DocTip>如果加入后或规律性闪退、黑屏，请自行检查mod或是游戏bug</DocTip>
       </DocTips>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <BackButton />
     </DocBox>

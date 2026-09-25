@@ -387,25 +387,16 @@ export default function Page() {
   };
 
   // 节点警告文案（根据网络类型）
-  const nodeWarningText = useMemo(() => {
-    const netType = userWgInfo?.net_type;
-    if (netType === "电信") {
-      return "你选的是电信线路节点，建议用户都是用中国电信或流量上网时使用，否则联机容易卡顿";
-    }
-    // else if (netType === "境外") {
-    //   return "你选的是境外线路节点，只建议中国大陆外的用户使用";
-    // }
-    return null;
-  }, [userWgInfo?.net_type]);
-
   const nodeWarningElement = useMemo(() => {
-    if (!nodeWarningText) return null;
+    const netType = userWgInfo?.net_type;
+    if (netType !== "电信") return null;
+
     return (
       <Text mt={2} color="warning.text" fontSize="xs" textAlign="left">
-        {nodeWarningText}
+        你选的是电信线路节点，建议用户都是用中国电信或流量上网时使用，否则联机容易卡顿
       </Text>
     );
-  }, [nodeWarningText]);
+  }, [userWgInfo?.net_type]);
 
   const filteredRoomGames = useMemo(
     () =>
@@ -575,6 +566,8 @@ export default function Page() {
           {filteredRoomGames.length === 0 ? (
             <Text py={6} textAlign="center" fontSize="sm" color="text.faint">
               未找到相关游戏，请使用「通用联机房」
+              <br />
+              只要支持填IP加入的游戏都支持的
             </Text>
           ) : (
             <VStack spacing={1} align="stretch" mt={2}>
@@ -643,29 +636,31 @@ export default function Page() {
       <Box>
         <VStack spacing={3} align="stretch">
           <Box {...CARD_STYLE} {...CARD_PADDING}>
-            <Flex align="center" justify="space-between" gap={3}>
-              <Box minW={0}>
-                <SectionTitle>房间号（点击复制）</SectionTitle>
-                <Text
-                  fontSize="2xl"
-                  fontWeight="bold"
-                  lineHeight="1.3"
-                  cursor="pointer"
-                  onClick={handleCopyRoomInfo}
-                  title="点击复制房间信息"
-                  textAlign="center"
-                >
-                  {roomData?.room_id}
-                  <Icon
-                    ml={1.5}
-                    as={MdContentCopy}
-                    boxSize={4}
-                    color="brand.text"
-                  />
-                </Text>
-              </Box>
+            {/* <Flex align="center" justify="space-between" gap={3}> */}
+            <Flex align="center" gap={3}>
+              <Text fontWeight="bold" isTruncated textAlign="left">
+                房间号
+              </Text>
+              {/* <SectionTitle>房间号（点击复制）</SectionTitle> */}
+              <Text
+                fontSize="2xl"
+                fontWeight="bold"
+                lineHeight="1.3"
+                cursor="pointer"
+                onClick={handleCopyRoomInfo}
+                title="点击复制房间信息"
+                textAlign="center"
+              >
+                {roomData?.room_id}
+                <Icon
+                  ml={1.5}
+                  as={MdContentCopy}
+                  boxSize={4}
+                  color="brand.text"
+                />
+              </Text>
 
-              <HStack spacing={2} flexShrink={0}>
+              <HStack ml="auto" spacing={2} flexShrink={0}>
                 {roomRole === ROLE_HOSTER && (
                   <Button
                     size="sm"
@@ -688,6 +683,10 @@ export default function Page() {
                 <Divider my={2.5} />
 
                 <Flex align="center" gap={2}>
+                  <Text fontWeight="bold" isTruncated>
+                    {roomGame.title}
+                  </Text>
+
                   <Image
                     src={roomGame.icon}
                     alt={roomGame.title}
@@ -697,10 +696,9 @@ export default function Page() {
                     flexShrink={0}
                     bg="bg.subtle"
                   />
-                  <Text fontWeight="bold" isTruncated flex={1} textAlign="left">
-                    {roomGame.title}
-                  </Text>
+
                   <Button
+                    ml="auto"
                     size="sm"
                     px={3}
                     flexShrink={0}
@@ -719,23 +717,25 @@ export default function Page() {
             <Flex align="center" justify="space-between">
               <SectionTitle>成员</SectionTitle>
 
-              <Text ml={2} fontSize="xs" color="text.faint">
+              <Text ml={2} mr="auto" fontSize="xs" color="text.faint">
                 点刷新房间才会更新
               </Text>
 
-              {roomRole === ROLE_HOSTER && (
-                <Text
-                  ml="auto"
-                  mr={3}
-                  fontSize="sm"
-                  fontWeight="bold"
-                  as="button"
-                  color="brand.text"
-                  onClick={() => navigate("/sponsor")}
-                >
-                  提升人数
-                </Text>
-              )}
+              {roomRole === ROLE_HOSTER &&
+                roomData !== undefined &&
+                roomData.room_max < 99 && (
+                  <Text
+                    ml="auto"
+                    mr={2}
+                    fontSize="sm"
+                    fontWeight="bold"
+                    as="button"
+                    color="brand.text"
+                    onClick={() => navigate("/sponsor")}
+                  >
+                    提高上限
+                  </Text>
+                )}
 
               <Text fontSize="sm" color="text.muted">
                 <Text
@@ -1020,7 +1020,7 @@ export default function Page() {
                 </Button>
               </Flex>
 
-              {roomRole === ROLE_HOSTER && nodeWarningElement}
+              {roomRole === ROLE_NONE && nodeWarningElement}
             </Box>
           ) : (
             <Center {...CARD_STYLE} py={4} gap={2}>

@@ -15,6 +15,7 @@ import {
   Image,
   Link,
   VStack,
+  Divider,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
@@ -26,7 +27,7 @@ import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
 import { getStatusColor } from "@/utils/strings";
 import { NoticeText } from "@/components/universal/Notice";
-import { DocNotice } from "@/components/docs/DocParts";
+import { DocCode, DocNotice } from "@/components/docs/DocParts";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
@@ -76,6 +77,7 @@ const DocumentPage = () => {
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
+  const [showIOSID, setShowIOSID] = useState(false);
   const [showMSI, setShowMSI] = useState(false);
 
   const GenConfFile = (conf_text: string) => {
@@ -114,7 +116,7 @@ const DocumentPage = () => {
 
   const SelectNode = () => {
     return (
-      <Box mb={1}>
+      <Box>
         <Text>
           ① 当前选择的是&ensp;
           <Text as="span" color="warning.text" fontWeight="bold">
@@ -178,18 +180,56 @@ const DocumentPage = () => {
     );
   };
 
+  const GetIOSID = () => {
+    return (
+      <Box>
+        ② 安装WG客户端，
+        <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
+        <Text
+          ml={2}
+          as="span"
+          color="brand.text"
+          fontWeight="600"
+          size="sm"
+          onClick={() => setShowIOSID(!showIOSID)}
+        >
+          {showIOSID ? "点击收起" : "没有海外账号点我"}
+        </Text>
+        <Collapse in={showIOSID}>
+          <Text fontSize="sm" lineHeight={1.2} py={1}>
+            <Icon as={MdTipsAndUpdates} mr={2} />
+            B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
+          </Text>
+          <Text fontSize="sm" lineHeight={1.2} py={1}>
+            <Icon as={MdTipsAndUpdates} mr={2} />
+            淘宝、拼多多或其他购物平台，搜“苹果游戏”租个外区号，或者直接搜“星露谷物语ios”买那种2元左右的
+          </Text>
+          <Text fontSize="sm" lineHeight={1.2} py={1}>
+            <Icon as={MdTipsAndUpdates} mr={2} />
+            网上搜“苹果账号分享”，这是随机搜的一个，不包能用
+            https://nodewu.com/iosid/
+          </Text>
+          <Text fontSize="sm" lineHeight={1.2} py={1}>
+            <Icon as={MdTipsAndUpdates} mr={2} />
+            赞助喵服不低于50元可以找服主借（最好别找）
+          </Text>
+        </Collapse>
+      </Box>
+    );
+  };
+
   return (
     <Box pb={5} maxW="900px" mx="auto">
       <DocNotice
         notices={[
           "联机的每个玩家都要注册喵服并安装WG",
           "WG客户端要安装在运行游戏的设备上",
-          "禁止Minecraft联机（独享节点除外）",
-          "不兼容华为的鸿蒙6系统",
+          "禁止MC联机(独享节点除外)，因为MC占资源",
+          "不兼容华为鸿蒙6系统，请选择其他联机工具",
         ]}
       />
 
-      <Box mt={5} display={userWgInfo === undefined ? "block" : "none"}>
+      <Box display={userWgInfo === undefined ? "block" : "none"}>
         <VStack spacing={3} align="center">
           <Heading size="md">请登录后再访问该页面</Heading>
           <Button onClick={openLoginModal}>点击登录</Button>
@@ -197,12 +237,12 @@ const DocumentPage = () => {
         </VStack>
       </Box>
 
-      <Box mt={5} display={userWgInfo === undefined ? "none" : "block"}>
+      <Box display={userWgInfo === undefined ? "none" : "block"}>
         <Tabs variant="unstyled">
           <Heading size="md">点击选择联机的设备类型</Heading>
 
           <TabList
-            mt={2}
+            mt={3}
             flexWrap="wrap"
             gap={{ base: 1.5, md: 2 }} // 移动端间距小一点
           >
@@ -232,12 +272,16 @@ const DocumentPage = () => {
             )}
           </TabList>
 
+          <Divider my={3} />
+
           <TabPanels>
             {/* 安卓 */}
-            <TabPanel px={0} pb={1} pt={2}>
+            <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Text mt={5}>
+              <Divider my={3} />
+
+              <Text>
                 ② 下载并安装WG客户端
                 <Text
                   as="span"
@@ -270,7 +314,9 @@ const DocumentPage = () => {
                 </Text>
               </Collapse>
 
-              <Box mt={5}>
+              <Divider my={3} />
+
+              <Box>
                 ③ 点击或长按黄字复制
                 <Text
                   ml={2}
@@ -297,10 +343,13 @@ const DocumentPage = () => {
               <Text>
                 &emsp;然后运行WG点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入
                 <br />
-                &emsp;导入的隧道名称应是 “{userWgInfo?.tunnel_name}”
+                &emsp;导入的隧道名称应是{" "}
+                <strong>{userWgInfo?.tunnel_name}</strong>
               </Text>
 
-              <Flex mt={5}>
+              <Divider my={3} />
+
+              <Flex>
                 ④ 打开隧道开关 =&gt;
                 <Image
                   mx={1}
@@ -337,29 +386,25 @@ const DocumentPage = () => {
             </TabPanel>
 
             {/* iOS */}
-            <TabPanel px={0} pb={1} pt={2}>
+            <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Box mt={5}>
-                ② 安装WG客户端，
-                <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
-                ，如果没有海外账号，给如下几个建议
-                <br />
-                &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
-                <br /> &emsp;2.tb或pdd搜“苹果游戏”租个号，选类似“国际服手游大全”
-                <br /> &emsp;3.网上搜“苹果账号分享”，这是随机搜的一个，不包能用
-                https://nodewu.com/iosid/
-                <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
-                <Image
-                  src="/images/wg/app_store.webp"
-                  alt="app_store"
-                  borderRadius="md"
-                  w="300px"
-                />
-              </Box>
+              <Divider my={3} />
+
+              <GetIOSID />
+
+              <Image
+                mt={2}
+                src="/images/wg/app_store.webp"
+                alt="app_store"
+                borderRadius="md"
+                w="300px"
+              />
+
+              <Divider my={3} />
 
               <Tabs variant="unstyled">
-                <Text mt={5} fontWeight="bolder">
+                <Text fontWeight="bolder">
                   iOS导入隧道可以扫码或下载
                   <br />
                   <HighLight fontSize="sm">
@@ -438,15 +483,15 @@ const DocumentPage = () => {
                     <Text pt={1}>
                       打开浏览器的下载任务列表，点击文件“
                       {userWgInfo?.tunnel_name}
-                      .conf”，然后点左下角发送到WG
-                      <br />
-                      或者，到WG里导入配置也行
+                      .conf”，然后点左下角发送到WG，或者直接在WG里导入配置也行
                     </Text>
                   </TabPanel>
                 </TabPanels>
               </Tabs>
 
-              <Flex mt={5}>
+              <Divider my={3} />
+
+              <Flex>
                 ④ 打开隧道开关 =&gt;
                 <Image
                   mx={1}
@@ -455,17 +500,16 @@ const DocumentPage = () => {
                   alt="iOS_switch"
                 />
               </Flex>
-              <Text fontSize="sm">
-                如果出现DBS解析失败，并重新打开几次都不行，就换个网络再试
-              </Text>
+              <Text fontSize="sm">如果出现DBS解析失败，设备断网再联网试试</Text>
             </TabPanel>
 
             {/* windows */}
-            <TabPanel px={0} pb={1} pt={2}>
+            <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Text mt={5}>② 下载并安装WG客户端</Text>
+              <Divider my={3} />
 
+              <Text>② 下载并安装WG客户端</Text>
               <Button
                 size="sm"
                 mx={2}
@@ -476,13 +520,17 @@ const DocumentPage = () => {
                 点击下载安装包
               </Button>
 
-              <Box mt={5}>
+              <Divider my={3} />
+
+              <Box>
                 ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}
                 .conf”
               </Box>
               {DownloadButton()}
 
-              <Text mt={5}>④ 跟着下图操作完成隧道导入，看红字就行</Text>
+              <Divider my={3} />
+
+              <Text>④ 跟着下图操作完成隧道导入，看红字就行</Text>
 
               <Image
                 src="/images/wg/win_msi.webp"
@@ -491,26 +539,25 @@ const DocumentPage = () => {
                 w="500px"
               />
 
-              <Flex alignItems="center" my={1}>
-                <HighLight>
+              <Text>
+                <HighLight fontSize="sm">
                   点连接如果出现“The system cannot find the file
                   specified”，检查wireguard的路径是否含有中文
                 </HighLight>
-              </Flex>
+              </Text>
 
-              <Flex alignItems="center" my={1}>
+              <Text fontSize="sm">
                 <HighLight>点连接如果出现“隧道错误”的处理方法</HighLight>
                 <Text
                   ml={2}
                   as="span"
                   color="brand.text"
                   fontWeight="600"
-                  size="sm"
                   onClick={() => setShowMSI(!showMSI)}
                 >
                   {showMSI ? "点击收起" : "点击查看"}
                 </Text>
-              </Flex>
+              </Text>
 
               <Collapse in={showMSI}>
                 <Text fontSize="sm">
@@ -538,33 +585,29 @@ const DocumentPage = () => {
             </TabPanel>
 
             {/* MAC */}
-            <TabPanel px={0} pb={1} pt={2}>
+            <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Box mt={5}>
-                ② 安装WG客户端，
-                <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
-                ，如果没有海外账号，给如下几个建议
-                <br />
-                &emsp;1.B站搜“美区id注册”，自己看教程注册，以后干别的也用得上
-                <br /> &emsp;2.tb或pdd搜“苹果游戏”租个号，选类似“国际服手游大全”
-                <br /> &emsp;3.网上搜“苹果账号分享”，这是随机搜的一个，不包能用
-                https://nodewu.com/iosid/
-                <br /> &emsp;4.赞助喵服不低于50元可以找服主借（最好别找）
-                <Image
-                  src="/images/wg/app_store_mac.webp"
-                  alt="app_store_mac"
-                  borderRadius="md"
-                  w="300px"
-                />
-              </Box>
+              <Divider my={3} />
 
-              <Box mt={5}>
+              <GetIOSID />
+              <Image
+                src="/images/wg/app_store_mac.webp"
+                alt="app_store_mac"
+                borderRadius="md"
+                w="300px"
+              />
+
+              <Divider my={3} />
+
+              <Box>
                 ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
               {DownloadButton()}
 
-              <Box mt={5}>
+              <Divider my={3} />
+
+              <Box>
                 <Text>④ 运行WG，跟着下图操作完成隧道导入，看红字就行</Text>
                 <Image
                   src="/images/wg/mac.webp"
@@ -576,32 +619,36 @@ const DocumentPage = () => {
             </TabPanel>
 
             {/* SteamDeck */}
-            <TabPanel px={0} pb={1} pt={2}>
+            <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Box mt={5}>
-                ② 安装喵服Decky插件（插件由网友开发）
-                <br />
-                <Button
-                  size="sm"
-                  mx={2}
-                  onClick={() => {
-                    window.open("/apks/NyaFuWG.zip", "_blank");
-                  }}
-                >
-                  点击下载插件
-                </Button>
-                <br />
+              <Divider my={3} />
+
+              <Text>② 安装喵服Decky插件（插件由网友开发）</Text>
+              <Button
+                size="sm"
+                mx={2}
+                onClick={() => {
+                  window.open("/apks/NyaFuWG.zip", "_blank");
+                }}
+              >
+                点击下载插件
+              </Button>
+              <Text>
                 在Steam Deck的游戏模式打开右侧快捷菜单，进入 Decky
                 插件面板，打开 `NyaFu WG`
-              </Box>
+              </Text>
 
-              <Box mt={5}>
+              <Divider my={3} />
+
+              <Box>
                 ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
               {DownloadButton()}
 
-              <Box mt={5}>
+              <Divider my={3} />
+
+              <Box>
                 <Text>
                   ④ 回到插件，点击“更新隧道配置”，找到“
                   {userWgInfo?.tunnel_name}
@@ -611,111 +658,117 @@ const DocumentPage = () => {
             </TabPanel>
 
             {/* Linux */}
-            <TabPanel px={0} pb={1} pt={2}>
+            <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Box mt={5}>
-                <Text>
-                  ② 看WG官方文档安装客户端，或者问deepseek
-                  <br />
-                  <Link
-                    ml={1}
-                    color="brand.text"
-                    href="https://www.wireguard.com/install/"
-                    target="_blank"
-                  >
-                    点击跳转WG官方文档（需要翻墙）
-                  </Link>
-                </Text>
+              <Divider my={3} />
 
-                <Box mt={5}>
-                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
-                </Box>
-                {DownloadButton()}
+              <Text>② 看WG官方文档安装客户端，或者问deepseek</Text>
+              <Link
+                ml={1}
+                color="brand.text"
+                href="https://www.wireguard.com/install/"
+                target="_blank"
+              >
+                点击跳转WG官方文档（需要翻墙）
+              </Link>
 
-                <Box mt={5}>
-                  <Text>
-                    ④ 在命令行打开隧道文件的目录
-                    <br />
-                    启动执行 “wg-quick up ./
-                    {userWgInfo?.tunnel_name}.conf”
-                    <br />
-                    关闭执行 “wg-quick down ./
-                    {userWgInfo?.tunnel_name}.conf”
-                  </Text>
-                </Box>
+              <Divider my={3} />
+
+              <Box>
+                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
+              {DownloadButton()}
+
+              <Divider my={3} />
+
+              <Text>
+                ④ 在命令行打开隧道文件的目录
+                <br />
+                连接WG隧道执行
+                <DocCode>wg-quick up ./{userWgInfo?.tunnel_name}.conf</DocCode>
+                断开则执行
+                <DocCode>
+                  wg-quick down ./{userWgInfo?.tunnel_name}.conf
+                </DocCode>
+              </Text>
             </TabPanel>
           </TabPanels>
         </Tabs>
 
-        <Box mt={5}>
-          <Text>
-            ⑤ WG隧道打开后<HighLight>等5秒</HighLight>再点刷新
+        <Divider my={3} />
+
+        <Text>
+          ⑤ WG隧道打开后<HighLight>等5秒</HighLight>再点刷新
+        </Text>
+
+        <Flex align="center" mt={1} gap={2}>
+          <Text
+            fontSize={18}
+            fontWeight="bold"
+            color={getStatusColor(isOnline)}
+          >
+            &emsp;{isOnline ? "恭喜！WG已连接" : "WG尚未连接"}
           </Text>
 
-          <Flex align="center" mt={1} gap={2}>
-            <Text
-              fontSize={18}
-              fontWeight="bold"
-              color={getStatusColor(isOnline)}
-            >
-              &emsp;{isOnline ? "恭喜！WG已连接" : "WG尚未连接"}
-            </Text>
+          <Button
+            bg="transparent"
+            h={5}
+            px={0}
+            disabled={disableFlush}
+            onClick={() => {
+              getRoomData(false);
+            }}
+            color="brand.text"
+          >
+            <Text>刷新</Text>
+            <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
+              <TbReload size={18} />
+            </Box>
+          </Button>
+        </Flex>
 
+        {isOnline === false && (
+          <Text>
+            &emsp;隧道打开了还是未连接
             <Button
-              bg="transparent"
-              h={5}
-              px={0}
-              disabled={disableFlush}
-              onClick={() => {
-                getRoomData(false);
-              }}
-              color="brand.text"
-            >
-              <Text>刷新</Text>
-              <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
-                <TbReload size={18} />
-              </Box>
-            </Button>
-          </Flex>
-
-          {isOnline === false && (
-            <Text>
-              &emsp;隧道打开了还是未连接
-              <Button
-                ml={1}
-                variant="link"
-                bg="transparent"
-                color="brand.text"
-                onClick={() => {
-                  navigate("/offlineCheck");
-                }}
-              >
-                点我排查
-              </Button>
-            </Text>
-          )}
-
-          <Text mt={5}>
-            ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
-            ，网页只负责创建和加入房间，WG客户端保持连接就行
-            <br />
-            WG安装教程到此结束，请
-            <Button
-              mx={1}
+              ml={1}
               variant="link"
               bg="transparent"
               color="brand.text"
               onClick={() => {
-                navigate("/room");
+                navigate("/offlineCheck");
               }}
             >
-              返回联机房间
+              点我排查
             </Button>
-            页面创建或加入房间
           </Text>
-        </Box>
+        )}
+
+        <Divider my={3} />
+
+        <Text>
+          ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
+          ，网页只负责创建和加入房间，WG客户端保持连接就行
+        </Text>
+
+        <Divider my={3} />
+
+        <Text>
+          现在请
+          <Button
+            mx={1}
+            variant="link"
+            bg="transparent"
+            color="brand.text"
+            onClick={() => {
+              navigate("/room");
+            }}
+          >
+            返回联机房间
+          </Button>
+          ，创建或加入房间后，里面有游戏联机教程
+        </Text>
       </Box>
     </Box>
   );

@@ -51,7 +51,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Heading size="md" mt={5} mb={3}>
         联机失败常见原因
@@ -70,7 +70,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <BackButton />
     </DocBox>

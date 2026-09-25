@@ -107,7 +107,7 @@ export default function Navbar({ path }: { path?: string }) {
             ml={3}
           >
             {NAV_ITEMS.filter((item) => item.path !== "/me").map((item) => {
-              const isActive = rootPath === item.path;
+              const isActive = currentPath === item.path;
               return (
                 <Box
                   key={item.path}
@@ -190,7 +190,7 @@ export default function Navbar({ path }: { path?: string }) {
         className="safe-bottom"
       >
         {NAV_ITEMS.filter((item) => item.tab).map((item) => {
-          const isActive = rootPath === item.path;
+          const isActive = currentPath === item.path;
           return (
             <Flex
               key={item.path}

@@ -20,7 +20,7 @@ export default function Page() {
       <Text>喵服阿瑞斯病毒2交流Q群 966579113</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -46,7 +46,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Heading size="md" mb={3}>
         联机失败？
@@ -61,7 +61,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <BackButton />
     </DocBox>

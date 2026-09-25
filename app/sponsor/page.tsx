@@ -140,19 +140,19 @@ const Page = () => {
                 只需要房主赞助，成员无需单独赞助
               </Text>
 
-              <Text fontSize="sm" color="text.muted">
-                房间内成员的赞助也可以叠加房间人数
-              </Text>
-
-              <Text fontSize="sm" color="warning.text" lineHeight="1.8">
+              <Text fontSize="sm" color="warning.text" fontWeight="700">
                 简单点说：多线节点赞助10元房间2人，20元则3人，后续每加10元多1人，16人封顶；跨境节点所需金额翻倍
               </Text>
 
-              <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+              <Text fontSize="sm" color="text.muted">
                 计算公式如下
                 <br />
                 房间人数 = 总赞助金额 <strong>//</strong> 节点解锁金额{" "}
                 <strong>+1</strong>
+              </Text>
+
+              <Text fontSize="sm" color="text.muted">
+                房间内成员的赞助也可以叠加房间人数
               </Text>
             </VStack>
           </Card>

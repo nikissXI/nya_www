@@ -13,12 +13,12 @@ export default function Page() {
         </ExtLink>
       </Text>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Text>喵服以撒的结合交流Q群 1074963191</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -36,7 +36,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <Heading size="md" mb={3}>
         联机还是很卡？
@@ -51,7 +51,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <BackButton />
     </DocBox>

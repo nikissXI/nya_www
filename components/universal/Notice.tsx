@@ -8,7 +8,7 @@ import { Card } from "./ui";
  */
 export const NoticeText = () => {
   return (
-    <Card maxW="560px" mx="auto" bg="warning.soft" borderColor="warning.line">
+    <Card w="360px" mx="auto" bg="warning.soft" borderColor="warning.line">
       <VStack spacing={2} align="stretch">
         <Flex align="center" gap={2}>
           <Icon as={MdInfoOutline} boxSize={5} color="warning.text" />

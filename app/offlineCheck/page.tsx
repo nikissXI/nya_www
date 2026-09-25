@@ -40,7 +40,7 @@ export default function Page() {
   return (
     <Box maxW="900px" mx="auto" pb={5}>
       <Text my={3} fontSize="sm" color="text.faint">
-        注意：这里的连接失败指WG离线，不是游戏的连接
+        注意：这里的掉线指WG突然变成离线
       </Text>
 
       <Card p={{ base: 4, md: 5 }}>

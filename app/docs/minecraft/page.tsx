@@ -57,7 +57,7 @@ export default function Page() {
         ))}
       </List>
 
-      <Divider my={5} />
+      <Divider my={3} />
 
       <BackButton />
     </DocBox>
