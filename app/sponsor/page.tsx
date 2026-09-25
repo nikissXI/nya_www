@@ -136,11 +136,7 @@ const Page = () => {
                 跨境赞助满 <strong>20元</strong> 解锁，跨境联机用这种
               </Text>
 
-              <Text
-                fontSize="sm"
-                color="warning.text"
-                fontWeight="700"
-              >
+              <Text fontSize="sm" color="warning.text" fontWeight="700">
                 只需要房主赞助，成员无需单独赞助
               </Text>
 
@@ -244,7 +240,12 @@ const Page = () => {
                   </Button>
                 </Flex>
 
-                <Text color="warning.text" fontSize="sm" mt={3} lineHeight="1.8">
+                <Text
+                  color="warning.text"
+                  fontSize="sm"
+                  mt={3}
+                  lineHeight="1.8"
+                >
                   <Text as="span" fontWeight="700">
                     赞助金额由服主手动录入，就是看到了才更新；
                   </Text>
@@ -259,9 +260,6 @@ const Page = () => {
 
               <SimpleGrid columns={2} spacing={3}>
                 <Box textAlign="center">
-                  <Text mb={1} fontSize="sm" color="text.muted">
-                    支付宝
-                  </Text>
                   <Image
                     w="100%"
                     maxW="250px"
@@ -273,9 +271,6 @@ const Page = () => {
                 </Box>
 
                 <Box textAlign="center">
-                  <Text mb={1} fontSize="sm" color="text.muted">
-                    微信
-                  </Text>
                   <Image
                     w="100%"
                     maxW="250px"
