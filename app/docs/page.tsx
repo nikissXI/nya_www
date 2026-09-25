@@ -15,7 +15,6 @@ import {
   Image,
   Link,
   VStack,
-  Divider,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
@@ -27,7 +26,7 @@ import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
 import { getStatusColor } from "@/utils/strings";
 import { NoticeText } from "@/components/universal/Notice";
-import { DocCode, DocNotice } from "@/components/docs/DocParts";
+import { DocCode, DocDivider, DocNotice } from "@/components/docs/DocParts";
 
 const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
   return (
@@ -272,14 +271,14 @@ const DocumentPage = () => {
             )}
           </TabList>
 
-          <Divider my={3} />
+          <DocDivider />
 
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Text>
                 ② 下载并安装WG客户端
@@ -314,7 +313,7 @@ const DocumentPage = () => {
                 </Text>
               </Collapse>
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Box>
                 ③ 点击或长按黄字复制
@@ -347,7 +346,7 @@ const DocumentPage = () => {
                 <strong>{userWgInfo?.tunnel_name}</strong>
               </Text>
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Flex>
                 ④ 打开隧道开关 =&gt;
@@ -389,7 +388,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <GetIOSID />
 
@@ -401,7 +400,7 @@ const DocumentPage = () => {
                 w="300px"
               />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Tabs variant="unstyled">
                 <Text fontWeight="bolder">
@@ -489,7 +488,7 @@ const DocumentPage = () => {
                 </TabPanels>
               </Tabs>
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Flex>
                 ④ 打开隧道开关 =&gt;
@@ -507,7 +506,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Text>② 下载并安装WG客户端</Text>
               <Button
@@ -520,7 +519,7 @@ const DocumentPage = () => {
                 点击下载安装包
               </Button>
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Box>
                 ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}
@@ -528,7 +527,7 @@ const DocumentPage = () => {
               </Box>
               {DownloadButton()}
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Text>④ 跟着下图操作完成隧道导入，看红字就行</Text>
 
@@ -588,7 +587,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <GetIOSID />
               <Image
@@ -598,14 +597,14 @@ const DocumentPage = () => {
                 w="300px"
               />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Box>
                 ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
               {DownloadButton()}
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Box>
                 <Text>④ 运行WG，跟着下图操作完成隧道导入，看红字就行</Text>
@@ -622,7 +621,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Text>② 安装喵服Decky插件（插件由网友开发）</Text>
               <Button
@@ -639,14 +638,14 @@ const DocumentPage = () => {
                 插件面板，打开 `NyaFu WG`
               </Text>
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Box>
                 ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
               {DownloadButton()}
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Box>
                 <Text>
@@ -661,7 +660,7 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={0}>
               <SelectNode />
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Text>② 看WG官方文档安装客户端，或者问deepseek</Text>
               <Link
@@ -673,14 +672,14 @@ const DocumentPage = () => {
                 点击跳转WG官方文档（需要翻墙）
               </Link>
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Box>
                 ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
               </Box>
               {DownloadButton()}
 
-              <Divider my={3} />
+              <DocDivider />
 
               <Text>
                 ④ 在命令行打开隧道文件的目录
@@ -696,7 +695,7 @@ const DocumentPage = () => {
           </TabPanels>
         </Tabs>
 
-        <Divider my={3} />
+        <DocDivider />
 
         <Text>
           ⑤ WG隧道打开后<HighLight>等5秒</HighLight>再点刷新
@@ -745,14 +744,14 @@ const DocumentPage = () => {
           </Text>
         )}
 
-        <Divider my={3} />
+        <DocDivider />
 
         <Text>
           ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
           ，网页只负责创建和加入房间，WG客户端保持连接就行
         </Text>
 
-        <Divider my={3} />
+        <DocDivider />
 
         <Text>
           现在请

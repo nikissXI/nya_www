@@ -79,6 +79,8 @@ const theme = extendTheme({
       /* ---------- 描边 ---------- */
       "border.line": { default: "#E4EAF3", _dark: "#1F2B45" },
       "border.strong": { default: "#CDD8E7", _dark: "#2E3D5C" },
+      /** 教程分节线：比 border.strong 再明显一点，亮暗模式下都能看清 */
+      "border.divider": { default: "#AEBED5", _dark: "#35456A" },
 
       /* ---------- 文字 ---------- */
       "text.main": { default: "#101828", _dark: "#E9EEF8" },

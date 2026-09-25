@@ -1,8 +1,9 @@
-import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import {
   DocCode,
+  DocDivider,
   DocMuted,
   DocStep,
   DocTip,
@@ -21,7 +22,7 @@ export default function Page() {
       <Text>喵服饥荒联机版交流Q群 641115719</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -56,7 +57,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={3}>
         联机失败？按顺序检查
@@ -77,7 +78,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>

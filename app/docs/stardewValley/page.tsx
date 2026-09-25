@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Box,
-  Divider,
   Flex,
   Heading,
   HStack,
@@ -19,6 +18,7 @@ import { Button } from "@/components/universal/button";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import {
+  DocDivider,
   DocImage,
   DocMuted,
   DocStep,
@@ -111,12 +111,12 @@ export default function Page() {
         )}
       </Box>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Text>喵服星露谷物语交流Q群 817658554</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -140,7 +140,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={3}>
         联机失败？按顺序检查
@@ -217,7 +217,7 @@ export default function Page() {
         )}
       </Box>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md">单机农场转联机农场</Heading>
 
@@ -236,7 +236,7 @@ export default function Page() {
         </Text>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>

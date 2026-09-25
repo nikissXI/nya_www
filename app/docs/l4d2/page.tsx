@@ -1,8 +1,9 @@
-import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import {
   DocCode,
+  DocDivider,
   DocImage,
   DocMuted,
   DocStep,
@@ -22,7 +23,7 @@ export default function Page() {
       <Text>喵服求生之路2交流Q群 138012638</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md">启用游戏控制台</Heading>
 
@@ -35,7 +36,7 @@ export default function Page() {
         在游戏中按 <strong>~</strong> 键（通常在键盘左上角）打开控制台
       </Text>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -74,7 +75,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={3}>
         联机失败？按顺序检查
@@ -97,7 +98,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={3}>
         用喵服后联机还是卡顿？
@@ -112,7 +113,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>

@@ -1,7 +1,8 @@
-import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import {
+  DocDivider,
   DocImage,
   DocMuted,
   DocStep,
@@ -20,7 +21,7 @@ export default function Page() {
       <Text>该游戏玩家群体太小，没有专门的交流群</Text>
       <DocMuted mt={1}>联机有问题请去大群找群主</DocMuted>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={2}>
         联机步骤
@@ -37,7 +38,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={3}>
         联机失败？按顺序检查
@@ -53,7 +54,7 @@ export default function Page() {
         <DocTip>如果加入后或规律性闪退、黑屏，请自行检查mod或是游戏bug</DocTip>
       </DocTips>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>

@@ -1,7 +1,7 @@
-import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
-import { DocMuted, DocStep, DocTip, DocTips, ExtLink } from "@/components/docs/DocParts";
+import { DocDivider, DocMuted, DocStep, DocTip, DocTips, ExtLink } from "@/components/docs/DocParts";
 import { GENERAL_QQ_GROUP } from "@/utils/roomGames";
 
 export default function Page() {
@@ -51,7 +51,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mt={5} mb={3}>
         联机失败常见原因
@@ -70,7 +70,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>

@@ -3,6 +3,7 @@ import {
   Badge,
   Box,
   Code,
+  Divider,
   Flex,
   Heading,
   Icon,
@@ -11,6 +12,7 @@ import {
   Text,
   VStack,
   type BoxProps,
+  type DividerProps,
   type ImageProps,
   type TextProps,
 } from "@chakra-ui/react";
@@ -156,4 +158,21 @@ export const DocCode = ({
 /** 教程配图：统一圆角与最大宽度 */
 export const DocImage = (props: ImageProps) => (
   <Image borderRadius="control" maxW="100%" my={2} {...props} />
+);
+
+/**
+ * 教程分节线
+ * ------------------------------------------------------------------
+ * 各教程页原来都是 `<Divider my={3} />`：上下间距偏紧，而且 Chakra 的 Divider
+ * 自带 `opacity: 0.6`，把颜色又冲淡一层，亮暗模式下都几乎看不见。
+ * 这里统一成「不透明 + 更明显的 border.divider 色 + 更舒展的上下留白」，
+ * 以后要调分节线的间距/颜色，只改这一个组件。
+ */
+export const DocDivider = (props: DividerProps) => (
+  <Divider
+    opacity={1}
+    borderColor="border.divider"
+    my={{ base: 5, md: 6 }}
+    {...props}
+  />
 );

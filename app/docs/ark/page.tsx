@@ -1,8 +1,9 @@
-import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import {
   DocCode,
+  DocDivider,
   DocImage,
   DocMuted,
   DocStep,
@@ -20,14 +21,14 @@ export default function Page() {
     >
       <Text>这里只有手游的联机教程，如果是端游请找服主</Text>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Text textAlign="center"></Text>
 
       <Text>喵服方舟手游交流Q群 1106534252</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -56,7 +57,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={3}>
         联机失败？按顺序检查
@@ -71,7 +72,7 @@ export default function Page() {
         </DocTip>
       </DocTips>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md" mb={3}>
         修改联机游戏距离
@@ -86,7 +87,7 @@ export default function Page() {
         <DocMuted>只需要主机修改，40为建议值，太大也不行</DocMuted>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>

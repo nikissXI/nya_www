@@ -1,7 +1,7 @@
-import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
-import { DocMuted, DocStep } from "@/components/docs/DocParts";
+import { DocDivider, DocMuted, DocStep } from "@/components/docs/DocParts";
 
 export default function Page() {
   return (
@@ -15,7 +15,7 @@ export default function Page() {
       <Text>喵服传说法师交流Q群 981286541</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <Heading size="md">联机步骤</Heading>
 
@@ -33,7 +33,7 @@ export default function Page() {
         </DocStep>
       </VStack>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>

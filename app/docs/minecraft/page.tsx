@@ -1,10 +1,10 @@
-import { Divider, Flex, Heading, List, ListItem, Text } from "@chakra-ui/react";
+import { Flex, Heading, List, ListItem, Text } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import DocBox from "@/components/docs/DocBox";
 import DocLink from "@/components/docs/DocLink";
 import BackButton from "@/components/docs/BackButton";
-import { ExtLink } from "@/components/docs/DocParts";
+import { DocDivider, ExtLink } from "@/components/docs/DocParts";
 
 export default function Page() {
   const TextList = [
@@ -57,7 +57,7 @@ export default function Page() {
         ))}
       </List>
 
-      <Divider my={3} />
+      <DocDivider />
 
       <BackButton />
     </DocBox>
