@@ -929,12 +929,12 @@ export default function Page() {
                       if (roomRole === ROLE_NONE) setNodeListModal();
                       else
                         openToast({
-                          content: `${roomRole === ROLE_HOSTER ? "关闭" : "退出"}房间后再切换节点`,
+                          content: `${roomRole === ROLE_HOSTER ? "关闭" : "退出"}房间后再切换`,
                           status: "warning",
                         });
                     }}
                   >
-                    切换节点
+                    节点
                   </Button>
                 </Flex>
               </Flex>
