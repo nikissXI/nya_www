@@ -480,7 +480,7 @@ export default function Page() {
             />
             <Button
               size="sm"
-              px={5}
+              px={2}
               flexShrink={0}
               onClick={() => {
                 handleJoinRoom(inputRoomId, inputPasswd);
@@ -567,7 +567,7 @@ export default function Page() {
 
                   <Button
                     size="sm"
-                    px={4}
+                    px={2}
                     flexShrink={0}
                     onClick={() => {
                       handleCreateRoom(game);
@@ -925,7 +925,7 @@ export default function Page() {
                   <Button
                     ml={2}
                     size="sm"
-                    px={3}
+                    px={2}
                     onClick={() => {
                       if (roomRole === ROLE_NONE) setNodeListModal();
                       else
