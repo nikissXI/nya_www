@@ -1,4 +1,11 @@
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 import {
   Box,
   Text,
@@ -115,6 +122,52 @@ export default function Page() {
   const setRoomPassword = useUserStateStore((s) => s.setRoomPassword);
   const openLoginModal = useUserStateStore((s) => s.openLoginModal);
   const setNodeListModal = useUserStateStore((s) => s.setNodeListModal);
+
+  // 当前节点行：宽度不够时两个 Badge 从横向改纵向，把宽度让给节点名
+  // （节点名永远不换行，过长时截断显示省略号）
+  const [nodeRowEl, setNodeRowEl] = useState<HTMLDivElement | null>(null);
+  const [stackBadges, setStackBadges] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!nodeRowEl) return;
+
+    const measure = () => {
+      const badges = nodeRowEl.querySelector<HTMLElement>("[data-node-badges]");
+      const name = nodeRowEl.querySelector<HTMLElement>("[data-node-name]");
+      const net = nodeRowEl.querySelector<HTMLElement>("[data-node-net]");
+      if (!badges || !name || !net) return;
+
+      // 两个 Badge 横向排布所需宽度（Badge 自身宽度固定，纵向时量到的还是同一个值）
+      const badgeWidths = Array.from(badges.children).map(
+        (child) => (child as HTMLElement).offsetWidth,
+      );
+      const badgeGap = parseFloat(getComputedStyle(badges).columnGap) || 0;
+      const badgesWidth =
+        badgeWidths.reduce((sum, width) => sum + width, 0) +
+        badgeGap * Math.max(badgeWidths.length - 1, 0);
+
+      const rowGap = parseFloat(getComputedStyle(nodeRowEl).columnGap) || 0;
+      // 名字被截断时 scrollWidth 仍是完整文字宽度，所以这个判断与当前排列方式无关，
+      // 不会出现「切了又切回来」的抖动
+      const needed =
+        badgesWidth + name.scrollWidth + net.offsetWidth + rowGap * 2;
+
+      setStackBadges(needed > nodeRowEl.clientWidth + 1);
+    };
+
+    // 先同步量一次，避免首帧闪一下横向排列
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(nodeRowEl);
+    return () => observer.disconnect();
+    // 节点信息变化后文字宽度会变，需要重新量一次
+  }, [
+    nodeRowEl,
+    userWgInfo?.node_alias,
+    userWgInfo?.net_type,
+    userWgInfo?.bandwidth,
+    nodeNetLoad,
+  ]);
 
   useEffect(() => {
     // 当节点存在，且还没有房间数据时，自动拉取
@@ -479,8 +532,7 @@ export default function Page() {
               {...INPUT_STYLE}
             />
             <Button
-              size="sm"
-              px={2}
+              px={3}
               flexShrink={0}
               onClick={() => {
                 handleJoinRoom(inputRoomId, inputPasswd);
@@ -566,8 +618,7 @@ export default function Page() {
                   </Box>
 
                   <Button
-                    size="sm"
-                    px={2}
+                    px={3}
                     flexShrink={0}
                     onClick={() => {
                       handleCreateRoom(game);
@@ -618,7 +669,7 @@ export default function Page() {
                 {roomRole === ROLE_HOSTER && (
                   <Button
                     size="sm"
-                    px={4}
+                    px={3}
                     onClick={() => {
                       setInputPasswd(
                         roomData?.room_passwd ? roomData.room_passwd : "",
@@ -651,7 +702,7 @@ export default function Page() {
                   </Text>
                   <Button
                     size="sm"
-                    px={4}
+                    px={3}
                     flexShrink={0}
                     onClick={() => navigate(roomGame.path)}
                   >
@@ -880,64 +931,93 @@ export default function Page() {
           {/* 当前节点 */}
           {userWgInfo?.node_alias && nodeNetLoad !== undefined ? (
             <Box {...CARD_STYLE} {...CARD_PADDING}>
-              <Flex align="center" gap={{ base: 2, md: 3 }}>
-                <Badge
-                  // colorScheme="orange"
-                  fontSize="xs"
-                >
-                  {userWgInfo.net_type}
-                </Badge>
-                <Badge
-                  // colorScheme="teal"
-                  fontSize="xs"
-                >
-                  {userWgInfo.bandwidth}M
-                </Badge>
-
-                {/* 节点名称：占据中间剩余空间并居中 */}
-                <Text
+              <Flex align="center">
+                <Flex
+                  ref={setNodeRowEl}
                   flex={1}
                   minW={0}
-                  textAlign="center"
-                  fontWeight="bold"
-                  fontSize="lg"
-                  color="text.main"
-                  isTruncated
-                  title={userWgInfo.node_alias}
+                  align="center"
+                  justify="center"
+                  gap={{ base: 3, md: 5 }}
+                  mx={3}
                 >
-                  {userWgInfo.node_alias}
-                </Text>
+                  <Flex
+                    data-node-badges
+                    direction={stackBadges ? "column" : "row"}
+                    align="center"
+                    justify="center"
+                    gap={1}
+                    flexShrink={0}
+                  >
+                    <Badge
+                      textAlign="center"
+                      bg="bg.subtle"
+                      w="3rem"
+                      minW="3rem"
+                      fontSize="xs"
+                      whiteSpace="normal"
+                    >
+                      {userWgInfo.net_type}
+                    </Badge>
+                    <Badge
+                      textAlign="center"
+                      w="3rem"
+                      minW="3rem"
+                      bg="bg.subtle"
+                      fontSize="xs"
+                      whiteSpace="normal"
+                    >
+                      {userWgInfo.bandwidth}M
+                    </Badge>
+                  </Flex>
 
-                {/* 负载情况 + 切换节点：右 */}
-                <Flex align="center" gap={{ base: 2, md: 3 }} flexShrink={0}>
-                  <Flex align="center" gap={1.5}>
+                  <Text
+                    data-node-name
+                    flex="0 1 auto"
+                    minW="2.5rem"
+                    isTruncated
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize={{ base: "md", md: "lg" }}
+                    color="text.main"
+                    title={userWgInfo.node_alias}
+                  >
+                    {userWgInfo.node_alias}
+                  </Text>
+
+                  <Flex
+                    data-node-net
+                    align="center"
+                    gap={1}
+                    flexShrink={0}
+                    justify="center"
+                  >
                     <Box
                       w="8px"
                       h="8px"
                       borderRadius="full"
                       bg={getNetColor(nodeNetLoad)}
                     />
-                    <Text fontSize="xs" color="text.muted">
+                    <Text fontSize="xs" color="text.muted" whiteSpace="nowrap">
                       {getNetText(nodeNetLoad)}
                     </Text>
                   </Flex>
-
-                  <Button
-                    ml={2}
-                    size="sm"
-                    px={2}
-                    onClick={() => {
-                      if (roomRole === ROLE_NONE) setNodeListModal();
-                      else
-                        openToast({
-                          content: `${roomRole === ROLE_HOSTER ? "关闭" : "退出"}房间后再切换`,
-                          status: "warning",
-                        });
-                    }}
-                  >
-                    切换
-                  </Button>
                 </Flex>
+
+                <Button
+                  px={3}
+                  flexShrink={0}
+                  onClick={() => {
+                    if (roomRole === ROLE_NONE) setNodeListModal();
+                    else
+                      openToast({
+                        content: `${roomRole === ROLE_HOSTER ? "关闭" : "退出"}房间后再切换`,
+                        status: "warning",
+                      });
+                  }}
+                >
+                  切换
+                </Button>
               </Flex>
 
               {roomRole === ROLE_HOSTER && nodeWarningElement}

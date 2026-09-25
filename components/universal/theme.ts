@@ -276,7 +276,18 @@ const theme = extendTheme({
         app: {
           field: {
             bg: "bg.subtle",
+            border: "1px solid",
             borderColor: "border.line",
+            color: "text.main",
+            borderRadius: "control",
+            transition:
+              "border-color .2s ease, box-shadow .2s ease, background-color .2s ease",
+            _placeholder: { color: "text.faint" },
+            _hover: { borderColor: "border.strong" },
+            _focus: {
+              borderColor: "brand.solid",
+              boxShadow: "0 0 0 3px var(--nya-ring)",
+            },
           },
         },
       },

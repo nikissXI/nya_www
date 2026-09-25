@@ -43,7 +43,11 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-function sortNodes(nodes: NodeInfo[], sortBy: string, sortOrder: "asc" | "desc") {
+function sortNodes(
+  nodes: NodeInfo[],
+  sortBy: string,
+  sortOrder: "asc" | "desc",
+) {
   return [...nodes].sort((a, b) => {
     // 离线节点（net === -1）始终排在后面
     const aOffline = a.net === -1;
@@ -102,7 +106,6 @@ const ServerNodeItem: React.FC<{
         border="1px solid"
         borderColor={selected ? "brand.solid" : "border.line"}
         bg={selected ? "brand.soft" : "bg.surface"}
-        boxShadow={selected ? "0 0 0 3px var(--nya-ring)" : undefined}
         opacity={offline ? 0.55 : 1}
         cursor={offline || selectNodeLock ? "not-allowed" : "pointer"}
         transition="border-color .2s ease, background .2s ease, box-shadow .2s ease"
@@ -136,14 +139,14 @@ const ServerNodeItem: React.FC<{
 
           {!offline ? (
             <>
-              <Badge bg="brand.soft" color="brand.text" fontSize="xs">
+              <Badge bg="bg.subtle" fontSize="xs">
                 {node.net_type}
               </Badge>
-              <Badge bg="bg.subtle" color="text.muted" fontSize="xs">
+              <Badge bg="bg.subtle" fontSize="xs">
                 {node.bandwidth}M
               </Badge>
               {node.node_desc && (
-                <Badge bg="bg.subtle" color="text.faint" fontSize="xs">
+                <Badge bg="bg.subtle" fontSize="xs">
                   {node.node_desc}
                 </Badge>
               )}
@@ -155,12 +158,19 @@ const ServerNodeItem: React.FC<{
           )}
         </Flex>
 
-        <SimpleGrid columns={2} spacing={2} mt={2} display={offline ? "none" : "grid"}>
+        <SimpleGrid
+          columns={2}
+          spacing={2}
+          mt={2}
+          display={offline ? "none" : "grid"}
+        >
           <Stat
             icon={MdOutlineSignalCellularAlt}
             label="延迟"
             color={
-              node.delay !== undefined ? getDelayColor(node.delay) : "text.faint"
+              node.delay !== undefined
+                ? getDelayColor(node.delay)
+                : "text.faint"
             }
             value={
               node.delay !== undefined ? (
@@ -223,7 +233,9 @@ export default function ServerNodeListModal() {
   const getNodeListLock = useUserStateStore((state) => state.getNodeListLock);
   const getNodeList = useUserStateStore((state) => state.getNodeList);
   const nodeMap = useUserStateStore((state) => state.nodeMap);
-  const showNodeListModal = useUserStateStore((state) => state.showNodeListModal);
+  const showNodeListModal = useUserStateStore(
+    (state) => state.showNodeListModal,
+  );
   const setNodeListModal = useUserStateStore((state) => state.setNodeListModal);
   const userWgInfo = useUserStateStore((state) => state.userWgInfo);
   const fixedNode = useUserStateStore((state) => state.fixedNode);
