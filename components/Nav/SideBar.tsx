@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Divider,
   Flex,
   Heading,
   Icon,
-  IconButton,
   Image,
   Input,
   Link,
@@ -16,17 +15,15 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  Tooltip,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
   MdCampaign,
   MdContentCopy,
   MdFavorite,
   MdGroups,
-  MdHistory,
 } from "react-icons/md";
 import { useUserStateStore } from "@/store/user-state";
 import { GENERAL_QQ_GROUP, ROOM_GAME_LIST } from "@/utils/roomGames";
@@ -47,6 +44,14 @@ export default function SideBar() {
     onOpen: openGameGroup,
     onClose: closeGameGroup,
   } = useDisclosure();
+
+  // 带 ?groups 访问时（方便把「各游戏小群列表」当分享链接用），加载完自动弹出弹窗
+  const { search } = useLocation();
+  const shouldOpenGameGroups = new URLSearchParams(search).has("groups");
+
+  useEffect(() => {
+    if (shouldOpenGameGroups) openGameGroup();
+  }, [shouldOpenGameGroups, openGameGroup]);
 
   // 用 selector 单独订阅，避免 store 任意状态变化都触发侧栏重渲染
   const announcementsData = useUserStateStore((s) => s.announcementsData);

@@ -122,7 +122,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
       embed: false,
-
       announcementsData: undefined,
       getAnnouncementsData: async () => {
         try {
