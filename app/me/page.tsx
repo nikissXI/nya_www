@@ -578,7 +578,7 @@ export default function UserProfilePage() {
                 as="h1"
                 fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="800"
-                my={6}
+                mt={8}
                 textAlign="center"
               >
                 账号信息
