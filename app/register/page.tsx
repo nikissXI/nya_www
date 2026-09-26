@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-import { Text, Box, Flex, Input, Image, VStack, Icon, Spinner } from "@chakra-ui/react";
+import {
+  Text,
+  Box,
+  Flex,
+  Input,
+  Image,
+  VStack,
+  Icon,
+  Spinner,
+} from "@chakra-ui/react";
 import { openToast } from "@/components/universal/toast";
 import useCaptcha from "@/utils/GetCaptcha";
 import { useUserStateStore } from "@/store/user-state";
@@ -36,6 +45,7 @@ export default function Page() {
 
   // 用 selector 单独订阅，避免 store 任意状态变化都触发本页重渲染
   const uuid = useUserStateStore((s) => s.uuid);
+  const embed = useUserStateStore((s) => s.embed);
   const getUserInfo = useUserStateStore((s) => s.getUserInfo);
   const openLoginModal = useUserStateStore((s) => s.openLoginModal);
 
@@ -306,18 +316,20 @@ export default function Page() {
             注册
           </Button>
 
-          <Text fontSize="sm" textAlign="center" color="text.muted">
-            已有账号？
-            <Text
-              as="button"
-              ml={1}
-              color="brand.text"
-              fontWeight="600"
-              onClick={openLoginModal}
-            >
-              点击登录
+          {!embed && (
+            <Text fontSize="sm" textAlign="center" color="text.muted">
+              已有账号？
+              <Text
+                as="button"
+                ml={1}
+                color="brand.text"
+                fontWeight="600"
+                onClick={openLoginModal}
+              >
+                点击登录
+              </Text>
             </Text>
-          </Text>
+          )}
         </VStack>
       </Box>
     </Flex>

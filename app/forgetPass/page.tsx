@@ -41,8 +41,8 @@ export default function Page() {
 
   // 用 selector 单独订阅，避免 store 任意状态变化都触发本页重渲染
   const uuid = useUserStateStore((s) => s.uuid);
+  const embed = useUserStateStore((s) => s.embed);
   const getUserInfo = useUserStateStore((s) => s.getUserInfo);
-  const openLoginModal = useUserStateStore((s) => s.openLoginModal);
 
   // 验证码拉取和图片
   const { fetchCaptcha } = useCaptcha();
@@ -207,9 +207,9 @@ export default function Page() {
               lineHeight="1.7"
               textAlign="left"
             >
-              本页面仅支持通过电子邮箱找回密码；
+              本页面仅支持通过电子邮箱找回密码
               <br />
-              如果只绑定了手机号，请联系服主找回。
+              通过手机号找回要加服主QQ <strong>1299577815</strong>
             </Text>
           </Flex>
 
@@ -339,18 +339,20 @@ export default function Page() {
             提交
           </Button>
 
-          <Text fontSize="sm" textAlign="center" color="text.muted">
-            想起来了？
-            <Text
-              as="button"
-              ml={1}
-              color="brand.text"
-              fontWeight="600"
-              onClick={() => navigate(-1)}
-            >
-              返回
+          {!embed && (
+            <Text fontSize="sm" textAlign="center" color="text.muted">
+              想起来了？
+              <Text
+                as="button"
+                ml={1}
+                color="brand.text"
+                fontWeight="600"
+                onClick={() => navigate(-1)}
+              >
+                返回
+              </Text>
             </Text>
-          </Text>
+          )}
         </VStack>
       </Box>
     </Flex>

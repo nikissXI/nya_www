@@ -15,6 +15,6 @@ dist/
 # typescript
 *.tsbuildinfo
 
-tmp.txt
+xuqiu.txt
 
 .github
