@@ -50,7 +50,6 @@ export default function Navbar({ path }: { path?: string }) {
   const headerBg = useColorModeValue(HEADER_BG_LIGHT, HEADER_BG_DARK);
 
   const currentPath = path || pathname;
-  const rootPath = "/" + currentPath.split("/")[1];
 
   return (
     <>

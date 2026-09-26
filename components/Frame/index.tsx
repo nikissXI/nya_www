@@ -32,14 +32,12 @@ import { ROOM_GAME_LIST } from "@/utils/roomGames";
 // 页面标题配置：新增页面时在这里补一行
 // 注意 /docs 本身是 WG 安装教程，/docs/<游戏> 才是各游戏的联机教程（见下面的 DOC_GAME_TITLE）
 const PAGE_TITLES: Record<string, string> = {
-  "/": "喵服首页",
   "/register": "注册账号",
   "/forgetPass": "忘记密码",
   "/me": "账号信息",
-  "/sponsor": "赞助喵服",
   "/docs": "WG安装教程",
-  "/room": "联机房间",
   "/login": "登录",
+  "/sponsor": "感谢赞助者们的支持！",
   "/offlineCheck": "WG连接失败或掉线排查",
 };
 
@@ -111,16 +109,6 @@ export default function Frame({
     rootPath === "/docs" && segments.length > 1
       ? (DOC_PAGE_TITLES["/" + segments.join("/")] ?? DOC_GAME_TITLE)
       : (PAGE_TITLES[rootPath] ?? "");
-  const showPageTitle =
-    Boolean(title) &&
-    rootPath !== "/" &&
-    rootPath !== "/sponsor" &&
-    rootPath !== "/room";
-
-  // 浏览器标签页标题跟着路由走（首页不重复拼站点名）
-  useEffect(() => {
-    document.title = showPageTitle ? `${title} · 喵服联机平台` : "喵服联机平台";
-  }, [showPageTitle, title]);
 
   return (
     <>
@@ -159,9 +147,10 @@ export default function Frame({
             direction={{ base: "column", lg: "row" }}
             align="flex-start"
             gap={{ base: 0, lg: 8 }}
+            pt={embed ? 8 : 0}
           >
             <Box flex="1" minW={0} w="100%">
-              {showPageTitle && !embed && (
+              {rootPath !== "/room" && (
                 <Heading
                   as="h1"
                   fontSize={{ base: "2xl", md: "3xl" }}

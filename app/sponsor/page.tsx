@@ -83,10 +83,6 @@ const Page = () => {
   return (
     <Box maxW="640px" mx="auto" pb={8}>
       <VStack spacing={5} align="stretch">
-        <Heading size="lg" textAlign="center">
-          感谢赞助者们的支持！
-        </Heading>
-
         {/* 联系服主 */}
         <Card p={4}>
           <Flex

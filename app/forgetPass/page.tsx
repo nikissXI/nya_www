@@ -182,19 +182,6 @@ export default function Page() {
 
   return (
     <Flex direction="column" align="center" pb={6}>
-      {embed && (
-        <Heading
-          as="h1"
-          fontSize={{ base: "2xl", md: "3xl" }}
-          fontWeight="800"
-          mt={8}
-          mb={3}
-          textAlign="center"
-        >
-          忘记密码
-        </Heading>
-      )}
-
       <Box {...CARD_STYLE} {...CARD_PADDING} maxW="380px" px={4} py={4}>
         <VStack spacing={3} align="stretch" onKeyDown={handleEnter}>
           {/* 提示：本页只支持邮箱找回 */}
