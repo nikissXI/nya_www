@@ -472,12 +472,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             set({ latency: delay });
           } else {
             set({ latency: undefined });
-            if (!auto) {
-              openToast({
-                content: "刷新成功，你的WG未连接",
-                status: "warning",
-              });
-            }
+            if (!auto) openToast({ content: "刷新成功", status: "success" });
           }
 
           // --- 核心优化结束 ---
