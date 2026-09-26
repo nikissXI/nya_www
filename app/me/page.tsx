@@ -150,6 +150,7 @@ export default function UserProfilePage() {
   const navigate = useNavigate();
   // 用 selector 单独订阅，避免 store 任意状态变化都触发本页重渲染
   const uuid = useUserStateStore((s) => s.uuid);
+  const embed = useUserStateStore((s) => s.embed);
   const getUserInfo = useUserStateStore((s) => s.getUserInfo);
   const userInfo = useUserStateStore((s) => s.userInfo);
   const userWgInfo = useUserStateStore((s) => s.userWgInfo);
@@ -572,6 +573,18 @@ export default function UserProfilePage() {
             mx="auto"
             align="stretch"
           >
+            {embed && (
+              <Heading
+                as="h1"
+                fontSize={{ base: "2xl", md: "3xl" }}
+                fontWeight="800"
+                my={6}
+                textAlign="center"
+              >
+                账号信息
+              </Heading>
+            )}
+
             {/* 账号信息（含昵称与账号绑定） */}
             <Box {...CARD_STYLE} {...CARD_PADDING}>
               <VStack spacing={0} align="stretch" divider={<Divider />}>
