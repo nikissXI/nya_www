@@ -175,7 +175,7 @@ export default function Frame({
 
               {loginLoading ? (
                 <Box>
-                  <NoticeText />
+                  {!embed && <NoticeText />}
 
                   <Center mt={6}>
                     <VStack spacing={3}>
