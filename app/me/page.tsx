@@ -22,7 +22,6 @@ import { Button } from "@/components/universal/button";
 import { useEffect, useState } from "react";
 import { openToast } from "@/components/universal/toast";
 import {
-  isInteger,
   getHash,
   getErrorMessage,
   getPasswordAlertText,
@@ -46,7 +45,6 @@ import {
   FaIdCard,
   FaMobileAlt,
   FaEnvelope,
-  FaQq,
   FaNetworkWired,
   FaHeart,
   FaShieldAlt,
@@ -56,7 +54,7 @@ import { MdContentCopy } from "react-icons/md";
 
 /* ------------------- 本页公用的小组件 ------------------- */
 
-/** 账号输入框（手机/邮箱/QQ 共用） */
+/** 账号输入框（手机/邮箱 共用） */
 const AccountInput = (props: {
   value: string;
   onChange: (value: string) => void;
@@ -72,7 +70,7 @@ const AccountInput = (props: {
   />
 );
 
-/** 绑定/改绑弹窗：手机、邮箱、QQ 三个流程只有文案和账号输入区不同 */
+/** 绑定/改绑弹窗：手机、邮箱 流程只有文案和账号输入区不同 */
 const BindModal = (props: {
   isOpen: boolean;
   onClose: () => void;
@@ -213,55 +211,6 @@ export default function UserProfilePage() {
   /** 保存昵称成功后退出编辑态 */
   const handleSaveUsername = async () => {
     if (await saveUsername()) setIsEditingUsername(false);
-  };
-
-  // 绑定QQ相关
-  const {
-    isOpen: bindQQIsOpen,
-    onOpen: bindQQOnOpen,
-    onClose: bindQQOnClose,
-  } = useDisclosure();
-
-  const [verifyQQText, setVerifyQQText] = useState("");
-  const [disableVerifyQQ, setDisableVerifyQQ] = useState(false);
-
-  const sendQQVerify = async (qq: string) => {
-    if (!isInteger(qq)) {
-      openToast({ content: `请正确填写QQ号`, status: "warning" });
-      return;
-    }
-
-    try {
-      // 这两个接口用 code 表达“是 / 否”，需要自己判断，所以用 requestEnvelope
-      const exist = await api.qqExist(qq);
-      if (exist.code === 1) {
-        setVerifyQQText("该QQ号已被注册");
-        return;
-      }
-
-      const verify = await api.verifyQQ(uuid, qq);
-      setVerifyQQText(verify.msg ?? "服务异常，请联系服主处理");
-      if (verify.code === 0) {
-        setDisableVerifyQQ(true);
-      }
-    } catch (err) {
-      setVerifyQQText(getErrorMessage(err, "服务异常，请联系服主处理"));
-    }
-  };
-
-  const handleBindQQ = async () => {
-    try {
-      await api.bindQQ({
-        qq: inputAccount,
-        uuid: uuid,
-        captcha_code: inputCaptcha,
-      });
-      openToast({ content: "绑定新QQ成功", status: "success" });
-      getUserInfo();
-      bindQQOnClose();
-    } catch (err) {
-      await toastRequestError(err, { refreshCaptcha: true });
-    }
   };
 
   // 绑定手机相关
@@ -410,52 +359,6 @@ export default function UserProfilePage() {
         captchaImageUrl={captchaImageUrl}
         onCaptchaRefresh={refreshCaptcha}
         onSubmit={handleBindEmail}
-      />
-
-      {/* 绑定/改绑QQ */}
-      <BindModal
-        isOpen={bindQQIsOpen}
-        onClose={bindQQOnClose}
-        title={userInfo?.qq ? "改绑QQ" : "绑定QQ"}
-        accountField={
-          <Box>
-            <Flex>
-              <AccountInput
-                value={inputAccount}
-                onChange={(value) => {
-                  setInputAccount(value);
-                  setDisableVerifyQQ(false);
-                  setVerifyQQText("");
-                }}
-                placeholder="请输入QQ号"
-                numeric
-              />
-
-              <Button
-                ml={1}
-                px={6}
-                fontSize="15px"
-                isDisabled={disableVerifyQQ}
-                onClick={() => {
-                  if (inputAccount) {
-                    sendQQVerify(inputAccount);
-                  }
-                }}
-              >
-                验证QQ
-              </Button>
-            </Flex>
-
-            <Text color="warning.text" fontSize="sm">
-              {verifyQQText}
-            </Text>
-          </Box>
-        }
-        captchaValue={inputCaptcha}
-        onCaptchaChange={setInputCaptcha}
-        captchaImageUrl={captchaImageUrl}
-        onCaptchaRefresh={refreshCaptcha}
-        onSubmit={handleBindQQ}
       />
 
       {/* 修改密码 */}
@@ -737,35 +640,6 @@ export default function UserProfilePage() {
                     color={userInfo.email ? "text.main" : "text.faint"}
                   >
                     {userInfo.email || "未绑定"}
-                  </Text>
-                </InfoRow>
-
-                <InfoRow
-                  icon={FaQq}
-                  label="QQ"
-                  right={
-                    <Button
-                      size="sm"
-                      px={3}
-                      flexShrink={0}
-                      onClick={async () => {
-                        await refreshCaptcha();
-                        setInputAccount("");
-                        setVerifyQQText("");
-                        setDisableVerifyQQ(false);
-                        bindQQOnOpen();
-                      }}
-                    >
-                      {userInfo.qq ? "换绑" : "绑定"}
-                    </Button>
-                  }
-                >
-                  <Text
-                    fontSize="sm"
-                    isTruncated
-                    color={userInfo.qq ? "text.main" : "text.faint"}
-                  >
-                    {userInfo.qq || "未绑定"}
                   </Text>
                 </InfoRow>
               </VStack>

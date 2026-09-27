@@ -1088,25 +1088,20 @@ export default function Page() {
               </Button>
             </Flex>
 
-            {isOnline === false && (
-              <Flex
-                align="center"
-                justify="center"
-                gap={2}
-                mt={1.5}
-                fontSize="sm"
-              >
-                <Text
-                  as="button"
-                  color="brand.text"
-                  onClick={() => {
-                    navigate("/offlineCheck");
-                  }}
-                >
-                  隧道打开了还是离线或掉线排查
-                </Text>
-              </Flex>
-            )}
+            <Text
+              w="100%"
+              mt={1}
+              textAlign="center"
+              fontSize="sm"
+              fontWeight="bold"
+              as="button"
+              color="brand.text"
+              onClick={() => {
+                navigate("/offlineCheck");
+              }}
+            >
+              WG离线或掉线排查
+            </Text>
           </Box>
 
           {roomRole === ROLE_NONE ? standbyPage() : joinedPage()}

@@ -32,7 +32,6 @@ export interface UserInfo {
   username: string; // 昵称
   tel: string; // 手机
   email: string; // 邮箱
-  qq: string; // QQ
   sponsorship: number; // 赞助金额
 }
 /** 用户当前使用的隧道信息 */
@@ -119,11 +118,6 @@ export type ChangePasswordReq = {
 export type ModifyUsernameReq = {
   username: string;
 };
-export type BindQQReq = {
-  qq: string;
-  uuid: string;
-  captcha_code: string;
-};
 export type BindTELReq = {
   tel: string;
   uuid: string;
@@ -166,10 +160,6 @@ export const api = {
     request<string>("/resetPass", { method: "POST", auth: false, body }),
 
   // ---------- 下面这些用 code 表达“是 / 否”，需要自己读 code / msg ----------
-  qqExist: (qq: string) =>
-    requestEnvelope<null>("/qqExist", { params: { qq }, auth: false }),
-  verifyQQ: (uuid: string, qq: string) =>
-    requestEnvelope<null>("/verifyQQ", { params: { uuid, qq }, auth: false }),
   telExist: (tel: string) =>
     requestEnvelope<null>("/telExist", { params: { tel }, auth: false }),
   verifyTEL: (tel: string) =>
@@ -189,8 +179,6 @@ export const api = {
     request<string>("/changePassword", { method: "POST", body }),
   modifyUsername: (body: ModifyUsernameReq) =>
     request<null>("/modifyUsername", { method: "POST", body }),
-  bindQQ: (body: BindQQReq) =>
-    request<null>("/bindQQ", { method: "POST", body }),
   bindTEL: (body: BindTELReq) =>
     request<null>("/bindTEL", { method: "POST", body }),
   bindEmail: (body: BindEmailReq) =>
