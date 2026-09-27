@@ -3,7 +3,6 @@ import {
   Box,
   Collapse,
   Flex,
-  Heading,
   Icon,
   Image,
   Text,
@@ -16,8 +15,7 @@ import { useUserStateStore } from "@/store/user-state";
 
 /** 通用排查项 */
 const TIPS = [
-  "隧道必须是自己账号的！不能用其他人给的conf_key/二维码/隧道文件",
-  "关掉其他游戏加速器或VPN，确保玩家自己联机设备的网络足够稳定，建议使用WiFi进行联机",
+  "关掉其他游戏加速器或VPN，确保玩家自己联机设备的网络足够稳定，建议使用WiFi进行联机。手机或平板建议锁定WG客户端防止被系统误杀",
   "部分学校的校园网会拦截喵服的流量，试试流量上网可进行验证",
   "大陆外玩家只能用跨境线路节点，节点列表线路筛选，选跨境。国外部分地区用跨境线路节点也连不上，目前已知俄罗斯，这种情况请找服主特殊处理",
 ];
@@ -45,15 +43,18 @@ export default function Page() {
 
       <Card p={{ base: 4, md: 5 }}>
         <VStack align="stretch" spacing={3}>
-          {userWgInfo && (
-            <Tip>
-              连接的隧道名称是否为
-              <strong>{userWgInfo?.tunnel_name}</strong>
-              ，如果不是请导入正确隧道
-            </Tip>
+          {platform === "web" && (
+            <>
+              <Tip>
+                连接的隧道名称是否为
+                <strong>{userWgInfo?.tunnel_name}</strong>
+                ，如果不是请导入正确隧道
+              </Tip>
+              <Tip>
+                隧道必须是自己账号的！不能用其他人给的conf_key/二维码/隧道文件
+              </Tip>
+            </>
           )}
-
-          <Tip>{TIPS[0]}</Tip>
 
           {platform === "android" && (
             <Tip>
@@ -96,7 +97,7 @@ export default function Page() {
             </Tip>
           )}
 
-          {TIPS.slice(1).map((tip) => (
+          {TIPS.map((tip) => (
             <Tip key={tip}>{tip}</Tip>
           ))}
         </VStack>
