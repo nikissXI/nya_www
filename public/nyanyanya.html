@@ -1047,9 +1047,18 @@
                         </form>
                     </div>
                     <div>
-                        <h4>🔄 更新关联群</h4>
-                        <button class="btn btn-primary" id="updateRelateGroupBtn">执行更新</button>
-                        <div class="msg-box" id="updateRelateGroupResult"></div>
+                        <h4>📱 更新APP版本</h4>
+                        <div id="appVersionCurrent"
+                            style="font-size:13px;color:#64748b;margin:6px 0;word-break:break-word;">
+                            当前版本：-</div>
+                        <form id="updateAppVersionForm">
+                            <div class="form-group"><label>平台</label><input name="platform"
+                                    placeholder="android / ios" required></div>
+                            <div class="form-group"><label>最新版本号</label><input name="latestVersion"
+                                    placeholder="如 1.2.3" required></div>
+                            <button type="submit" class="btn btn-primary btn-sm">更新版本</button>
+                            <div class="msg-box" id="updateAppVersionResult"></div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1427,13 +1436,44 @@
                         result.innerHTML = '<p style="color:#94a3b8;">暂无历史记录</p>';
                         return;
                     }
-                    result.innerHTML = `<table><thead><tr><th>节点</th><th>记录时间</th><th>负载</th><th>在线人数</th></tr></thead><tbody>${
-                        data.data.map(log => `<tr><td>${escapeHtml(log.node_alias)}</td><td>${new Date(log.recorded_at).toLocaleString()}</td><td>${log.net}%</td><td>${log.onlines}</td></tr>`).join('')
-                    }</tbody></table>`;
+                    result.innerHTML = `<table><thead><tr><th>节点</th><th>记录时间</th><th>负载</th><th>在线人数</th></tr></thead><tbody>${data.data.map(log => `<tr><td>${escapeHtml(log.node_alias)}</td><td>${new Date(log.recorded_at).toLocaleString()}</td><td>${log.net}%</td><td>${log.onlines}</td></tr>`).join('')
+                        }</tbody></table>`;
                 } catch (err) {
                     result.innerHTML = `<p style="color:#dc2626;">加载失败：${escapeHtml(err.message)}</p>`;
                 }
             }
+
+            function renderAppVersion(data) {
+                const el = document.getElementById('appVersionCurrent');
+                if (!el) return;
+                const appVersion = (data && data.data && data.data.appVersion) || {};
+                const entries = Object.entries(appVersion);
+                if (entries.length === 0) {
+                    el.textContent = '当前版本：暂无记录';
+                } else {
+                    el.textContent = '当前版本：' + entries.map(([p, v]) => `${p} - ${v}`).join('　|　');
+                }
+            }
+
+            document.getElementById('updateAppVersionForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const platform = this.elements['platform'].value.trim();
+                const latestVersion = this.elements['latestVersion'].value.trim();
+                if (!platform || !latestVersion) return;
+                const msgBox = document.getElementById('updateAppVersionResult');
+                try {
+                    const res = await apiFetch(`/updateAppVersion?platform=${encodeURIComponent(platform)}&latestVersion=${encodeURIComponent(latestVersion)}`);
+                    if (res.code === 0) {
+                        showMsg(msgBox, '✅ ' + res.msg, 'success');
+                        // 更新成功后刷新当前版本展示
+                        loadDashboard();
+                    } else {
+                        showMsg(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
 
             // ---- 仪表盘 ----
             async function loadDashboard(data) {
@@ -1459,6 +1499,7 @@
                     const nodes = d.nodes || [];
                     currentNodes = nodes;
                     renderNodes(nodes);
+                    renderAppVersion(data);
                 } catch (err) {
                     showMsgPermanent(document.getElementById('statusTime'), '加载状态失败: ' + err.message, 'error');
                 }
@@ -1959,21 +2000,6 @@
                     }
                 } catch (err) {
                     showMsgPermanent(msgBox, '❌ 请求失败: ' + err.message, 'error');
-                }
-            });
-
-            // 更新关联群
-            document.getElementById('updateRelateGroupBtn').addEventListener('click', async function () {
-                const msgBox = document.getElementById('updateRelateGroupResult');
-                try {
-                    const res = await apiFetch('/updateRelateGroup');
-                    if (res.code === 0) {
-                        showMsg(msgBox, '✅ 更新成功', 'success');
-                    } else {
-                        showMsg(msgBox, '❌ ' + (res.msg || '未知错误'), 'error');
-                    }
-                } catch (err) {
-                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
                 }
             });
 
