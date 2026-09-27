@@ -1091,7 +1091,8 @@ export default function Page() {
             <Text
               w="100%"
               mt={1}
-              textAlign="center"
+              pr={{ base: 0, md: 3 }}
+              textAlign={{ base: "center", md: "right" }}
               fontSize="sm"
               fontWeight="bold"
               as="button"
