@@ -347,7 +347,7 @@ export default function ServerNodeListModal() {
 
             <Collapse in={isExpanded} animateOpacity>
               <List
-                maxH="30vh"
+                maxH="56vh"
                 overflowY="auto"
                 spacing={2.5}
                 p={3}
@@ -388,7 +388,7 @@ export default function ServerNodeListModal() {
             <Stack
               spacing={2.5}
               w="100%"
-              maxH={isExpanded ? "30vh" : "56vh"}
+              maxH={isExpanded ? "0vh" : "56vh"}
               overflowY="auto"
               pr={1}
             >

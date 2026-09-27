@@ -858,8 +858,6 @@ export default function Page() {
             <Button
               size="sm"
               px={4}
-              variant="ghost"
-              color="brand.text"
               disabled={disableFlush}
               onClick={() => {
                 getRoomData(false);
@@ -872,6 +870,7 @@ export default function Page() {
               >
                 <TbReload size={16} />
               </Box>
+
               <Text ml={1} fontSize="sm">
                 刷新房间
               </Text>
