@@ -336,7 +336,7 @@ const DocumentPage = () => {
                     if (confKey) handleCopyLink(confKey);
                   }}
                 >
-                  {confKey}
+                  <strong>{confKey}</strong>
                 </Text>
               </Box>
               <Text>

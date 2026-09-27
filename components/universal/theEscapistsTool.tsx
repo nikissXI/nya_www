@@ -34,22 +34,18 @@ export default function TheEscapistsTool() {
   };
 
   return (
-    <Box p={3} bg="bg.subtle" border="1px solid" borderColor="border.line" borderRadius="control">
+    <Box
+      p={3}
+      bg="bg.subtle"
+      border="1px solid"
+      borderColor="border.line"
+      borderRadius="control"
+    >
       <Heading size="sm" mb={2} textAlign="center">
         创建搜索任务，不创建搜不到房间
       </Heading>
 
       <Flex gap={2}>
-        <Button
-          size="sm"
-          onClick={() => createTask(inputIp)}
-          isLoading={isChecking}
-          loadingText="创建中"
-          flexShrink={0}
-        >
-          创建
-        </Button>
-
         <Input
           {...INPUT_STYLE}
           size="sm"
@@ -67,6 +63,16 @@ export default function TheEscapistsTool() {
           aria-label="主机喵服 IP"
           _placeholder={{ fontSize: "13px" }}
         />
+
+        <Button
+          size="sm"
+          onClick={() => createTask(inputIp)}
+          isLoading={isChecking}
+          loadingText="创建中"
+          flexShrink={0}
+        >
+          创建
+        </Button>
       </Flex>
 
       {showText && (
