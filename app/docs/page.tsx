@@ -25,6 +25,7 @@ import { MdTipsAndUpdates } from "react-icons/md";
 import { TbReload } from "react-icons/tb";
 import { keyframes } from "@emotion/react";
 import { getStatusColor } from "@/utils/strings";
+import { ANDROID_APP_URL } from "@/utils/appDownload";
 import { NoticeText } from "@/components/universal/Notice";
 import { DocCode, DocDivider, DocNotice } from "@/components/docs/DocParts";
 
@@ -276,6 +277,42 @@ const DocumentPage = () => {
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={0}>
+              <Heading size="md">方式一：安装喵服安卓APP</Heading>
+
+              <Box
+                mt={3}
+                bg="brand.soft"
+                border="1px solid"
+                borderColor="brand.line"
+                borderRadius="card"
+                p={{ base: 4, md: 5 }}
+              >
+                <Text fontSize="sm" lineHeight="1.8">
+                  内置WG隧道和节点切换，登录后可直接连接联机。
+                  APP刚上线，如果APP有BUG或建议请加Q群1047464328找群主反馈
+                </Text>
+
+                <Button
+                  my={2}
+                  size="sm"
+                  onClick={() => {
+                    window.open(ANDROID_APP_URL, "_blank");
+                  }}
+                >
+                  点击下载安卓APP
+                </Button>
+
+                <Text fontSize="sm" lineHeight="1.8">
+                  建议到浏览器打开网站再下载，在QQ、微信这些非浏览器应用中可能无法正常下载
+                </Text>
+              </Box>
+
+              <DocDivider />
+
+              <Heading size="md" mb={3}>
+                方式二：安装官方WG客户端
+              </Heading>
+
               <SelectNode />
 
               <DocDivider />

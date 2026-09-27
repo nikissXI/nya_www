@@ -3,12 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/universal/button";
 import { Card } from "@/components/universal/ui";
 import { useUserStateStore } from "@/store/user-state";
+import { ANDROID_APP_URL } from "@/utils/appDownload";
 
 /** 平台亮点（静态数据，放到组件外避免每次渲染重新创建） */
 const highlights = [
-  { title: "免费无广", description: "多个节点免费使用，无任何广告", icon: "✨" },
-  { title: "多端支持", description: "支持安卓/苹果/电脑/SteamDeck", icon: "📱" },
-  { title: "全球可用", description: "国内多地设有节点，跨境也能用", icon: "🌍" },
+  {
+    title: "免费无广",
+    description: "多个节点免费使用，无任何广告",
+    icon: "✨",
+  },
+  {
+    title: "多端支持",
+    description: "支持安卓/苹果/电脑/SteamDeck",
+    icon: "📱",
+  },
+  {
+    title: "全球可用",
+    description: "国内多地设有节点，跨境也能用",
+    icon: "🌍",
+  },
 ];
 
 export default function Page() {
@@ -52,6 +65,49 @@ export default function Page() {
         </Button>
       </Flex>
 
+      {/* 安卓APP下载入口 */}
+      <Card
+        w="100%"
+        maxW="880px"
+        bg="brand.soft"
+        borderColor="brand.line"
+        p={{ base: 4, md: 5 }}
+      >
+        <Flex
+          align="center"
+          justify="space-between"
+          gap={{ base: 3, md: 4 }}
+          flexWrap="wrap"
+          textAlign="left"
+        >
+          <Box minW={0}>
+            <Heading
+              as="h3"
+              fontSize={{ base: "md", md: "lg" }}
+              color="brand.text"
+            >
+              安卓APP已上线
+            </Heading>
+
+            <Text mt={1} fontSize="sm" lineHeight="1.8">
+              内置WG隧道和节点切换，装好登录就能联机
+            </Text>
+          </Box>
+
+          <Button
+            size={{ base: "md", md: "lg" }}
+            px={{ base: 6, md: 8 }}
+            flexShrink={0}
+            w={{ base: "100%", md: "auto" }}
+            onClick={() => {
+              window.open(ANDROID_APP_URL, "_blank");
+            }}
+          >
+            下载安卓APP
+          </Button>
+        </Flex>
+      </Card>
+
       {/* 平台亮点 */}
       <SimpleGrid
         columns={{ base: 1, sm: 2, md: 3 }}
@@ -64,7 +120,10 @@ export default function Page() {
             key={highlight.title}
             p={{ base: 4, md: 5 }}
             transition="transform .2s ease, border-color .2s ease"
-            _hover={{ transform: "translateY(-2px)", borderColor: "brand.line" }}
+            _hover={{
+              transform: "translateY(-2px)",
+              borderColor: "brand.line",
+            }}
           >
             <Flex direction="column" align="center" gap={2}>
               <Text fontSize="3xl" lineHeight="1">
