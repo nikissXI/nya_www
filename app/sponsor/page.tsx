@@ -297,9 +297,6 @@ const Page = () => {
               <Thead position="sticky" top={0} bg="bg.subtle">
                 <Tr>
                   <Th color="text.muted" fontSize="sm">
-                    UID
-                  </Th>
-                  <Th color="text.muted" fontSize="sm">
                     用户名
                   </Th>
                   <Th color="text.muted" fontSize="sm">
@@ -310,7 +307,6 @@ const Page = () => {
               <Tbody>
                 {sponsorList.map((item, index) => (
                   <Tr key={index}>
-                    <Td className="tabular">{item.uid}</Td>
                     <Td>{item.username}</Td>
                     <Td className="tabular">{item.sponsorship}</Td>
                   </Tr>

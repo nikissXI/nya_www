@@ -52,7 +52,7 @@ export default function Page() {
 
           <Text my={1}>
             这里提供一个兼容v0.111版本的，也可以自行找其他同类mod
-            <ExtLink href="/apks/[IP直连1.4.0][v0.111].zip">
+            <ExtLink href="/download/[IP直连1.4.0][v0.111].zip">
               下载IP联机mod
             </ExtLink>
           </Text>

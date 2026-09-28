@@ -339,7 +339,7 @@ const DocumentPage = () => {
                 ml={4}
                 size="sm"
                 onClick={() => {
-                  window.open("/apks/wireguard.apk", "_blank");
+                  window.open("/download/wireguard.apk", "_blank");
                 }}
               >
                 点击下载安装包
@@ -550,7 +550,7 @@ const DocumentPage = () => {
                 size="sm"
                 mx={2}
                 onClick={() => {
-                  window.open("/apks/wg客户端，解压后双击运行.zip", "_blank");
+                  window.open("/download/wg客户端，解压后双击运行.zip", "_blank");
                 }}
               >
                 点击下载安装包
@@ -603,7 +603,7 @@ const DocumentPage = () => {
                     color="brand.text"
                     fontWeight="600"
                     onClick={() => {
-                      window.open("/apks/右键以管理员身份运行.bat", "_blank");
+                      window.open("/download/右键以管理员身份运行.bat", "_blank");
                     }}
                   >
                     点击下载bat修复文件
@@ -665,7 +665,7 @@ const DocumentPage = () => {
                 size="sm"
                 mx={2}
                 onClick={() => {
-                  window.open("/apks/NyaFuWG.zip", "_blank");
+                  window.open("/download/NyaFuWG.zip", "_blank");
                 }}
               >
                 点击下载插件

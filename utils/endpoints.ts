@@ -22,7 +22,6 @@ export interface AnnouncementsData {
 }
 /** 赞助名单项 */
 export interface SponsorItem {
-  uid: number;
   username: string;
   sponsorship: number;
 }
