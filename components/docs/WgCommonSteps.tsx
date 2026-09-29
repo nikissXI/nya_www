@@ -24,11 +24,7 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-export const WgCommonSteps = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const WgCommonSteps = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const userWgInfo = useUserStateStore((s) => s.userWgInfo);
@@ -77,11 +73,7 @@ export const WgCommonSteps = ({
       </Text>
 
       <Flex align="center" mt={1} gap={2}>
-        <Text
-          fontSize={18}
-          fontWeight="bold"
-          color={getStatusColor(isOnline)}
-        >
+        <Text fontSize={18} fontWeight="bold" color={getStatusColor(isOnline)}>
           &emsp;{isOnline ? "恭喜！WG已连接" : "WG尚未连接"}
         </Text>
 
@@ -125,6 +117,24 @@ export const WgCommonSteps = ({
       <Text>
         ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
         ，网页只负责创建和加入房间，WG客户端保持连接就行
+      </Text>
+
+      <DocDivider />
+
+      <Text>
+        现在请
+        <Button
+          mx={1}
+          variant="link"
+          bg="transparent"
+          color="brand.text"
+          onClick={() => {
+            navigate("/room");
+          }}
+        >
+          返回联机房间
+        </Button>
+        ，创建或加入房间后，里面有游戏联机教程
       </Text>
     </Box>
   );

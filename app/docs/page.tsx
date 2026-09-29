@@ -482,7 +482,9 @@ const DocumentPage = () => {
                     alt="iOS_switch"
                   />
                 </Flex>
-                <Text fontSize="sm">如果出现DBS解析失败，设备断网再联网试试</Text>
+                <Text fontSize="sm">
+                  如果出现DBS解析失败，设备断网再联网试试
+                </Text>
               </WgCommonSteps>
             </TabPanel>
 
@@ -494,7 +496,10 @@ const DocumentPage = () => {
                   size="sm"
                   mx={2}
                   onClick={() => {
-                    window.open("/download/wg客户端，解压后双击运行.zip", "_blank");
+                    window.open(
+                      "/download/wg客户端，解压后双击运行.zip",
+                      "_blank",
+                    );
                   }}
                 >
                   点击下载安装包
@@ -547,7 +552,10 @@ const DocumentPage = () => {
                       color="brand.text"
                       fontWeight="600"
                       onClick={() => {
-                        window.open("/download/右键以管理员身份运行.bat", "_blank");
+                        window.open(
+                          "/download/右键以管理员身份运行.bat",
+                          "_blank",
+                        );
                       }}
                     >
                       点击下载bat修复文件
@@ -660,7 +668,9 @@ const DocumentPage = () => {
                   ④ 在命令行打开隧道文件的目录
                   <br />
                   连接WG隧道执行
-                  <DocCode>wg-quick up ./{userWgInfo?.tunnel_name}.conf</DocCode>
+                  <DocCode>
+                    wg-quick up ./{userWgInfo?.tunnel_name}.conf
+                  </DocCode>
                   断开则执行
                   <DocCode>
                     wg-quick down ./{userWgInfo?.tunnel_name}.conf
@@ -670,24 +680,6 @@ const DocumentPage = () => {
             </TabPanel>
           </TabPanels>
         </Tabs>
-
-        <DocDivider />
-
-        <Text>
-          现在请
-          <Button
-            mx={1}
-            variant="link"
-            bg="transparent"
-            color="brand.text"
-            onClick={() => {
-              navigate("/room");
-            }}
-          >
-            返回联机房间
-          </Button>
-          ，创建或加入房间后，里面有游戏联机教程
-        </Text>
       </Box>
     </Box>
   );
