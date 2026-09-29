@@ -176,7 +176,7 @@ export default function Page() {
     }
   }, [userWgInfo?.node_alias, roomData, getRoomData]);
 
-  // 房间操作统一入口：加并发锁；创建/加入/关闭/退出房间时成功后回到页面顶部
+  // 房间操作统一入口：加并发锁；创建/加入/解散/离开房间时成功后回到页面顶部
   const runRoomAction = useCallback(
     async (
       action: () => Promise<ApiEnvelope<unknown>>,
@@ -275,7 +275,7 @@ export default function Page() {
     [runRoomAction, getRoomData, isOnline, openSponsorNotice, showRequestError],
   );
 
-  // 关闭房间（房主）/ 退出房间（成员）：两个操作只有 handleType 不同
+  // 解散房间（房主）/ 离开房间（成员）：两个操作只有 handleType 不同
   const handleLeaveRoom = useCallback(
     async (handleType: "closeRoom" | "exitRoom") => {
       try {
@@ -849,7 +849,7 @@ export default function Page() {
                 )
               }
             >
-              {roomRole === ROLE_HOSTER ? "关闭房间" : "退出房间"}
+              {roomRole === ROLE_HOSTER ? "解散房间" : "离开房间"}
               <Box as="span" ml={1} display="inline-flex">
                 <IoIosExit size={18} />
               </Box>
