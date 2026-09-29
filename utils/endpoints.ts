@@ -188,6 +188,9 @@ export const api = {
     requestEnvelope<null>("/handleRoom", { params }),
   setRoomPasswd: (roomPasswd: string) =>
     requestEnvelope<null>("/setRoomPasswd", { params: { roomPasswd } }),
+  /** 切换房间游戏（房主/成员都能切，msg 即结果文案） */
+  changeGame: (room_game: string) =>
+    requestEnvelope<null>("/changeGame", { params: { room_game } }),
 
   /** 游戏查房工具，msg 即结果文案 */
   escapistsHelper: (hosterIp: string) =>

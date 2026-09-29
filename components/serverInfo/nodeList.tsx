@@ -90,6 +90,7 @@ const ServerNodeItem: React.FC<{
 }> = ({ node, selected }) => {
   const selectNode = useUserStateStore((state) => state.selectNode);
   const selectNodeLock = useUserStateStore((state) => state.selectNodeLock);
+  const setNodeListModal = useUserStateStore((state) => state.setNodeListModal);
 
   const offline = node.net === -1;
 
@@ -125,6 +126,7 @@ const ServerNodeItem: React.FC<{
             openToast({ content: "已经在使用该节点", status: "info" });
             return;
           }
+          setNodeListModal()
           selectNode(node.alias);
         }}
       >

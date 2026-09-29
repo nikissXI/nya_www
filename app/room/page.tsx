@@ -80,6 +80,9 @@ const spin = keyframes`
 const ROLE_HOSTER = "hoster";
 const ROLE_NONE = "none";
 
+/** 房间数据自动刷新间隔（毫秒） */
+const AUTO_REFRESH_INTERVAL = 5000;
+
 // 游戏房间配置、群号、房间角色常量已迁移到 @/utils/roomGames
 // （放在独立模块可避免该页面被静态引用，保证路由懒加载生效）
 
@@ -88,6 +91,8 @@ export default function Page() {
 
   // 使用 useRef 作为并发请求锁，解决 useState 异步更新导致的竞态问题
   const isRequesting = useRef(false);
+  // 自动刷新的并发锁：上一次还没回来就跳过本次，避免慢请求叠加
+  const autoRefreshBusy = useRef(false);
 
   const {
     isOpen: setPassIsOpen,
@@ -98,6 +103,12 @@ export default function Page() {
     isOpen: isSponsorNoticeOpen,
     onOpen: openSponsorNotice,
     onClose: closeSponsorNotice,
+  } = useDisclosure();
+  // 切换房间游戏的弹窗（复用「创建房间」那个游戏列表）
+  const {
+    isOpen: isGamePickerOpen,
+    onOpen: openGamePicker,
+    onClose: closeGamePicker,
   } = useDisclosure();
 
   const [hideJoinPassInput, setHideJoinPassInput] = useState(true);
@@ -175,6 +186,32 @@ export default function Page() {
       getRoomData();
     }
   }, [userWgInfo?.node_alias, roomData, getRoomData]);
+
+  // 每 5 秒自动刷新一次房间数据（成员列表 / 在线状态 / 节点负载）
+  // - silent：失败不弹提示，否则断网时会每 5 秒刷一次屏
+  // - 页面切到后台时暂停，回到前台立刻补一次；请求未返回时跳过本次
+  useEffect(() => {
+    if (!userInfo || !userWgInfo?.node_alias) return;
+
+    const tick = () => {
+      if (document.hidden || isRequesting.current || autoRefreshBusy.current) {
+        return;
+      }
+
+      autoRefreshBusy.current = true;
+      getRoomData().finally(() => {
+        autoRefreshBusy.current = false;
+      });
+    };
+
+    const timer = window.setInterval(tick, AUTO_REFRESH_INTERVAL);
+    document.addEventListener("visibilitychange", tick);
+
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, [userInfo, userWgInfo?.node_alias, getRoomData]);
 
   // 房间操作统一入口：加并发锁；创建/加入/解散/离开房间时成功后回到页面顶部
   const runRoomAction = useCallback(
@@ -361,6 +398,42 @@ export default function Page() {
     [runRoomAction, getRoomData, showRequestError],
   );
 
+  // 切换房间游戏（复用创建房间的游戏列表，按钮文案为「选择」）
+  const handleChangeGame = useCallback(
+    async (game: GameRoomItem) => {
+      const gameName = getRoomGameName(game);
+
+      // 已经是这个游戏就不用打接口了
+      if (gameName === roomData?.room_game) {
+        openToast({ content: "当前就是该游戏", status: "info" });
+        return;
+      }
+
+      try {
+        const data = await runRoomAction(() => api.changeGame(gameName));
+
+        if (data.code === 0) {
+          closeGamePicker();
+          setSelectedGame(game);
+          openToast({ content: data.msg ?? "切换成功", status: "success" });
+          // 切换成功后刷新一次房间数据
+          getRoomData();
+        } else {
+          openToast({ content: data.msg ?? "切换失败", status: "warning" });
+        }
+      } catch (err) {
+        showRequestError(err, "请求出错：");
+      }
+    },
+    [
+      runRoomAction,
+      roomData?.room_game,
+      closeGamePicker,
+      getRoomData,
+      showRequestError,
+    ],
+  );
+
   // 键盘事件处理
   const handleSetPassEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
@@ -416,59 +489,141 @@ export default function Page() {
     [selectedGame, roomData?.room_game],
   );
 
+  // 游戏列表：创建房间与切换房间游戏共用，只有右侧按钮文案不同
+  // （写成普通函数而不是组件：这样每轮 render 返回的 JSX 位置不变，
+  //   搜索框不会因组件标识变化而重挂载、输着字丢焦点）
+  const renderGameList = (
+    actionLabel: string,
+    onAction: (game: GameRoomItem) => void,
+  ) => (
+    <>
+      <InputGroup mt={2}>
+        <InputLeftElement pointerEvents="none">
+          <Icon as={MdSearch} color="text.faint" />
+        </InputLeftElement>
+        <Input
+          pl={9}
+          placeholder="搜索游戏名称"
+          value={gameSearchTerm}
+          onChange={(e) => setGameSearchTerm(e.target.value)}
+          {...INPUT_STYLE}
+        />
+      </InputGroup>
+
+      {filteredRoomGames.length === 0 ? (
+        <Text py={6} textAlign="center" fontSize="sm" color="text.faint">
+          未找到相关游戏，请使用「通用联机房」
+          <br />
+          只要支持填IP加入的游戏都支持的
+        </Text>
+      ) : (
+        <VStack spacing={1} align="stretch" mt={2}>
+          {filteredRoomGames.map((game) => (
+            <Flex
+              key={game.path}
+              align="center"
+              gap={3}
+              py={1.5}
+              px={1}
+              borderRadius="lg"
+              transition="background 0.2s"
+              _hover={{ bg: "bg.hover" }}
+            >
+              <Image
+                src={game.icon}
+                alt={game.title}
+                boxSize="40px"
+                objectFit="cover"
+                borderRadius="lg"
+                flexShrink={0}
+                bg="bg.subtle"
+              />
+
+              <Box flex={1} minW={0} textAlign="left">
+                <Text fontWeight="bold" color="text.main" isTruncated>
+                  {game.title}
+                </Text>
+                <Flex
+                  as="button"
+                  align="center"
+                  gap={1}
+                  fontSize="xs"
+                  color="brand.text"
+                  onClick={() => setGameInfo(game)}
+                  _hover={{ textDecoration: "underline" }}
+                >
+                  <Icon as={MdInfoOutline} boxSize={3.5} />
+                  查看联机支持情况
+                </Flex>
+              </Box>
+
+              <Button
+                px={3}
+                flexShrink={0}
+                onClick={() => {
+                  onAction(game);
+                }}
+              >
+                {actionLabel}
+              </Button>
+            </Flex>
+          ))}
+        </VStack>
+      )}
+    </>
+  );
+
+  // 联机支持情况弹窗：两个游戏列表都会用（含切换游戏弹窗），放在根节点渲染一次
+  const gameInfoModal = () => (
+    <Modal
+      isOpen={gameInfo !== null}
+      onClose={() => setGameInfo(null)}
+      isCentered
+    >
+      <ModalOverlay />
+      <ModalContent {...MODAL_STYLE}>
+        <ModalHeader>{gameInfo?.title}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          {gameInfo?.qq && (
+            <Text
+              onClick={() => {
+                if (gameInfo.qq) copyText(gameInfo.qq);
+              }}
+              mb={4}
+              cursor="pointer"
+            >
+              该游戏的喵服QQ群{" "}
+              <Text as="span" fontWeight="bold" color="brand.text">
+                {gameInfo.qq}
+              </Text>
+              <Icon ml={1} as={MdContentCopy} boxSize={3} color="brand.text" />
+            </Text>
+          )}
+
+          <SectionTitle>联机支持情况</SectionTitle>
+          {gameInfo?.support && gameInfo.support.length > 0 ? (
+            <VStack align="stretch" spacing={2} mt={2}>
+              {gameInfo.support.map((item) => (
+                <Text key={item} fontSize="sm" lineHeight="1.7">
+                  • {item}
+                </Text>
+              ))}
+            </VStack>
+          ) : (
+            <Text mt={2} fontSize="sm" color="text.muted">
+              具体平台、版本和主机方向请先查看该游戏教程中的说明。
+            </Text>
+          )}
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+
   // 待加入页面（未进房间）：加入房间 + 创建房间
   const standbyPage = () => (
     <Box>
       <VStack spacing={3} align="stretch">
-        <Modal
-          isOpen={gameInfo !== null}
-          onClose={() => setGameInfo(null)}
-          isCentered
-        >
-          <ModalOverlay />
-          <ModalContent {...MODAL_STYLE}>
-            <ModalHeader>{gameInfo?.title}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              {gameInfo?.qq && (
-                <Text
-                  onClick={() => {
-                    if (gameInfo.qq) copyText(gameInfo.qq);
-                  }}
-                  mb={4}
-                  cursor="pointer"
-                >
-                  该游戏的喵服QQ群{" "}
-                  <Text as="span" fontWeight="bold" color="brand.text">
-                    {gameInfo.qq}
-                  </Text>
-                  <Icon
-                    ml={1}
-                    as={MdContentCopy}
-                    boxSize={3}
-                    color="brand.text"
-                  />
-                </Text>
-              )}
-
-              <SectionTitle>联机支持情况</SectionTitle>
-              {gameInfo?.support && gameInfo.support.length > 0 ? (
-                <VStack align="stretch" spacing={2} mt={2}>
-                  {gameInfo.support.map((item) => (
-                    <Text key={item} fontSize="sm" lineHeight="1.7">
-                      • {item}
-                    </Text>
-                  ))}
-                </VStack>
-              ) : (
-                <Text mt={2} fontSize="sm" color="text.muted">
-                  具体平台、版本和主机方向请先查看该游戏教程中的说明。
-                </Text>
-              )}
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-
         <Modal
           isOpen={isSponsorNoticeOpen}
           onClose={closeSponsorNotice}
@@ -550,79 +705,7 @@ export default function Page() {
         <Box {...CARD_STYLE} {...CARD_PADDING}>
           <SectionTitle>创建房间</SectionTitle>
 
-          <InputGroup mt={2}>
-            <InputLeftElement pointerEvents="none">
-              <Icon as={MdSearch} color="text.faint" />
-            </InputLeftElement>
-            <Input
-              pl={9}
-              placeholder="搜索游戏名称"
-              value={gameSearchTerm}
-              onChange={(e) => setGameSearchTerm(e.target.value)}
-              {...INPUT_STYLE}
-            />
-          </InputGroup>
-
-          {filteredRoomGames.length === 0 ? (
-            <Text py={6} textAlign="center" fontSize="sm" color="text.faint">
-              未找到相关游戏，请使用「通用联机房」
-              <br />
-              只要支持填IP加入的游戏都支持的
-            </Text>
-          ) : (
-            <VStack spacing={1} align="stretch" mt={2}>
-              {filteredRoomGames.map((game) => (
-                <Flex
-                  key={game.path}
-                  align="center"
-                  gap={3}
-                  py={1.5}
-                  px={1}
-                  borderRadius="lg"
-                  transition="background 0.2s"
-                  _hover={{ bg: "bg.hover" }}
-                >
-                  <Image
-                    src={game.icon}
-                    alt={game.title}
-                    boxSize="40px"
-                    objectFit="cover"
-                    borderRadius="lg"
-                    flexShrink={0}
-                    bg="bg.subtle"
-                  />
-
-                  <Box flex={1} minW={0} textAlign="left">
-                    <Text fontWeight="bold" color="text.main" isTruncated>
-                      {game.title}
-                    </Text>
-                    <Flex
-                      as="button"
-                      align="center"
-                      gap={1}
-                      fontSize="xs"
-                      color="brand.text"
-                      onClick={() => setGameInfo(game)}
-                      _hover={{ textDecoration: "underline" }}
-                    >
-                      <Icon as={MdInfoOutline} boxSize={3.5} />
-                      查看联机支持情况
-                    </Flex>
-                  </Box>
-
-                  <Button
-                    px={3}
-                    flexShrink={0}
-                    onClick={() => {
-                      handleCreateRoom(game);
-                    }}
-                  >
-                    创建
-                  </Button>
-                </Flex>
-              ))}
-            </VStack>
-          )}
+          {renderGameList("创建", handleCreateRoom)}
         </Box>
       </VStack>
     </Box>
@@ -716,10 +799,6 @@ export default function Page() {
           <Box {...CARD_STYLE} {...CARD_PADDING}>
             <Flex align="center" justify="space-between">
               <SectionTitle>成员</SectionTitle>
-
-              <Text ml={2} mr="auto" fontSize="xs" color="text.faint">
-                点刷新房间才会更新
-              </Text>
 
               {roomRole === ROLE_HOSTER &&
                 roomData !== undefined &&
@@ -850,33 +929,24 @@ export default function Page() {
               }
             >
               {roomRole === ROLE_HOSTER ? "解散房间" : "离开房间"}
-              <Box as="span" ml={1} display="inline-flex">
-                <IoIosExit size={18} />
-              </Box>
             </Button>
 
-            <Button
-              size="sm"
-              px={4}
-              disabled={disableFlush}
-              onClick={() => {
-                getRoomData(false);
-              }}
-            >
-              <Box
-                as="span"
-                display="inline-flex"
-                animation={rotate ? `${spin} 1s linear infinite` : "none"}
-              >
-                <TbReload size={16} />
-              </Box>
-
-              <Text ml={1} fontSize="sm">
-                刷新房间
-              </Text>
+            <Button size="sm" px={4} onClick={openGamePicker}>
+              切换游戏
             </Button>
           </HStack>
         </VStack>
+
+        <Modal isOpen={isGamePickerOpen} onClose={closeGamePicker} isCentered>
+          <ModalOverlay />
+          <ModalContent {...MODAL_STYLE}>
+            <ModalHeader>切换游戏</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6} maxH="60vh" overflowY="auto">
+              {renderGameList("选择", handleChangeGame)}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
 
         <Modal isOpen={setPassIsOpen} onClose={setPassOnClose} isCentered>
           <ModalOverlay />
@@ -1010,7 +1080,7 @@ export default function Page() {
                     if (roomRole === ROLE_NONE) setNodeListModal();
                     else
                       openToast({
-                        content: `${roomRole === ROLE_HOSTER ? "关闭" : "退出"}房间后再切换`,
+                        content: `${roomRole === ROLE_HOSTER ? "解散" : "离开"}房间后再切换`,
                         status: "warning",
                       });
                   }}
@@ -1090,8 +1160,8 @@ export default function Page() {
             <Text
               w="100%"
               mt={1}
-              pr={{ base: 0, md: 3 }}
-              textAlign={{ base: "center", md: "right" }}
+              pr={3}
+              textAlign="right"
               fontSize="sm"
               fontWeight="bold"
               as="button"
@@ -1100,11 +1170,14 @@ export default function Page() {
                 navigate("/offlineCheck");
               }}
             >
-              WG离线或掉线排查
+              离线或掉线排查
             </Text>
           </Box>
 
           {roomRole === ROLE_NONE ? standbyPage() : joinedPage()}
+
+          {/* 联机支持情况弹窗（两个游戏列表共用） */}
+          {gameInfoModal()}
         </VStack>
       )}
     </Flex>

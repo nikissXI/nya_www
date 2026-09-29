@@ -48,11 +48,16 @@ interface ILoginStateSlice {
   getEmbedParama: () => void;
   embed: boolean;
 
-  // 获取节点延迟
+  /**
+   * 获取节点延迟
+   * @param net 节点负载，-1（故障）时直接返回 0，不做测速
+   * @param auto true 时只测一遍（房间页用，请求更轻）；false 时测两遍、必要时再补一遍取最小值
+   */
   getNodeLatency: (
     node_alias: string,
     ping_host: string,
-    net?: number | null,
+    net?: number,
+    auto?: boolean,
   ) => Promise<number>;
   // 节点列表
   getNodeListLock: boolean;
@@ -79,7 +84,12 @@ interface ILoginStateSlice {
   // 房间数据
   roomData: RoomInfo | undefined;
   setRoomPassword: (newPassword: string) => void;
-  getRoomData: (auto?: boolean) => Promise<void>;
+  /**
+   * 拉取房间信息。
+   * @param silent 默认 true：自动刷新（不弹「刷新成功」、不走手动刷新的 3 秒冷却、失败不弹提示）；
+   *   传 false 表示用户手动刷新，会提示成功/失败
+   */
+  getRoomData: (silent?: boolean) => Promise<void>;
 
   showRegetModal: boolean;
   setShowRegetModal: () => void;
@@ -226,10 +236,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
       getNodeLatency: async (
         node_alias: string,
         ping_host: string,
-        net: number | null = 0,
+        net: number = 0,
+        auto: boolean = false,
       ) => {
-        // 节点离线（net 为 -1）或负载未知（null）时不必测速，直接返回 0，避免无意义超时等待
-        if (net === null || net === -1) return 0;
+        // 节点离线（net 为 -1）时不必测速，直接返回 0，避免无意义超时等待
+        if (net === -1) return 0;
 
         const statusUrl = `https://${ping_host}/ping`;
 
@@ -273,8 +284,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         try {
           // 0 表示本次测量无效（拿不到性能条目），999 表示超时
-          const measured = [await singlePing(true), await singlePing()];
-          if (measured.some((delay) => delay <= 0 || delay >= 999)) {
+          // auto（房间页）只测一遍，减少对节点的请求；否则测两遍，无效时再补一遍
+          const measured = auto
+            ? [await singlePing(true)]
+            : [await singlePing(true), await singlePing()];
+
+          if (!auto && measured.some((delay) => delay <= 0 || delay >= 999)) {
             measured.push(await singlePing());
           }
 
@@ -409,10 +424,10 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      getRoomData: async (auto: boolean = true) => {
+      getRoomData: async (silent: boolean = true) => {
         try {
           // 冷却逻辑不变
-          if (!auto) {
+          if (!silent) {
             if (get().disableFlush) return;
             set({ disableFlush: true });
             setTimeout(() => set({ disableFlush: false }), 3000);
@@ -458,26 +473,34 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             const delay = await get().getNodeLatency(
               currentWg.node_alias,
               currentWg.ping_host,
+              undefined,
+              true,
             );
 
             if (get().isOnline && delay === 0) {
-              openToast({
-                content: "检测延迟故障，请联系服主处理",
-                status: "error",
-              });
+              if (!silent) {
+                openToast({
+                  content: "检测延迟故障，请联系服主处理",
+                  status: "error",
+                });
+              }
             } else {
-              if (!auto) openToast({ content: "刷新成功", status: "success" });
+              if (!silent)
+                openToast({ content: "刷新成功", status: "success" });
             }
             set({ latency: delay });
           } else {
             set({ latency: undefined });
-            if (!auto) openToast({ content: "刷新成功", status: "success" });
+            if (!silent) openToast({ content: "刷新成功", status: "success" });
           }
 
           // --- 核心优化结束 ---
         } catch (error) {
           // 凭证失效 / 数据异常已由统一处理接管，这里不再重复提示
           if (shouldSilenceError(error)) return;
+
+          // 后台轮询失败不打扰用户（手动刷新仍然会提示）
+          if (silent) return;
 
           // 优化：不刷新页面，给予友好提示
           openToast({ content: "获取房间信息失败，请重试", status: "error" });
