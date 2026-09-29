@@ -10,7 +10,6 @@ import {
   TabPanels,
   TabPanel,
   Flex,
-  TextProps,
   Collapse,
   Image,
   Link,
@@ -22,39 +21,23 @@ import { useNavigate } from "react-router-dom";
 import { openToast } from "@/components/universal/toast";
 import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
-import { TbReload } from "react-icons/tb";
-import { keyframes } from "@emotion/react";
-import { getStatusColor } from "@/utils/strings";
 import { ANDROID_APP_URL } from "@/utils/appDownload";
 import { NoticeText } from "@/components/universal/Notice";
-import { DocCode, DocDivider, DocNotice } from "@/components/docs/DocParts";
-
-const HighLight: React.FC<TextProps> = ({ children, ...props }) => {
-  return (
-    <Text as="span" color="warning.text" fontWeight="bold" {...props}>
-      {children}
-    </Text>
-  );
-};
-
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
+import {
+  DocCode,
+  DocDivider,
+  DocNotice,
+  HighLight,
+} from "@/components/docs/DocParts";
+import { WgCommonSteps } from "@/components/docs/WgCommonSteps";
 
 const DocumentPage = () => {
-  const {
-    confKey,
-    getConfKey,
-    userInfo,
-    userWgInfo,
-    setNodeListModal,
-    getRoomData,
-    isOnline,
-    rotate,
-    disableFlush,
-    openLoginModal,
-  } = useUserStateStore();
+  // 逐个字段订阅：store 里房间/延迟等字段会频繁变化，整体解构会让整页（含 6 个设备面板）跟着重渲染
+  const confKey = useUserStateStore((s) => s.confKey);
+  const getConfKey = useUserStateStore((s) => s.getConfKey);
+  const userInfo = useUserStateStore((s) => s.userInfo);
+  const userWgInfo = useUserStateStore((s) => s.userWgInfo);
+  const openLoginModal = useUserStateStore((s) => s.openLoginModal);
 
   const navigate = useNavigate();
 
@@ -113,38 +96,6 @@ const DocumentPage = () => {
   };
   //////////////////////
   //////////////////////
-
-  const SelectNode = () => {
-    return (
-      <Box>
-        <Text>
-          ① 当前选择的是&ensp;
-          <Text as="span" color="warning.text" fontWeight="bold">
-            {userWgInfo?.node_alias}
-          </Text>
-          &ensp;节点
-        </Text>
-
-        <Button ml={4} onClick={setNodeListModal} size="sm">
-          点击切换节点
-        </Button>
-
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={2} />
-          <HighLight fontSize="sm">
-            如果切换了新节点，要来这导入新节点的隧道，每个节点有对应的隧道
-          </HighLight>
-        </Text>
-
-        <Text>
-          <Icon as={MdTipsAndUpdates} mr={2} />
-          <HighLight fontSize="sm">
-            不要导入他人分享的隧道，一人一隧道不能共用
-          </HighLight>
-        </Text>
-      </Box>
-    );
-  };
 
   const DownloadButton = (isIOS: boolean = false) => {
     return (
@@ -309,484 +260,416 @@ const DocumentPage = () => {
 
               <DocDivider />
 
-              <Heading size="md" mb={3}>
-                方式二：安装官方WG客户端
-              </Heading>
+              <WgCommonSteps>
+                <Heading size="md" mb={3}>
+                  方式二：安装官方WG客户端
+                </Heading>
 
-              <SelectNode />
-
-              <DocDivider />
-
-              <Text>
-                ② 下载并安装WG客户端
-                <Text
-                  as="span"
-                  color="brand.text"
-                  fontWeight="600"
-                  onClick={() => {
-                    setAndroidDLWarning(!showAndroidDLWarning);
-                  }}
-                >
-                  &ensp;无法下载点我
-                </Text>
-                <br />
-                <HighLight fontSize="sm">
-                  &emsp;必须使用这里下载的WG客户端
-                </HighLight>
-              </Text>
-
-              <Button
-                ml={4}
-                size="sm"
-                onClick={() => {
-                  window.open("/download/wireguard.apk", "_blank");
-                }}
-              >
-                点击下载安装包
-              </Button>
-              <Collapse in={showAndroidDLWarning}>
-                <Text fontSize="sm">
-                  &emsp;到浏览器打开网站再下载，无法下载的都是因为在QQ、微信这些非浏览器应用中下载。
-                </Text>
-              </Collapse>
-
-              <DocDivider />
-
-              <Box>
-                ③ 点击或长按黄字复制
-                <Text
-                  ml={2}
-                  as="span"
-                  color="brand.text"
-                  fontWeight="600"
-                  onClick={() => {
-                    getConfKey(true);
-                  }}
-                >
-                  key失效点我
-                </Text>
-                <Text
-                  ml={1}
-                  fontSize="sm"
-                  color="warning.text"
-                  onClick={() => {
-                    if (confKey) handleCopyLink(confKey);
-                  }}
-                >
-                  <strong>{confKey}</strong>
-                </Text>
-              </Box>
-              <Text>
-                &emsp;然后运行WG点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入
-                <br />
-                &emsp;导入的隧道名称应是{" "}
-                <strong>{userWgInfo?.tunnel_name}</strong>
-              </Text>
-
-              <DocDivider />
-
-              <Flex>
-                ④ 打开隧道开关 =&gt;
-                <Image
-                  mx={1}
-                  maxH="1.5rem"
-                  src="/images/wg/android_switch.webp"
-                  alt="android_switch"
-                />
-              </Flex>
-              <Flex alignItems="center" mt={1} fontSize="sm">
-                &emsp;<HighLight>注意！小米/红米设备要改个设置</HighLight>
-                <Text
-                  ml={2}
-                  as="span"
-                  color="brand.text"
-                  fontWeight="600"
-                  size="sm"
-                  onClick={() => setShowXM(!showXM)}
-                >
-                  {showXM ? "点击收起" : "点击查看"}
-                </Text>
-              </Flex>
-              <Collapse in={showXM}>
-                <Text fontSize="sm">
-                  游戏加速的“网络优化”会导致无法联机，系统版本不同可能不一样，脑子灵活点
+                <Text>
+                  ② 下载并安装WG客户端
+                  <Text
+                    as="span"
+                    color="brand.text"
+                    fontWeight="600"
+                    onClick={() => {
+                      setAndroidDLWarning(!showAndroidDLWarning);
+                    }}
+                  >
+                    &ensp;无法下载点我
+                  </Text>
                   <br />
-                  关闭方法：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
+                  <HighLight fontSize="sm">
+                    &emsp;必须使用这里下载的WG客户端
+                  </HighLight>
                 </Text>
-                <Image
-                  src="/images/wg/xiaomi.webp"
-                  alt="xiaomi"
-                  borderRadius="md"
-                />
-              </Collapse>
+
+                <Button
+                  ml={4}
+                  size="sm"
+                  onClick={() => {
+                    window.open("/download/wireguard.apk", "_blank");
+                  }}
+                >
+                  点击下载安装包
+                </Button>
+                <Collapse in={showAndroidDLWarning}>
+                  <Text fontSize="sm">
+                    &emsp;到浏览器打开网站再下载，无法下载的都是因为在QQ、微信这些非浏览器应用中下载。
+                  </Text>
+                </Collapse>
+
+                <DocDivider />
+
+                <Box>
+                  ③ 点击或长按黄字复制
+                  <Text
+                    ml={2}
+                    as="span"
+                    color="brand.text"
+                    fontWeight="600"
+                    onClick={() => {
+                      getConfKey(true);
+                    }}
+                  >
+                    key失效点我
+                  </Text>
+                  <Text
+                    ml={1}
+                    fontSize="sm"
+                    color="warning.text"
+                    onClick={() => {
+                      if (confKey) handleCopyLink(confKey);
+                    }}
+                  >
+                    <strong>{confKey}</strong>
+                  </Text>
+                </Box>
+                <Text>
+                  &emsp;然后运行WG点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入
+                  <br />
+                  &emsp;导入的隧道名称应是{" "}
+                  <strong>{userWgInfo?.tunnel_name}</strong>
+                </Text>
+
+                <DocDivider />
+
+                <Flex>
+                  ④ 打开隧道开关 =&gt;
+                  <Image
+                    mx={1}
+                    maxH="1.5rem"
+                    src="/images/wg/android_switch.webp"
+                    alt="android_switch"
+                  />
+                </Flex>
+                <Flex alignItems="center" mt={1} fontSize="sm">
+                  &emsp;<HighLight>注意！小米/红米设备要改个设置</HighLight>
+                  <Text
+                    ml={2}
+                    as="span"
+                    color="brand.text"
+                    fontWeight="600"
+                    size="sm"
+                    onClick={() => setShowXM(!showXM)}
+                  >
+                    {showXM ? "点击收起" : "点击查看"}
+                  </Text>
+                </Flex>
+                <Collapse in={showXM}>
+                  <Text fontSize="sm">
+                    游戏加速的“网络优化”会导致无法联机，系统版本不同可能不一样，脑子灵活点
+                    <br />
+                    关闭方法：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
+                  </Text>
+                  <Image
+                    src="/images/wg/xiaomi.webp"
+                    alt="xiaomi"
+                    borderRadius="md"
+                  />
+                </Collapse>
+              </WgCommonSteps>
             </TabPanel>
 
             {/* iOS */}
             <TabPanel px={0} pb={1} pt={0}>
-              <SelectNode />
+              <WgCommonSteps>
+                <GetIOSID />
 
-              <DocDivider />
-
-              <GetIOSID />
-
-              <Image
-                mt={2}
-                src="/images/wg/app_store.webp"
-                alt="app_store"
-                borderRadius="md"
-                w="300px"
-              />
-
-              <DocDivider />
-
-              <Tabs variant="unstyled">
-                <Text fontWeight="bolder">
-                  iOS导入隧道可以扫码或下载
-                  <br />
-                  <HighLight fontSize="sm">
-                    注意不要在远程控制的状态下导入
-                  </HighLight>
-                </Text>
-
-                <TabList my={2}>
-                  <Tab
-                    py={1.5}
-                    px={4}
-                    fontWeight="600"
-                    fontSize="sm"
-                    borderRadius="full"
-                    color="text.muted"
-                    bg="bg.subtle"
-                    border="1px solid"
-                    borderColor="border.line"
-                    mr={2}
-                    _selected={{
-                      color: "white",
-                      bg: "brand.solid",
-                      borderColor: "brand.solid",
-                    }}
-                  >
-                    扫二维码
-                  </Tab>
-                  <Tab
-                    py={1.5}
-                    px={4}
-                    fontWeight="600"
-                    fontSize="sm"
-                    borderRadius="full"
-                    color="text.muted"
-                    bg="bg.subtle"
-                    border="1px solid"
-                    borderColor="border.line"
-                    _selected={{
-                      color: "white",
-                      bg: "brand.solid",
-                      borderColor: "brand.solid",
-                    }}
-                  >
-                    下载隧道
-                  </Tab>
-                </TabList>
-
-                <TabPanels>
-                  <TabPanel px={0} pb={0} pt={1}>
-                    <HighLight fontSize="sm">
-                      不支持从相册导入二维码，所以自己想办法扫（比如借个设备拍下来再扫），扫不了就选“下载隧道”的方法
-                    </HighLight>
-
-                    <Text>
-                      ③ 打开WG，点右上角+号，扫描二维码，隧道名称写&ensp;
-                      {userWgInfo?.tunnel_name}
-                    </Text>
-
-                    <Box borderWidth={5} borderColor="white" w="min">
-                      {userWgInfo && (
-                        <QRCodeSVG size={256} value={userWgInfo.conf_text} />
-                      )}
-                    </Box>
-                  </TabPanel>
-
-                  <TabPanel px={0} pb={0} pt={1}>
-                    <HighLight fontSize="sm">
-                      建议使用Safari浏览器访问网站再下载
-                      <br />
-                      如果点了下载没反应就是触发BUG了，等几分钟或换个浏览器再试试
-                    </HighLight>
-
-                    <Text>③ 下载隧道文件</Text>
-                    {DownloadButton(true)}
-
-                    <Text pt={1}>
-                      打开浏览器的下载任务列表，点击文件“
-                      {userWgInfo?.tunnel_name}
-                      .conf”，然后点左下角发送到WG，或者直接在WG里导入配置也行
-                    </Text>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-
-              <DocDivider />
-
-              <Flex>
-                ④ 打开隧道开关 =&gt;
                 <Image
-                  mx={1}
-                  maxH="1.5rem"
-                  src="/images/wg/iOS_switch.webp"
-                  alt="iOS_switch"
+                  mt={2}
+                  src="/images/wg/app_store.webp"
+                  alt="app_store"
+                  borderRadius="md"
+                  w="300px"
                 />
-              </Flex>
-              <Text fontSize="sm">如果出现DBS解析失败，设备断网再联网试试</Text>
+
+                <DocDivider />
+
+                <Tabs variant="unstyled">
+                  <Text fontWeight="bolder">
+                    iOS导入隧道可以扫码或下载
+                    <br />
+                    <HighLight fontSize="sm">
+                      注意不要在远程控制的状态下导入
+                    </HighLight>
+                  </Text>
+
+                  <TabList my={2}>
+                    <Tab
+                      py={1.5}
+                      px={4}
+                      fontWeight="600"
+                      fontSize="sm"
+                      borderRadius="full"
+                      color="text.muted"
+                      bg="bg.subtle"
+                      border="1px solid"
+                      borderColor="border.line"
+                      mr={2}
+                      _selected={{
+                        color: "white",
+                        bg: "brand.solid",
+                        borderColor: "brand.solid",
+                      }}
+                    >
+                      扫二维码
+                    </Tab>
+                    <Tab
+                      py={1.5}
+                      px={4}
+                      fontWeight="600"
+                      fontSize="sm"
+                      borderRadius="full"
+                      color="text.muted"
+                      bg="bg.subtle"
+                      border="1px solid"
+                      borderColor="border.line"
+                      _selected={{
+                        color: "white",
+                        bg: "brand.solid",
+                        borderColor: "brand.solid",
+                      }}
+                    >
+                      下载隧道
+                    </Tab>
+                  </TabList>
+
+                  <TabPanels>
+                    <TabPanel px={0} pb={0} pt={1}>
+                      <HighLight fontSize="sm">
+                        不支持从相册导入二维码，所以自己想办法扫（比如借个设备拍下来再扫），扫不了就选“下载隧道”的方法
+                      </HighLight>
+
+                      <Text>
+                        ③ 打开WG，点右上角+号，扫描二维码，隧道名称写&ensp;
+                        {userWgInfo?.tunnel_name}
+                      </Text>
+
+                      <Box borderWidth={5} borderColor="white" w="min">
+                        {userWgInfo && (
+                          <QRCodeSVG size={256} value={userWgInfo.conf_text} />
+                        )}
+                      </Box>
+                    </TabPanel>
+
+                    <TabPanel px={0} pb={0} pt={1}>
+                      <HighLight fontSize="sm">
+                        建议使用Safari浏览器访问网站再下载
+                        <br />
+                        如果点了下载没反应就是触发BUG了，等几分钟或换个浏览器再试试
+                      </HighLight>
+
+                      <Text>③ 下载隧道文件</Text>
+                      {DownloadButton(true)}
+
+                      <Text pt={1}>
+                        打开浏览器的下载任务列表，点击文件“
+                        {userWgInfo?.tunnel_name}
+                        .conf”，然后点左下角发送到WG，或者直接在WG里导入配置也行
+                      </Text>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+
+                <DocDivider />
+
+                <Flex>
+                  ④ 打开隧道开关 =&gt;
+                  <Image
+                    mx={1}
+                    maxH="1.5rem"
+                    src="/images/wg/iOS_switch.webp"
+                    alt="iOS_switch"
+                  />
+                </Flex>
+                <Text fontSize="sm">如果出现DBS解析失败，设备断网再联网试试</Text>
+              </WgCommonSteps>
             </TabPanel>
 
             {/* windows */}
             <TabPanel px={0} pb={1} pt={0}>
-              <SelectNode />
-
-              <DocDivider />
-
-              <Text>② 下载并安装WG客户端</Text>
-              <Button
-                size="sm"
-                mx={2}
-                onClick={() => {
-                  window.open("/download/wg客户端，解压后双击运行.zip", "_blank");
-                }}
-              >
-                点击下载安装包
-              </Button>
-
-              <DocDivider />
-
-              <Box>
-                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}
-                .conf”
-              </Box>
-              {DownloadButton()}
-
-              <DocDivider />
-
-              <Text>④ 跟着下图操作完成隧道导入，看红字就行</Text>
-
-              <Image
-                src="/images/wg/win_msi.webp"
-                alt="win_msi"
-                borderRadius="md"
-                w="500px"
-              />
-
-              <Text>
-                <HighLight fontSize="sm">
-                  点连接如果出现“The system cannot find the file
-                  specified”，检查wireguard的路径是否含有中文
-                </HighLight>
-              </Text>
-
-              <Text fontSize="sm">
-                <HighLight>点连接如果出现“隧道错误”的处理方法</HighLight>
-                <Text
-                  ml={2}
-                  as="span"
-                  color="brand.text"
-                  fontWeight="600"
-                  onClick={() => setShowMSI(!showMSI)}
+              <WgCommonSteps>
+                <Text>② 下载并安装WG客户端</Text>
+                <Button
+                  size="sm"
+                  mx={2}
+                  onClick={() => {
+                    window.open("/download/wg客户端，解压后双击运行.zip", "_blank");
+                  }}
                 >
-                  {showMSI ? "点击收起" : "点击查看"}
-                </Text>
-              </Text>
+                  点击下载安装包
+                </Button>
 
-              <Collapse in={showMSI}>
-                <Text fontSize="sm">
-                  <Text
-                    as="span"
-                    fontSize="sm"
-                    color="brand.text"
-                    fontWeight="600"
-                    onClick={() => {
-                      window.open("/download/右键以管理员身份运行.bat", "_blank");
-                    }}
-                  >
-                    点击下载bat修复文件
-                  </Text>
-                  ，然后右键“以管理员身份运行”修复。如果还是不行，就按下图指引“网络重置”试试
-                </Text>
+                <DocDivider />
+
+                <Box>
+                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}
+                  .conf”
+                </Box>
+                {DownloadButton()}
+
+                <DocDivider />
+
+                <Text>④ 跟着下图操作完成隧道导入，看红字就行</Text>
+
                 <Image
-                  src="/images/wg/network_reset.webp"
-                  alt="network_reset"
+                  src="/images/wg/win_msi.webp"
+                  alt="win_msi"
                   borderRadius="md"
                   w="500px"
-                  mb={10}
                 />
-              </Collapse>
+
+                <Text>
+                  <HighLight fontSize="sm">
+                    点连接如果出现“The system cannot find the file
+                    specified”，检查wireguard的路径是否含有中文
+                  </HighLight>
+                </Text>
+
+                <Text fontSize="sm">
+                  <HighLight>点连接如果出现“隧道错误”的处理方法</HighLight>
+                  <Text
+                    ml={2}
+                    as="span"
+                    color="brand.text"
+                    fontWeight="600"
+                    onClick={() => setShowMSI(!showMSI)}
+                  >
+                    {showMSI ? "点击收起" : "点击查看"}
+                  </Text>
+                </Text>
+
+                <Collapse in={showMSI}>
+                  <Text fontSize="sm">
+                    <Text
+                      as="span"
+                      fontSize="sm"
+                      color="brand.text"
+                      fontWeight="600"
+                      onClick={() => {
+                        window.open("/download/右键以管理员身份运行.bat", "_blank");
+                      }}
+                    >
+                      点击下载bat修复文件
+                    </Text>
+                    ，然后右键“以管理员身份运行”修复。如果还是不行，就按下图指引“网络重置”试试
+                  </Text>
+                  <Image
+                    src="/images/wg/network_reset.webp"
+                    alt="network_reset"
+                    borderRadius="md"
+                    w="500px"
+                    mb={10}
+                  />
+                </Collapse>
+              </WgCommonSteps>
             </TabPanel>
 
             {/* MAC */}
             <TabPanel px={0} pb={1} pt={0}>
-              <SelectNode />
-
-              <DocDivider />
-
-              <GetIOSID />
-              <Image
-                src="/images/wg/app_store_mac.webp"
-                alt="app_store_mac"
-                borderRadius="md"
-                w="300px"
-              />
-
-              <DocDivider />
-
-              <Box>
-                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
-              </Box>
-              {DownloadButton()}
-
-              <DocDivider />
-
-              <Box>
-                <Text>④ 运行WG，跟着下图操作完成隧道导入，看红字就行</Text>
+              <WgCommonSteps>
+                <GetIOSID />
                 <Image
-                  src="/images/wg/mac.webp"
-                  alt="mac"
+                  src="/images/wg/app_store_mac.webp"
+                  alt="app_store_mac"
                   borderRadius="md"
-                  w="500px"
+                  w="300px"
                 />
-              </Box>
+
+                <DocDivider />
+
+                <Box>
+                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
+                </Box>
+                {DownloadButton()}
+
+                <DocDivider />
+
+                <Box>
+                  <Text>④ 运行WG，跟着下图操作完成隧道导入，看红字就行</Text>
+                  <Image
+                    src="/images/wg/mac.webp"
+                    alt="mac"
+                    borderRadius="md"
+                    w="500px"
+                  />
+                </Box>
+              </WgCommonSteps>
             </TabPanel>
 
             {/* SteamDeck */}
             <TabPanel px={0} pb={1} pt={0}>
-              <SelectNode />
-
-              <DocDivider />
-
-              <Text>② 安装喵服Decky插件（插件由网友开发）</Text>
-              <Button
-                size="sm"
-                mx={2}
-                onClick={() => {
-                  window.open("/download/NyaFuWG.zip", "_blank");
-                }}
-              >
-                点击下载插件
-              </Button>
-              <Text>
-                在Steam Deck的游戏模式打开右侧快捷菜单，进入 Decky
-                插件面板，打开 `NyaFu WG`
-              </Text>
-
-              <DocDivider />
-
-              <Box>
-                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
-              </Box>
-              {DownloadButton()}
-
-              <DocDivider />
-
-              <Box>
+              <WgCommonSteps>
+                <Text>② 安装喵服Decky插件（插件由网友开发）</Text>
+                <Button
+                  size="sm"
+                  mx={2}
+                  onClick={() => {
+                    window.open("/download/NyaFuWG.zip", "_blank");
+                  }}
+                >
+                  点击下载插件
+                </Button>
                 <Text>
-                  ④ 回到插件，点击“更新隧道配置”，找到“
-                  {userWgInfo?.tunnel_name}
-                  .conf”，点击“导入此配置”，最后点击“连接喵服”
+                  在Steam Deck的游戏模式打开右侧快捷菜单，进入 Decky
+                  插件面板，打开 `NyaFu WG`
                 </Text>
-              </Box>
+
+                <DocDivider />
+
+                <Box>
+                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
+                </Box>
+                {DownloadButton()}
+
+                <DocDivider />
+
+                <Box>
+                  <Text>
+                    ④ 回到插件，点击“更新隧道配置”，找到“
+                    {userWgInfo?.tunnel_name}
+                    .conf”，点击“导入此配置”，最后点击“连接喵服”
+                  </Text>
+                </Box>
+              </WgCommonSteps>
             </TabPanel>
 
             {/* Linux */}
             <TabPanel px={0} pb={1} pt={0}>
-              <SelectNode />
+              <WgCommonSteps>
+                <Text>② 看WG官方文档安装客户端，或者问deepseek</Text>
+                <Link
+                  ml={1}
+                  color="brand.text"
+                  href="https://www.wireguard.com/install/"
+                  target="_blank"
+                >
+                  点击跳转WG官方文档（需要翻墙）
+                </Link>
 
-              <DocDivider />
+                <DocDivider />
 
-              <Text>② 看WG官方文档安装客户端，或者问deepseek</Text>
-              <Link
-                ml={1}
-                color="brand.text"
-                href="https://www.wireguard.com/install/"
-                target="_blank"
-              >
-                点击跳转WG官方文档（需要翻墙）
-              </Link>
+                <Box>
+                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
+                </Box>
+                {DownloadButton()}
 
-              <DocDivider />
+                <DocDivider />
 
-              <Box>
-                ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
-              </Box>
-              {DownloadButton()}
-
-              <DocDivider />
-
-              <Text>
-                ④ 在命令行打开隧道文件的目录
-                <br />
-                连接WG隧道执行
-                <DocCode>wg-quick up ./{userWgInfo?.tunnel_name}.conf</DocCode>
-                断开则执行
-                <DocCode>
-                  wg-quick down ./{userWgInfo?.tunnel_name}.conf
-                </DocCode>
-              </Text>
+                <Text>
+                  ④ 在命令行打开隧道文件的目录
+                  <br />
+                  连接WG隧道执行
+                  <DocCode>wg-quick up ./{userWgInfo?.tunnel_name}.conf</DocCode>
+                  断开则执行
+                  <DocCode>
+                    wg-quick down ./{userWgInfo?.tunnel_name}.conf
+                  </DocCode>
+                </Text>
+              </WgCommonSteps>
             </TabPanel>
           </TabPanels>
         </Tabs>
-
-        <DocDivider />
-
-        <Text>
-          ⑤ WG隧道打开后<HighLight>等5秒</HighLight>再点刷新
-        </Text>
-
-        <Flex align="center" mt={1} gap={2}>
-          <Text
-            fontSize={18}
-            fontWeight="bold"
-            color={getStatusColor(isOnline)}
-          >
-            &emsp;{isOnline ? "恭喜！WG已连接" : "WG尚未连接"}
-          </Text>
-
-          <Button
-            bg="transparent"
-            h={5}
-            px={0}
-            disabled={disableFlush}
-            onClick={() => {
-              getRoomData(false);
-            }}
-            color="brand.text"
-          >
-            <Text>刷新</Text>
-            <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
-              <TbReload size={18} />
-            </Box>
-          </Button>
-        </Flex>
-
-        {isOnline === false && (
-          <Text>
-            &emsp;隧道打开了还是未连接
-            <Button
-              ml={1}
-              variant="link"
-              bg="transparent"
-              color="brand.text"
-              onClick={() => {
-                navigate("/offlineCheck");
-              }}
-            >
-              点我排查
-            </Button>
-          </Text>
-        )}
-
-        <DocDivider />
-
-        <Text>
-          ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
-          ，网页只负责创建和加入房间，WG客户端保持连接就行
-        </Text>
 
         <DocDivider />
 

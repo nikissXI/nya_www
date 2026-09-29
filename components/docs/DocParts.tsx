@@ -75,6 +75,16 @@ export const DocMuted = ({
   </Text>
 );
 
+/**
+ * 黄字高亮：需要用户特别注意的词（原来是 color="warning.text" + bold）
+ * WG 安装教程页面与新抽出的 WgCommonSteps 共用这一份
+ */
+export const HighLight: React.FC<TextProps> = ({ children, ...props }) => (
+  <Text as="span" color="warning.text" fontWeight="bold" {...props}>
+    {children}
+  </Text>
+);
+
 /** 外链（原来是 color="#7ddcff"） */
 export const ExtLink = ({
   children,
@@ -107,7 +117,12 @@ export const DocStep = ({
   </Box>
 );
 
-/** 一条带图标的提示 */
+/**
+ * 一条带图标的提示
+ * ------------------------------------------------------------------
+ * Text 上的 minW={0}：flex 子项默认 min-width:auto，里面放 DocCode 这类超长内容时
+ * 整行会被撑宽、连带把卡片和页面顶出横向滚动；归零后才能收缩，交给 DocCode 自己出滚动条。
+ */
 export const DocTip = ({ children }: { children: React.ReactNode }) => (
   <Flex align="flex-start" gap={1.5}>
     <Icon
@@ -117,7 +132,7 @@ export const DocTip = ({ children }: { children: React.ReactNode }) => (
       flexShrink={0}
       mt="3px"
     />
-    <Text fontSize="sm" color="text.muted" lineHeight="1.8" as="div">
+    <Text fontSize="sm" color="text.muted" lineHeight="1.8" as="div" minW={0}>
       {children}
     </Text>
   </Flex>
@@ -140,7 +155,12 @@ export const DocCode = ({
 }) => (
   <Code
     display={block ? "block" : "inline"}
-    whiteSpace="pre-wrap"
+    // 代码不折行：内容过长时在块内横向滚动，而不是把卡片/页面顶宽。
+    // overflow-x 非 visible 时按 CSS 规则 overflow-y 会一并算成 auto，
+    // 这里高度自适应，所以不会冒出竖向滚动条。
+    whiteSpace="pre"
+    overflowX="auto"
+    minW={0}
     p={1.5}
     maxW="100%"
     borderRadius="control"
