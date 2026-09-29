@@ -228,37 +228,67 @@ const DocumentPage = () => {
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={0}>
-              <Heading size="md">方式一：安装喵服安卓APP</Heading>
+              <Heading size="md" mb={3}>
+                使用喵服安卓APP
+              </Heading>
 
-              <Box
-                mt={3}
-                bg="brand.soft"
-                border="1px solid"
-                borderColor="brand.line"
-                borderRadius="card"
-                p={{ base: 4, md: 5 }}
+              <Text fontSize="sm" lineHeight="1.8">
+                已内置WG隧道导入和节点切换功能。APP刚上线，如果使用有问题请加Q群1047464328找群主反馈
+              </Text>
+
+              <Button
+                my={2}
+                size="sm"
+                onClick={() => {
+                  window.open(ANDROID_APP_URL, "_blank");
+                }}
               >
-                <Text fontSize="sm" lineHeight="1.8">
-                  内置WG隧道和节点切换，登录后可直接连接联机。
-                  APP刚上线，如果APP有BUG或建议请加Q群1047464328找群主反馈
-                </Text>
+                点击下载安卓APP
+              </Button>
 
-                <Button
-                  my={2}
+              <Text
+                fontSize="sm"
+                color="brand.text"
+                fontWeight="600"
+                onClick={() => {
+                  setAndroidDLWarning(!showAndroidDLWarning);
+                }}
+              >
+                无法下载点我
+              </Text>
+              <Collapse in={showAndroidDLWarning}>
+                <Text fontSize="sm">
+                  &emsp;到浏览器打开网站再下载，无法下载的都是因为在QQ、微信这些非浏览器应用中下载。
+                </Text>
+              </Collapse>
+
+              <Flex alignItems="center" mt={1} fontSize="sm">
+                <HighLight>注意！小米/红米设备要改个设置</HighLight>
+                <Text
+                  ml={2}
+                  as="span"
+                  color="brand.text"
+                  fontWeight="600"
                   size="sm"
-                  onClick={() => {
-                    window.open(ANDROID_APP_URL, "_blank");
-                  }}
+                  onClick={() => setShowXM(!showXM)}
                 >
-                  点击下载安卓APP
-                </Button>
-
-                <Text fontSize="sm" lineHeight="1.8">
-                  建议到浏览器打开网站再下载，在QQ、微信这些非浏览器应用中可能无法正常下载
+                  {showXM ? "点击收起" : "点击查看"}
                 </Text>
-              </Box>
+              </Flex>
+              <Collapse in={showXM}>
+                <Text fontSize="sm">
+                  游戏加速的“网络优化”会导致无法联机，系统版本不同可能不一样，脑子灵活点
+                  <br />
+                  关闭方法：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
+                </Text>
+                <Image
+                  src="/images/wg/xiaomi.webp"
+                  alt="xiaomi"
+                  borderRadius="md"
+                />
+              </Collapse>
 
-              <DocDivider />
+              {/* <DocDivider />
 
               <WgCommonSteps>
                 <Heading size="md" mb={3}>
@@ -367,7 +397,7 @@ const DocumentPage = () => {
                     borderRadius="md"
                   />
                 </Collapse>
-              </WgCommonSteps>
+              </WgCommonSteps> */}
             </TabPanel>
 
             {/* iOS */}
