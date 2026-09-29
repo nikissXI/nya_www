@@ -115,8 +115,13 @@ export const WgCommonSteps = ({ children }: { children: React.ReactNode }) => {
 
       {/* ⑥ 网页关闭不影响联机 */}
       <Text>
-        ⑥ <HighLight>喵服网页关闭不影响联机</HighLight>
-        ，网页只负责创建和加入房间，WG客户端保持连接就行
+        ⑥ 联机需网页+WG客户端组合使用
+        <br />
+        网页负责 创建/加入房间
+        <br />
+        WG客户端负责 联机通信
+        <br />
+        <HighLight>关闭网页不影响联机</HighLight>
       </Text>
 
       <DocDivider />
@@ -134,7 +139,7 @@ export const WgCommonSteps = ({ children }: { children: React.ReactNode }) => {
         >
           返回联机房间
         </Button>
-        ，创建或加入房间后，里面有游戏联机教程
+        ，创建或加入房间，房间里有游戏联机教程
       </Text>
     </Box>
   );
