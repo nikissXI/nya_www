@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
-import { useNavigate } from "react-router-dom";
 import { openToast } from "@/components/universal/toast";
 import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
@@ -33,30 +32,28 @@ import { WgCommonSteps } from "@/components/docs/WgCommonSteps";
 
 const DocumentPage = () => {
   // 逐个字段订阅：store 里房间/延迟等字段会频繁变化，整体解构会让整页（含 6 个设备面板）跟着重渲染
-  const confKey = useUserStateStore((s) => s.confKey);
-  const getConfKey = useUserStateStore((s) => s.getConfKey);
+  // const confKey = useUserStateStore((s) => s.confKey);
+  // const getConfKey = useUserStateStore((s) => s.getConfKey);
   const userInfo = useUserStateStore((s) => s.userInfo);
   const userWgInfo = useUserStateStore((s) => s.userWgInfo);
   const openLoginModal = useUserStateStore((s) => s.openLoginModal);
 
-  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (userInfo && userWgInfo && !confKey) {
+  //     getConfKey();
+  //   }
+  // }, [userInfo, userWgInfo, confKey, getConfKey]);
 
-  useEffect(() => {
-    if (userInfo && userWgInfo && !confKey) {
-      getConfKey();
-    }
-  }, [userInfo, userWgInfo, confKey, getConfKey]);
-
-  const handleCopyLink = async (confKey: string) => {
-    try {
-      if (navigator.clipboard && navigator.permissions) {
-        await navigator.clipboard.writeText(confKey);
-        openToast({ content: "key已复制到剪切板", status: "warning" });
-      } else {
-        throw new Error("不支持自动复制");
-      }
-    } catch (err) {}
-  };
+  // const handleCopyLink = async (confKey: string) => {
+  //   try {
+  //     if (navigator.clipboard && navigator.permissions) {
+  //       await navigator.clipboard.writeText(confKey);
+  //       openToast({ content: "key已复制到剪切板", status: "warning" });
+  //     } else {
+  //       throw new Error("不支持自动复制");
+  //     }
+  //   } catch (err) {}
+  // };
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
