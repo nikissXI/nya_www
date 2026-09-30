@@ -34,7 +34,9 @@ export default function Page() {
 
       <DocMuted my={1}>
         手游需要使用
-        <ExtLink href="https://space.bilibili.com/597869160">琳星Lin-C</ExtLink>{" "}
+        <ExtLink href="https://space.bilibili.com/597869160">
+          琳星Lin-C
+        </ExtLink>{" "}
         制作的版本，群文件里可下载
       </DocMuted>
 
@@ -42,7 +44,9 @@ export default function Page() {
         <DocStep step={1} role="主机">
           <Text>一名玩家作为主机，根据下图创建多人游戏</Text>
           <DocMuted my={1}>游戏必须保持在前台，不能锁屏或切到后台</DocMuted>
-          <DocMuted my={1}>oppo和一加手机有时候没有非专用主机，需重开游戏</DocMuted>
+          <DocMuted my={1}>
+            oppo和一加手机有时候没有非专用主机，需重开游戏
+          </DocMuted>
           <DocImage w="600px" src="/images/ark/ark_1.webp" alt="ark_1" />
         </DocStep>
 
@@ -78,11 +82,10 @@ export default function Page() {
       </Heading>
 
       <VStack align="stretch" spacing={1}>
-        <DocTip>
-          找到游戏的配置文件
-          GameUserSettings.ini，找到下方的这个设置并将数值改为40.00000
-          <DocCode>ListenServerTetherDistanceMultiplier=40.00000</DocCode>
-        </DocTip>
+        <Text>
+          在游戏的配置文件GameUserSettings.ini，找到下方的这个设置并将数值改为40.00000
+        </Text>
+        <DocCode>ListenServerTetherDistanceMultiplier=40.00000</DocCode>
         <DocMuted>只需要主机修改，40为建议值，太大也不行</DocMuted>
       </VStack>
 
