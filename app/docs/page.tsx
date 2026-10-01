@@ -225,7 +225,11 @@ const DocumentPage = () => {
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={0}>
-              <Heading size="md" mb={3}>
+              <HighLight fontSize="sm" lineHeight="1.8">
+                以前的安卓WG不再使用，可以卸载
+              </HighLight>
+
+              <Heading size="md" my={1}>
                 使用喵服安卓APP
               </Heading>
 
