@@ -1170,7 +1170,7 @@ export default function Page() {
                 navigate("/offlineCheck");
               }}
             >
-              离线或掉线排查
+              注意事项及连接失败排查
             </Text>
           </Box>
 

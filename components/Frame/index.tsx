@@ -38,7 +38,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/docs": "WG安装教程",
   "/login": "登录",
   "/sponsor": "感谢赞助者们的支持！",
-  "/offlineCheck": "WG连接失败或掉线排查",
+  "/offlineCheck": "注意事项及连接失败排查",
 };
 
 /** /docs/<游戏> 这类子页的标题后缀（各游戏的联机教程） */
