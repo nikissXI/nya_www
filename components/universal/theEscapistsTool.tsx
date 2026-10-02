@@ -36,7 +36,7 @@ export default function TheEscapistsTool() {
   return (
     <Box
       p={3}
-      bg="bg.subtle"
+      bg="bg.surface"
       border="1px solid"
       borderColor="border.line"
       borderRadius="control"
