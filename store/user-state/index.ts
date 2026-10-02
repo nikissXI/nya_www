@@ -29,10 +29,6 @@ interface ILoginStateSlice {
   announcementsData: AnnouncementsData | undefined;
   getAnnouncementsData: () => Promise<void>;
 
-  // 用于导入隧道的key
-  confKey: string | null;
-  getConfKey: (manual?: boolean) => void;
-
   // 登录加载状态
   loginLoading: boolean;
   // 获取用户信息
@@ -143,29 +139,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
         }
       },
 
-      confKey: null,
-      getConfKey: async (manual: boolean = false) => {
-        try {
-          const confKey = await api.confKey();
-          set({ confKey });
-          if (manual) openToast({ content: "key激活成功", status: "success" });
-        } catch (error) {
-          // 凭证失效/数据异常已由统一处理接管
-          if (shouldSilenceError(error)) return;
-
-          if (isBusinessError(error)) {
-            // 业务失败（如未选择节点），后端 msg 即原因
-            openToast({ content: error.message, status: "warning" });
-          } else {
-            // 改动：不再 reload，而是提示用户重新登录
-            openToast({
-              content: "获取配置失败，请尝试重新登录",
-              status: "error",
-            });
-          }
-        }
-      },
-
       loginLoading: true,
       userInfo: undefined,
       userWgInfo: undefined,
@@ -225,8 +198,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           roomData: undefined,
           latency: undefined,
           nodeNetLoad: undefined,
-          // 清理与账号绑定的数据，避免下一个登录的账号看到上一个账号的信息
-          confKey: null,
           fixedNode: undefined,
         });
         localStorage.setItem("uuid", new_uuid);

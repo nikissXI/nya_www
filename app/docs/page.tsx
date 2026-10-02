@@ -15,7 +15,7 @@ import {
   Link,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
 import { openToast } from "@/components/universal/toast";
 import { QRCodeSVG } from "qrcode.react";
@@ -32,28 +32,9 @@ import { WgCommonSteps } from "@/components/docs/WgCommonSteps";
 
 const DocumentPage = () => {
   // 逐个字段订阅：store 里房间/延迟等字段会频繁变化，整体解构会让整页（含 6 个设备面板）跟着重渲染
-  // const confKey = useUserStateStore((s) => s.confKey);
-  // const getConfKey = useUserStateStore((s) => s.getConfKey);
   const userInfo = useUserStateStore((s) => s.userInfo);
   const userWgInfo = useUserStateStore((s) => s.userWgInfo);
   const openLoginModal = useUserStateStore((s) => s.openLoginModal);
-
-  // useEffect(() => {
-  //   if (userInfo && userWgInfo && !confKey) {
-  //     getConfKey();
-  //   }
-  // }, [userInfo, userWgInfo, confKey, getConfKey]);
-
-  // const handleCopyLink = async (confKey: string) => {
-  //   try {
-  //     if (navigator.clipboard && navigator.permissions) {
-  //       await navigator.clipboard.writeText(confKey);
-  //       openToast({ content: "key已复制到剪切板", status: "warning" });
-  //     } else {
-  //       throw new Error("不支持自动复制");
-  //     }
-  //   } catch (err) {}
-  // };
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
@@ -172,8 +153,7 @@ const DocumentPage = () => {
         notices={[
           "联机的每个玩家都要注册喵服并安装WG",
           "WG客户端要安装在运行游戏的设备上",
-          "禁止MC联机(独享节点除外)，因为MC占资源",
-          "不兼容华为鸿蒙6系统，请选择其他联机工具",
+          "禁止MC联机，加钱也不行，太占资源",
         ]}
       />
 
@@ -194,30 +174,36 @@ const DocumentPage = () => {
             flexWrap="wrap"
             gap={{ base: 1.5, md: 2 }} // 移动端间距小一点
           >
-            {["安卓", "苹果", "Windows", "Mac", "SteamDeck", "Linux"].map(
-              (label) => (
-                <Tab
-                  key={label}
-                  py={1.5}
-                  px={{ base: 3, md: 4 }}
-                  fontWeight="600"
-                  fontSize="sm"
-                  borderRadius="full"
-                  color="text.muted"
-                  bg="bg.subtle"
-                  border="1px solid"
-                  borderColor="border.line"
-                  _selected={{
-                    color: "white",
-                    bg: "brand.solid",
-                    borderColor: "brand.solid",
-                  }}
-                  transition="all .2s"
-                >
-                  {label}
-                </Tab>
-              ),
-            )}
+            {[
+              "安卓",
+              "苹果",
+              "Windows",
+              "鸿蒙",
+              "Mac",
+              "SteamDeck",
+              "Linux",
+            ].map((label) => (
+              <Tab
+                key={label}
+                py={1.5}
+                px={{ base: 3, md: 4 }}
+                fontWeight="600"
+                fontSize="sm"
+                borderRadius="full"
+                color="text.muted"
+                bg="bg.subtle"
+                border="1px solid"
+                borderColor="border.line"
+                _selected={{
+                  color: "white",
+                  bg: "brand.solid",
+                  borderColor: "brand.solid",
+                }}
+                transition="all .2s"
+              >
+                {label}
+              </Tab>
+            ))}
           </TabList>
 
           <DocDivider />
@@ -288,117 +274,6 @@ const DocumentPage = () => {
                   borderRadius="md"
                 />
               </Collapse>
-
-              {/* <DocDivider />
-
-              <WgCommonSteps>
-                <Heading size="md" mb={3}>
-                  方式二：安装官方WG客户端
-                </Heading>
-
-                <Text>
-                  ② 下载并安装WG客户端
-                  <Text
-                    as="span"
-                    color="brand.text"
-                    fontWeight="600"
-                    onClick={() => {
-                      setAndroidDLWarning(!showAndroidDLWarning);
-                    }}
-                  >
-                    &ensp;无法下载点我
-                  </Text>
-                  <br />
-                  <HighLight fontSize="sm">
-                    &emsp;必须使用这里下载的WG客户端
-                  </HighLight>
-                </Text>
-
-                <Button
-                  ml={4}
-                  size="sm"
-                  onClick={() => {
-                    window.open("/download/wireguard.apk", "_blank");
-                  }}
-                >
-                  点击下载安装包
-                </Button>
-                <Collapse in={showAndroidDLWarning}>
-                  <Text fontSize="sm">
-                    &emsp;到浏览器打开网站再下载，无法下载的都是因为在QQ、微信这些非浏览器应用中下载。
-                  </Text>
-                </Collapse>
-
-                <DocDivider />
-
-                <Box>
-                  ③ 点击或长按黄字复制
-                  <Text
-                    ml={2}
-                    as="span"
-                    color="brand.text"
-                    fontWeight="600"
-                    onClick={() => {
-                      getConfKey(true);
-                    }}
-                  >
-                    key失效点我
-                  </Text>
-                  <Text
-                    ml={1}
-                    fontSize="sm"
-                    color="warning.text"
-                    onClick={() => {
-                      if (confKey) handleCopyLink(confKey);
-                    }}
-                  >
-                    <strong>{confKey}</strong>
-                  </Text>
-                </Box>
-                <Text>
-                  &emsp;然后运行WG点右下角加号，选“通过conf_key导入”，粘贴黄字完成隧道导入
-                  <br />
-                  &emsp;导入的隧道名称应是{" "}
-                  <strong>{userWgInfo?.tunnel_name}</strong>
-                </Text>
-
-                <DocDivider />
-
-                <Flex>
-                  ④ 打开隧道开关 =&gt;
-                  <Image
-                    mx={1}
-                    maxH="1.5rem"
-                    src="/images/wg/android_switch.webp"
-                    alt="android_switch"
-                  />
-                </Flex>
-                <Flex alignItems="center" mt={1} fontSize="sm">
-                  &emsp;<HighLight>注意！小米/红米设备要改个设置</HighLight>
-                  <Text
-                    ml={2}
-                    as="span"
-                    color="brand.text"
-                    fontWeight="600"
-                    size="sm"
-                    onClick={() => setShowXM(!showXM)}
-                  >
-                    {showXM ? "点击收起" : "点击查看"}
-                  </Text>
-                </Flex>
-                <Collapse in={showXM}>
-                  <Text fontSize="sm">
-                    游戏加速的“网络优化”会导致无法联机，系统版本不同可能不一样，脑子灵活点
-                    <br />
-                    关闭方法：找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
-                  </Text>
-                  <Image
-                    src="/images/wg/xiaomi.webp"
-                    alt="xiaomi"
-                    borderRadius="md"
-                  />
-                </Collapse>
-              </WgCommonSteps> */}
             </TabPanel>
 
             {/* iOS */}
@@ -408,8 +283,8 @@ const DocumentPage = () => {
 
                 <Image
                   mt={2}
-                  src="/images/wg/app_store.webp"
-                  alt="app_store"
+                  src="/images/wg/app_store_ios.webp"
+                  alt="app_store_ios"
                   borderRadius="md"
                   w="300px"
                 />
@@ -418,7 +293,7 @@ const DocumentPage = () => {
 
                 <Tabs variant="unstyled">
                   <Text fontWeight="bolder">
-                    iOS导入隧道可以扫码或下载
+                    导入隧道可以扫码或下载
                     <br />
                     <HighLight fontSize="sm">
                       注意不要在远程控制的状态下导入
@@ -601,6 +476,117 @@ const DocumentPage = () => {
                     mb={10}
                   />
                 </Collapse>
+              </WgCommonSteps>
+            </TabPanel>
+
+            {/* 鸿蒙 */}
+            <TabPanel px={0} pb={1} pt={0}>
+              <WgCommonSteps>
+                <Box>
+                  ② 安装WG客户端
+                  <Link
+                    ml={1}
+                    color="brand.text"
+                    href="https://appgallery.huawei.com/app/detail?id=site.leojay.wireguard&channelId=SHARE&source=appshare"
+                    target="_blank"
+                  >
+                    点击跳转应用商店界面
+                  </Link>
+                </Box>
+
+                <Image
+                  mt={2}
+                  src="/images/wg/app_store_hm.webp"
+                  alt="app_store_hm"
+                  borderRadius="md"
+                  w="400px"
+                />
+
+                <DocDivider />
+
+                <Tabs variant="unstyled">
+                  <Text fontWeight="bolder">导入隧道可以扫码或下载</Text>
+
+                  <TabList my={2}>
+                    <Tab
+                      py={1.5}
+                      px={4}
+                      fontWeight="600"
+                      fontSize="sm"
+                      borderRadius="full"
+                      color="text.muted"
+                      bg="bg.subtle"
+                      border="1px solid"
+                      borderColor="border.line"
+                      mr={2}
+                      _selected={{
+                        color: "white",
+                        bg: "brand.solid",
+                        borderColor: "brand.solid",
+                      }}
+                    >
+                      扫二维码
+                    </Tab>
+                    <Tab
+                      py={1.5}
+                      px={4}
+                      fontWeight="600"
+                      fontSize="sm"
+                      borderRadius="full"
+                      color="text.muted"
+                      bg="bg.subtle"
+                      border="1px solid"
+                      borderColor="border.line"
+                      _selected={{
+                        color: "white",
+                        bg: "brand.solid",
+                        borderColor: "brand.solid",
+                      }}
+                    >
+                      下载隧道
+                    </Tab>
+                  </TabList>
+
+                  <TabPanels>
+                    <TabPanel px={0} pb={0} pt={1}>
+                      <HighLight fontSize="sm">
+                        不支持从相册导入二维码，所以自己想办法扫（比如借个设备拍下来再扫），扫不了就选“下载隧道”的方法
+                      </HighLight>
+
+                      <Text>
+                        ③ 打开WG，点右下角+号，扫描二维码添加，隧道名称写&ensp;
+                        {userWgInfo?.tunnel_name}
+                      </Text>
+
+                      <Box borderWidth={5} borderColor="white" w="min">
+                        {userWgInfo && (
+                          <QRCodeSVG size={256} value={userWgInfo.conf_text} />
+                        )}
+                      </Box>
+                    </TabPanel>
+
+                    <TabPanel px={0} pb={0} pt={1}>
+                      <Text>③ 下载隧道文件</Text>
+                      {DownloadButton(true)}
+
+                      <Text pt={1}>
+                        打开WG，点右下角+号，选择conf导入配置，然后选中下载的隧道文件完成导入
+                      </Text>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+
+                <DocDivider />
+
+                <Text>④ 打开隧道连接</Text>
+
+                <Image
+                  mt={2}
+                  src="/images/wg/hm_switch.webp"
+                  alt="hm_switch"
+                  borderRadius="md"
+                  w="400px"
+                />
               </WgCommonSteps>
             </TabPanel>
 
