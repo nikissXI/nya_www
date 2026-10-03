@@ -29,7 +29,12 @@ import { useUserStateStore } from "@/store/user-state";
 import { GENERAL_QQ_GROUP, ROOM_GAME_LIST } from "@/utils/roomGames";
 import { copyText, formatAnnouncementDate } from "@/utils/strings";
 import { AnnouncementList } from "@/components/universal/Announcements";
-import { Card, EmptyState, INPUT_STYLE, MODAL_STYLE } from "@/components/universal/ui";
+import {
+  Card,
+  EmptyState,
+  INPUT_STYLE,
+  MODAL_STYLE,
+} from "@/components/universal/ui";
 
 /**
  * 全站右侧信息栏
@@ -84,10 +89,7 @@ export default function SideBar() {
       <VStack align="stretch" spacing={4}>
         {/* ---------- 公告 ---------- */}
         <Card p={4}>
-          <SectionHead
-            icon={MdCampaign}
-            title="喵服公告"
-          />
+          <SectionHead icon={MdCampaign} title="喵服公告" />
 
           {latestAnnouncement ? (
             <>
@@ -175,7 +177,7 @@ export default function SideBar() {
           <SectionHead icon={MdFavorite} title="赞助喵服" />
 
           <Text fontSize="sm" color="text.muted" lineHeight="1.7">
-            觉得好用的话支持下啦，赞助可以解锁专属节点与特权。
+            赞助可以解锁专属节点获得更好的联机体验。当然，普通的节点也足够对付大部分联机场景
           </Text>
 
           <Link
@@ -223,7 +225,12 @@ export default function SideBar() {
                     <Box key={game.path}>
                       {index > 0 && <Divider />}
 
-                      <Flex align="center" justify="space-between" gap={3} py={2}>
+                      <Flex
+                        align="center"
+                        justify="space-between"
+                        gap={3}
+                        py={2}
+                      >
                         <Flex align="center" minW={0}>
                           <Image
                             mr={2}
