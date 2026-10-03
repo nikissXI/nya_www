@@ -166,7 +166,7 @@ export default function SideBar() {
             _hover={{ textDecoration: "underline" }}
             onClick={openGameGroup}
           >
-            查看各游戏小群列表
+            查看游戏小群
           </Link>
         </Card>
 
