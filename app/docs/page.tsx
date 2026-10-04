@@ -549,12 +549,8 @@ const DocumentPage = () => {
 
                   <TabPanels>
                     <TabPanel px={0} pb={0} pt={1}>
-                      <HighLight fontSize="sm">
-                        不支持从相册导入二维码，所以自己想办法扫（比如借个设备拍下来再扫），扫不了就选“下载隧道”的方法
-                      </HighLight>
-
                       <Text>
-                        ③ 打开WG，点右下角+号，扫描二维码添加，隧道名称写&ensp;
+                        ③ 打开WG，点右下角+号，扫描二维码，扫码或从相册导入添加，隧道名称写&ensp;
                         {userWgInfo?.tunnel_name}
                       </Text>
 
