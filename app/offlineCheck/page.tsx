@@ -13,14 +13,6 @@ import BackButton from "@/components/docs/BackButton";
 import { Card } from "@/components/universal/ui";
 import { useUserStateStore } from "@/store/user-state";
 
-/** 通用排查项 */
-const TIPS = [
-  "关掉其他游戏加速器或VPN，手机或平板建议锁定客户端防止被系统误杀",
-  "确保玩家自己联机设备的网络足够稳定，建议使用WiFi进行联机",
-  "部分学校的校园网会拦截喵服的流量，试试流量上网可进行验证",
-  "大陆外玩家只能用跨境线路节点，节点列表线路筛选，选跨境。国外部分地区用跨境线路节点也连不上，目前已知俄罗斯，这种情况请找服主特殊处理",
-];
-
 export default function Page() {
   const userWgInfo = useUserStateStore((s) => s.userWgInfo);
 
@@ -98,9 +90,20 @@ export default function Page() {
             </Tip>
           )}
 
-          {TIPS.map((tip) => (
-            <Tip key={tip}>{tip}</Tip>
-          ))}
+          {(platform === "web" || platform === "android") && (
+            <Tip>
+              确保玩家自己联机设备的网络足够稳定，建议用WiFi/有线网络联机
+            </Tip>
+          )}
+
+          {platform === "windows" && (
+            <Tip>关掉其他游戏加速器或VPN，建议用WiFi/有线网络联机</Tip>
+          )}
+
+          <Tip>部分学校的校园网会拦截喵服的流量，试试流量上网可进行验证</Tip>
+          <Tip>
+            大陆外玩家只能用跨境线路节点，节点列表线路筛选，选跨境。国外部分地区用跨境线路节点也连不上，目前已知俄罗斯，这种情况请找服主特殊处理
+          </Tip>
         </VStack>
       </Card>
 
