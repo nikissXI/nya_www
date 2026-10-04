@@ -92,7 +92,7 @@ export default function Page() {
 
           {(platform === "web" || platform === "android") && (
             <Tip>
-              确保玩家自己联机设备的网络足够稳定，建议用WiFi/有线网络联机
+              确保玩家自己联机设备的网络足够稳定，任一方网络卡顿都会导致联机卡顿
             </Tip>
           )}
 
