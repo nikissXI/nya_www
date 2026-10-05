@@ -21,6 +21,20 @@ import type {
 } from "@/utils/endpoints";
 import { getErrorMessage } from "@/utils/strings";
 
+/**
+ * 资源计时缓冲区（performance resource timing）默认只有 250 条，房间页每 5 秒就会写入
+ * 2 条（getRoom + 节点 ping），挂十几分钟就写满；写满后浏览器会静默丢弃新条目，
+ * 测延迟便查不到自己那条记录 → 表现为弹「xxx节点获取延迟性能记录出错」，
+ * 而 F12 里一切正常（请求本身是 200，错误又被 toast 接走了，不会进 console）。
+ * 这里把上限抬高一档，并在真的写满时清空一次，避免长期挂机后测速失效。
+ */
+if (typeof performance !== "undefined") {
+  performance.setResourceTimingBufferSize?.(2000);
+  performance.onresourcetimingbufferfull = () => {
+    performance.clearResourceTimings();
+  };
+}
+
 interface ILoginStateSlice {
   // 访问唯一标识
   uuid: string;
@@ -48,6 +62,8 @@ interface ILoginStateSlice {
    * 获取节点延迟
    * @param net 节点负载，-1（故障）时直接返回 0，不做测速
    * @param auto true 时只测一遍（房间页用，请求更轻）；false 时测两遍、必要时再补一遍取最小值
+   *
+   * 优先用资源计时里的服务端响应耗时；拿不到条目时退回整段请求耗时，不会因此判失败
    */
   getNodeLatency: (
     node_alias: string,
@@ -224,7 +240,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
             const pingPromise = (async () => {
               // no-store 保证每次都是真实请求，否则命中缓存会读到旧的 performance 条目
+              const start = performance.now();
               const resp = await fetch(statusUrl, { cache: "no-store" });
+              // 整段请求耗时：拿不到资源计时条目时的兜底值
+              const requestTime = performance.now() - start;
+
               if (!resp.ok) {
                 throw new Error(`${node_alias}节点获取延迟出错`);
               }
@@ -234,14 +254,21 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
               const lastEntry = performance
                 .getEntriesByName(statusUrl)
                 .at(-1) as PerformanceResourceTiming | undefined;
-              if (lastEntry) {
-                const delay = Math.floor(
-                  lastEntry.responseStart - lastEntry.requestStart,
-                );
-                return Math.min(delay, 999);
-              } else {
-                throw new Error(`${node_alias}节点获取延迟性能记录出错`);
-              }
+
+              // 优先用服务端响应耗时（responseStart - requestStart，不含建连/下载，
+              // 更接近节点到你的延迟）；但它不一定有：缓冲区写满时新条目会被静默丢弃，
+              // 跨域节点没回 Timing-Allow-Origin 时这两个时间点又都是 0。
+              // 这些情况退回整段请求耗时，别让测速直接失败
+              const responseTime = lastEntry
+                ? lastEntry.responseStart - lastEntry.requestStart
+                : 0;
+
+              // 两种取值都可能 <1ms，向上取到 1，否则会被上层当成「无效测量（0）」
+              const delay = Math.max(
+                1,
+                Math.floor(responseTime > 0 ? responseTime : requestTime),
+              );
+              return Math.min(delay, 999);
             })();
 
             return await Promise.race([pingPromise, timeoutPromise]);

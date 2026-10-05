@@ -20,7 +20,7 @@ import { useUserStateStore } from "@/store/user-state";
 import { openToast } from "@/components/universal/toast";
 import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
-import { ANDROID_APP_URL } from "@/utils/appDownload";
+import { ANDROID_APP_URL, WINDOWS_APP_URL } from "@/utils/appDownload";
 import { NoticeText } from "@/components/universal/Notice";
 import {
   DocCode,
@@ -212,7 +212,7 @@ const DocumentPage = () => {
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={0}>
               <HighLight fontSize="sm" lineHeight="1.8">
-                以前的安卓WG不再使用，可以卸载
+                以前的安卓WG客户端不再使用，可以删掉
               </HighLight>
 
               <Heading size="md" my={1}>
@@ -396,7 +396,29 @@ const DocumentPage = () => {
 
             {/* windows */}
             <TabPanel px={0} pb={1} pt={0}>
-              <WgCommonSteps>
+              <HighLight fontSize="sm" lineHeight="1.8">
+                以前的Windows WG客户端不再使用，可以删掉
+              </HighLight>
+
+              <Heading size="md" my={1}>
+                使用Windows客户端
+              </Heading>
+
+              <Text fontSize="sm" lineHeight="1.8">
+                已内置WG隧道导入和节点切换功能。客户端刚上线，如果使用有问题请加Q群1047464328找群主反馈
+              </Text>
+
+              <Button
+                my={2}
+                size="sm"
+                onClick={() => {
+                  window.open(WINDOWS_APP_URL, "_blank");
+                }}
+              >
+                点击下载Windows客户端
+              </Button>
+
+              {/* <WgCommonSteps>
                 <Text>② 下载并安装WG客户端</Text>
                 <Button
                   size="sm"
@@ -474,9 +496,10 @@ const DocumentPage = () => {
                     borderRadius="md"
                     w="500px"
                     mb={10}
-                  />
+                  /> 
                 </Collapse>
-              </WgCommonSteps>
+                </WgCommonSteps>
+                */}
             </TabPanel>
 
             {/* 鸿蒙 */}
@@ -550,7 +573,8 @@ const DocumentPage = () => {
                   <TabPanels>
                     <TabPanel px={0} pb={0} pt={1}>
                       <Text>
-                        ③ 打开WG，点右下角+号，扫描二维码，扫码或从相册导入添加，隧道名称写&ensp;
+                        ③
+                        打开WG，点右下角+号，扫描二维码，扫码或从相册导入添加，隧道名称写&ensp;
                         {userWgInfo?.tunnel_name}
                       </Text>
 

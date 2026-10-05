@@ -1,9 +1,21 @@
-import { Box, Flex, Heading, Image, SimpleGrid, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Flex,
+  Heading,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Button } from "@/components/universal/button";
 import { Card } from "@/components/universal/ui";
-import { useUserStateStore } from "@/store/user-state";
-import { ANDROID_APP_URL } from "@/utils/appDownload";
+import { ANDROID_APP_URL, WINDOWS_APP_URL } from "@/utils/appDownload";
+
+/** 客户端下载（新增平台往这里加一项即可） */
+const appDownloads = [
+  { label: "下载安卓APP客户端", url: ANDROID_APP_URL },
+  { label: "下载Windows客户端", url: WINDOWS_APP_URL },
+];
 
 /** 平台亮点（静态数据，放到组件外避免每次渲染重新创建） */
 const highlights = [
@@ -25,9 +37,6 @@ const highlights = [
 ];
 
 export default function Page() {
-  const navigate = useNavigate();
-  const userInfo = useUserStateStore((s) => s.userInfo);
-
   return (
     <Flex
       direction="column"
@@ -53,19 +62,9 @@ export default function Page() {
         >
           异地组网联机平台
         </Heading>
-
-        <Button
-          size={{ base: "md", md: "lg" }}
-          fontSize={{ base: "md", md: "lg" }}
-          px={10}
-          h={{ base: "48px", md: "56px" }}
-          onClick={() => navigate(userInfo ? "/room" : "/me")}
-        >
-          👉开始使用喵服👈
-        </Button>
       </Flex>
 
-      {/* 安卓APP下载入口 */}
+      {/* 客户端下载入口（安卓 / Windows，教程页的下载入口在 app/docs/page.tsx） */}
       <Card
         w="100%"
         maxW="880px"
@@ -86,25 +85,33 @@ export default function Page() {
               fontSize={{ base: "md", md: "lg" }}
               color="brand.text"
             >
-              安卓APP已上线
+              安卓、Windows客户端已上线
             </Heading>
 
             <Text mt={1} fontSize="sm" lineHeight="1.8">
-              内置WG隧道和节点切换，装好登录就能联机
+              客户端内置WG隧道和节点切换，装好登录就能联机。其他系统目前需要浏览器+WG官方客户端配合使用
             </Text>
           </Box>
 
-          <Button
-            size={{ base: "md", md: "lg" }}
-            px={{ base: 6, md: 8 }}
+          <Stack
+            direction={{ base: "column", sm: "row" }}
+            spacing={2}
+            w={{ base: "100%", sm: "auto" }}
             flexShrink={0}
-            w={{ base: "100%", md: "auto" }}
-            onClick={() => {
-              window.open(ANDROID_APP_URL, "_blank");
-            }}
           >
-            下载安卓APP
-          </Button>
+            {appDownloads.map((app) => (
+              <Button
+                key={app.url}
+                size={{ base: "md", md: "lg" }}
+                px={{ base: 6, md: 8 }}
+                onClick={() => {
+                  window.open(app.url, "_blank");
+                }}
+              >
+                {app.label}
+              </Button>
+            ))}
+          </Stack>
         </Flex>
       </Card>
 
