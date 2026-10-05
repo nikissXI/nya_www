@@ -159,12 +159,6 @@ export const api = {
     request<string>("/resetPass", { method: "POST", auth: false, body }),
 
   // ---------- 下面这些用 code 表达“是 / 否”，需要自己读 code / msg ----------
-  telExist: (tel: string) =>
-    requestEnvelope<null>("/telExist", { params: { tel }, auth: false }),
-  verifyTEL: (tel: string) =>
-    requestEnvelope<null>("/verifyTEL", { params: { tel }, auth: false }),
-  emailExist: (email: string) =>
-    requestEnvelope<null>("/emailExist", { params: { email }, auth: false }),
   verifyEmail: (email: string) =>
     requestEnvelope<null>("/verifyEmail", { params: { email }, auth: false }),
 
