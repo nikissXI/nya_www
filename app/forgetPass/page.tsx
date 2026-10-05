@@ -146,13 +146,6 @@ export default function Page() {
     }
 
     try {
-      // 这两个接口用 code 表达“是 / 否”，需要自己判断
-      const exist = await api.emailExist(email);
-      if (exist.code === 0) {
-        openToast({ content: "该电子邮箱未被注册", status: "warning" });
-        return false;
-      }
-
       const verify = await api.verifyEmail(email);
       openToast({
         content: verify.msg ?? "服务异常，请联系服主处理",
