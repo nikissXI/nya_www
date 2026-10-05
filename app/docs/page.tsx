@@ -408,6 +408,13 @@ const DocumentPage = () => {
                 已内置WG隧道导入和节点切换功能。客户端刚上线，如果使用有问题请加Q群1047464328找群主反馈
               </Text>
 
+              <Text>
+                客户端下载后是zip压缩包，
+                <HighLight lineHeight="1.8">
+                  右键解压后双击NyaClient.exe启动
+                </HighLight>
+              </Text>
+
               <Button
                 my={2}
                 size="sm"
@@ -417,6 +424,26 @@ const DocumentPage = () => {
               >
                 点击下载Windows客户端
               </Button>
+
+              <Text fontSize="sm" lineHeight="1.8">
+                客户端运行需要安装<strong>.NET</strong>
+                运行环境，第一次启动会提示下载，如果下载失败也可以在这下载
+                <Text
+                  ml={1}
+                  as="span"
+                  fontSize="sm"
+                  color="brand.text"
+                  fontWeight="600"
+                  onClick={() => {
+                    window.open(
+                      "/download/windowsdesktop-runtime-10.0.12-win-x64.exe",
+                      "_blank",
+                    );
+                  }}
+                >
+                  点击下载
+                </Text>
+              </Text>
 
               {/* <WgCommonSteps>
                 <Text>② 下载并安装WG客户端</Text>
