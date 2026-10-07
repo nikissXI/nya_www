@@ -408,13 +408,6 @@ const DocumentPage = () => {
                 已内置WG隧道导入和节点切换功能。客户端刚上线，如果使用有问题请加Q群1047464328找群主反馈
               </Text>
 
-              <Text>
-                客户端下载后是zip压缩包，
-                <HighLight lineHeight="1.8">
-                  右键解压后双击NyaClient.exe启动
-                </HighLight>
-              </Text>
-
               <Button
                 my={2}
                 size="sm"
@@ -426,107 +419,8 @@ const DocumentPage = () => {
               </Button>
 
               <Text fontSize="sm" lineHeight="1.8">
-                客户端运行需要安装<strong>.NET</strong>
-                运行环境，第一次启动会提示下载，如果下载失败也可以在这下载
-                <Text
-                  ml={1}
-                  as="span"
-                  fontSize="sm"
-                  color="brand.text"
-                  fontWeight="600"
-                  onClick={() => {
-                    window.open(
-                      "/download/windowsdesktop-runtime-10.0.12-win-x64.exe",
-                      "_blank",
-                    );
-                  }}
-                >
-                  点击下载
-                </Text>
+                因为没有企业资质，有的浏览器会拦截下载的文件，请自行放行
               </Text>
-
-              {/* <WgCommonSteps>
-                <Text>② 下载并安装WG客户端</Text>
-                <Button
-                  size="sm"
-                  mx={2}
-                  onClick={() => {
-                    window.open(
-                      "/download/wg客户端，解压后双击运行.zip",
-                      "_blank",
-                    );
-                  }}
-                >
-                  点击下载安装包
-                </Button>
-
-                <DocDivider />
-
-                <Box>
-                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}
-                  .conf”
-                </Box>
-                {DownloadButton()}
-
-                <DocDivider />
-
-                <Text>④ 跟着下图操作完成隧道导入，看红字就行</Text>
-
-                <Image
-                  src="/images/wg/win_msi.webp"
-                  alt="win_msi"
-                  borderRadius="md"
-                  w="500px"
-                />
-
-                <Text>
-                  <HighLight fontSize="sm">
-                    点连接如果出现“The system cannot find the file
-                    specified”，检查wireguard的路径是否含有中文
-                  </HighLight>
-                </Text>
-
-                <Text fontSize="sm">
-                  <HighLight>点连接如果出现“隧道错误”的处理方法</HighLight>
-                  <Text
-                    ml={2}
-                    as="span"
-                    color="brand.text"
-                    fontWeight="600"
-                    onClick={() => setShowMSI(!showMSI)}
-                  >
-                    {showMSI ? "点击收起" : "点击查看"}
-                  </Text>
-                </Text>
-
-                <Collapse in={showMSI}>
-                  <Text fontSize="sm">
-                    <Text
-                      as="span"
-                      fontSize="sm"
-                      color="brand.text"
-                      fontWeight="600"
-                      onClick={() => {
-                        window.open(
-                          "/download/右键以管理员身份运行.bat",
-                          "_blank",
-                        );
-                      }}
-                    >
-                      点击下载bat修复文件
-                    </Text>
-                    ，然后右键“以管理员身份运行”修复。如果还是不行，就按下图指引“网络重置”试试
-                  </Text>
-                  <Image
-                    src="/images/wg/network_reset.webp"
-                    alt="network_reset"
-                    borderRadius="md"
-                    w="500px"
-                    mb={10}
-                  /> 
-                </Collapse>
-                </WgCommonSteps>
-                */}
             </TabPanel>
 
             {/* 鸿蒙 */}
@@ -677,7 +571,10 @@ const DocumentPage = () => {
                   size="sm"
                   mx={2}
                   onClick={() => {
-                    window.open("/download/steamDeck_plugin_v0.1.0.zip", "_blank");
+                    window.open(
+                      "/download/steamDeck_plugin_v0.1.0.zip",
+                      "_blank",
+                    );
                   }}
                 >
                   点击下载插件
