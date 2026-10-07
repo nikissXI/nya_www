@@ -5,7 +5,7 @@
  * 发新版只要改这里的版本号；APP 自身带更新检查，会在 APP 里提示用户升级。
  */
 export const ANDROID_APP_VERSION = "0.1.3";
-export const WINDOWS_APP_VERSION = "0.1.0";
+export const WINDOWS_APP_VERSION = "0.1.1";
 
 export const ANDROID_APP_URL = `/download/android_v${ANDROID_APP_VERSION}.apk`;
 export const WINDOWS_APP_URL = `/download/windows_v${WINDOWS_APP_VERSION}.exe`;
