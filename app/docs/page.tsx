@@ -677,7 +677,7 @@ const DocumentPage = () => {
                   size="sm"
                   mx={2}
                   onClick={() => {
-                    window.open("/download/NyaFuWG.zip", "_blank");
+                    window.open("/download/steamDeck_plugin_v0.1.0.zip", "_blank");
                   }}
                 >
                   点击下载插件
