@@ -81,7 +81,7 @@ export default function AuthForm({
     setIsSubmitting(true);
     try {
       const token = await api.login(req_data);
-      openToast({ content: "登陆成功", status: "success" });
+      openToast({ content: "登录成功", status: "success" });
       if (token) setAuthToken(token);
       getUserInfo();
       onSuccess?.();

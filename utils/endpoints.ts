@@ -89,15 +89,15 @@ export interface GetRoomPayload {
 
 export type LoginReqBody = {
   account: string; // 手机或邮箱
-  password: string; // 登陆密码 sha256
+  password: string; // 登录密码 sha256
   uuid: string; // 表单 uuid
   captcha_code: string; // 图片验证码
 };
 export type RegisterReqBody = {
   verifyType: string; // 注册类型：tel 或 email
   account: string; // 手机或邮箱
-  username: string; // 登陆用户名
-  password: string; // 登陆密码 sha256
+  username: string; // 登录用户名
+  password: string; // 登录密码 sha256
   uuid: string; // 表单 uuid
   captcha_code: string; // 图片验证码
   invite_code?: string; // 邀请码

@@ -529,7 +529,7 @@ setUnauthorizedHandler(() => {
   // 并发请求可能同时 401，3 秒内只提示一次
   const now = Date.now();
   if (now - lastAuthToastTime > 3000) {
-    openToast({ content: "登陆凭证失效", status: "warning" });
+    openToast({ content: "登录凭证失效", status: "warning" });
     lastAuthToastTime = now;
   }
 });

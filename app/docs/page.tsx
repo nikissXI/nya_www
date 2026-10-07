@@ -113,7 +113,7 @@ const DocumentPage = () => {
     return (
       <Box>
         ② 安装WG客户端，
-        <HighLight>AppStore要登陆海外账号才能搜到</HighLight>
+        <HighLight>AppStore要登录海外账号才能搜到</HighLight>
         <Text
           ml={2}
           as="span"
@@ -220,7 +220,7 @@ const DocumentPage = () => {
               </Heading>
 
               <Text fontSize="sm" lineHeight="1.8">
-                已内置WG隧道导入和节点切换功能。APP刚上线，如果使用有问题请加Q群1047464328找群主反馈
+                已内置WG隧道导入和节点切换功能。APP刚上线，如果使用有问题请加Q群1047464328找服主反馈
               </Text>
 
               <Button
@@ -405,7 +405,7 @@ const DocumentPage = () => {
               </Heading>
 
               <Text fontSize="sm" lineHeight="1.8">
-                已内置WG隧道导入和节点切换功能。客户端刚上线，如果使用有问题请加Q群1047464328找群主反馈
+                已内置WG隧道导入和节点切换功能。客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
               </Text>
 
               <Button
@@ -420,6 +420,9 @@ const DocumentPage = () => {
 
               <Text fontSize="sm" lineHeight="1.8">
                 因为没有企业资质，有的浏览器会拦截下载的文件，请自行放行
+              </Text>
+              <Text fontSize="sm" lineHeight="1.8">
+                客户端不支持win7及以下系统，如果需要找服主
               </Text>
             </TabPanel>
 
