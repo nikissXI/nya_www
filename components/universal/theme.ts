@@ -84,6 +84,7 @@ const theme = extendTheme({
 
       /* ---------- 文字 ---------- */
       "text.main": { default: "#101828", _dark: "#E9EEF8" },
+      "text.sponsor": { default: "#ff7b00", _dark: "#ffd012" },
       "text.muted": { default: "#475467", _dark: "#A2B0C7" },
       "text.faint": { default: "#7B8798", _dark: "#78889F" },
       "text.inverted": { default: "#FFFFFF", _dark: "#080D18" },

@@ -50,10 +50,8 @@ import {
   getDelayColor,
 } from "@/utils/strings";
 import { RiSignalCellularOffLine } from "react-icons/ri";
-import { IoIosExit } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { NoticeText } from "@/components/universal/Notice";
-import SponsorTag from "@/components/universal/SponsorTag";
 import { shouldSilenceError, type ApiEnvelope } from "@/utils/api";
 import { api } from "@/utils/endpoints";
 import TheEscapistsTool from "@/components/universal/theEscapistsTool";
@@ -845,13 +843,11 @@ export default function Page() {
                     borderColor="border.line"
                   >
                     <Flex align="center" gap={2}>
-                      {item.sponsorship > 0 && (
-                        <SponsorTag amount={item.sponsorship} />
-                      )}
-
                       <Text
                         fontWeight="bold"
-                        color="text.main"
+                        color={
+                          item.sponsorship > 0 ? "text.sponsor" : "text.main"
+                        }
                         isTruncated
                         flex={1}
                         textAlign="left"
