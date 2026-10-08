@@ -13,7 +13,6 @@ import {
   Collapse,
   Image,
   Link,
-  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useUserStateStore } from "@/store/user-state";
@@ -21,20 +20,21 @@ import { openToast } from "@/components/universal/toast";
 import { QRCodeSVG } from "qrcode.react";
 import { MdTipsAndUpdates } from "react-icons/md";
 import { ANDROID_APP_URL, WINDOWS_APP_URL } from "@/utils/appDownload";
-import { NoticeText } from "@/components/universal/Notice";
 import {
   DocCode,
   DocDivider,
   DocNotice,
   HighLight,
 } from "@/components/docs/DocParts";
+import { NeedLogin } from "@/components/docs/NeedLogin";
 import { WgCommonSteps } from "@/components/docs/WgCommonSteps";
 
 const DocumentPage = () => {
   // 逐个字段订阅：store 里房间/延迟等字段会频繁变化，整体解构会让整页（含 6 个设备面板）跟着重渲染
   const userInfo = useUserStateStore((s) => s.userInfo);
   const userWgInfo = useUserStateStore((s) => s.userWgInfo);
-  const openLoginModal = useUserStateStore((s) => s.openLoginModal);
+  // 未登录（或还没建隧道）时拿不到隧道名，用占位文案让各步骤照样读得通
+  const tunnelName = userWgInfo?.tunnel_name ?? "你的隧道名";
 
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
@@ -157,15 +157,15 @@ const DocumentPage = () => {
         ]}
       />
 
-      <Box display={userWgInfo === undefined ? "block" : "none"}>
-        <VStack spacing={3} align="center">
-          <Heading size="md">请登录后再访问该页面</Heading>
-          <Button onClick={openLoginModal}>点击登录</Button>
-          <NoticeText />
-        </VStack>
-      </Box>
+      {/* 未登录也能看完整教程；真正需要账号的步骤就地提示（见 NeedLogin） */}
+      <Box>
+        {!userInfo && (
+          <NeedLogin
+            block
+            text="未登录也能查看安装步骤，但获取隧道文件、切换节点、查看连接状态需要登录"
+          />
+        )}
 
-      <Box display={userWgInfo === undefined ? "none" : "block"}>
         <Tabs variant="unstyled">
           <Heading size="md">点击选择联机的设备类型</Heading>
 
@@ -346,16 +346,23 @@ const DocumentPage = () => {
                         不支持从相册导入二维码，所以自己想办法扫（比如借个设备拍下来再扫），扫不了就选“下载隧道”的方法
                       </HighLight>
 
-                      <Text>
-                        ③ 打开WG，点右上角+号，扫描二维码，隧道名称写&ensp;
-                        {userWgInfo?.tunnel_name}
-                      </Text>
+                      {userWgInfo ? (
+                        <>
+                          <Text>
+                            ③ 打开WG，点右上角+号，扫描二维码，隧道名称写&ensp;
+                            {tunnelName}
+                          </Text>
 
-                      <Box borderWidth={5} borderColor="white" w="min">
-                        {userWgInfo && (
-                          <QRCodeSVG size={256} value={userWgInfo.conf_text} />
-                        )}
-                      </Box>
+                          <Box borderWidth={5} borderColor="white" w="min">
+                            <QRCodeSVG
+                              size={256}
+                              value={userWgInfo.conf_text}
+                            />
+                          </Box>
+                        </>
+                      ) : (
+                        <NeedLogin text="③ 登录后才能生成你的专属隧道二维码" />
+                      )}
                     </TabPanel>
 
                     <TabPanel px={0} pb={0} pt={1}>
@@ -365,14 +372,20 @@ const DocumentPage = () => {
                         如果点了下载没反应就是触发BUG了，等几分钟或换个浏览器再试试
                       </HighLight>
 
-                      <Text>③ 下载隧道文件</Text>
-                      {DownloadButton(true)}
+                      {userWgInfo ? (
+                        <>
+                          <Text>③ 下载隧道文件</Text>
+                          {DownloadButton(true)}
 
-                      <Text pt={1}>
-                        打开浏览器的下载任务列表，点击文件“
-                        {userWgInfo?.tunnel_name}
-                        .conf”，然后点左下角发送到WG，或者直接在WG里导入配置也行
-                      </Text>
+                          <Text pt={1}>
+                            打开浏览器的下载任务列表，点击文件“
+                            {tunnelName}
+                            .conf”，然后点左下角发送到WG，或者直接在WG里导入配置也行
+                          </Text>
+                        </>
+                      ) : (
+                        <NeedLogin text="③ 登录后才能下载你的专属隧道文件" />
+                      )}
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -496,26 +509,39 @@ const DocumentPage = () => {
 
                   <TabPanels>
                     <TabPanel px={0} pb={0} pt={1}>
-                      <Text>
-                        ③
-                        打开WG，点右下角+号，扫描二维码，扫码或从相册导入添加，隧道名称写&ensp;
-                        {userWgInfo?.tunnel_name}
-                      </Text>
+                      {userWgInfo ? (
+                        <>
+                          <Text>
+                            ③
+                            打开WG，点右下角+号，扫描二维码，扫码或从相册导入添加，隧道名称写&ensp;
+                            {tunnelName}
+                          </Text>
 
-                      <Box borderWidth={5} borderColor="white" w="min">
-                        {userWgInfo && (
-                          <QRCodeSVG size={256} value={userWgInfo.conf_text} />
-                        )}
-                      </Box>
+                          <Box borderWidth={5} borderColor="white" w="min">
+                            <QRCodeSVG
+                              size={256}
+                              value={userWgInfo.conf_text}
+                            />
+                          </Box>
+                        </>
+                      ) : (
+                        <NeedLogin text="③ 登录后才能生成你的专属隧道二维码" />
+                      )}
                     </TabPanel>
 
                     <TabPanel px={0} pb={0} pt={1}>
-                      <Text>③ 下载隧道文件</Text>
-                      {DownloadButton(true)}
+                      {userWgInfo ? (
+                        <>
+                          <Text>③ 下载隧道文件</Text>
+                          {DownloadButton(true)}
 
-                      <Text pt={1}>
-                        打开WG，点右下角+号，选择conf导入配置，然后选中下载的隧道文件完成导入
-                      </Text>
+                          <Text pt={1}>
+                            打开WG，点右下角+号，选择conf导入配置，然后选中下载的隧道文件完成导入
+                          </Text>
+                        </>
+                      ) : (
+                        <NeedLogin text="③ 登录后才能下载你的专属隧道文件" />
+                      )}
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -547,10 +573,16 @@ const DocumentPage = () => {
 
                 <DocDivider />
 
-                <Box>
-                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
-                </Box>
-                {DownloadButton()}
+                {userWgInfo ? (
+                  <>
+                    <Box>
+                      ③ 下载隧道文件，文件名为“{tunnelName}.conf”
+                    </Box>
+                    {DownloadButton()}
+                  </>
+                ) : (
+                  <NeedLogin text="③ 登录后才能下载你的专属隧道文件" />
+                )}
 
                 <DocDivider />
 
@@ -589,17 +621,23 @@ const DocumentPage = () => {
 
                 <DocDivider />
 
-                <Box>
-                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
-                </Box>
-                {DownloadButton()}
+                {userWgInfo ? (
+                  <>
+                    <Box>
+                      ③ 下载隧道文件，文件名为“{tunnelName}.conf”
+                    </Box>
+                    {DownloadButton()}
+                  </>
+                ) : (
+                  <NeedLogin text="③ 登录后才能下载你的专属隧道文件" />
+                )}
 
                 <DocDivider />
 
                 <Box>
                   <Text>
                     ④ 回到插件，点击“更新隧道配置”，找到“
-                    {userWgInfo?.tunnel_name}
+                    {tunnelName}
                     .conf”，点击“导入此配置”，最后点击“连接喵服”
                   </Text>
                 </Box>
@@ -621,10 +659,16 @@ const DocumentPage = () => {
 
                 <DocDivider />
 
-                <Box>
-                  ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}.conf”
-                </Box>
-                {DownloadButton()}
+                {userWgInfo ? (
+                  <>
+                    <Box>
+                      ③ 下载隧道文件，文件名为“{tunnelName}.conf”
+                    </Box>
+                    {DownloadButton()}
+                  </>
+                ) : (
+                  <NeedLogin text="③ 登录后才能下载你的专属隧道文件" />
+                )}
 
                 <DocDivider />
 
@@ -633,11 +677,11 @@ const DocumentPage = () => {
                   <br />
                   连接WG隧道执行
                   <DocCode>
-                    wg-quick up ./{userWgInfo?.tunnel_name}.conf
+                    wg-quick up ./{tunnelName}.conf
                   </DocCode>
                   断开则执行
                   <DocCode>
-                    wg-quick down ./{userWgInfo?.tunnel_name}.conf
+                    wg-quick down ./{tunnelName}.conf
                   </DocCode>
                 </Text>
               </WgCommonSteps>

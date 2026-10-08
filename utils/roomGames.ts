@@ -45,8 +45,8 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/doNotStarve/icon.webp",
     qq: "641115719",
     support: [
-      "不支持PC端与移动端联机；安卓可以与苹果联机",
       "苹果只能做主机，无法搜索房间，除非安装改版饥荒能调出控制台",
+      "不支持PC端与移动端联机；安卓可以与苹果联机",
     ],
   },
   {

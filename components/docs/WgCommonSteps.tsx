@@ -7,6 +7,7 @@ import { Button } from "@/components/universal/button";
 import { useUserStateStore } from "@/store/user-state";
 import { getStatusColor } from "@/utils/strings";
 import { DocDivider, HighLight } from "./DocParts";
+import { NeedLogin } from "./NeedLogin";
 
 /**
  * WG 安装教程的公用步骤
@@ -36,16 +37,22 @@ export const WgCommonSteps = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Box>
-      {/* ① 选择节点 */}
-      <Text>
-        ① 当前选择的是&ensp;
-        <HighLight>{userWgInfo?.node_alias}</HighLight>
-        &ensp;节点
-      </Text>
+      {/* ① 选择节点（依赖账号：每个节点对应各自的隧道） */}
+      {userWgInfo ? (
+        <>
+          <Text>
+            ① 当前选择的是&ensp;
+            <HighLight>{userWgInfo.node_alias}</HighLight>
+            &ensp;节点
+          </Text>
 
-      <Button ml={4} onClick={setNodeListModal} size="sm">
-        点击切换节点
-      </Button>
+          <Button ml={4} onClick={setNodeListModal} size="sm">
+            点击切换节点
+          </Button>
+        </>
+      ) : (
+        <NeedLogin text="① 登录后才能选择节点，每个节点对应各自的隧道" />
+      )}
 
       <Text>
         <Icon as={MdTipsAndUpdates} mr={2} />
@@ -67,59 +74,72 @@ export const WgCommonSteps = ({ children }: { children: React.ReactNode }) => {
 
       <DocDivider />
 
-      {/* ⑤ 刷新确认 WG 连接 */}
-      <Text>
-        ⑤ WG隧道打开后<HighLight>等5秒</HighLight>再点刷新
-      </Text>
+      {/* ⑤ 刷新确认 WG 连接（依赖账号：连接状态来自房间数据） */}
+      {userWgInfo ? (
+        <>
+          <Text>
+            ⑤ WG隧道打开后<HighLight>等5秒</HighLight>再点刷新
+          </Text>
 
-      <Flex align="center" mt={1} gap={2}>
-        <Text fontSize={18} fontWeight="bold" color={getStatusColor(isOnline)}>
-          &emsp;{isOnline ? "恭喜！WG已连接" : "WG尚未连接"}
-        </Text>
+          <Flex align="center" mt={1} gap={2}>
+            <Text
+              fontSize={18}
+              fontWeight="bold"
+              color={getStatusColor(isOnline)}
+            >
+              &emsp;{isOnline ? "恭喜！WG已连接" : "WG尚未连接"}
+            </Text>
 
-        <Button
-          bg="transparent"
-          h={5}
-          px={0}
-          disabled={disableFlush}
-          onClick={() => {
-            getRoomData(false);
-          }}
-          color="brand.text"
-        >
-          <Text>刷新</Text>
-          <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
-            <TbReload size={18} />
-          </Box>
-        </Button>
-      </Flex>
+            <Button
+              bg="transparent"
+              h={5}
+              px={0}
+              disabled={disableFlush}
+              onClick={() => {
+                getRoomData(false);
+              }}
+              color="brand.text"
+            >
+              <Text>刷新</Text>
+              <Box animation={rotate ? `${spin} 1s linear infinite` : "none"}>
+                <TbReload size={18} />
+              </Box>
+            </Button>
+          </Flex>
 
-      {isOnline === false && (
-        <Text>
-          &emsp;隧道打开了还是未连接
-          <Button
-            ml={1}
-            variant="link"
-            bg="transparent"
-            color="brand.text"
-            onClick={() => {
-              navigate("/offlineCheck");
-            }}
-          >
-            点我排查
-          </Button>
-        </Text>
+          {isOnline === false && (
+            <Text>
+              &emsp;隧道打开了还是未连接
+              <Button
+                ml={1}
+                variant="link"
+                bg="transparent"
+                color="brand.text"
+                onClick={() => {
+                  navigate("/offlineCheck");
+                }}
+              >
+                点我排查
+              </Button>
+            </Text>
+          )}
+        </>
+      ) : (
+        <NeedLogin text="⑤ 登录后才能刷新查看 WG 连接状态" />
       )}
 
       <DocDivider />
 
       {/* ⑥ 网页关闭不影响联机 */}
       <Text>
-        ⑥ 联机需网页+WG客户端组合使用
+        ⑥ 联机需要网页和WG客户端配合
         <br />
-        网页负责 创建/加入房间
+        网页负责：创建/加入房间
         <br />
-        WG客户端负责 联机通信
+        WG客户端负责：联机通信
+        <br />
+        <HighLight>两者可以不在一台设备上</HighLight>
+        ，比如手机开网页、平板装WG联机
         <br />
         <HighLight>关闭网页不影响联机</HighLight>
       </Text>
