@@ -28,7 +28,7 @@ export default function Page() {
 
       <DocDivider />
 
-      <Heading size="md">原版联机步骤</Heading>
+      <Heading size="md">联机步骤</Heading>
 
       <DocMuted my={1}>
         简单的说，玩家都连上喵服，直接联机就行，不要开其他加速器
@@ -45,15 +45,15 @@ export default function Page() {
       </VStack>
 
       <DocMuted mt={1}>
-        内置的联机功能很烂，某个人网络不稳定或延迟大，会导致全部人一起卡。如果用了喵服还是卡，试试下面的局域网联机mod
+        内置的联机功能很烂，某个人网络不稳定或延迟大，会导致全部人一起卡
       </DocMuted>
 
       <DocDivider />
 
-      <Heading size="md">
-        联机还是很卡？试试安装局域网联机mod
-      </Heading>
-      <DocMuted mt={1}>这个mod刚开发出来没多久，bug较多。可以到以撒群里反馈bug，开发者也在群里。但用这个mod联机能稳定很多</DocMuted>
+      <Heading size="md">试试安装局域网联机mod？</Heading>
+      <DocMuted mt={1}>
+        这个mod刚开发出来没多久，bug较多。可以到以撒群里反馈bug，开发者也在群里。但用这个mod联机能稳定很多
+      </DocMuted>
       <VStack align="stretch" spacing={3}>
         <DocStep step={1} role="安装“以撒：忏悔+”">
           <DocImage
