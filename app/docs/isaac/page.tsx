@@ -51,9 +51,9 @@ export default function Page() {
       <DocDivider />
 
       <Heading size="md">
-        联机还是很卡？试试安装局域网联机mod（强烈建议）
+        联机还是很卡？试试安装局域网联机mod
       </Heading>
-      <DocMuted mt={1}>建议花几分钟安装这个mod，能大幅提升联机体验</DocMuted>
+      <DocMuted mt={1}>这个mod刚开发出来没多久，bug较多。可以到以撒群里反馈bug，开发者也在群里。但用这个mod联机能稳定很多</DocMuted>
       <VStack align="stretch" spacing={3}>
         <DocStep step={1} role="安装“以撒：忏悔+”">
           <DocImage
