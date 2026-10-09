@@ -32,6 +32,12 @@ export default function Page() {
     <Box maxW="900px" mx="auto" pb={5}>
       <Card p={{ base: 4, md: 5 }}>
         <VStack align="stretch" spacing={3}>
+          {(platform === "windows" || platform === "android") && (
+            <Tip>
+              老用户注意！以前的WG客户端要删掉，会与喵服客户端冲突！如果开了WG客户端，删掉后重启电脑，再用喵服客户端连接
+            </Tip>
+          )}
+
           {platform === "web" && (
             <>
               <Tip>
@@ -96,7 +102,9 @@ export default function Page() {
             <Tip>关掉其他游戏加速器或VPN，建议用WiFi/有线网络联机</Tip>
           )}
 
-          <Tip>部分学校的校园网会拦截喵服的流量，连手机热点可进行验证，开热点的时候记得断开WiFi</Tip>
+          <Tip>
+            部分学校的校园网会拦截喵服的流量，连手机热点可进行验证，开热点的时候记得断开WiFi
+          </Tip>
           <Tip>
             大陆外玩家只能用跨境线路节点，节点列表线路筛选，选跨境。国外部分地区用跨境线路节点也连不上，目前已知俄罗斯，这种情况请找服主特殊处理
           </Tip>
