@@ -392,7 +392,7 @@
 
         /* 表单 */
         .form-group {
-            margin: 6px 0px;
+            margin: 6px 0px 0px 0px;
         }
 
         .form-group label {
@@ -485,6 +485,7 @@
         }
 
         .btn-sm {
+            margin-top: 4px;
             padding: 4px 12px;
             font-size: 12px;
         }
@@ -886,7 +887,8 @@
                         </form>
                     </div>
                     <!-- 查绑 -->
-                    <div class="card" style="box-shadow:none;border:1px solid #e2e8f0;padding:8px;">
+                    <div class="card"
+                        style="box-shadow:none;border:1px solid #e2e8f0;padding:16px;">
                         <h4>🔍 查绑</h4>
                         <form id="chabangForm" style="margin-top:8px;">
                             <div class="form-group"><label>类型</label>
@@ -1044,17 +1046,10 @@
                         </form>
                     </div>
                     <div>
-                        <h4>📱 更新APP版本</h4>
-                        <div id="appVersionCurrent"
-                            style="font-size:13px;color:#64748b;margin:6px 0;word-break:break-word;">
-                            当前版本：-</div>
-                        <form id="updateAppVersionForm">
-                            <div class="form-group"><label>平台</label><input name="platform"
-                                    placeholder="android / ios" required></div>
-                            <div class="form-group"><label>最新版本号</label><input name="latestVersion"
-                                    placeholder="如 1.2.3" required></div>
-                            <button type="submit" class="btn btn-primary btn-sm">更新版本</button>
-                            <div class="msg-box" id="updateAppVersionResult"></div>
+                        <h4>📄 客户端数量统计</h4>
+                        <form id="clientTypeCountForm">
+                            <button type="submit" class="btn btn-primary btn-sm">获取数据</button>
+                            <div class="msg-box" id="clientTypeCountResult"></div>
                         </form>
                     </div>
                 </div>
@@ -1440,38 +1435,6 @@
                 }
             }
 
-            function renderAppVersion(data) {
-                const el = document.getElementById('appVersionCurrent');
-                if (!el) return;
-                const appVersion = (data && data.data && data.data.appVersion) || {};
-                const entries = Object.entries(appVersion);
-                if (entries.length === 0) {
-                    el.textContent = '当前版本：暂无记录';
-                } else {
-                    el.textContent = '当前版本：' + entries.map(([p, v]) => `${p} - ${v}`).join('　|　');
-                }
-            }
-
-            document.getElementById('updateAppVersionForm').addEventListener('submit', async function (e) {
-                e.preventDefault();
-                const platform = this.elements['platform'].value.trim();
-                const latestVersion = this.elements['latestVersion'].value.trim();
-                if (!platform || !latestVersion) return;
-                const msgBox = document.getElementById('updateAppVersionResult');
-                try {
-                    const res = await apiFetch(`/updateAppVersion?platform=${encodeURIComponent(platform)}&latestVersion=${encodeURIComponent(latestVersion)}`);
-                    if (res.code === 0) {
-                        showMsg(msgBox, '✅ ' + res.msg, 'success');
-                        // 更新成功后刷新当前版本展示
-                        loadDashboard();
-                    } else {
-                        showMsg(msgBox, '❌ ' + res.msg, 'error');
-                    }
-                } catch (err) {
-                    showMsg(msgBox, '❌ 请求失败: ' + err.message, 'error');
-                }
-            });
-
             // ---- 仪表盘 ----
             async function loadDashboard(data) {
                 if (!isAuthed) return;
@@ -1496,7 +1459,6 @@
                     const nodes = d.nodes || [];
                     currentNodes = nodes;
                     renderNodes(nodes);
-                    renderAppVersion(data);
                 } catch (err) {
                     showMsgPermanent(document.getElementById('statusTime'), '加载状态失败: ' + err.message, 'error');
                 }
@@ -1990,6 +1952,22 @@
                 const msgBox = document.getElementById('confGetResult');
                 try {
                     const res = await apiFetch(`/confGet?ip=${encodeURIComponent(ip)}`);
+                    if (res.code === 0) {
+                        showMsgPermanent(msgBox, '📄 ' + res.msg, 'info');
+                    } else {
+                        showMsgPermanent(msgBox, '❌ ' + res.msg, 'error');
+                    }
+                } catch (err) {
+                    showMsgPermanent(msgBox, '❌ 请求失败: ' + err.message, 'error');
+                }
+            });
+
+            // 客户端数量统计
+            document.getElementById('clientTypeCountForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const msgBox = document.getElementById('clientTypeCountResult');
+                try {
+                    const res = await apiFetch(`/getClientTypeCount`);
                     if (res.code === 0) {
                         showMsgPermanent(msgBox, '📄 ' + res.msg, 'info');
                     } else {
