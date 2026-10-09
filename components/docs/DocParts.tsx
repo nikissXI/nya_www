@@ -132,7 +132,7 @@ export const DocTip = ({ children }: { children: React.ReactNode }) => (
       flexShrink={0}
       mt="3px"
     />
-    <Text fontSize="sm" color="text.muted" lineHeight="1.8" as="div" minW={0}>
+    <Text fontSize="sm" color="text.main" lineHeight="1.8" as="div" minW={0}>
       {children}
     </Text>
   </Flex>

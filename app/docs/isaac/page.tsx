@@ -1,7 +1,15 @@
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
-import { DocDivider, DocMuted, DocStep, DocTip, DocTips, ExtLink } from "@/components/docs/DocParts";
+import {
+  DocDivider,
+  DocImage,
+  DocMuted,
+  DocStep,
+  DocTip,
+  DocTips,
+  ExtLink,
+} from "@/components/docs/DocParts";
 
 export default function Page() {
   return (
@@ -20,7 +28,7 @@ export default function Page() {
 
       <DocDivider />
 
-      <Heading size="md">联机步骤</Heading>
+      <Heading size="md">原版联机步骤</Heading>
 
       <DocMuted my={1}>
         简单的说，玩家都连上喵服，直接联机就行，不要开其他加速器
@@ -36,20 +44,84 @@ export default function Page() {
         </DocStep>
       </VStack>
 
+      <DocMuted mt={1}>
+        内置的联机功能很烂，如果用了喵服还是卡，就看下面的局域网联机mod
+      </DocMuted>
+
       <DocDivider />
 
-      <Heading size="md" mb={3}>
-        联机还是很卡？
+      <Heading size="md">
+        联机还是很卡？试试安装局域网联机mod（强烈建议）
       </Heading>
+      <DocMuted mt={1}>建议花几分钟安装这个mod，能大幅提升联机体验</DocMuted>
+      <VStack align="stretch" spacing={3}>
+        <DocStep step={1} role="安装“以撒：忏悔+”">
+          <DocImage
+            w="600px"
+            src="/images/isaac/mod_install_1.webp"
+            alt="hoster1"
+          />
+          <DocImage
+            w="600px"
+            src="/images/isaac/mod_install_2.webp"
+            alt="hoster1"
+          />
+          <DocImage
+            w="600px"
+            src="/images/isaac/mod_install_3.webp"
+            alt="hoster1"
+          />
+        </DocStep>
 
-      <DocTips>
-        <DocTip>
-          这游戏需要所有玩家延迟都低才行，其中一个人卡其他人也会跟着卡，可以尝试调整输入延迟，或把卡比踢了吧（手动狗头）
-        </DocTip>
-        <DocTip>
-          进以撒群找服主检查联机流量是否走了喵服，有时候流量不走喵服
-        </DocTip>
-      </DocTips>
+        <DocStep step={2} role="下载、安装局域网联机mod">
+          <Text>
+            由社区大佬制作，mod的下载地址
+            <ExtLink href="https://github.com/BMingSY/isaac-lan/releases/tag/v0.2.0">
+              点击跳转github下载
+            </ExtLink>
+            <br />
+            如果打不开github也可以在这里下载，但不一定是最新版，当前版本v0.2.0
+            <ExtLink href="/download/Isaac-LAN-v0.2.0-windows-x86.zip">
+              点击下载联机mod
+            </ExtLink>
+          </Text>
+
+          <Text>
+            1. 下载后解压，运行 Install.cmd
+            <br />
+            2. 保持游戏是关闭状态，选择游戏目录中的 isaac-ng.exe
+            <br />
+            3. 从 Steam 正常启动游戏，选择存档栏，进入 ONLINE／在线联机 →
+            局域网联机
+          </Text>
+        </DocStep>
+
+        <DocStep step={3} role="主机">
+          <Text>一名玩家作为主机，局域网联机里选创建房间，等就行了</Text>
+          <DocMuted mt={1}>
+            如果客机加入失败，关闭防火墙再试试
+            <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
+              不会关点我
+            </ExtLink>
+          </DocMuted>
+          <DocImage
+            w="600px"
+            src="/images/isaac/mod_install_4.webp"
+            alt="hoster1"
+          />
+        </DocStep>
+
+        <DocStep step={4} role="客机">
+          <Text>
+            其他玩家作为客机，局域网联机里选输入房主IP，然后填主机的喵服IP，加入房间
+          </Text>
+          <DocImage
+            w="600px"
+            src="/images/isaac/mod_install_5.webp"
+            alt="hoster1"
+          />
+        </DocStep>
+      </VStack>
 
       <DocDivider />
 
