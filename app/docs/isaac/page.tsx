@@ -45,7 +45,7 @@ export default function Page() {
       </VStack>
 
       <DocMuted mt={1}>
-        内置的联机功能很烂，如果用了喵服还是卡，就看下面的局域网联机mod
+        内置的联机功能很烂，某个人网络不稳定或延迟大，会导致全部人一起卡。如果用了喵服还是卡，试试下面的局域网联机mod
       </DocMuted>
 
       <DocDivider />
