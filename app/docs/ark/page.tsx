@@ -19,10 +19,6 @@ export default function Page() {
         "2-3人联机时，建议选择带宽不低于0.5M的联机节点，人更多时选择更大带宽节点",
       ]}
     >
-      <Text>这里只有手游的联机教程，如果是端游请找服主</Text>
-
-      <DocDivider />
-
       <Text textAlign="center"></Text>
 
       <Text>喵服方舟手游交流Q群 1106534252</Text>
@@ -30,15 +26,20 @@ export default function Page() {
 
       <DocDivider />
 
-      <Heading size="md">联机步骤</Heading>
-
-      <DocMuted my={1}>
+      <Text>这里只有手游的联机教程，如果是端游请找服主</Text>
+      <Text my={1}>
         手游需要使用
         <ExtLink href="https://space.bilibili.com/597869160">
           琳星Lin-C
         </ExtLink>{" "}
         制作的版本，群文件里可下载
-      </DocMuted>
+      </Text>
+
+      <DocDivider />
+
+      <Heading size="md" mb={2}>
+        联机步骤
+      </Heading>
 
       <VStack align="stretch" spacing={3}>
         <DocStep step={1} role="主机">
@@ -56,6 +57,7 @@ export default function Page() {
             <DocCode>admincheat open 主机喵服IP</DocCode>
             比如主机喵服IP是100.64.0.1
             <DocCode>admincheat open 100.64.0.1</DocCode>
+            注意命令里的open左右都要加空格
           </Text>
         </DocStep>
       </VStack>
