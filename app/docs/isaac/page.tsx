@@ -76,12 +76,12 @@ export default function Page() {
         <DocStep step={2} role="下载、安装局域网联机mod">
           <Text>
             由社区大佬制作，mod的下载地址
-            <ExtLink href="https://github.com/BMingSY/isaac-lan/releases/tag/v0.2.0">
+            <ExtLink href="https://github.com/BMingSY/isaac-lan/releases">
               点击跳转github下载
             </ExtLink>
             <br />
-            如果打不开github也可以在这里下载，但不一定是最新版，当前版本v0.2.0
-            <ExtLink href="/download/Isaac-LAN-v0.2.0-windows-x86.zip">
+            如果打不开github也可以在这里下载，但不一定是最新版，当前版本v0.2.1
+            <ExtLink href="/download/Isaac-LAN-v0.2.1-windows-x86.zip">
               点击下载联机mod
             </ExtLink>
           </Text>
