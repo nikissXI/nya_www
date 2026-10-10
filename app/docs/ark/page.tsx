@@ -52,6 +52,9 @@ export default function Page() {
         </DocStep>
 
         <DocStep step={2} role="客机">
+          <DocMuted>
+            控制台打开方法：进单机地图后，左上角打开菜单，点控制台命令
+          </DocMuted>
           <Text>
             其他玩家作为客机，打开游戏控制台，输入命令加入游戏，格式如下
             <DocCode>admincheat open 主机喵服IP</DocCode>
