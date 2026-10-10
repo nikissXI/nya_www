@@ -92,11 +92,9 @@ export default function Page() {
             </Tip>
           )}
 
-          {(platform === "web" || platform === "android") && (
-            <Tip>
-              确保玩家自己联机设备的网络足够稳定，任一方网络卡顿都会导致联机卡顿
-            </Tip>
-          )}
+          <Tip>
+            确保玩家自己联机设备的网络足够稳定，任一方网络卡顿都会导致联机卡顿
+          </Tip>
 
           {platform === "windows" && (
             <Tip>关掉其他游戏加速器或VPN，建议用WiFi/有线网络联机</Tip>
@@ -105,9 +103,12 @@ export default function Page() {
           <Tip>
             部分学校的校园网会拦截喵服的流量，连手机热点可进行验证，开热点的时候记得断开WiFi
           </Tip>
+
           <Tip>
             大陆外玩家只能用跨境线路节点，节点列表线路筛选，选跨境。国外部分地区用跨境线路节点也连不上，目前已知俄罗斯，这种情况请找服主特殊处理
           </Tip>
+
+          <Tip>还是解决不了就找服主问问，QQ1299577815</Tip>
         </VStack>
       </Card>
 
