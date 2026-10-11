@@ -379,14 +379,14 @@ const DocumentPage = () => {
 
                           <Image
                             my={1}
-                            h="160px"
+                            w="400px"
                             src="/images/wg/ios_import1.webp"
                             alt="ios_import1"
                           />
 
                           <Image
                             my={1}
-                            h="160px"
+                            w="400px"
                             src="/images/wg/ios_import2.webp"
                             alt="ios_import2"
                           />
