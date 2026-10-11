@@ -39,7 +39,7 @@ const DocumentPage = () => {
   const [showAndroidDLWarning, setAndroidDLWarning] = useState(false);
   const [showXM, setShowXM] = useState(false);
   const [showIOSID, setShowIOSID] = useState(false);
-  const [showMSI, setShowMSI] = useState(false);
+  const [showWIN7, setShowWIN7] = useState(false);
 
   const GenConfFile = (conf_text: string) => {
     try {
@@ -457,8 +457,72 @@ const DocumentPage = () => {
                 因为没有企业资质，有的浏览器会拦截下载的文件，请自行放行
               </Text>
               <Text fontSize="sm" lineHeight="1.8">
-                客户端不支持win7及以下系统，如果需要找服主
+                喵服客户端不支持win7及以下系统，如果非要用喵服
+                <Text
+                  ml={2}
+                  as="span"
+                  color="brand.text"
+                  fontWeight="600"
+                  size="sm"
+                  onClick={() => setShowWIN7(!showWIN7)}
+                >
+                  {showWIN7 ? "点击收起" : "点我查看win7接入喵服"}
+                </Text>
               </Text>
+              <Collapse in={showWIN7}>
+                <Box
+                  borderColor="text.main"
+                  borderWidth={2}
+                  borderRadius={10}
+                  padding={2}
+                >
+                  <Heading size="md" my={1}>
+                    Win7接入喵服教程
+                  </Heading>
+
+                  <WgCommonSteps>
+                    <Text>② 下载并安装WG客户端</Text>
+                    <Button
+                      size="sm"
+                      mx={2}
+                      onClick={() => {
+                        window.open(
+                          "/download/wg客户端，解压后双击运行.zip",
+                          "_blank",
+                        );
+                      }}
+                    >
+                      点击下载安装包
+                    </Button>
+
+                    <DocDivider />
+
+                    <Box>
+                      ③ 下载隧道文件，文件名为“{userWgInfo?.tunnel_name}
+                      .conf”
+                    </Box>
+                    {DownloadButton()}
+
+                    <DocDivider />
+
+                    <Text>④ 跟着下图操作完成隧道导入，看红字就行</Text>
+
+                    <Image
+                      src="/images/wg/win7_import.webp"
+                      alt="win7_import"
+                      borderRadius="md"
+                      w="500px"
+                    />
+
+                    <Text>
+                      <HighLight fontSize="sm">
+                        点连接如果出现“The system cannot find the file
+                        specified”，检查wireguard的路径是否含有中文
+                      </HighLight>
+                    </Text>
+                  </WgCommonSteps>
+                </Box>
+              </Collapse>
             </TabPanel>
 
             {/* 鸿蒙 */}
