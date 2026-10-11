@@ -63,9 +63,7 @@ interface ILoginStateSlice {
    * @param net 节点负载，-1（故障）时直接返回 0，不做测速
    * @param auto true 时只测一遍（房间页用，请求更轻）；false 时测两遍、必要时再补一遍取最小值
    *
-   * 优先用资源计时里的服务端响应耗时；拿不到条目时退回整段请求耗时，不会因此判失败。
-   * 超时由 AbortController 真断请求（不留下挂着的连接），网络层失败（Safari 的
-   * 「Load failed」）自动重试一次；auto 时的失败不弹提示，交给房间页统一处理
+   * 优先用资源计时里的服务端响应耗时；拿不到条目时退回整段请求耗时，不会因此判失败
    */
   getNodeLatency: (
     node_alias: string,
@@ -233,83 +231,51 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
         const statusUrl = `https://${ping_host}/ping`;
 
-        /**
-         * 测一次（真实发请求）。
-         * ------------------------------------------------------------------
-         * 超时必须由 AbortController 真的把请求断掉：原来只做 Promise.race，
-         * 上层 3 秒后就拿到「超时」继续往下走，但那条 fetch 还挂在浏览器里，
-         * 要等系统自己的连接超时（约 1 分钟）才释放。
-         * 节点列表一次要 ping 34 个域名（并发多个），iOS Safari 的连接 / DNS
-         * 额度比桌面小得多，挂着的请求会把额度占满，之后新请求直接失败 ——
-         * WebKit 把这种网络层失败报成「Load failed」（Chrome 是「Failed to fetch」），
-         * 这就是手机上「部分节点概率性 Load failed、等 1 分钟又自己好了」的来源。
-         */
-        const pingOnce = async (timeout: number): Promise<number> => {
-          const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), timeout);
-
-          try {
-            // no-store 保证每次都是真实请求，否则命中缓存会读到旧的 performance 条目
-            const start = performance.now();
-            const resp = await fetch(statusUrl, {
-              cache: "no-store",
-              signal: controller.signal,
-            });
-            // 整段请求耗时：拿不到资源计时条目时的兜底值
-            const requestTime = performance.now() - start;
-
-            if (!resp.ok) {
-              throw new Error(`${node_alias}节点获取延迟出错`);
-            }
-
-            // 把（0 字节的）响应体读完：只 fetch 不读 body 时浏览器会当成请求被取消，
-            // Chromium 直接报 net::ERR_ABORTED，等于每次测速都白重置一次连接 / HTTP/2 流，
-            // 手机上几十个域名并发测速时没必要留这种脏收尾
-            await resp.arrayBuffer();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-
-            // 同一个 URL 的条目按时间顺序追加，最后一条即本次请求
-            const lastEntry = performance
-              .getEntriesByName(statusUrl)
-              .at(-1) as PerformanceResourceTiming | undefined;
-
-            // 优先用服务端响应耗时（responseStart - requestStart，不含建连/下载，
-            // 更接近节点到你的延迟）；但它不一定有：缓冲区写满时新条目会被静默丢弃，
-            // 跨域节点没回 Timing-Allow-Origin 时这两个时间点又都是 0。
-            // 这些情况退回整段请求耗时，别让测速直接失败
-            const responseTime = lastEntry
-              ? lastEntry.responseStart - lastEntry.requestStart
-              : 0;
-
-            // 两种取值都可能 <1ms，向上取到 1，否则会被上层当成「无效测量（0）」
-            const delay = Math.max(
-              1,
-              Math.floor(responseTime > 0 ? responseTime : requestTime),
-            );
-            return Math.min(delay, 999);
-          } finally {
-            // 请求已结束，定时器同时回收（原来的 race 写法不会清）
-            clearTimeout(timer);
-          }
-        };
-
         const singlePing = async (first: boolean = false): Promise<number> => {
           try {
-            return await pingOnce(first ? 3000 : 1000);
+            const timeout = first ? 3000 : 1000;
+            const timeoutPromise = new Promise<number>((_, reject) =>
+              setTimeout(() => reject(new Error("请求超时")), timeout),
+            );
+
+            const pingPromise = (async () => {
+              // no-store 保证每次都是真实请求，否则命中缓存会读到旧的 performance 条目
+              const start = performance.now();
+              const resp = await fetch(statusUrl, { cache: "no-store" });
+              // 整段请求耗时：拿不到资源计时条目时的兜底值
+              const requestTime = performance.now() - start;
+
+              if (!resp.ok) {
+                throw new Error(`${node_alias}节点获取延迟出错`);
+              }
+              await new Promise((resolve) => setTimeout(resolve, 100));
+
+              // 同一个 URL 的条目按时间顺序追加，最后一条即本次请求
+              const lastEntry = performance
+                .getEntriesByName(statusUrl)
+                .at(-1) as PerformanceResourceTiming | undefined;
+
+              // 优先用服务端响应耗时（responseStart - requestStart，不含建连/下载，
+              // 更接近节点到你的延迟）；但它不一定有：缓冲区写满时新条目会被静默丢弃，
+              // 跨域节点没回 Timing-Allow-Origin 时这两个时间点又都是 0。
+              // 这些情况退回整段请求耗时，别让测速直接失败
+              const responseTime = lastEntry
+                ? lastEntry.responseStart - lastEntry.requestStart
+                : 0;
+
+              // 两种取值都可能 <1ms，向上取到 1，否则会被上层当成「无效测量（0）」
+              const delay = Math.max(
+                1,
+                Math.floor(responseTime > 0 ? responseTime : requestTime),
+              );
+              return Math.min(delay, 999);
+            })();
+
+            return await Promise.race([pingPromise, timeoutPromise]);
           } catch (error) {
-            // 自己 abort 的（即超时）→ 999，让上层按超时处理
-            if ((error as { name?: string } | null)?.name === "AbortError") {
+            if (error instanceof Error && error.message === "请求超时") {
               return 999;
             }
-
-            // fetch 在网络层失败抛的是 TypeError（Safari「Load failed」/ Chrome
-            // 「Failed to fetch」）：移动网络下多是瞬时的 DNS / TLS / 连接失败，
-            // 隔 300ms 重试一次基本就能过；再失败才交给上层提示
-            if (error instanceof TypeError) {
-              await new Promise((resolve) => setTimeout(resolve, 300));
-              return await pingOnce(1000);
-            }
-
             throw error;
           }
         };
@@ -345,20 +311,12 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           return minDelay;
         } catch (error) {
-          // 改动：减少错误 Toast，使用防抖
-          // fetch 在网络层失败时抛的是 TypeError，message 是浏览器给的英文
-          // （Safari「Load failed」/ Chrome「Failed to fetch」），直接弹给用户看不懂，
-          // 换成和 utils/api.ts 一致的中文文案
-          const content =
-            error instanceof TypeError
-              ? `${node_alias}节点连接失败，请检查网络后重试`
-              : error instanceof Error
-                ? error.message
-                : "节点延迟测量失败";
-
-          // auto 是房间页在用（5 秒轮询 + 手动刷新）：后台轮询要完全静默，
-          // 手动刷新时房间页自己会提示，不该再被网络错误弹窗刷屏
-          if (!auto) showErrorToast(content);
+          // 节点不通 / 被网络（CORS、无网、路由抖动）拦掉时 fetch 会直接 reject，
+          // Safari 的报错文案就是「Load failed」——这种失败概率性出现且不影响联机，
+          // 直接抛原文只会让用户以为网站坏了，这里统一换成一句人话；
+          // 原始错误留在 console，方便排查是哪个节点出的问题
+          console.warn(`节点延迟测量失败（${node_alias}）`, error);
+          showErrorToast("延迟获取失败，但不影响联机");
 
           set(
             produce((draft) => {
@@ -391,8 +349,6 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             nodeMap: new Map<string, NodeInfo>(nodes.map((n) => [n.alias, n])),
           });
 
-          // 一批并发几个：34 个节点就是 34 个不同域名，手机浏览器（尤其 iOS Safari）
-          // 同时开太多连接 / DNS 查询会让部分请求直接失败，这里压到 6 个一批
           const batchSize = 6;
           for (let i = 0; i < nodes.length; i += batchSize) {
             const batch = nodes.slice(i, i + batchSize);
