@@ -51,7 +51,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
   },
   {
     path: "/docs/slayTheSpire",
-    title: "杀戮尖塔",
+    title: "杀戮尖塔2",
     icon: "/images/slayTheSpire/icon.webp",
     qq: "698892019",
     support: [
