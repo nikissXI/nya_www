@@ -315,8 +315,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // Safari 的报错文案就是「Load failed」——这种失败概率性出现且不影响联机，
           // 直接抛原文只会让用户以为网站坏了，这里统一换成一句人话；
           // 原始错误留在 console，方便排查是哪个节点出的问题
-          console.warn(`节点延迟测量失败（${node_alias}）`, error);
-          showErrorToast("延迟获取失败，但不影响联机");
+          showErrorToast(`${node_alias}延迟测量失败（${error}）`);
 
           set(
             produce((draft) => {
