@@ -114,17 +114,6 @@ interface ILoginStateSlice {
 }
 export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
   (set, get) => {
-    // 内部工具：用于限制 Toast 重复
-    let lastToastTime = 0;
-    const showErrorToast = (content: string) => {
-      const now = Date.now();
-      if (now - lastToastTime > 3000) {
-        // 3秒内只弹一次
-        openToast({ content, status: "error" });
-        lastToastTime = now;
-      }
-    };
-
     return {
       uuid: "",
 
@@ -315,7 +304,11 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
           // Safari 的报错文案就是「Load failed」——这种失败概率性出现且不影响联机，
           // 直接抛原文只会让用户以为网站坏了，这里统一换成一句人话；
           // 原始错误留在 console，方便排查是哪个节点出的问题
-          showErrorToast(`${node_alias}延迟测量失败（${error}）`);
+          if (!auto)
+            openToast({
+              content: `${node_alias}获取延迟失败（不影响联机）`,
+              status: "error",
+            });
 
           set(
             produce((draft) => {
@@ -348,7 +341,7 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
             nodeMap: new Map<string, NodeInfo>(nodes.map((n) => [n.alias, n])),
           });
 
-          const batchSize = 6;
+          const batchSize = 10;
           for (let i = 0; i < nodes.length; i += batchSize) {
             const batch = nodes.slice(i, i + batchSize);
             await Promise.all(

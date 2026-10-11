@@ -69,7 +69,13 @@ export interface NodeInfo {
   node_desc: string; // 节点描述
   ping_host: string; // 用于获取节点延迟的域名
   sponsor: boolean; // 是否赞助专用节点
-  delay: number; // 网络延迟，单位ms
+  /**
+   * 网络延迟，单位ms。
+   * ⚠️ 节点列表接口**不返回**这个字段：前端测速（getNodeLatency）后才写进 store 的 nodeMap。
+   *   undefined = 还没测到（UI 显示转圈）
+   *   0 = 测速失败（UI 显示 "? ? ?"）
+   */
+  delay?: number;
 }
 /** /userInfo 的 data */
 export interface UserInfoPayload {

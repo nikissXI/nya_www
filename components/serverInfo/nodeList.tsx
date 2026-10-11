@@ -56,8 +56,19 @@ function sortNodes(
     if (!aOffline && bOffline) return -1;
 
     if (sortBy === "delay") {
-      if (a.delay === undefined) return 1;
-      if (b.delay === undefined) return -1;
+      // 0 = 测速失败（UI 显示 "? ? ?"），沉到底部，但仍在离线节点之前
+      const aFailed = a.delay === 0;
+      const bFailed = b.delay === 0;
+      if (aFailed && !bFailed) return 1;
+      if (!aFailed && bFailed) return -1;
+
+      // undefined = 还没测到（列表接口不返回 delay，测完才写入），
+      // 排在已测到的之后、测速失败的之前；两者都是同一个东西时保持原顺序
+      if (a.delay === undefined || b.delay === undefined) {
+        if (a.delay === undefined && b.delay === undefined) return 0;
+        return a.delay === undefined ? 1 : -1;
+      }
+
       return sortOrder === "asc" ? a.delay - b.delay : b.delay - a.delay;
     } else if (sortBy === "net") {
       return sortOrder === "asc" ? a.net - b.net : b.net - a.net;
@@ -126,7 +137,7 @@ const ServerNodeItem: React.FC<{
             openToast({ content: "已经在使用该节点", status: "info" });
             return;
           }
-          setNodeListModal()
+          setNodeListModal();
           selectNode(node.alias);
         }}
       >
@@ -177,10 +188,16 @@ const ServerNodeItem: React.FC<{
             value={
               node.delay !== undefined ? (
                 <Text as="span" className="tabular">
-                  {node.delay}
-                  <Text as="span" fontSize="xs" ml="1px">
-                    ms
-                  </Text>
+                  {node.delay === 0 ? (
+                    <Text as="span" color="warning.text">? ? ?</Text>
+                  ) : (
+                    <>
+                      {node.delay}
+                      <Text as="span" fontSize="xs" ml="1px">
+                        ms
+                      </Text>
+                    </>
+                  )}
                 </Text>
               ) : (
                 <Icon

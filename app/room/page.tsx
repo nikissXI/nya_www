@@ -1114,9 +1114,21 @@ export default function Page() {
                 {isOnline && latency !== undefined ? (
                   <Flex align="center" color={getDelayColor(latency)}>
                     {getDelayIcon(latency)}
-                    <Text as="span" fontWeight="bold" ml={0.5}>
-                      {latency}ms
-                    </Text>
+
+                    {latency === 0 ? (
+                      <Text
+                        as="span"
+                        fontWeight="bold"
+                        color="warning.text"
+                        ml={1}
+                      >
+                        ? ? ?
+                      </Text>
+                    ) : (
+                      <Text as="span" fontWeight="bold" ml={0.5}>
+                        {latency}ms
+                      </Text>
+                    )}
                   </Flex>
                 ) : (
                   <Icon as={RiSignalCellularOffLine} color="text.faint" />
