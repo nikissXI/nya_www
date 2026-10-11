@@ -368,20 +368,42 @@ const DocumentPage = () => {
                     <TabPanel px={0} pb={0} pt={1}>
                       <HighLight fontSize="sm">
                         建议使用Safari浏览器访问网站再下载
-                        <br />
-                        如果点了下载没反应就是触发BUG了，等几分钟或换个浏览器再试试
+                        {/* <br /> */}
+                        {/* 如果点了下载没反应就是触发BUG了，等几分钟或换个浏览器再试试 */}
                       </HighLight>
 
                       {userWgInfo ? (
                         <>
-                          <Text>③ 下载隧道文件</Text>
+                          <Text>③ 下载并导入隧道文件（看图操作）</Text>
                           {DownloadButton(true)}
 
-                          <Text pt={1}>
-                            打开浏览器的下载任务列表，点击文件“
-                            {tunnelName}
-                            .conf”，然后点左下角发送到WG，或者直接在WG里导入配置也行
-                          </Text>
+                          <Image
+                            my={1}
+                            h="160px"
+                            src="/images/wg/ios_import1.webp"
+                            alt="ios_import1"
+                          />
+
+                          <Image
+                            my={1}
+                            h="160px"
+                            src="/images/wg/ios_import2.webp"
+                            alt="ios_import2"
+                          />
+
+                          <Image
+                            my={1}
+                            w="400px"
+                            src="/images/wg/ios_import3.webp"
+                            alt="ios_import3"
+                          />
+
+                          <Image
+                            my={1}
+                            w="400px"
+                            src="/images/wg/ios_import4.webp"
+                            alt="ios_import4"
+                          />
                         </>
                       ) : (
                         <NeedLogin text="③ 登录后才能下载你的专属隧道文件" />
@@ -401,9 +423,9 @@ const DocumentPage = () => {
                     alt="iOS_switch"
                   />
                 </Flex>
-                <Text fontSize="sm">
-                  如果出现DBS解析失败，设备断网再联网试试
-                </Text>
+                <HighLight fontSize="sm">
+                  如果提示DBS解析失败，设备断网再联网试试
+                </HighLight>
               </WgCommonSteps>
             </TabPanel>
 
@@ -575,9 +597,7 @@ const DocumentPage = () => {
 
                 {userWgInfo ? (
                   <>
-                    <Box>
-                      ③ 下载隧道文件，文件名为“{tunnelName}.conf”
-                    </Box>
+                    <Box>③ 下载隧道文件，文件名为“{tunnelName}.conf”</Box>
                     {DownloadButton()}
                   </>
                 ) : (
@@ -588,6 +608,9 @@ const DocumentPage = () => {
 
                 <Box>
                   <Text>④ 运行WG，跟着下图操作完成隧道导入，看红字就行</Text>
+                  <HighLight fontSize="sm">
+                    如果提示DBS解析失败，设备断网再联网试试
+                  </HighLight>
                   <Image
                     src="/images/wg/mac.webp"
                     alt="mac"
@@ -623,9 +646,7 @@ const DocumentPage = () => {
 
                 {userWgInfo ? (
                   <>
-                    <Box>
-                      ③ 下载隧道文件，文件名为“{tunnelName}.conf”
-                    </Box>
+                    <Box>③ 下载隧道文件，文件名为“{tunnelName}.conf”</Box>
                     {DownloadButton()}
                   </>
                 ) : (
@@ -661,9 +682,7 @@ const DocumentPage = () => {
 
                 {userWgInfo ? (
                   <>
-                    <Box>
-                      ③ 下载隧道文件，文件名为“{tunnelName}.conf”
-                    </Box>
+                    <Box>③ 下载隧道文件，文件名为“{tunnelName}.conf”</Box>
                     {DownloadButton()}
                   </>
                 ) : (
@@ -676,13 +695,9 @@ const DocumentPage = () => {
                   ④ 在命令行打开隧道文件的目录
                   <br />
                   连接WG隧道执行
-                  <DocCode>
-                    wg-quick up ./{tunnelName}.conf
-                  </DocCode>
+                  <DocCode>wg-quick up ./{tunnelName}.conf</DocCode>
                   断开则执行
-                  <DocCode>
-                    wg-quick down ./{tunnelName}.conf
-                  </DocCode>
+                  <DocCode>wg-quick down ./{tunnelName}.conf</DocCode>
                 </Text>
               </WgCommonSteps>
             </TabPanel>
