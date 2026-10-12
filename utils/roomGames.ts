@@ -45,7 +45,7 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     icon: "/images/doNotStarve/icon.webp",
     qq: "641115719",
     support: [
-      "苹果只能做主机，无法搜索房间，除非安装改版饥荒能调出控制台",
+      "苹果只能做主机，无法搜索房间。如果只能苹果做主机，请去使用UU加速器的云联机，或者安装第三方饥荒调出控制台加入",
       "不支持PC端与移动端联机；安卓可以与苹果联机",
     ],
   },

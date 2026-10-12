@@ -15,13 +15,19 @@ export default function Page() {
   return (
     <DocBox
       notices={[
-        "苹果只能做主机，无法搜索房间，除非安装改版饥荒能调出控制台",
+        "苹果只能做主机，无法搜索房间。如果只能苹果做主机，请去使用UU加速器的云联机，或者安装第三方饥荒调出控制台加入",
         "不支持PC端与移动端联机；安卓可以与苹果联机",
         "2-3人联机时，建议选择带宽不低于0.5M的联机节点，人更多时选择更大带宽节点",
       ]}
     >
       <Text>喵服饥荒联机版交流Q群 641115719</Text>
       <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
+
+      <DocDivider />
+
+      <Text color="warning.text">
+        再次提醒！苹果只能做主机，无法搜索房间。如果只能苹果做主机，请去使用UU加速器的云联机，或者安装第三方饥荒调出控制台加入
+      </Text>
 
       <DocDivider />
 
@@ -51,9 +57,6 @@ export default function Page() {
 
           <DocMuted mt={2}>
             端游按“~”键打开控制台；原版手游没有控制台，需要第三方版本
-          </DocMuted>
-          <DocMuted mt={2}>
-            iOS的饥荒无法搜索房间，只能通过控制台的命令加入
           </DocMuted>
         </DocStep>
       </VStack>
