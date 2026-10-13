@@ -8,5 +8,4 @@ export const ANDROID_APP_VERSION = "0.1.5";
 export const WINDOWS_APP_VERSION = "0.1.6";
 
 export const ANDROID_APP_URL = `/download/android_v${ANDROID_APP_VERSION}.apk`;
-export const WINDOWS_APP_URL = `/download/windows_v${WINDOWS_APP_VERSION}.exe`;
- 
+export const WINDOWS_APP_URL = `/download/windows_v${WINDOWS_APP_VERSION}.zip`;

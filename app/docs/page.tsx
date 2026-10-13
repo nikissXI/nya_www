@@ -220,7 +220,7 @@ const DocumentPage = () => {
               </Heading>
 
               <Text fontSize="sm" lineHeight="1.8">
-                已内置WG隧道导入和节点切换功能。APP刚上线，如果使用有问题请加Q群1047464328找服主反馈
+                已内置WG隧道导入和节点切换功能，登陆点连接就能联机。APP刚上线，如果使用有问题请加Q群1047464328找服主反馈
               </Text>
 
               <Button
@@ -440,7 +440,7 @@ const DocumentPage = () => {
               </Heading>
 
               <Text fontSize="sm" lineHeight="1.8">
-                已内置WG隧道导入和节点切换功能。客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
+                已内置WG隧道导入和节点切换功能，登陆点连接就能联机。客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
               </Text>
 
               <Button
