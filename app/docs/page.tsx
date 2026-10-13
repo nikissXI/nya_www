@@ -454,9 +454,6 @@ const DocumentPage = () => {
               </Button>
 
               <Text fontSize="sm" lineHeight="1.8">
-                因为没有企业资质，有的浏览器会拦截下载的文件，请自行放行
-              </Text>
-              <Text fontSize="sm" lineHeight="1.8">
                 喵服客户端不支持win7及以下系统，如果非要用喵服
                 <Text
                   ml={2}
