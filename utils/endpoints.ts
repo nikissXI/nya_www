@@ -197,4 +197,6 @@ export const api = {
     requestEnvelope<null>("/escapistsHelper", { params: { hosterIp } }),
   stardewValleyRoomCheck: (hosterIp: string) =>
     requestEnvelope<null>("/stardewValleyRoomCheck", { params: { hosterIp } }),
+  arkRoomCheck: (hosterIp: string) =>
+    requestEnvelope<null>("/arkRoomCheck", { params: { hosterIp } }),
 };

@@ -39,12 +39,12 @@ export default function Page() {
   const createTask = async (hosterIp: string) => {
     const normalizedIp = hosterIp.trim();
     if (!normalizedIp) {
-      setShowText("请先输入农场主的喵服 IP");
+      setShowText("请先输入农场主的喵服IP");
       return;
     }
 
     setIsChecking(true);
-    setShowText("正在查房，请保持农场在前台并稍候……");
+    setShowText("正在查房，主机请保持在游戏里……");
 
     try {
       const { msg } = await api.stardewValleyRoomCheck(normalizedIp);
@@ -171,7 +171,7 @@ export default function Page() {
       <Box
         mt={3}
         p={3}
-        bg="bg.subtle"
+        bg="bg.active"
         border="1px solid"
         borderColor="border.line"
         borderRadius="control"

@@ -1,4 +1,12 @@
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import {
@@ -11,8 +19,40 @@ import {
   DocTips,
   ExtLink,
 } from "@/components/docs/DocParts";
+import { INPUT_STYLE } from "@/components/universal/ui";
+import { useState } from "react";
+import { ApiError } from "@/utils/api";
+import { api } from "@/utils/endpoints";
 
 export default function Page() {
+  const [inputIp, setInputIp] = useState("");
+  const [showText, setShowText] = useState("");
+  const [isChecking, setIsChecking] = useState(false);
+
+  const createTask = async (hosterIp: string) => {
+    const normalizedIp = hosterIp.trim();
+    if (!normalizedIp) {
+      setShowText("请先输入主机的喵服IP");
+      return;
+    }
+
+    setIsChecking(true);
+    setShowText("正在查房，主机请保持在游戏里……");
+
+    try {
+      const { msg } = await api.arkRoomCheck(normalizedIp);
+      setShowText(msg ?? "响应结果异常，请联系服主");
+    } catch (err) {
+      setShowText(
+        err instanceof ApiError && err.status !== null
+          ? err.message
+          : "网络请求失败，请检查网络后重试",
+      );
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
   return (
     <DocBox
       notices={[
@@ -46,7 +86,7 @@ export default function Page() {
           <Text>一名玩家作为主机，根据下图创建多人游戏</Text>
           <DocMuted my={1}>游戏必须保持在前台，不能锁屏或切到后台</DocMuted>
           <DocMuted my={1}>
-            oppo和一加手机有时候没有非专用主机，需重开游戏
+            oppo和一加手机有时候没有非专用主机，大退游戏重试
           </DocMuted>
           <DocImage w="600px" src="/images/ark/ark_1.webp" alt="ark_1" />
         </DocStep>
@@ -78,7 +118,60 @@ export default function Page() {
         <DocTip>
           如果加入游戏后闪退，检查双方游戏版本是否一致，如果是一致，主机重开游戏试试，还不行就进群问问
         </DocTip>
+        <DocTip>
+          客机使用下方的查房工具，填写主机的喵服IP，如果查找房间失败，则代表主机问题，反之客机问题
+        </DocTip>
       </DocTips>
+
+      {/* 查房工具 */}
+      <Box
+        mt={3}
+        p={3}
+        bg="bg.active"
+        border="1px solid"
+        borderColor="border.line"
+        borderRadius="control"
+        maxW="380px"
+      >
+        <Heading size="sm" mb={2} textAlign="center">
+          查房工具
+        </Heading>
+
+        <Flex gap={2}>
+          <Button
+            size="sm"
+            onClick={() => createTask(inputIp)}
+            isLoading={isChecking}
+            loadingText="检查中"
+            flexShrink={0}
+          >
+            查找
+          </Button>
+
+          <Input
+            {...INPUT_STYLE}
+            size="sm"
+            type="text"
+            value={inputIp}
+            onChange={(e) => {
+              setInputIp(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !isChecking) {
+                createTask(inputIp);
+              }
+            }}
+            placeholder="填主机的喵服ip，如 100.64.0.1"
+            aria-label="主机喵服IP"
+          />
+        </Flex>
+
+        {showText && (
+          <Text mt={2} color="warning.text" fontSize="sm" role="status">
+            {showText}
+          </Text>
+        )}
+      </Box>
 
       <DocDivider />
 
