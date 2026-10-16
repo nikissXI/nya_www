@@ -94,7 +94,7 @@ const Page = () => {
               联系服主
             </Text>
 
-            <Text fontSize="sm" color="text.muted">
+            <Text fontSize="sm" color="text.main">
               <Icon as={FaWeixin} mx={1} color="success.text" />
               {AdminWX}
               <Text as="span" mx={3} color="border.strong">
@@ -110,7 +110,7 @@ const Page = () => {
         <VStack spacing={3} w="100%">
           {RULES_TEXT.map((text) => (
             <Card key={text} p={4}>
-              <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+              <Text fontSize="sm" color="text.main" lineHeight="1.8">
                 {text}
               </Text>
             </Card>
@@ -120,11 +120,15 @@ const Page = () => {
             <SectionHeading title="赞助专用节点解锁规则" mb={2} />
 
             <VStack align="stretch" spacing={2}>
+              <Text fontSize="sm" color="text.main" lineHeight="1.8">
+                节点里面里节点名称不是黑色的（标签写着“仅赞助可建房”），就是赞助专用节点
+              </Text>
+
               <Text fontSize="sm" color="warning.text" fontWeight="600">
                 赞助专用节点房间人数上限 <strong>16人</strong>
               </Text>
 
-              <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+              <Text fontSize="sm" color="text.main" lineHeight="1.8">
                 有两种线路的赞助节点：多线、跨境
                 <br />
                 多线赞助满 <strong>10元</strong> 解锁，国内联机用这种
@@ -140,14 +144,14 @@ const Page = () => {
                 简单点说：多线节点赞助10元房间2人，20元则3人，后续每加10元多1人，16人封顶；跨境节点所需金额翻倍
               </Text>
 
-              <Text fontSize="sm" color="text.muted">
+              <Text fontSize="sm" color="text.main">
                 计算公式如下
                 <br />
                 房间人数 = 总赞助金额 <strong>//</strong> 节点解锁金额{" "}
                 <strong>+1</strong>
               </Text>
 
-              <Text fontSize="sm" color="text.muted">
+              <Text fontSize="sm" color="text.main">
                 房间内成员的赞助也可以叠加房间人数
               </Text>
             </VStack>

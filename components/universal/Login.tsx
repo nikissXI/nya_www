@@ -5,7 +5,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useUserStateStore } from "@/store/user-state";
@@ -13,7 +12,6 @@ import AuthForm from "./AuthForm";
 import { MODAL_STYLE } from "./ui";
 
 export default function LoginModal() {
-  const navigate = useNavigate();
   const showLoginModal = useUserStateStore((s) => s.showLoginModal);
   const closeLoginModal = useUserStateStore((s) => s.closeLoginModal);
 
