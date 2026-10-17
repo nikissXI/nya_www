@@ -80,8 +80,8 @@ export default function Page() {
               点击跳转github下载
             </ExtLink>
             <br />
-            如果打不开github也可以在这里下载，但不一定是最新版，当前版本v0.2.1
-            <ExtLink href="/download/Isaac-LAN-v0.2.1-windows-x86.zip">
+            如果打不开github也可以在这里下载，但不一定是最新版，当前版本v0.4.1
+            <ExtLink href="/download/Isaac-LAN-v0.4.1-windows-x86.zip">
               点击下载联机mod
             </ExtLink>
           </Text>
