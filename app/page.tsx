@@ -1,21 +1,7 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/universal/button";
 import { Card } from "@/components/universal/ui";
-import { ANDROID_APP_URL, WINDOWS_APP_URL } from "@/utils/appDownload";
-
-/** 客户端下载（新增平台往这里加一项即可） */
-const appDownloads = [
-  { label: "下载安卓APP客户端", url: ANDROID_APP_URL },
-  { label: "下载Windows客户端", url: WINDOWS_APP_URL },
-];
 
 /** 平台亮点（静态数据，放到组件外避免每次渲染重新创建） */
 const highlights = [
@@ -37,6 +23,8 @@ const highlights = [
 ];
 
 export default function Page() {
+  const navigate = useNavigate();
+
   return (
     <Flex
       direction="column"
@@ -64,7 +52,7 @@ export default function Page() {
         </Heading>
       </Flex>
 
-      {/* 客户端下载入口（安卓 / Windows，教程页的下载入口在 app/docs/page.tsx） */}
+      {/* 安装引导：首页不直接给下载链接，统一引导到 WG 安装教程按设备类型安装 */}
       <Card
         w="100%"
         maxW="880px"
@@ -85,33 +73,25 @@ export default function Page() {
               fontSize={{ base: "md", md: "lg" }}
               color="brand.text"
             >
-              安卓、Windows客户端已上线
+              如何使用？
             </Heading>
 
             <Text mt={1} fontSize="sm" lineHeight="1.8">
-              客户端内置WG隧道和节点切换，装好登录就能联机。其他系统目前需要浏览器+WG官方客户端配合使用
+              请查看WG安装教程接入喵服进行联机
             </Text>
           </Box>
 
-          <Stack
-            direction={{ base: "column", sm: "row" }}
-            spacing={2}
+          <Button
+            size={{ base: "md", md: "lg" }}
+            px={{ base: 6, md: 8 }}
             w={{ base: "100%", sm: "auto" }}
             flexShrink={0}
+            onClick={() => {
+              navigate("/docs");
+            }}
           >
-            {appDownloads.map((app) => (
-              <Button
-                key={app.url}
-                size={{ base: "md", md: "lg" }}
-                px={{ base: 6, md: 8 }}
-                onClick={() => {
-                  window.open(app.url, "_blank");
-                }}
-              >
-                {app.label}
-              </Button>
-            ))}
-          </Stack>
+            查看WG安装教程
+          </Button>
         </Flex>
       </Card>
 

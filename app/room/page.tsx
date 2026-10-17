@@ -1137,7 +1137,7 @@ export default function Page() {
 
               {!isOnline && (
                 <Text mr="auto" fontSize="xs" color="text.faint">
-                  要安装WG客户端
+                  请查看WG安装教程
                 </Text>
               )}
 
