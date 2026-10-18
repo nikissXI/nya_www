@@ -52,44 +52,50 @@ export default function Page() {
           )}
 
           {platform === "android" && (
-            <Tip>
-              小米/红米设备，必须关掉“WLAN网络优化”
-              <Text
-                ml={2}
-                as="button"
-                type="button"
-                color="brand.text"
-                fontWeight="600"
-                textAlign="left"
-                onClick={() => setShowXM(!showXM)}
-              >
-                {showXM ? "点击收起" : "点击查看关闭方法"}
-              </Text>
-              <Collapse in={showXM}>
-                <Box
-                  mt={2}
-                  border="1px solid"
-                  borderColor="border.line"
-                  borderRadius="control"
-                  p={3}
-                  bg="bg.subtle"
+            <>
+              <Tip>
+                小米/红米设备，必须关掉“WLAN网络优化”
+                <Text
+                  ml={2}
+                  as="button"
+                  type="button"
+                  color="brand.text"
+                  fontWeight="600"
+                  textAlign="left"
+                  onClick={() => setShowXM(!showXM)}
                 >
-                  <Text fontSize="sm" color="text.muted" lineHeight="1.8">
-                    系统版本不同界面可能不一样（找不到可以干脆关掉游戏加速）
-                    <br />
-                    找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
-                  </Text>
-                  <Image
-                    w="100%"
-                    maxW="600px"
+                  {showXM ? "点击收起" : "点击查看关闭方法"}
+                </Text>
+                <Collapse in={showXM}>
+                  <Box
                     mt={2}
-                    src="/images/wg/xiaomi.webp"
-                    alt="xiaomi"
+                    border="1px solid"
+                    borderColor="border.line"
                     borderRadius="control"
-                  />
-                </Box>
-              </Collapse>
-            </Tip>
+                    p={3}
+                    bg="bg.subtle"
+                  >
+                    <Text fontSize="sm" color="text.muted" lineHeight="1.8">
+                      系统版本不同界面可能不一样（找不到可以干脆关掉游戏加速）
+                      <br />
+                      找到系统的游戏加速，打开加速设置-&gt;性能增强-&gt;性能增强-&gt;把“WLAN网络优化”关闭
+                    </Text>
+                    <Image
+                      w="100%"
+                      maxW="600px"
+                      mt={2}
+                      src="/images/wg/xiaomi.webp"
+                      alt="xiaomi"
+                      borderRadius="control"
+                    />
+                  </Box>
+                </Collapse>
+              </Tip>
+
+              <Tip>
+                鸿蒙6及以上系统不兼容安卓的喵服客户端（具体表现过几分钟就掉线），请到喵服官网的WG安装教程，查看鸿蒙系统部分连接喵服
+              </Tip>
+            </>
           )}
 
           <Tip>
