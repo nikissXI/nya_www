@@ -211,16 +211,16 @@ const DocumentPage = () => {
           <TabPanels>
             {/* 安卓 */}
             <TabPanel px={0} pb={1} pt={0}>
-              <HighLight fontSize="sm" lineHeight="1.8">
-                以前的安卓WG客户端不再使用，可以删掉
-              </HighLight>
-
               <Heading size="md" my={1}>
-                使用喵服安卓APP
+                使用喵服安卓客户端
               </Heading>
 
               <Text fontSize="sm" lineHeight="1.8">
-                已内置WG隧道导入和节点切换功能，登陆点连接就能联机。APP刚上线，如果使用有问题请加Q群1047464328找服主反馈
+                <HighLight fontSize="sm" lineHeight="1.8">
+                  不再需要导入confkey，直接用这个新的喵服客户端联机就行
+                </HighLight>
+                <br />
+                安卓客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
               </Text>
 
               <Button
@@ -230,7 +230,7 @@ const DocumentPage = () => {
                   window.open(ANDROID_APP_URL, "_blank");
                 }}
               >
-                点击下载安卓APP
+                点击下载安卓客户端
               </Button>
 
               <Text
@@ -431,16 +431,20 @@ const DocumentPage = () => {
 
             {/* windows */}
             <TabPanel px={0} pb={1} pt={0}>
-              <HighLight fontSize="sm" lineHeight="1.8">
-                以前的Windows WG客户端不再使用，可以删掉
-              </HighLight>
-
               <Heading size="md" my={1}>
                 使用Windows客户端
               </Heading>
 
               <Text fontSize="sm" lineHeight="1.8">
-                已内置WG隧道导入和节点切换功能，登陆点连接就能联机。客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
+                <HighLight fontSize="sm" lineHeight="1.8">
+                  以前的Windows WG客户端不再使用，请删掉！
+                </HighLight>
+                <br />
+                <HighLight fontSize="sm" lineHeight="1.8">
+                  直接使用这个客户端联机就行了
+                </HighLight>
+                <br />
+                客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
               </Text>
 
               <Button
