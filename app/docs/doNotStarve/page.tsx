@@ -50,9 +50,9 @@ export default function Page() {
             其他玩家作为客机，点击主界面的浏览游戏，连接类型选LAN
             <br />
             如果能调出控制台，也可以用命令加入，格式如下
-            <DocCode>c_connect("主机喵服IP", 10999, "密码")</DocCode>
-            比如主机喵服IP是100.64.0.1，密码123
-            <DocCode>c_connect("100.64.0.1", 10999, "123")</DocCode>
+            <DocCode>c_connect("主机喵服IP", 10999)</DocCode>
+            比如主机喵服IP是100.64.0.3
+            <DocCode>c_connect("100.64.0.3", 10999)</DocCode>
           </Text>
 
           <DocMuted mt={2}>
