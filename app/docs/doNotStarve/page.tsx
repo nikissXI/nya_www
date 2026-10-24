@@ -75,10 +75,10 @@ export default function Page() {
           手游加入时提示“这个服务器仅允许在相同局域网的玩家连接”，重开游戏再尝试加入（主机和客机都重开试试看）
         </DocTip>
         <DocTip>
-          如果是Windows做主机，试试关闭防火墙
-          <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
+          如果是Windows做主机，试试关闭系统防火墙
+          {/* <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
             不会关点我
-          </ExtLink>
+          </ExtLink> */}
         </DocTip>
       </DocTips>
 

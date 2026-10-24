@@ -83,10 +83,10 @@ export default function Page() {
 
       <DocTips>
         <DocTip>
-          加入游戏失败如果是下图错误，让主机关闭防火墙再试
-          <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
+          加入游戏失败如果是下图错误，让主机关闭系统防火墙再试
+          {/* <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
             不会关点我
-          </ExtLink>
+          </ExtLink> */}
           <DocImage h="150px" src="/images/l4d2/joiner.webp" alt="joiner" />
         </DocTip>
         <DocTip>

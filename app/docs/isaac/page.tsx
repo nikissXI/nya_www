@@ -101,10 +101,10 @@ export default function Page() {
         <DocStep step={3} role="主机">
           <Text>一名玩家作为主机，局域网联机里选创建房间，等就行了</Text>
           <DocMuted mt={1}>
-            如果客机加入失败，关闭防火墙再试试
-            <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
+            如果客机加入失败，试试关闭系统防火墙
+            {/* <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
               不会关点我
-            </ExtLink>
+            </ExtLink> */}
           </DocMuted>
           <DocImage
             w="600px"
