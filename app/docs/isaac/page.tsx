@@ -82,8 +82,8 @@ export default function Page() {
             <br />
             如果打不开github也可以在这里下载，但不一定是最新版
             <br />
-            当前版本v0.5.1（2026.10.24更新）
-            <ExtLink href="/download/Isaac-LAN-v0.5.1-windows-x86.zip">
+            当前版本v0.6.0（2026.10.25更新）
+            <ExtLink href="/download/Isaac-LAN-v0.6.0-windows-x86.zip">
               点击下载联机mod
             </ExtLink>
           </Text>
