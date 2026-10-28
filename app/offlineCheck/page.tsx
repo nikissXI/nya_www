@@ -107,7 +107,10 @@ export default function Page() {
           )}
 
           <Tip>
-            部分学校的校园网会拦截喵服的流量，连手机热点可进行验证，开热点的时候记得断开WiFi
+            部分学校的校园网会拦截喵服的流量，连手机热点可进行验证，
+            <Text as="span" color="warning.text" fontWeight="bold">
+              开热点的时候记得断开WiFi
+            </Text>
           </Tip>
 
           <Tip>
