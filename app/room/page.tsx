@@ -1136,9 +1136,17 @@ export default function Page() {
               </HStack>
 
               {!isOnline && (
-                <Text mr="auto" fontSize="xs" color="text.faint">
+                <Button
+                  variant="link"
+                  mr="auto"
+                  fontSize="xs"
+                  color="text.faint"
+                  onClick={() => {
+                    navigate("/docs");
+                  }}
+                >
                   请查看WG安装教程
-                </Text>
+                </Button>
               )}
 
               <Button
