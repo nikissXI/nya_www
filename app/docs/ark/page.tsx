@@ -113,6 +113,9 @@ export default function Page() {
 
       <DocTips>
         <DocTip>
+          要登陆Epic账号，就是点开始游戏如果提示“SIGN IN”，要点击完成登陆才能联机
+        </DocTip>
+        <DocTip>
           如果加入提示连接超时，客机自己开个主机房间，再退出来，然后进单机再输入一次代码就能进了
         </DocTip>
         <DocTip>
