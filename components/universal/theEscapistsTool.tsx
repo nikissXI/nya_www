@@ -59,7 +59,7 @@ export default function TheEscapistsTool() {
               createTask(inputIp);
             }
           }}
-          placeholder="填主机喵服IP 如100.64.0.1"
+          placeholder="填主机喵服IP 如10.88.0.3"
           aria-label="主机喵服 IP"
           _placeholder={{ fontSize: "13px" }}
         />

@@ -205,7 +205,7 @@ export default function Page() {
                 createTask(inputIp);
               }
             }}
-            placeholder="填农场主喵服ip，如 100.64.0.1"
+            placeholder="填农场主喵服ip，如 10.88.0.3"
             aria-label="农场主喵服 IP"
           />
         </Flex>

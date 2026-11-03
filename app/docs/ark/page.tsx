@@ -98,8 +98,8 @@ export default function Page() {
           <Text>
             其他玩家作为客机，打开游戏控制台，输入命令加入游戏，格式如下
             <DocCode>admincheat open 主机喵服IP</DocCode>
-            比如主机喵服IP是100.64.0.1
-            <DocCode>admincheat open 100.64.0.1</DocCode>
+            比如主机喵服IP是10.88.0.3
+            <DocCode>admincheat open 10.88.0.3</DocCode>
             注意命令里的open左右都要加空格
           </Text>
         </DocStep>
@@ -164,7 +164,7 @@ export default function Page() {
                 createTask(inputIp);
               }
             }}
-            placeholder="填主机的喵服ip，如 100.64.0.1"
+            placeholder="填主机的喵服ip，如 10.88.0.3"
             aria-label="主机喵服IP"
           />
         </Flex>

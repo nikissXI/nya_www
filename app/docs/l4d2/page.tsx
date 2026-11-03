@@ -69,8 +69,8 @@ export default function Page() {
           <Text>
             其他玩家作为客机，打开控制台用命令加入游戏
             <DocCode>connect 主机喵服IP</DocCode>
-            比如主机喵服IP是100.64.0.1
-            <DocCode>connect 100.64.0.1</DocCode>
+            比如主机喵服IP是10.88.0.3
+            <DocCode>connect 10.88.0.3</DocCode>
           </Text>
         </DocStep>
       </VStack>

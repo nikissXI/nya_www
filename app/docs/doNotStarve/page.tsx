@@ -51,8 +51,8 @@ export default function Page() {
             <br />
             如果能调出控制台，也可以用命令加入，格式如下
             <DocCode>c_connect("主机喵服IP", 10999)</DocCode>
-            比如主机喵服IP是100.64.0.3
-            <DocCode>c_connect("100.64.0.3", 10999)</DocCode>
+            比如主机喵服IP是10.88.0.3
+            <DocCode>c_connect("10.88.0.3", 10999)</DocCode>
           </Text>
 
           <DocMuted mt={2}>
