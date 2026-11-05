@@ -173,11 +173,9 @@ export const useUserStateStore = createWithEqualityFn<ILoginStateSlice>(
 
           set({ userInfo: data.user_info });
 
-          if (data?.user_wg_info) {
-            set({ userWgInfo: data.user_wg_info });
-          } else {
-            get().setNodeListModal();
-          }
+          // 没选过节点（user_wg_info 为空）也不再自动弹节点列表：
+          // 强制选完才能关窗太打扰，改成房间页/教程页就地提示「选择节点」
+          set({ userWgInfo: data.user_wg_info });
         } catch (error) {
           // 凭证失效已由全局 handler 统一登出并提示，这里不再重复
           if (shouldSilenceError(error)) return;

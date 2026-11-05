@@ -297,7 +297,6 @@ export default function ServerNodeListModal() {
     <Modal
       isOpen={showNodeListModal}
       onClose={setNodeListModal}
-      closeOnOverlayClick={userWgInfo ? true : false}
       isCentered
     >
       <ModalOverlay />
@@ -444,15 +443,6 @@ export default function ServerNodeListModal() {
                 size="sm"
                 colorScheme="red"
                 onClick={() => {
-                  if (!userWgInfo) {
-                    openToast({
-                      content:
-                        "选择节点后才能关闭，如果没有合适的节点，先随便选一个",
-                      status: "warning",
-                    });
-                    return;
-                  }
-
                   setNodeListModal();
                 }}
                 flex="1"

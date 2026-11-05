@@ -993,8 +993,39 @@ export default function Page() {
           {/* 轮播公告 */}
           <AnnouncementCarousel />
 
-          {/* 当前节点 */}
-          {userWgInfo?.node_alias && nodeNetLoad !== undefined ? (
+          {/* 当前节点：没选过节点时给入口，选过但负载还没拉到时才显示加载中 */}
+          {!userWgInfo?.node_alias ? (
+            <Flex
+              {...CARD_STYLE}
+              {...CARD_PADDING}
+              align="center"
+              justify="space-between"
+              gap={3}
+              flexWrap="wrap"
+            >
+              <Flex align="center" gap={2} minW={0}>
+                <Icon
+                  as={MdInfoOutline}
+                  boxSize={5}
+                  color="brand.text"
+                  flexShrink={0}
+                />
+
+                <Box minW={0}>
+                  <Text fontWeight="bold" color="text.main">
+                    还没选择节点
+                  </Text>
+                  <Text mt={0.5} fontSize="sm" color="text.muted">
+                    选好节点才能联机
+                  </Text>
+                </Box>
+              </Flex>
+
+              <Button flexShrink={0} onClick={setNodeListModal}>
+                选择节点
+              </Button>
+            </Flex>
+          ) : nodeNetLoad !== undefined ? (
             <Box {...CARD_STYLE} {...CARD_PADDING}>
               <Flex align="center">
                 <Flex
