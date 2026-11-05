@@ -159,13 +159,6 @@ const DocumentPage = () => {
 
       {/* 未登录也能看完整教程；真正需要账号的步骤就地提示（见 NeedLogin） */}
       <Box>
-        {!userInfo && (
-          <NeedLogin
-            block
-            text="未登录也能查看安装步骤，但获取隧道文件、切换节点、查看连接状态需要登录"
-          />
-        )}
-
         <Tabs variant="unstyled">
           <Heading size="md">点击选择联机的设备类型</Heading>
 
