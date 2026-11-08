@@ -1,4 +1,4 @@
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack, Flex } from "@chakra-ui/react";
 import DocBox from "@/components/docs/DocBox";
 import BackButton from "@/components/docs/BackButton";
 import {
@@ -51,11 +51,19 @@ export default function Page() {
           </DocMuted>
 
           <Text my={1}>
-            这里提供一个兼容v0.111版本的，也可以自行找其他同类mod
-            <ExtLink href="/download/[IP直连1.4.0][v0.111].zip">
-              下载IP联机mod
-            </ExtLink>
+            这里提供几个不同版本的IP联机mod，如果都不好使可以进群问问，也可以自行找其他同类mod
           </Text>
+          <Flex gap={2}>
+            <ExtLink href="/download/[IP直连1.4.0][v0.111].zip">
+              [IP直连1.4.0][v0.111].zip
+            </ExtLink>
+            <ExtLink href="/download/[IP直连1.3.3][v0.108].zip">
+              [IP直连1.3.3][v0.108].zip
+            </ExtLink>
+            <ExtLink href="/download/[IP直连1.2.7][v0.105].zip">
+              [IP直连1.2.7][v0.105].zip
+            </ExtLink>
+          </Flex>
 
           <DocMuted>
             手游如果安装了IP联机mod，需要在启动器的设置里把“本地联机补丁”关掉
