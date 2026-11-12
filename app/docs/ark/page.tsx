@@ -80,6 +80,10 @@ export default function Page() {
       <Heading size="md" mb={2}>
         联机步骤
       </Heading>
+      <DocMuted my={1}>
+        点开始游戏如果提示“SIGN
+        IN”，一定要点击并登陆Epic账号，否则无法联机，每个玩家都要！
+      </DocMuted>
 
       <VStack align="stretch" spacing={3}>
         <DocStep step={1} role="主机">
@@ -113,13 +117,11 @@ export default function Page() {
 
       <DocTips>
         <DocTip>
-          要登陆Epic账号，就是点开始游戏如果提示“SIGN IN”，要点击完成登陆才能联机
+          如果加入提示连接超时，检查是不是没有登陆Epic账号。如果没登陆，点开始游戏会有个“SIGN
+          IN”，有时候登陆掉了需要重新登陆
         </DocTip>
         <DocTip>
-          如果加入提示连接超时，客机自己开个主机房间，再退出来，然后进单机再输入一次代码就能进了
-        </DocTip>
-        <DocTip>
-          如果加入游戏后闪退，检查双方游戏版本是否一致，如果是一致，主机重开游戏试试，还不行就进群问问
+          如果加入游戏后闪退，检查双方游戏版本是否一致，如果是一致，主机重开游戏试试，还不行就找游戏开发者反馈bug，现阶段游戏还很多毛病
         </DocTip>
         <DocTip>
           客机使用下方的查房工具，填写主机的喵服IP，如果查找房间失败，则代表主机问题，反之客机问题
