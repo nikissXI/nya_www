@@ -53,8 +53,8 @@ const docPages = [
     component: lazy(() => import("@/app/docs/projectZomboid/page")),
   },
   {
-    path: "slayTheSpire",
-    component: lazy(() => import("@/app/docs/slayTheSpire/page")),
+    path: "sts",
+    component: lazy(() => import("@/app/docs/sts/page")),
   },
   {
     path: "stardewValley",

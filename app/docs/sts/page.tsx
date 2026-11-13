@@ -26,7 +26,10 @@ export default function Page() {
 
       <Heading size="md">联机步骤</Heading>
 
-      <DocMuted my={1}>端游和手游一样，不过端游要加mod，下面细说</DocMuted>
+      <DocMuted my={1}>如果装了联机大厅mod要禁用！</DocMuted>
+      <DocMuted my={1}>
+        端游和手游一样，不过端游要加联机mod，教程下方有教
+      </DocMuted>
 
       <VStack align="stretch" spacing={3}>
         <DocStep step={1} role="主机">
@@ -44,37 +47,41 @@ export default function Page() {
             如果有任一玩家是端游，就需要全部玩家都安装IP联机mod，因为端游原版是没有IP联机选项的
           </DocMuted>
         </DocStep>
-
-        <DocStep step="" role="IP联机mod（按需安装）">
-          <DocMuted>
-            如果全部玩家都是手游就不需要装IP联机mod，手游已经内置了
-          </DocMuted>
-
-          <Text my={1}>
-            这里提供几个不同版本的IP联机mod，如果都不好使可以进群问问，也可以自行找其他同类mod
-          </Text>
-          <Flex gap={2}>
-            <ExtLink href="/download/[IP直连1.4.0][v0.111].zip">
-              [IP直连1.4.0][v0.111].zip
-            </ExtLink>
-            <ExtLink href="/download/[IP直连1.3.3][v0.108].zip">
-              [IP直连1.3.3][v0.108].zip
-            </ExtLink>
-            <ExtLink href="/download/[IP直连1.2.7][v0.105].zip">
-              [IP直连1.2.7][v0.105].zip
-            </ExtLink>
-          </Flex>
-
-          <DocMuted>
-            手游如果安装了IP联机mod，需要在启动器的设置里把“本地联机补丁”关掉
-          </DocMuted>
-          <DocImage
-            w="300px"
-            src="/images/slayTheSpire/off_lan_mod.webp"
-            alt="off_lan_mod"
-          />
-        </DocStep>
       </VStack>
+
+      <DocDivider />
+
+      <Heading size="md" mb={3}>
+        联机mod安装（非必须）
+      </Heading>
+
+      <Text my={1}>
+        如果全部玩家都是手游就不需要装IP联机mod，手游已经内置了
+      </Text>
+
+      <Text my={1}>
+        这里提供几个不同版本的IP联机mod，如果都不好使可以进群问问，或自己去创意工坊找其他同类mod
+      </Text>
+      <Flex gap={2}>
+        <ExtLink href="/download/[IP直连1.4.0][v0.111].zip">
+          [IP直连1.4.0][v0.111].zip
+        </ExtLink>
+        <ExtLink href="/download/[IP直连1.3.3][v0.108].zip">
+          [IP直连1.3.3][v0.108].zip
+        </ExtLink>
+        <ExtLink href="/download/[IP直连1.2.7][v0.105].zip">
+          [IP直连1.2.7][v0.105].zip
+        </ExtLink>
+      </Flex>
+
+      <Text my={1}>
+        手游如果安装了IP联机mod，需要在启动器的设置里把“本地联机补丁”关掉
+      </Text>
+      <DocImage
+        w="300px"
+        src="/images/sts/off_lan_mod.webp"
+        alt="off_lan_mod"
+      />
 
       <DocDivider />
 
@@ -83,6 +90,7 @@ export default function Page() {
       </Heading>
 
       <DocTips>
+        <DocTip>使用喵服进行联机时，如果装了联机大厅mod要禁用</DocTip>
         <DocTip>
           如果是Windows做主机，试试关闭系统防火墙
           {/* <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">

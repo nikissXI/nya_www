@@ -50,9 +50,9 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     ],
   },
   {
-    path: "/docs/slayTheSpire",
+    path: "/docs/sts",
     title: "杀戮尖塔2",
-    icon: "/images/slayTheSpire/icon.webp",
+    icon: "/images/sts/icon.webp",
     qq: "698892019",
     support: [
       "支持安卓、苹果、电脑三端跨平台联机",
