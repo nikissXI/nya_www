@@ -56,22 +56,16 @@ export default function Page() {
       </Heading>
 
       <DocMuted my={1}>
-        如果全部玩家都是手游就不需要装IP联机mod，手游已经内置了
+        端游和手游联机、端游和端游联机，才需要安装！如果都是手游不需要装！
       </DocMuted>
 
       <Text my={1} fontSize="sm">
         这里提供几个不同版本的IP联机mod，如果都不好使可以进群问问，或自己去创意工坊找其他同类mod
       </Text>
-      <Flex gap={2} fontSize="sm">
-        <ExtLink href="/download/[IP直连1.4.0][v0.111].zip">
-          [IP直连1.4.0][v0.111].zip
-        </ExtLink>
-        <ExtLink href="/download/[IP直连1.3.3][v0.108].zip">
-          [IP直连1.3.3][v0.108].zip
-        </ExtLink>
-        <ExtLink href="/download/[IP直连1.2.7][v0.105].zip">
-          [IP直连1.2.7][v0.105].zip
-        </ExtLink>
+      <Flex gap={3} fontSize="sm">
+        <ExtLink href="/download/sts联机mod_v0.113.zip">适配v0.113</ExtLink>
+        <ExtLink href="/download/sts联机mod_v0.108.zip">适配v0.108</ExtLink>
+        <ExtLink href="/download/sts联机mod_v0.105.zip">适配v0.105</ExtLink>
       </Flex>
 
       <Text my={1} fontSize="sm">
