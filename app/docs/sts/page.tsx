@@ -55,14 +55,14 @@ export default function Page() {
         联机mod安装（非必须）
       </Heading>
 
-      <Text my={1}>
+      <DocMuted my={1}>
         如果全部玩家都是手游就不需要装IP联机mod，手游已经内置了
-      </Text>
+      </DocMuted>
 
-      <Text my={1}>
+      <Text my={1} fontSize="sm">
         这里提供几个不同版本的IP联机mod，如果都不好使可以进群问问，或自己去创意工坊找其他同类mod
       </Text>
-      <Flex gap={2}>
+      <Flex gap={2} fontSize="sm">
         <ExtLink href="/download/[IP直连1.4.0][v0.111].zip">
           [IP直连1.4.0][v0.111].zip
         </ExtLink>
@@ -74,7 +74,7 @@ export default function Page() {
         </ExtLink>
       </Flex>
 
-      <Text my={1}>
+      <Text my={1} fontSize="sm">
         手游如果安装了IP联机mod，需要在启动器的设置里把“本地联机补丁”关掉
       </Text>
       <DocImage
