@@ -72,9 +72,6 @@ export default function Page() {
       <DocTips>
         <DocTip>
           如果是Windows做主机，试试关闭系统防火墙
-          {/* <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
-            不会关点我
-          </ExtLink> */}
         </DocTip>
         <DocTip>
           装tMod不影响联机，如果装了后不能联机，关闭系统防火墙及检查模组

@@ -97,6 +97,13 @@ export const ROOM_GAME_LIST: GameRoomItem[] = [
     support: ["支持安卓与苹果联机，需游戏版本一致"],
   },
   {
+    path: "/docs/bnoFight",
+    title: "跨界对决",
+    icon: "/images/bnoFight/icon.webp",
+    qq: "1073963542",
+    support: ["支持安卓与PC端联机，需游戏版本一致"],
+  },
+  {
     path: "/docs/mindustry",
     title: "像素工厂",
     icon: "/images/mindustry/icon.webp",

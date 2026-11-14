@@ -87,9 +87,6 @@ export default function Page() {
         <DocTip>使用喵服进行联机时，如果装了联机大厅mod要禁用</DocTip>
         <DocTip>
           如果是Windows做主机，试试关闭系统防火墙
-          {/* <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
-            不会关点我
-          </ExtLink> */}
         </DocTip>
         <DocTip>
           如果手游加入报错，并且装了IP联机mod，请检查“本地联机补丁”是否关掉，上面有提及

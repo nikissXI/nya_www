@@ -149,9 +149,6 @@ export default function Page() {
       <DocTips>
         <DocTip>
           如果是Windows做主机，试试关闭系统防火墙
-          {/* <ExtLink href="https://zhuanlan.zhihu.com/p/397675766">
-            不会关点我
-          </ExtLink> */}
         </DocTip>
         <DocTip>
           如果是iOS设备，在系统设置中找到星露谷，确认“本地网络”权限已开启

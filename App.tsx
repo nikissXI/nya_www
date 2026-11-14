@@ -1,4 +1,10 @@
-import { Center, ChakraProvider, Spinner, Text, VStack } from "@chakra-ui/react";
+import {
+  Center,
+  ChakraProvider,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Frame from "@/components/Frame";
@@ -39,6 +45,10 @@ const docPages = [
   {
     path: "machinesAtWar3",
     component: lazy(() => import("@/app/docs/machinesAtWar3/page")),
+  },
+  {
+    path: "bnoFight",
+    component: lazy(() => import("@/app/docs/bnoFight/page")),
   },
   {
     path: "mindustry",
