@@ -89,11 +89,13 @@ export const HighLight: React.FC<TextProps> = ({ children, ...props }) => (
 export const ExtLink = ({
   children,
   href,
+  fontSize = "md"
 }: {
   children: React.ReactNode;
   href: string;
+  fontSize?: string;
 }) => (
-  <Link ml={1} color="brand.text" href={href} target="_blank" rel="noreferrer">
+  <Link ml={1} fontSize={fontSize} color="brand.text" href={href} target="_blank" rel="noreferrer">
     {children}
   </Link>
 );
