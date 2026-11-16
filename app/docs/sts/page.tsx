@@ -70,7 +70,7 @@ export default function Page() {
       /> */}
 
       <Text my={1} fontSize="sm">
-        这里目前只提供最新beta版本v0.113.1的局域网联机mod，如果需要其他请加Q群
+        这里目前只提供最新beta版本v0.113.1的局域网联机mod，如果需要其他版本或有bug请加Q群找群主
         698892019
       </Text>
       <ExtLink href="/download/sts2局域网联机mod-适配v0.113.1-版本v0.1.0.zip">
