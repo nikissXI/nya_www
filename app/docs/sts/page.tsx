@@ -31,7 +31,7 @@ export default function Page() {
       <HighLight fontSize="sm">
         1. 不管端游还是手游，如果装了联机大厅或其他局域网联机mod要禁用
         <br />
-        2. 只需要端游安装这个局域网联机mod，手游使用内置的局域网本地补丁就行
+        2. 只需要端游安装这个局域网联机mod，手游使用启动器内置的局域网联机补丁就行
       </HighLight>
 
       {/* <Text my={1} fontSize="sm">
