@@ -59,21 +59,22 @@ export default function Page() {
         "2-3人联机时，建议选择带宽不低于0.5M的联机节点，人更多时选择更大带宽节点",
       ]}
     >
-      <Text textAlign="center"></Text>
-
-      <Text>喵服方舟手游交流Q群 1106534252</Text>
-      <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
-
-      <DocDivider />
-
       <Text>这里只有手游的联机教程，如果是端游请找服主</Text>
       <Text my={1}>
         手游需要使用
         <ExtLink href="https://space.bilibili.com/597869160">
           琳星Lin-C
         </ExtLink>{" "}
-        制作的版本，群文件里可下载
+        制作的版本
       </Text>
+
+      <DocDivider />
+
+      <Text>喵服方舟手游交流Q群 1106534252</Text>
+      <Text>琳星粉丝群1 799910546</Text>
+      <Text>琳星粉丝群2 1071010914</Text>
+
+      <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
 
       <DocDivider />
 
