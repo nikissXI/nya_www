@@ -13,7 +13,7 @@ import {
 
 export default function Page() {
   return (
-    <DocBox notices={["建议选择带宽不低于0.6M的联机节点，4个人也够用"]}>
+    <DocBox notices={["2~3人联机时，建议选择带宽不低于0.6M的联机节点，人更多时选择更大带宽节点"]}>
       <Text>
         视频教程由B站UP主Winters_Stone1制作
         <ExtLink href="https://www.bilibili.com/video/BV1dZSeBLE4e/">
