@@ -33,12 +33,6 @@ import type { SponsorItem } from "@/utils/endpoints";
 const AdminQQ = "1299577815";
 const AdminWX = "nikissxi";
 
-/** 赞助规则说明（文案保持不变，只调整排版） */
-const RULES_TEXT = [
-  "如需定制独享节点（50元起/月）可联系服主，房间人数无上限，仅指定用户可建房",
-  "累计赞助不少于 10 元，可联系服主获取一对一技术支持",
-];
-
 const Page = () => {
   const [sponsorList, setSponsorList] = useState<SponsorItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,24 +102,32 @@ const Page = () => {
 
         {/* 赞助规则 */}
         <VStack spacing={3} w="100%">
-          {RULES_TEXT.map((text) => (
-            <Card key={text} p={4}>
-              <Text fontSize="sm" color="text.main" lineHeight="1.8">
-                {text}
-              </Text>
-            </Card>
-          ))}
+          <Card p={4}>
+            <Text
+              fontSize="sm"
+              color="warning.text"
+              fontWeight="600"
+              lineHeight="1.8"
+            >
+              赞助金额永久累计，解锁的赞助专用节点永久有效
+            </Text>
+
+            <Text fontSize="sm" color="text.main" lineHeight="1.8">
+              节点列表中，节点标签写着“仅赞助可建房”就是赞助专用节点
+            </Text>
+
+            <Text fontSize="sm" color="text.main" lineHeight="1.8">
+              累计赞助不少于 10 元，可联系服主获取一对一技术支持
+            </Text>
+          </Card>
 
           <Card p={4}>
             <SectionHeading title="赞助专用节点解锁规则" mb={2} />
 
             <VStack align="stretch" spacing={2}>
-              <Text fontSize="sm" color="text.main" lineHeight="1.8">
-                节点里面里节点名称不是黑色的（标签写着“仅赞助可建房”），就是赞助专用节点
-              </Text>
-
               <Text fontSize="sm" color="warning.text" fontWeight="600">
                 赞助专用节点房间人数上限 <strong>16人</strong>
+                ，只需要房主赞助，成员无需单独赞助
               </Text>
 
               <Text fontSize="sm" color="text.main" lineHeight="1.8">
@@ -134,10 +136,6 @@ const Page = () => {
                 多线赞助满 <strong>10元</strong> 解锁，国内联机用这种
                 <br />
                 跨境赞助满 <strong>20元</strong> 解锁，跨境联机用这种
-              </Text>
-
-              <Text fontSize="sm" color="warning.text" fontWeight="700">
-                只需要房主赞助，成员无需单独赞助
               </Text>
 
               <Text fontSize="sm" color="warning.text" fontWeight="700">

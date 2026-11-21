@@ -210,7 +210,7 @@ const DocumentPage = () => {
 
               <Text fontSize="sm" lineHeight="1.8">
                 <HighLight fontSize="sm" lineHeight="1.8">
-                  不再需要导入confkey，直接用这个新的喵服客户端联机就行
+                  安卓客户端不兼容鸿蒙6及以上系统！
                 </HighLight>
                 <br />
                 安卓客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
@@ -429,14 +429,6 @@ const DocumentPage = () => {
               </Heading>
 
               <Text fontSize="sm" lineHeight="1.8">
-                <HighLight fontSize="sm" lineHeight="1.8">
-                  以前的Windows WG客户端不再使用，请删掉！
-                </HighLight>
-                <br />
-                <HighLight fontSize="sm" lineHeight="1.8">
-                  直接使用这个客户端联机就行了
-                </HighLight>
-                <br />
                 客户端刚上线，如果使用有问题请加Q群1047464328找服主反馈
               </Text>
 
@@ -523,6 +515,10 @@ const DocumentPage = () => {
             <TabPanel px={0} pb={1} pt={0}>
               <WgCommonSteps>
                 <Box>
+                  <HighLight fontSize="sm" lineHeight="1.8">
+                    鸿蒙系统目前还有很多不稳定因素，有异常联系服主
+                    <br />
+                  </HighLight>
                   ② 安装WG客户端
                   <Link
                     ml={1}
