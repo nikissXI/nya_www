@@ -109,15 +109,15 @@ const Page = () => {
               fontWeight="600"
               lineHeight="1.8"
             >
-              赞助金额永久累计，解锁的赞助专用节点永久有效
+              赞助金额永久累计，已解锁的赞助专用节点永久有效
             </Text>
 
-            <Text fontSize="sm" color="text.main" lineHeight="1.8">
-              节点列表中，节点标签写着“仅赞助可建房”就是赞助专用节点
+            <Text mt={2} fontSize="sm" color="text.main" lineHeight="1.8">
+              节点列表中，标签写着“仅赞助可建房”的就是赞助专用节点
             </Text>
 
-            <Text fontSize="sm" color="text.main" lineHeight="1.8">
-              累计赞助不少于 10 元，可联系服主获取一对一技术支持
+            <Text mt={1} fontSize="sm" color="text.main" lineHeight="1.8">
+              累计赞助满 10 元，可联系服主获取一对一技术支持
             </Text>
           </Card>
 
@@ -125,32 +125,34 @@ const Page = () => {
             <SectionHeading title="赞助专用节点解锁规则" mb={2} />
 
             <VStack align="stretch" spacing={2}>
-              <Text fontSize="sm" color="warning.text" fontWeight="600">
-                赞助专用节点房间人数上限 <strong>16人</strong>
-                ，只需要房主赞助，成员无需单独赞助
+              <Text fontSize="sm"color="warning.text"fontWeight="600">
+               只需要房主赞助解锁，房间人数初始值为2
               </Text>
 
               <Text fontSize="sm" color="text.main" lineHeight="1.8">
-                有两种线路的赞助节点：多线、跨境
+                多线节点：赞助满 <strong>10 元</strong> 解锁（国内联机）
                 <br />
-                多线赞助满 <strong>10元</strong> 解锁，国内联机用这种
-                <br />
-                跨境赞助满 <strong>20元</strong> 解锁，跨境联机用这种
+                跨境节点：赞助满 <strong>20 元</strong> 解锁（跨境联机）
               </Text>
 
-              <Text fontSize="sm" color="warning.text" fontWeight="700">
-                简单点说：多线节点赞助10元房间2人，20元则3人，后续每加10元多1人，16人封顶；跨境节点所需金额翻倍
+              <Text fontSize="sm" color="text.main" lineHeight="1.8">
+                房间人数 = 总赞助金额 ÷ 节点解锁金额（向下取整）
+                <strong>+ 1</strong>
+                ，最多 16 人
               </Text>
 
-              <Text fontSize="sm" color="text.main">
-                计算公式如下
-                <br />
-                房间人数 = 总赞助金额 <strong>//</strong> 节点解锁金额{" "}
-                <strong>+1</strong>
+              <Text
+                fontSize="sm"
+                color="warning.text"
+                fontWeight="700"
+                lineHeight="1.8"
+              >
+                举例：多线节点赞助 10 元是 2 人房，20 元是 3 人房，之后每多 10
+                元加 1 人；跨境节点所需金额翻倍，即 20 元 2 人、40 元 3 人，依此类推
               </Text>
 
-              <Text fontSize="sm" color="text.main">
-                房间内成员的赞助也可以叠加房间人数
+              <Text fontSize="sm" color="text.main" lineHeight="1.8">
+                房间内其他成员的赞助同样计入总金额，也能提升人数上限
               </Text>
             </VStack>
           </Card>
