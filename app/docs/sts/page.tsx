@@ -20,7 +20,7 @@ export default function Page() {
       ]}
     >
       <Text>喵服杀戮尖塔交流Q群 698892019</Text>
-      <DocMuted mt={1}>联机有问题或找搭子请加群</DocMuted>
+      <DocMuted mt={1}>联机有问题或找搭子请加群。群文件里有安卓启动器和游戏文件</DocMuted>
 
       <DocDivider />
 
@@ -52,7 +52,7 @@ export default function Page() {
       /> */}
 
       <Text mt={1} fontSize="sm">
-        局域网联机mod目前只测试了beta版本v0.113.1，如需其他版本或有bug请加Q群找群主
+        局域网联机mod兼容最新beta版本v0.114.0，如需其他版本或有bug请加Q群找群主
         698892019
         <br />
         下载后解压，把文件夹放到游戏的mods目录里，就跟加其他mod一样
@@ -60,7 +60,7 @@ export default function Page() {
 
       <ExtLink
         fontSize="sm"
-        href="/download/sts2局域网联机mod-适配v0.113.1-版本v0.1.0.zip"
+        href="/download/sts2局域网联机mod-适配v0.114.0-版本v0.2.0.zip"
       >
         点击下载局域网联机mod
       </ExtLink>
